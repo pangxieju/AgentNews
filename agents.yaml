@@ -32,18 +32,18 @@
 
 - slug: pi
   name: Pi
-  vendor: TheLaoGao
+  vendor: Mario Zechner (badlogic)
   form: cli
   oss_bucket: open
   license_id: MIT
-  homepage: https://github.com/TheLaoGao/pi
-  # ⚠️ M0：repo 不存在（404），待核实正确仓库后修正
+  homepage: https://github.com/badlogic/pi-mono
   sources:
-    - { kind: github, identifier: TheLaoGao/pi, is_primary: true }
+    - { kind: github, identifier: badlogic/pi-mono, is_primary: true }
+    - { kind: npm, identifier: "@earendil-works/pi-coding-agent" }
 
 - slug: goose
   name: Goose
-  vendor: Block (Brett T.)
+  vendor: Block
   form: cli
   oss_bucket: open
   license_id: Apache-2.0
@@ -89,9 +89,9 @@
   form: cli
   oss_bucket: open
   license_id: Apache-2.0
-  homepage: https://github.com/QwenLM/Qwen2.5-Coder
+  homepage: https://github.com/QwenLM/qwen-code
   sources:
-    - { kind: github, identifier: QwenLM/Qwen2.5-Coder, is_primary: true }
+    - { kind: github, identifier: QwenLM/qwen-code, is_primary: true }
     - { kind: npm, identifier: "@qwen-code/qwen-code" }
 
 - slug: claude-code
@@ -104,17 +104,6 @@
   sources:
     - { kind: npm, identifier: "@anthropic-ai/claude-code", is_primary: true }
 
-- slug: amos
-  name: Amos
-  vendor: Anthropic
-  form: cli
-  oss_bucket: closed
-  license_id: proprietary
-  homepage: https://github.com/anthropics/amos
-  note: 闭源 CLI，GitHub 仓库仅供下载二进制（源码不可见）
-  sources:
-    - { kind: releases, identifier: anthropics/amos, is_primary: true }
-
 - slug: cursor-cli
   name: Cursor CLI
   vendor: Anysphere
@@ -122,8 +111,10 @@
   oss_bucket: closed
   license_id: proprietary
   homepage: https://cursor.com
+  # npm 上的 cursor-cli 是抢注包（仅 49 次/周），非官方分发渠道；改为 L3 收录
+  note: 无公开安装数据（L3）
   sources:
-    - { kind: npm, identifier: cursor-cli, is_primary: true }
+    - { kind: manual, identifier: cursor-cli, is_primary: true }
 
 - slug: kimi-cli
   name: Kimi CLI
@@ -137,13 +128,14 @@
 
 - slug: warp-agent
   name: Warp Agent Mode
-  vendor: Warp (ex-WeWork)
-  form: cli
+  vendor: Warp
+  form: desktop
   oss_bucket: closed
   license_id: proprietary
   homepage: https://warp.dev
+  note: 终端 + Agent Mode；无公开安装数据（L3）
   sources:
-    - { kind: releases, identifier: warp-terminal, is_primary: true }
+    - { kind: manual, identifier: warp-dev, is_primary: true }
 
 # ─────────────────────────────────────────────
 # IDE 插件
@@ -188,9 +180,10 @@
   oss_bucket: open
   license_id: MIT
   homepage: https://kilocode.ai
-  # ⚠️ M0：KiloCodeInc/Kilo-Code 不存在（404），待核实正确仓库；先用 vscode 渠道
   sources:
-    - { kind: vscode, identifier: KiloCode.kilocode, is_primary: true }
+    - { kind: github, identifier: Kilo-Org/kilocode, is_primary: true }
+    - { kind: npm, identifier: "@kilocode/cli" }
+    - { kind: vscode, identifier: KiloCode.kilocode }
 
 # ─────────────────────────────────────────────
 # IDE / 编辑器一体化产品

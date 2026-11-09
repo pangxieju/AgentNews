@@ -23,8 +23,8 @@ if (!row) {
 <Base pageTitle={row ? `${row.slug} · AgentRank` : '未找到'}>
   {row && (
     <>
-      <a href="/top" class="muted">← 返回榜单</a>
-      <h1 style="margin-top:0.5rem">{row.slug}
+      <a href="/top/open/all/month" class="muted">← 返回榜单</a>
+      <h1 style="margin-top:0.5rem">{row.name ?? row.slug}
         <span class={`badge ${row.oss_bucket === 'open' ? 'b-open' : row.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
           {row.oss_bucket === 'open' ? '开源' : row.oss_bucket === 'semi' ? '半开源' : '闭源'}
         </span>
@@ -39,9 +39,19 @@ if (!row) {
       </div>
 
       <table style="margin-top:1.5rem">
-        <tr><th>指标</th><th>7d</th><th>30d</th></tr>
-        <tr><td>Star 增量</td><td class="num">{row.delta_7d != null ? fmt(row.delta_7d) : '—'}</td><td class="num">{row.delta_30d != null ? fmt(row.delta_30d) : '—'}</td></tr>
-        <tr><td>相对增速</td><td class="num">{fmtPct(row.growth_7d_pct)}</td><td class="num">{fmtPct(row.growth_30d_pct)}</td></tr>
+        <tr><th>指标</th><th class="num">当前</th><th class="num">1d 增量</th><th class="num">7d 增量</th><th class="num">30d 增量</th></tr>
+        <tr>
+          <td>Star</td>
+          <td class="num">{fmt(row.metrics?.stars)}</td>
+          <td class="num">{fmt(row.delta_1d)}</td>
+          <td class="num">{fmt(row.delta_7d)}</td>
+          <td class="num">{fmt(row.delta_30d)}</td>
+        </tr>
+        <tr><td>Fork</td><td class="num">{fmt(row.metrics?.forks)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+        <tr><td>贡献者</td><td class="num">{fmt(row.metrics?.contributors)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+        <tr><td>安装量</td><td class="num">{fmt(row.metrics?.installs)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+        <tr><td>相对增速</td><td class="num">—</td><td class="num">—</td><td class="num">{fmtPct(row.growth_7d_pct)}</td><td class="num">{fmtPct(row.growth_30d_pct)}</td></tr>
+        <tr><td>活跃度</td><td class="num">{row.metrics?.activity != null ? row.metrics?.activity.toFixed(2) : '—'}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
       </table>
 
       {row.flags.includes('partial_data') && (

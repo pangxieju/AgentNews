@@ -6,6 +6,7 @@ import {
   AgentsFileSchema,
   FORMS,
   SCORE_VERSION,
+  activityScore,
   dataLevel,
   effectiveInstalls,
   scoreGroup,
@@ -13,7 +14,7 @@ import {
   type Metrics,
   type ScoreRow,
 } from '@agentrank/core';
-import { collectAgent, githubHasQuota } from './collectors/index.js';
+import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/index.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const YAML_PATH = join(ROOT, 'agents.yaml');
@@ -101,31 +102,17 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   const today = isoDate();
   console.log(`[run] ${today} · ${agents.length} agents`);
 
-  // 0. GitHub 额度保护：剩余不足则整轮跳过 GitHub 采集（保留旧快照，不覆盖成功数据）
-  const ghEnabled = await githubHasQuota(opts.token);
-  if (!ghEnabled) {
-    console.warn('[run] GitHub rate limit 不足（<20），本轮跳过 GitHub 采集，保留旧数据');
-  }
+  // 0. 选 GitHub 通道：有额度用官方 API（字段更全），否则自动降级 ungh（无限流）
+  const hasQuota = await githubHasQuota(opts.token);
+  const ghMode: GitHubMode = hasQuota ? 'api' : 'ungh';
+  console.log(`[run] GitHub 通道：${ghMode}${hasQuota ? '' : '（API 额度不足，降级 ungh）'}`);
 
   // 1. 采集（串行跑，限流友好；后续可 p-limit 并行）
   const metricsMap = new Map<string, Metrics>();
   const errors: string[] = [];
   for (const agent of agents) {
     try {
-      // GitHub 被跳过时：不调 GitHub 采集器，直接采非 GitHub 渠道
-      const gh = agent.sources.filter((s) => s.kind === 'github');
-      if (gh.length && !ghEnabled) {
-        const r = await collectAgent({ ...agent, sources: agent.sources.filter((s) => s.kind !== 'github') }, opts.token);
-        metricsMap.set(agent.slug, r.metrics);
-        if (r.errors.length) {
-          console.warn(`  ! ${agent.slug}: ${r.errors.join('; ')}`);
-          errors.push(...r.errors.map((e) => `${agent.slug}: ${e}`));
-        } else {
-          console.log(`  ✓ ${agent.slug} (non-github)  ${JSON.stringify(r.metrics)}`);
-        }
-        continue;
-      }
-      const r = await collectAgent(agent, opts.token);
+      const r = await collectAgent(agent, opts.token, ghMode);
       metricsMap.set(agent.slug, r.metrics);
       if (r.errors.length) {
         console.warn(`  ! ${agent.slug}: ${r.errors.join('; ')}`);
@@ -156,39 +143,74 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   await writeFile(snapshotPath, lines.join('\n') + '\n');
   console.log(`[snapshot] ${lines.length} rows → ${snapshotPath}`);
 
-  // 3. 打分（按 form 分组）
+  // 3. 打分（按 form 分组）—— L3（无数据）不参与排名（PRD §5.7）
   const scorables = await buildScorables(agents, metricsMap);
+  const agentName = new Map(agents.map((a) => [a.slug, a.name]));
   const rows: ScoreRow[] = [];
+
   for (const form of FORMS) {
     const group = scorables.filter((s) => s.form === form);
     if (group.length === 0) continue;
     const scores = scoreGroup(group, undefined, new Date());
-    const bySlug = new Map(scores.map((s) => [s.slug, s.score]));
-    // 组内排名（同分同名次）
-    const ranked = [...group].sort((a, b) => (bySlug.get(b.slug) ?? 0) - (bySlug.get(a.slug) ?? 0));
-    ranked.forEach((item, idx) => {
+    const scoreMap = new Map(scores.map((s) => [s.slug, s.score]));
+
+    const enriched = group.map((item) => {
       const m = item.metrics;
       const stars = typeof m.stars === 'number' ? m.stars : null;
+      const installs = effectiveInstalls(m);
+      const level = dataLevel(stars, installs);
+      return { item, m, stars, installs, level, score: level === 'L3' ? null : (scoreMap.get(item.slug) ?? null) };
+    });
+
+    // 仅 L1/L2 且组内 ≥2 项才有资格排名
+    const rankable = enriched
+      .filter((e) => e.score != null)
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    const rankMap = new Map(rankable.map((e, i) => [e.item.slug, i + 1]));
+    const ordered = [
+      ...rankable,
+      ...enriched.filter((e) => e.score == null).sort((a, b) => a.item.slug.localeCompare(b.item.slug)),
+    ];
+
+    for (const e of ordered) {
+      const { item, m, stars, installs, level, score } = e;
       const weekAgo = typeof item.ref?.weekAgo?.stars === 'number' ? item.ref.weekAgo.stars : null;
       const monthAgo = typeof item.ref?.monthAgo?.stars === 'number' ? item.ref.monthAgo.stars : null;
       const prevStars = typeof item.ref?.prev?.stars === 'number' ? item.ref.prev.stars : null;
-      const delta1d = stars != null && prevStars != null ? stars - prevStars : null;
+
+      const flags: string[] = [];
+      if (errors.some((err) => err.startsWith(item.slug))) flags.push('partial_data');
+      if (level === 'L3') flags.push('no_data');
+      if (installs != null && installs >= 1_000_000) flags.push('installs_may_include_ci');
+      if (group.length <= 2 && level !== 'L3') flags.push('small_group');
+
       rows.push({
         slug: item.slug,
+        name: agentName.get(item.slug) ?? item.slug,
         form: item.form,
         oss_bucket: item.oss_bucket,
-        score: bySlug.get(item.slug) ?? 0,
-        rank_in_form: idx + 1,
-        delta_1d: delta1d,
+        score: score == null ? null : Math.round(score * 10) / 10,
+        rank_in_form: rankMap.get(item.slug) ?? null,
+        delta_1d: stars != null && prevStars != null ? stars - prevStars : null,
         delta_7d: stars != null && weekAgo != null ? stars - weekAgo : null,
         delta_30d: stars != null && monthAgo != null ? stars - monthAgo : null,
         growth_7d_pct: growthPctSafe(stars, weekAgo, 50),
         growth_30d_pct: growthPctSafe(stars, monthAgo, 200),
-        data_level: dataLevel(stars, effectiveInstalls(m)),
-        flags: errors.some((e) => e.startsWith(item.slug)) ? ['partial_data'] : [],
+        metrics: {
+          stars,
+          forks: typeof m.forks === 'number' ? m.forks : null,
+          contributors: typeof m.contributors === 'number' ? m.contributors : null,
+          installs,
+          activity: activityScore(
+            typeof m.last_commit === 'string' ? m.last_commit : null,
+            typeof m.last_release === 'string' ? m.last_release : null,
+          ),
+        },
+        data_level: level,
+        flags,
         score_version: SCORE_VERSION,
       });
-    });
+    }
   }
 
   // 4. 落评分快照

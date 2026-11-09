@@ -3,7 +3,11 @@
   "private": true,
   "packageManager": "pnpm@10.4.0",
   "scripts": {
-    "collect": "pnpm --filter @agentrank/pipeline start"
+    "collect": "pnpm --filter @agentrank/pipeline start",
+    "validate": "pnpm --filter @agentrank/pipeline validate",
+    "test": "pnpm --filter @agentrank/core test",
+    "typecheck": "pnpm -r typecheck",
+    "build": "pnpm --filter @agentrank/web build"
   },
   "devDependencies": {
     "typescript": "^5.7.2"

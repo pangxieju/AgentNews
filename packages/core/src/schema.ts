@@ -115,6 +115,7 @@ export type ScoreInput = {
 /** 打分输出（score_daily / score_periodic 的 TS 形态） */
 export type ScoreRow = {
   slug: string;
+  name: string;
   form: Form;
   oss_bucket: OssBucket;
   score: number | null;
@@ -124,6 +125,14 @@ export type ScoreRow = {
   delta_30d: number | null;
   growth_7d_pct: number | null;
   growth_30d_pct: number | null;
+  /** 关键原始指标（前端展示与排序用） */
+  metrics: {
+    stars: number | null;
+    forks: number | null;
+    contributors: number | null;
+    installs: number | null;
+    activity: number | null;
+  };
   data_level: 'L1' | 'L2' | 'L3';
   flags: string[];
   score_version: typeof SCORE_VERSION;

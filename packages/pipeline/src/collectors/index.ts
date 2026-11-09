@@ -7,19 +7,53 @@ export type CollectorResult = {
   errors: string[];
 };
 
-/** GitHub REST：单 repo 基础指标（M0 无 token，限 60 次/h → 只打 1 次/repo） */
-export async function collectGitHub(repo: string, token?: string): Promise<{
-  stars: number; forks: number; open_issues: number;
+export type GitHubMode = 'api' | 'ungh';
+
+/** ungh.cc（unjs 提供的 GitHub 只读代理，无鉴权、无限流），作为 API 限流时的降级通道 */
+async function collectGitHubViaUngh(repo: string): Promise<{
+  stars: number; forks: number; open_issues: number | null;
   last_commit: string; last_release: string | null;
 }> {
+  const res = await fetch(`https://ungh.cc/repos/${repo}`, { headers: { 'User-Agent': 'agentrank-m0' } });
+  if (!res.ok) throw new Error(`ungh ${repo}: ${res.status}`);
+  const data = (await res.json()) as {
+    repo?: { stars: number; forks: number; pushedAt: string; repo?: string };
+  };
+  const r = data.repo;
+  if (!r) throw new Error(`ungh ${repo}: empty`);
+  return {
+    stars: r.stars,
+    forks: r.forks,
+    open_issues: null,
+    last_commit: r.pushedAt,
+    last_release: null,
+  };
+}
+
+/** GitHub REST：单 repo 基础指标（1 次请求/repo） */
+export async function collectGitHub(repo: string, token?: string, mode: GitHubMode = 'api'): Promise<{
+  stars: number; forks: number; open_issues: number | null;
+  last_commit: string; last_release: string | null;
+}> {
+  if (mode === 'ungh') return collectGitHubViaUngh(repo);
+
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
     'User-Agent': 'agentrank-m0',
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const repoRes = await fetch(`https://api.github.com/repos/${repo}`, { headers });
-  if (repoRes.status === 403) throw new Error(`github repo ${repo}: rate-limited(403)`);
+  let repoRes: Response;
+  try {
+    repoRes = await fetch(`https://api.github.com/repos/${repo}`, { headers });
+  } catch {
+    return collectGitHubViaUngh(repo);
+  }
+  // 限流 → 自动降级，不丢数据
+  if (repoRes.status === 403) {
+    console.warn(`  ↳ ${repo}: API 限流，降级 ungh`);
+    return collectGitHubViaUngh(repo);
+  }
   if (repoRes.status === 404) throw new Error(`github repo ${repo}: not-found(404)`);
   if (!repoRes.ok) throw new Error(`github repo ${repo}: ${repoRes.status}`);
   const repoData = (await repoRes.json()) as {
@@ -71,15 +105,29 @@ export async function collectNpm(pkg: string): Promise<{
   return { npm_weekly_dl: w.downloads, npm_monthly_dl: m.downloads };
 }
 
-/** PyPI：月下载量（pypistats，可容忍失败） */
-export async function collectPypi(pkg: string): Promise<{ pypi_monthly_dl: number }> {
-  const res = await fetch(
-    `https://pypistats.org/api/packages/${encodeURIComponent(pkg)}/recent`,
-    { headers: { 'User-Agent': 'agentrank-m0' } },
-  );
-  if (!res.ok) throw new Error(`pypi ${pkg}: ${res.status}`);
-  const data = (await res.json()) as { data: { last_month: number } };
-  return { pypi_monthly_dl: data.data.last_month };
+/** PyPI：月下载量（pypistats 经常 429，带重试退避） */
+export async function collectPypi(pkg: string, retries = 3): Promise<{ pypi_monthly_dl: number }> {
+  let lastErr = '';
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const res = await fetch(
+        `https://pypistats.org/api/packages/${encodeURIComponent(pkg)}/recent`,
+        { headers: { 'User-Agent': 'agentrank-m0 (github.com/agentrank)' } },
+      );
+      if (res.status === 429 || res.status >= 500) {
+        lastErr = `pypi ${pkg}: ${res.status}`;
+        await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+        continue;
+      }
+      if (!res.ok) throw new Error(`pypi ${pkg}: ${res.status}`);
+      const data = (await res.json()) as { data: { last_month: number } };
+      return { pypi_monthly_dl: data.data.last_month };
+    } catch (e) {
+      lastErr = e instanceof Error ? e.message : String(e);
+      await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+    }
+  }
+  throw new Error(lastErr || `pypi ${pkg}: failed`);
 }
 
 /** VS Code Marketplace installs（非官方 API，低频） */
@@ -102,7 +150,11 @@ export async function collectVscode(extensionId: string): Promise<{ vscode_insta
 }
 
 /** 按 source.kind 分发采集 */
-export async function collectAgent(agent: Agent, token?: string): Promise<CollectorResult> {
+export async function collectAgent(
+  agent: Agent,
+  token?: string,
+  ghMode: GitHubMode = 'api',
+): Promise<CollectorResult> {
   const metrics: Metrics = {};
   const errors: string[] = [];
 
@@ -111,7 +163,7 @@ export async function collectAgent(agent: Agent, token?: string): Promise<Collec
   const ghPrimary = ghSources.find((s) => s.is_primary) ?? ghSources[0];
   if (ghPrimary) {
     try {
-      const g = await collectGitHub(ghPrimary.identifier, token);
+      const g = await collectGitHub(ghPrimary.identifier, token, ghMode);
       Object.assign(metrics, g);
     } catch (e) {
       errors.push(String(e instanceof Error ? e.message : e));

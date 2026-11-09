@@ -1,0 +1,26 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import RankView from '../../../../components/RankView.astro';
+
+const BUCKETS = ['open', 'closed'];
+const FORMS = ['all', 'cli', 'ide-plugin', 'ide-app', 'desktop', 'browser', 'framework', 'autonomous'];
+const GRANS = ['day', 'week', 'month'];
+
+export function getStaticPaths() {
+  const buckets = ['open', 'closed'];
+  const forms = ['all', 'cli', 'ide-plugin', 'ide-app', 'desktop', 'browser', 'framework', 'autonomous'];
+  const grans = ['day', 'week', 'month'];
+  const paths = [];
+  for (const bucket of buckets)
+    for (const form of forms)
+      for (const g of grans)
+        paths.push({ params: { bucket, form, g } });
+  return paths;
+}
+
+const { bucket, form, g } = Astro.params;
+---
+
+<Base pageTitle={`${bucket === 'open' ? '开源' : '闭源'}榜 · AgentRank`}>
+  <RankView bucket={bucket!} form={form!} g={g!} />
+</Base>

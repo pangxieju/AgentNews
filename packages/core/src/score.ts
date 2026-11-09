@@ -45,14 +45,22 @@ export function compress(x: number): number {
   return Math.log10(1 + Math.max(0, x));
 }
 
-/** 组内分位数排名 ∈ [0,1]；对极端值不敏感 */
+/**
+ * 组内分位数排名 ∈ (0,1)，使用「秩中点平滑」：
+ *   (midRank + 0.5) / n
+ * 为什么不平滑成 lo/(n-1)（即最小=0、最大=1）：
+ * 小组（n=3）时会退化成 {0, 0.5, 1}，星数最少的项目直接拿 0 分，
+ * 看起来像 bug。平滑后得到 {0.167, 0.5, 0.833}，保留相对顺序且不极端。
+ */
 export function percentileRank(values: number[]): number[] {
   if (values.length === 0) return [];
   const sorted = [...values].sort((a, b) => a - b);
+  const n = sorted.length;
   return values.map((v) => {
     const lo = sorted.findIndex((s) => s >= v);
     const hi = sorted.findLastIndex((s) => s <= v);
-    return (lo + hi) / 2 / Math.max(1, sorted.length - 1);
+    const midRank = (lo + hi) / 2; // 0-based，平局取中点
+    return (midRank + 0.5) / n;
   });
 }
 

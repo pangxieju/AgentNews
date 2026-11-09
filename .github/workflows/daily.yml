@@ -1,0 +1,65 @@
+name: daily
+
+on:
+  schedule:
+    # UTC 02:00 = 北京时间 10:00
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+# 需要写权限来回写 data/ 快照
+permissions:
+  contents: write
+
+concurrency:
+  group: daily
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # 数据契约先校验；算法回归先跑
+      - run: pnpm validate
+      - run: pnpm test
+
+      - name: Collect & score
+        run: pnpm collect
+        env:
+          # 默认 token：5000 次/小时，足够覆盖 500 个 repo
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit snapshots
+        run: |
+          git config user.name  'agentrank-bot'
+          git config user.email 'bot@agentrank.dev'
+          git add data/
+          if git diff --staged --quiet; then
+            echo "无数据变更，跳过提交"
+          else
+            git commit -m "data: snapshot $(date -u +%F)"
+            git push
+          fi
+
+      # 可选：构建产物留档（Cloudflare Pages 通常由 GitHub 集成自动构建）
+      - name: Build site
+        run: pnpm build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: packages/web/dist
+          retention-days: 7

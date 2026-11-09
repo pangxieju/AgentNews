@@ -1,0 +1,114 @@
+---
+import { loadLatestScores, fmt, fmtPct } from '../lib/data';
+
+interface Props {
+  bucket: string;
+  form: string;
+  g: string;
+}
+
+const { bucket, form, g } = Astro.props;
+
+const data = loadLatestScores();
+const rows = data?.rows ?? [];
+const date = data?.date ?? '—';
+
+let filtered = rows;
+if (bucket === 'open') filtered = filtered.filter((r) => r.oss_bucket !== 'closed');
+if (bucket === 'closed') filtered = filtered.filter((r) => r.oss_bucket === 'closed');
+if (form !== 'all') filtered = filtered.filter((r) => r.form === form);
+
+type Row = (typeof rows)[number];
+
+/** 粒度切换 = 排序口径切换（PRD §5.5） */
+const sortKey = (g === 'day' ? 'delta_1d' : g === 'week' ? 'delta_7d' : 'score') as keyof Row;
+const numOf = (r: Row, k: keyof Row): number => {
+  const v = r[k];
+  return typeof v === 'number' ? v : -Infinity;
+};
+
+const FORM_ORDER = ['cli', 'ide-plugin', 'ide-app', 'desktop', 'browser', 'framework', 'autonomous'];
+const groups = FORM_ORDER
+  .map((f) => {
+    const list = filtered
+      .filter((r) => r.form === f)
+      .sort((a, b) => numOf(b, sortKey) - numOf(a, sortKey));
+    // 展示序号按当前视图重编（避免开源/闭源过滤后出现 1,2,3,4,6,7 断层）；L3 无序号
+    let n = 0;
+    const rows2 = list.map((r) => ({ ...r, _displayRank: r.score != null ? ++n : null }));
+    return { form: f, rows: rows2 };
+  })
+  .filter((x) => x.rows.length > 0);
+
+const forms = ['all', ...FORM_ORDER];
+const bucketLabel = bucket === 'open' ? '开源' : '闭源';
+const formLabel = (f: string) =>
+  ({ all: '全部', cli: 'CLI', 'ide-plugin': 'IDE 插件', 'ide-app': 'IDE 应用', desktop: '桌面', browser: '浏览器', framework: '框架', autonomous: '自主' })[f] ?? f;
+const gLabel = (x: string) => (x === 'day' ? '日榜' : x === 'week' ? '周榜' : '月榜');
+const sortHint =
+  g === 'day' ? '按当日 Star 增量排序' : g === 'week' ? '按滚动 7 日 Star 增量排序' : '按综合分排序';
+const href = (b: string, f: string, gg: string) => `/top/${b}/${f}/${gg}`;
+
+const hasDeltas = rows.some((r) => r.delta_7d != null);
+const flagLabel: Record<string, string> = {
+  partial_data: '数据不全',
+  no_data: '数据未公开',
+  installs_may_include_ci: '含 CI 安装',
+  small_group: '样本少',
+};
+---
+
+<h1>{bucketLabel}榜 <span class="muted">· {date}</span></h1>
+<p class="muted">{sortHint} · <strong>同形态内比较，跨形态不排名</strong> · <a href="/about">口径说明</a></p>
+
+<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:1rem 0">
+  {forms.map((f) => (
+    <a href={href(bucket, f, g)} style="padding:0.35rem 0.8rem;border-radius:4px;border:1px solid var(--border)" class={form === f ? 'badge b-open' : ''}>{formLabel(f)}</a>
+  ))}
+</div>
+
+<div style="display:flex;gap:0.5rem;margin-bottom:1rem;font-size:0.85rem">
+  {['day', 'week', 'month'].map((gg) => (
+    <a href={href(bucket, form, gg)} class={g === gg ? 'badge b-open' : ''} style="padding:0.3rem 0.8rem;border-radius:4px;border:1px solid var(--border)">{gLabel(gg)}</a>
+  ))}
+</div>
+
+{!hasDeltas && <div class="warn">增量数据积累中：日榜/周榜将在快照满 1 天后可用（当前按综合分排序）。</div>}
+
+{groups.map((grp) => (
+  <section style="margin-top:1.8rem">
+    <h2 style="font-size:1.05rem;margin-bottom:0.2rem">
+      {formLabel(grp.form)}
+      <span class="muted" style="font-weight:400"> · {grp.rows.filter((r) => r._displayRank != null).length} 个在榜</span>
+    </h2>
+    <table>
+      <tr>
+        <th>#</th><th>Agent</th>
+        <th class="num">综合分</th><th class="num">Star</th>
+        <th class="num">日增</th><th class="num">7d 增</th>
+        <th class="num">30d 增速</th><th class="num">安装量</th><th class="num">活跃</th>
+      </tr>
+      {grp.rows.map((r) => (
+        <tr>
+          <td class="pos">{r._displayRank ?? '—'}</td>
+          <td>
+            <a href={`/agent/${r.slug}`}>{r.name ?? r.slug}</a>
+            <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
+              {r.oss_bucket === 'open' ? '开源' : r.oss_bucket === 'semi' ? '半开源' : '闭源'}
+            </span>
+            {r.flags.map((f) => <span class="badge b-semi">{flagLabel[f] ?? f}</span>)}
+          </td>
+          <td class="num"><strong>{r.score ?? '—'}</strong></td>
+          <td class="num">{fmt(r.metrics?.stars)}</td>
+          <td class="num">{r.delta_1d != null ? (r.delta_1d > 0 ? '+' : '') + fmt(r.delta_1d) : '—'}</td>
+          <td class="num">{r.delta_7d != null ? (r.delta_7d > 0 ? '+' : '') + fmt(r.delta_7d) : '—'}</td>
+          <td class="num">{fmtPct(r.growth_30d_pct)}</td>
+          <td class="num">{fmt(r.metrics?.installs)}</td>
+          <td class="num">{r.metrics?.activity != null ? r.metrics.activity.toFixed(2) : '—'}</td>
+        </tr>
+      ))}
+    </table>
+  </section>
+))}
+
+{rows.length === 0 && <div class="warn">暂无数据：请先运行 <code>pnpm collect</code>。</div>}

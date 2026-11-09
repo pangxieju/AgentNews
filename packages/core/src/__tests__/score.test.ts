@@ -18,28 +18,33 @@ describe('percentileRank', () => {
   it('空数组安全', () => {
     expect(percentileRank([])).toEqual([]);
   });
-  it('平局取中间分位', () => {
-    // 1,2,2,3 → 各分位：0, (1+2)/2/3=0.5, 0.5, 1
-    expect(percentileRank([1, 2, 2, 3])).toEqual([0, 0.5, 0.5, 1]);
+  it('平局取中间分位（秩中点平滑）', () => {
+    // [1,2,2,3] → 秩中点 [0, 1.5, 1.5, 3] → (r+0.5)/4
+    expect(percentileRank([1, 2, 2, 3])).toEqual([0.125, 0.5, 0.5, 0.875]);
   });
-  it('单元素组归一为 0（不除零）', () => {
-    expect(percentileRank([42])).toEqual([0]);
+  it('单元素组归一为 0.5（不平滑到 0，不除零）', () => {
+    expect(percentileRank([42])).toEqual([0.5]);
   });
-  it('单调递增序列', () => {
-    expect(percentileRank([1, 2, 3])).toEqual([0, 0.5, 1]);
+  it('单调递增，且不出现 0 / 1 极端值', () => {
+    const r = percentileRank([1, 2, 3]);
+    expect(r[0]).toBeCloseTo(1 / 6, 5);
+    expect(r[1]).toBe(0.5);
+    expect(r[2]).toBeCloseTo(5 / 6, 5);
+    expect(r[0]).toBeGreaterThan(0);
+    expect(r[2]).toBeLessThan(1);
   });
 });
 
 describe('normalizeGroup', () => {
-  it('返回每项 ∈[0,1]', () => {
+  it('返回每项 ∈(0,1) 且保持顺序', () => {
     const m = normalizeGroup([
       { slug: 'a', value: 1 },
       { slug: 'b', value: 2 },
       { slug: 'c', value: 3 },
     ]);
-    expect(m.get('a')).toBe(0);
+    expect(m.get('a')!).toBeCloseTo(1 / 6, 5);
     expect(m.get('b')).toBe(0.5);
-    expect(m.get('c')).toBe(1);
+    expect(m.get('c')!).toBeCloseTo(5 / 6, 5);
   });
 });
 
@@ -54,6 +59,13 @@ describe('scoreGroup', () => {
   it('少于 2 项 → 全 0（无法算分位数）', () => {
     const r = scoreGroup([base('a', 100)]);
     expect(r[0]!.score).toBe(0);
+  });
+
+  it('最小项目不会尴尬地拿 0 分（平滑分位）', () => {
+    const r = scoreGroup([base('a', 1_000), base('b', 10_000), base('c', 100_000)]);
+    const bySlug = Object.fromEntries(r.map((x) => [x.slug, x.score]));
+    expect(bySlug['a']!).toBeGreaterThan(0);
+    expect(bySlug['c']!).toBeGreaterThan(bySlug['b']!);
   });
 
   it('star 高者分高（单指标）', () => {
@@ -81,7 +93,7 @@ describe('scoreGroup', () => {
       base(`p${i}`, 1000 * (i + 1), { forks: i * 10 }),
     );
     for (const { score } of scoreGroup(items)) {
-      expect(score).toBeGreaterThanOrEqual(0);
+      expect(score).toBeGreaterThan(0);
       expect(score).toBeLessThanOrEqual(100);
     }
   });
