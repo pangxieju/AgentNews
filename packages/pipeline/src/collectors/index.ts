@@ -292,6 +292,29 @@ export async function collectGithubVersion(repo: string, token?: string): Promis
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, { headers });
+    if (res.status === 404) {
+      // 没有 release 但可能有 tag（例如 Void / BabyAGI）：退回 tag + 该 tag 的提交时间
+      const tagRes = await fetch(`https://api.github.com/repos/${repo}/tags?per_page=1`, { headers });
+      if (!tagRes.ok) return { version: null, version_at: null, name: null, notes: null, url: null };
+      const tags = (await tagRes.json()) as Array<{ name?: string; commit?: { sha?: string; url?: string } }>;
+      const tag = tags[0];
+      if (!tag?.name) return { version: null, version_at: null, name: null, notes: null, url: null };
+      let at: string | null = null;
+      if (tag.commit?.url) {
+        const cRes = await fetch(tag.commit.url, { headers });
+        if (cRes.ok) {
+          const c = (await cRes.json()) as { commit?: { committer?: { date?: string } } };
+          at = c.commit?.committer?.date ?? null;
+        }
+      }
+      return {
+        version: tag.name,
+        version_at: at,
+        name: null,
+        notes: null,
+        url: `https://github.com/${repo}/releases/tag/${tag.name}`,
+      };
+    }
     if (!res.ok) return { version: null, version_at: null, name: null, notes: null, url: null };
     const d = (await res.json()) as {
       tag_name?: string;

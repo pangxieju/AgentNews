@@ -1,0 +1,362 @@
+{
+  "agent-framework": {
+    "file": "agent-framework.6bb00c38.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "agent-zero": {
+    "file": "agent-zero.74d66e8f.jpg",
+    "source": "github",
+    "w": 150,
+    "h": 150
+  },
+  "agno": {
+    "file": "agno.e2c08f8a.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "aider": {
+    "file": "aider.7f8ee81e.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "amazon-q": {
+    "file": "amazon-q.4371db20.png",
+    "source": "html",
+    "w": 144,
+    "h": 144
+  },
+  "atomic-agents": {
+    "file": "atomic-agents.394d564e.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "autogen": {
+    "file": "autogen.6bb00c38.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "autogpt": {
+    "file": "autogpt.4507a775.png",
+    "source": "html",
+    "w": 512,
+    "h": 512
+  },
+  "babyagi": {
+    "file": "babyagi.1c62aa0b.jpg",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "browser-use": {
+    "file": "browser-use.48189ad5.png",
+    "source": "html",
+    "w": 180,
+    "h": 180
+  },
+  "claude-code": {
+    "file": "claude-code.76a62758.png",
+    "source": "html",
+    "w": 192,
+    "h": 192
+  },
+  "cline": {
+    "file": "cline.10315b11.png",
+    "source": "html",
+    "w": 256,
+    "h": 256
+  },
+  "codex-cli": {
+    "file": "codex-cli.10c1403f.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "cody": {
+    "file": "cody.448ea346.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "continue": {
+    "file": "continue.86917da3.png",
+    "source": "html",
+    "w": 256,
+    "h": 256
+  },
+  "crewai": {
+    "file": "crewai.f411c1b8.ico",
+    "source": "html",
+    "w": 32,
+    "h": 32
+  },
+  "crush": {
+    "file": "crush.294a5629.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "cursor": {
+    "file": "cursor.f0e88430.png",
+    "source": "html",
+    "w": 192,
+    "h": 192
+  },
+  "cursor-cli": {
+    "file": "cursor-cli.f0e88430.png",
+    "source": "html",
+    "w": 192,
+    "h": 192
+  },
+  "devin": {
+    "file": "devin.2b69ec0d.png",
+    "source": "html",
+    "w": 568,
+    "h": 568
+  },
+  "forgecode": {
+    "file": "forgecode.e15d60f1.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "gemini-cli": {
+    "file": "gemini-cli.a6c477cf.jpg",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "github-copilot": {
+    "file": "github-copilot.79fd9062.png",
+    "source": "override",
+    "w": 192,
+    "h": 192
+  },
+  "google-adk": {
+    "file": "google-adk.f2bb6a32.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "goose": {
+    "file": "goose.b452a633.jpg",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "gpt-engineer": {
+    "file": "gpt-engineer.3d991a0a.jpg",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "haystack": {
+    "file": "haystack.85582779.ico",
+    "source": "well-known",
+    "w": 48,
+    "h": 48
+  },
+  "iflow-cli": {
+    "file": "iflow-cli.ed0e89e2.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "kilo-code": {
+    "file": "kilo-code.2575a820.png",
+    "source": "html",
+    "w": 512,
+    "h": 512
+  },
+  "kimi-cli": {
+    "file": "kimi-cli.23e50509.ico",
+    "source": "html",
+    "w": 48,
+    "h": 48
+  },
+  "kiro": {
+    "file": "kiro.fff9f20b.png",
+    "source": "html",
+    "w": 192,
+    "h": 192
+  },
+  "langchain": {
+    "file": "langchain.05da80e3.png",
+    "source": "html",
+    "w": 256,
+    "h": 256
+  },
+  "langgraph": {
+    "file": "langgraph.05da80e3.png",
+    "source": "html",
+    "w": 256,
+    "h": 256
+  },
+  "llamaindex": {
+    "file": "llamaindex.ce7a14fa.png",
+    "source": "html",
+    "w": 180,
+    "h": 180
+  },
+  "manus": {
+    "file": "manus.809c6355.png",
+    "source": "html",
+    "w": 512,
+    "h": 512
+  },
+  "mastra": {
+    "file": "mastra.20c60eac.png",
+    "source": "html",
+    "w": 512,
+    "h": 512
+  },
+  "mistral-vibe": {
+    "file": "mistral-vibe.8b6513fd.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "nanobrowser": {
+    "file": "nanobrowser.9039d33d.png",
+    "source": "html",
+    "w": 32,
+    "h": 32
+  },
+  "open-interpreter": {
+    "file": "open-interpreter.01ca4aec.png",
+    "source": "html",
+    "w": 180,
+    "h": 180
+  },
+  "openai-agents": {
+    "file": "openai-agents.10c1403f.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "opencode": {
+    "file": "opencode.beda24b9.png",
+    "source": "html",
+    "w": 180,
+    "h": 180
+  },
+  "openhands": {
+    "file": "openhands.4c7469bb.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "pi": {
+    "file": "pi.f0db200c.jpg",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "plandex": {
+    "file": "plandex.5a33024f.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "pydantic-ai": {
+    "file": "pydantic-ai.9ec640d2.png",
+    "source": "well-known",
+    "w": 180,
+    "h": 180
+  },
+  "qwen-code": {
+    "file": "qwen-code.fc44fda0.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "roo-code": {
+    "file": "roo-code.e55f60c7.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "semantic-kernel": {
+    "file": "semantic-kernel.a873a2ab.png",
+    "source": "well-known",
+    "w": 192,
+    "h": 192
+  },
+  "skyvern": {
+    "file": "skyvern.9864a603.png",
+    "source": "html",
+    "w": 256,
+    "h": 256
+  },
+  "smolagents": {
+    "file": "smolagents.abd50054.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "stagehand": {
+    "file": "stagehand.eaab8524.png",
+    "source": "html",
+    "w": 180,
+    "h": 180
+  },
+  "strands-agents": {
+    "file": "strands-agents.b1aecde5.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "tabnine": {
+    "file": "tabnine.efd50868.png",
+    "source": "override",
+    "w": 192,
+    "h": 192
+  },
+  "theia": {
+    "file": "theia.690bf35d.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "trae": {
+    "file": "trae.57a3ac5e.png",
+    "source": "html",
+    "w": 48,
+    "h": 48
+  },
+  "vercel-ai-sdk": {
+    "file": "vercel-ai-sdk.ac61f601.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "void-editor": {
+    "file": "void-editor.2901704a.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
+  },
+  "warp-agent": {
+    "file": "warp-agent.e742cc2a.png",
+    "source": "html",
+    "w": 196,
+    "h": 196
+  },
+  "windsurf": {
+    "file": "windsurf.8935f7ae.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "zed": {
+    "file": "zed.f4202c3f.png",
+    "source": "html",
+    "w": 64,
+    "h": 64
+  }
+}

@@ -214,8 +214,11 @@ export async function resolveIcon(agent: Agent): Promise<Resolved | null> {
   }
 
   // 2. 官网声明的图标
+  //    注意：主页就是 GitHub 仓库时，页面里声明的 icon 是 GitHub 自己的 favicon，
+  //    必须跳过，否则每个开源项目都会变成 GitHub 章鱼猫。
+  const isGitHubHome = !!agent.homepage && /^https?:\/\/(www\.)?github\.com\//i.test(agent.homepage);
   let origin: string | null = null;
-  if (agent.homepage) {
+  if (agent.homepage && !isGitHubHome) {
     try {
       const u = new URL(agent.homepage);
       origin = u.origin;
@@ -279,7 +282,12 @@ export async function syncIcons(
 
   const results = await mapLimit(agents, opts.concurrency ?? 6, async (agent) => {
     try {
-      const r = await resolveIcon(agent);
+      let r = await resolveIcon(agent);
+      // 站点偶发 502 / 超时：重试一次，避免图标在两次采集之间无故消失
+      if (!r) {
+        await new Promise((res) => setTimeout(res, 700));
+        r = await resolveIcon(agent);
+      }
       return { agent, r };
     } catch (e) {
       return { agent, r: null, err: String(e) };

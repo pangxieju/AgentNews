@@ -211,6 +211,8 @@ const zh: Dict = {
   'agent.versionMissing':
     '未采集到版本信息：该 agent 可能只有 manual 渠道，或包名不在 npm / PyPI / VS Code 市场。',
   'agent.githubRelease': 'GitHub release ↗',
+  'agent.versionLink': 'View version history ↗',
+  'agent.versionLink': '查看该版本记录 ↗',
   'agent.trend': '趋势',
   'agent.trendHint': '每日快照 · {n} 个数据点',
   'agent.trendEmpty': '趋势图需要至少 2 天快照。当前首份快照为 {date}，下一次采集后即可看到折线。',
@@ -597,6 +599,8 @@ const en: Dict = {
   'agent.versionMissing':
     'No version captured: this agent may only have a manual channel, or its package is not on npm / PyPI / VS Code Marketplace.',
   'agent.githubRelease': 'GitHub release ↗',
+  'agent.versionLink': 'View version history ↗',
+  'agent.versionLink': '查看该版本记录 ↗',
   'agent.trend': 'Trend',
   'agent.trendHint': 'Daily snapshots · {n} data points',
   'agent.trendEmpty':

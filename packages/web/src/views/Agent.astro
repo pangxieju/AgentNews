@@ -33,6 +33,19 @@ const siblings = rows
   .slice(0, 4);
 
 const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
+
+/** 没有 GitHub release notes 时，给一个能看版本记录的外链 */
+const versionLink = (() => {
+  const v = row?.metrics?.version;
+  if (!v) return null;
+  const src = (s: string) => meta?.sources.find((x) => x.kind === s);
+  if (row?.metrics?.release_url) return row.metrics.release_url;
+  const npm = src('npm');
+  if (npm) return `https://www.npmjs.com/package/${npm.identifier}/v/${v}`;
+  const pypi = src('pypi');
+  if (pypi) return `https://pypi.org/project/${pypi.identifier}/${v}/`;
+  return null;
+})();
 ---
 
 <Base lang={lang} pageTitle={row ? `${row.name ?? row.slug} · AgentNews` : t(lang, 'agent.notFound')}>
@@ -182,7 +195,15 @@ const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-
                   <pre class="release-notes">{row.metrics.release_notes}</pre>
                 </>
               ) : (
-                <p class="muted" style="font-size:12.5px;margin-top:10px">{t(lang, 'agent.versionNoNotes')}</p>
+                <p class="muted" style="font-size:12.5px;margin-top:10px">
+                  {t(lang, 'agent.versionNoNotes')}
+                  {versionLink && (
+                    <>
+                      {' '}
+                      <a href={versionLink} target="_blank" rel="noopener">{t(lang, 'agent.versionLink')}</a>
+                    </>
+                  )}
+                </p>
               )}
             </div>
             <div>
@@ -197,7 +218,9 @@ const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-
                         <span class="v">{v.version}</span>
                         <span class="d">
                           {v.date}
-                          {v.version_at ? ` · ${v.version_at.slice(0, 10)}` : ''}
+                          {v.version_at
+                            ? ` · ${lang === 'en' ? 'published' : '发布'} ${v.version_at.slice(0, 10)}`
+                            : ''}
                         </span>
                       </li>
                     ))}

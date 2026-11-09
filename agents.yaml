@@ -625,6 +625,7 @@
   oss_bucket: closed
   license_id: proprietary
   homepage: https://github.com/features/copilot
+  icon: https://github.com/github.png?size=192
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: github-copilot, is_primary: true }
@@ -647,6 +648,7 @@
   oss_bucket: closed
   license_id: proprietary
   homepage: https://tabnine.com
+  icon: https://github.com/codota.png?size=192
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: tabnine, is_primary: true }
