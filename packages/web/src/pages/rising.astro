@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import AgentIcon from '../components/AgentIcon.astro';
+import AgentIcon from '../components/AgentIcon';
 import { loadLatestScores, loadAgentsMeta, loadAgentState, fmt, formLabel } from '../lib/data';
 
 const data = loadLatestScores();
@@ -84,7 +84,7 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
         </div>
       </div>
     ) : (
-      <div class="warn">
+      <div class="notice">
         当前无符合条件的 agent（收录名单里最年轻的也已超过 {NEWCOMER_DAYS} 天）。
         这说明当前样本偏向成熟项目 —— 新秀榜需要持续收录新项目才有内容。
       </div>

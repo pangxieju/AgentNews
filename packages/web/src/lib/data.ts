@@ -142,24 +142,8 @@ export function loadAgentsMeta(): Record<string, AgentMeta> {
   return (_agentsMeta = out);
 }
 
-/** 格式化数字（k/M 缩写，小于 1k 保留原值） */
-export function fmt(n: number | null | undefined): string {
-  if (n == null) return '—';
-  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
-  if (Math.abs(n) >= 10_000) return Math.round(n / 1_000) + 'k';
-  if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(1) + 'k';
-  return String(Math.round(n));
-}
-
-/** 格式化增速（+12.3%） */
-export function fmtPct(n: number | null | undefined): string {
-  if (n == null) return '—';
-  const v = n * 100;
-  return (v > 0 ? '+' : '') + v.toFixed(1) + '%';
-}
-
-export const formLabel = (f: string): string =>
-  ({ cli: 'CLI', 'ide-plugin': 'IDE 插件', 'ide-app': 'IDE 应用', desktop: '桌面', browser: '浏览器', framework: '框架', autonomous: '自主' })[f] ?? f;
+// 纯展示工具统一在 shared.ts（客户端 island 也要用，不能带 node 依赖）
+export { fmt, fmtPct, fmtSigned, formLabel, bucketText, bucketBadgeClass, FORM_ORDER, GRANS, granLabel, defaultSortFor, rankUrl } from './shared';
 
 /* ───────────────── 活动事件流（PRD F-24） ───────────────── */
 

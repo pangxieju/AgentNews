@@ -425,6 +425,16 @@ const isActive = (href: string) =>
         font-size: 14px;
       }
       .warn strong { color: var(--gh-attention); }
+      /* 中性提示：说明性内容用这个，别用黄色告警（看起来像出错） */
+      .notice {
+        background: var(--gh-canvas-subtle);
+        border: 1px solid var(--gh-border);
+        color: var(--gh-fg-muted);
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+      }
+      .notice strong { color: var(--gh-fg); }
 
       /* ── Agent 图标 ───────────────────────────────────────── */
       .agent-icon {
@@ -471,6 +481,186 @@ const isActive = (href: string) =>
       .agent-cell .name:hover { color: var(--gh-accent); }
       .agent-cell .tags { display: inline-flex; gap: 4px; flex-wrap: wrap; align-items: center; }
 
+      /* ── 榜单交互（RankBoard island） ─────────────────────── */
+      .rank-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+      .rank-toolbar-count { font-size: 12px; margin-left: auto; }
+      .rank-hint {
+        font-size: 13px;
+        color: var(--gh-fg-muted);
+        margin-bottom: 16px;
+        padding: 8px 12px;
+        border-left: 3px solid var(--gh-border);
+        background: var(--gh-canvas-subtle);
+        border-radius: 0 6px 6px 0;
+      }
+      .rank-empty { margin-bottom: 16px; }
+
+      /* ── 首页选型入口 ─────────────────────────────────────── */
+      .picker-search {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border: 1px solid var(--gh-border);
+        border-radius: 6px;
+        background: var(--gh-canvas);
+      }
+      .picker-search:focus-within {
+        border-color: var(--gh-accent);
+        box-shadow: 0 0 0 3px var(--gh-accent-subtle);
+      }
+      .picker-search svg { color: var(--gh-fg-muted); flex: none; }
+      .picker-input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        background: none;
+        color: var(--gh-fg);
+        font-size: 14px;
+        line-height: 20px;
+        outline: none;
+        font-family: inherit;
+      }
+      .picker-input::-webkit-search-cancel-button { display: none; }
+      .picker-clear {
+        border: 0;
+        background: none;
+        color: var(--gh-fg-muted);
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+        padding: 0 4px;
+      }
+      .picker-clear:hover { color: var(--gh-fg); }
+      .picker-filters {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+      .chip {
+        padding: 2px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--gh-border);
+        background: var(--gh-canvas);
+        color: var(--gh-fg);
+        font-size: 12px;
+        line-height: 20px;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      .chip:hover { background: var(--gh-btn-hover); }
+      .chip[aria-pressed='true'] {
+        background: var(--gh-accent-subtle);
+        border-color: var(--gh-accent);
+        color: var(--gh-accent);
+        font-weight: 600;
+      }
+      .picker-summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 12px 0 8px;
+        font-size: 12px;
+      }
+      .picker-list { list-style: none; border-top: 1px solid var(--gh-border-muted); }
+      .picker-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 4px;
+        color: var(--gh-fg);
+        border-bottom: 1px solid var(--gh-border-muted);
+      }
+      .picker-list li:last-child .picker-item { border-bottom: 0; }
+      .picker-item:hover { background: var(--gh-canvas-subtle); text-decoration: none; }
+      .picker-item-main { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+      .picker-item-main .name { font-weight: 600; }
+      .picker-item-meta {
+        font-size: 12px;
+        color: var(--gh-fg-muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .picker-item-score {
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        min-width: 3rem;
+        text-align: right;
+      }
+      .picker-empty { padding: 12px 4px; font-size: 13px; }
+      .link-btn {
+        border: 0;
+        background: none;
+        color: var(--gh-accent);
+        cursor: pointer;
+        padding: 0 2px;
+        font: inherit;
+      }
+      .link-btn:hover { text-decoration: underline; }
+      th.sortable { padding: 0; }
+      th.sortable button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        width: 100%;
+        justify-content: flex-end;
+        padding: 8px 12px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        color: inherit;
+        background: none;
+        border: 0;
+        cursor: pointer;
+      }
+      th.sortable button:hover { color: var(--gh-fg); }
+      .sort-caret { font-size: 8px; line-height: 1; opacity: 0.75; min-width: 8px; }
+      .rank-row { cursor: pointer; }
+      .rank-row:hover td { background: var(--gh-canvas-subtle); }
+
+      /* 移动端卡片列表：窄屏用卡片替代 9 列表格 */
+      .rank-cards { display: none; list-style: none; }
+      .rank-card { border-bottom: 1px solid var(--gh-border-muted); }
+      .rank-card:last-child { border-bottom: 0; }
+      .rank-card-main {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        color: inherit;
+        text-decoration: none;
+      }
+      .rank-card-main:hover { text-decoration: none; background: var(--gh-canvas-subtle); }
+      .rank-card-name { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+      .rank-card-name .name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .rank-card-score { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 15px; }
+      .rank-card-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 16px;
+        padding: 0 16px 10px 58px;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+        color: var(--gh-fg);
+      }
+      .rank-card-stats em {
+        font-style: normal;
+        color: var(--gh-fg-muted);
+        margin-right: 4px;
+      }
+
       /* ── 页脚 ─────────────────────────────────────────────── */
       .gh-footer {
         border-top: 1px solid var(--gh-border);
@@ -497,6 +687,13 @@ const isActive = (href: string) =>
         h1 { font-size: 20px; }
         th, td { padding: 8px 10px; }
         .gh-brand span { display: none; }
+        /* 窄屏：表格换成卡片，避免横向滚动找列 */
+        .rank-table { display: none; }
+        .rank-cards { display: block; }
+        .rank-toolbar { gap: 10px; }
+        .rank-toolbar-count { margin-left: 0; width: 100%; }
+        .tabs { margin-bottom: 12px; }
+        .card .num { font-size: 24px; }
       }
     </style>
   </head>

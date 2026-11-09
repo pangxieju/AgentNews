@@ -2,10 +2,6 @@
 import Base from '../../../../layouts/Base.astro';
 import RankView from '../../../../components/RankView.astro';
 
-const BUCKETS = ['open', 'closed'];
-const FORMS = ['all', 'cli', 'ide-plugin', 'ide-app', 'desktop', 'browser', 'framework', 'autonomous'];
-const GRANS = ['day', 'week', 'month'];
-
 export function getStaticPaths() {
   const buckets = ['open', 'closed'];
   const forms = ['all', 'cli', 'ide-plugin', 'ide-app', 'desktop', 'browser', 'framework', 'autonomous'];

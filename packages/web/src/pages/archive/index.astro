@@ -34,7 +34,7 @@ const daily = loadAllScores();
         </div>
       </div>
     ) : (
-      <div class="warn">
+      <div class="notice">
         尚无归档。周档在每周日采集后生成，月档在每月最后一天生成 —— 上线首周即可看到第一个周档。
       </div>
     )}
@@ -63,11 +63,11 @@ const daily = loadAllScores();
         </div>
       </div>
     ) : (
-      <div class="warn">尚无每日快照。</div>
+      <div class="notice">尚无每日快照。</div>
     )}
   </section>
 
-  <div class="warn" style="margin-top:24px">
+  <div class="notice" style="margin-top:24px">
     <strong>数据可下载：</strong>所有快照均为纯 JSON 文件，位于仓库 <code>data/</code> 目录，
     可通过 git 历史完整回溯（每个快照对应一个 commit）。
   </div>

@@ -1,25 +1,56 @@
 ---
 import Base from '../layouts/Base.astro';
-import AgentIcon from '../components/AgentIcon.astro';
+import AgentIcon from '../components/AgentIcon';
+import HomePicker, { type PickRow } from '../components/HomePicker';
 import { loadLatestScores, loadAgentsMeta, fmt, fmtPct } from '../lib/data';
+
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
-const meta = loadAgentsMeta();
+const metaAll = loadAgentsMeta();
+
+const meta: Record<string, { icon: string | null; iconFallback: string | null }> = {};
+for (const r of rows) {
+  const m = metaAll[r.slug];
+  if (m) meta[r.slug] = { icon: m.icon, iconFallback: m.iconFallback };
+}
 
 const open = rows.filter((r) => r.oss_bucket !== 'closed');
 const closed = rows.filter((r) => r.oss_bucket === 'closed');
 const topOpen = [...open].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
 const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
+
+/** 首日没有增速数据：隐藏该列，避免整列都是「—」 */
+const hasGrowth = rows.some((r) => r.growth_30d_pct != null);
+
+const pick: PickRow[] = rows.map((r) => ({
+  slug: r.slug,
+  name: r.name ?? r.slug,
+  vendor: metaAll[r.slug]?.vendor ?? null,
+  form: r.form,
+  oss_bucket: r.oss_bucket,
+  score: r.score,
+  stars: r.metrics?.stars ?? null,
+}));
 ---
 
 <Base pageTitle="AI Agent 排行榜">
   <div class="page-head">
     <h1>AI Agent 排行榜</h1>
     <p class="muted">
-      数据截至 {date} · 跨生态归一化 · 开源/闭源双榜 · 日/周/月粒度
+      数据截至 {date} · 跨生态归一化 · 开源/闭源双榜 · 日/周/月粒度 —— 先按形态缩小范围，再比指标。
     </p>
   </div>
+
+  <section class="box" style="margin-bottom:16px">
+    <div class="box-header">
+      <span>选型入口</span>
+      <span class="muted" style="font-size:12px;font-weight:400">搜索 / 按形态筛选，跨形态不排名</span>
+    </div>
+    <div class="box-body">
+      <HomePicker client:load items={pick} meta={meta} />
+    </div>
+  </section>
 
   <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr))">
     <section class="box">
@@ -34,7 +65,10 @@ const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).sl
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>#</th><th>Agent</th><th class="num">综合分</th><th class="num">30d 增速</th></tr>
+            <tr>
+              <th>#</th><th>Agent</th><th class="num">综合分</th>
+              {hasGrowth && <th class="num">30d 增速</th>}
+            </tr>
           </thead>
           <tbody>
             {topOpen.map((r, i) => (
@@ -53,7 +87,7 @@ const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).sl
                   </div>
                 </td>
                 <td class="num"><strong>{r.score ?? '—'}</strong></td>
-                <td class="num">{fmtPct(r.growth_30d_pct)}</td>
+                {hasGrowth && <td class="num">{fmtPct(r.growth_30d_pct)}</td>}
               </tr>
             ))}
           </tbody>
@@ -76,7 +110,10 @@ const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).sl
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>#</th><th>Agent</th><th class="num">综合分</th><th class="num">30d 增速</th></tr>
+            <tr>
+              <th>#</th><th>Agent</th><th class="num">综合分</th>
+              {hasGrowth && <th class="num">30d 增速</th>}
+            </tr>
           </thead>
           <tbody>
             {topClosed.map((r, i) => (
@@ -95,7 +132,7 @@ const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).sl
                   </div>
                 </td>
                 <td class="num"><strong>{r.score ?? '—'}</strong></td>
-                <td class="num">{fmtPct(r.growth_30d_pct)}</td>
+                {hasGrowth && <td class="num">{fmtPct(r.growth_30d_pct)}</td>}
               </tr>
             ))}
           </tbody>

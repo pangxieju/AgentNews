@@ -1,6 +1,13 @@
 ---
-import { loadLatestScores, loadAgentsMeta, fmt, fmtPct } from '../lib/data';
-import AgentIcon from './AgentIcon.astro';
+/**
+ * 榜单容器（服务端壳）。
+ * 数据在构建期内联进 HTML，交互交给 RankBoard island：
+ * - 默认 `client:load` 时首屏已有 SSR 结果，hydrate 后接管筛选/排序
+ * - 用 `client:visible` 会让首屏切换有一瞬原生跳转，这里选 load
+ */
+import RankBoard, { type RankRow, type IconMeta } from './RankBoard';
+import { loadLatestScores, loadAgentsMeta } from '../lib/data';
+import { rankUrl, formLabel, granLabel, defaultSortFor } from '../lib/shared';
 
 interface Props {
   bucket: string;
@@ -13,148 +20,55 @@ const { bucket, form, g } = Astro.props;
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
-const meta = loadAgentsMeta();
+const metaAll = loadAgentsMeta();
 
-let filtered = rows;
-if (bucket === 'open') filtered = filtered.filter((r) => r.oss_bucket !== 'closed');
-if (bucket === 'closed') filtered = filtered.filter((r) => r.oss_bucket === 'closed');
-if (form !== 'all') filtered = filtered.filter((r) => r.form === form);
+/** 只把榜单需要的字段送进 island —— 减小 HTML 体积 */
+const slim: RankRow[] = rows.map((r) => ({
+  slug: r.slug,
+  name: r.name ?? r.slug,
+  form: r.form,
+  oss_bucket: r.oss_bucket,
+  score: r.score,
+  rank_in_form: r.rank_in_form,
+  delta_1d: r.delta_1d,
+  delta_7d: r.delta_7d,
+  growth_30d_pct: r.growth_30d_pct,
+  metrics: {
+    stars: r.metrics?.stars ?? null,
+    installs: r.metrics?.installs ?? null,
+    activity: r.metrics?.activity ?? null,
+  },
+  flags: r.flags ?? [],
+  data_level: r.data_level,
+}));
 
-type Row = (typeof rows)[number];
+const meta: Record<string, IconMeta> = {};
+for (const r of rows) {
+  const m = metaAll[r.slug];
+  if (m) meta[r.slug] = { icon: m.icon, iconFallback: m.iconFallback };
+}
 
-/** 粒度切换 = 排序口径切换（PRD §5.5） */
-const sortKey = (g === 'day' ? 'delta_1d' : g === 'week' ? 'delta_7d' : 'score') as keyof Row;
-const numOf = (r: Row, k: keyof Row): number => {
-  const v = r[k];
-  return typeof v === 'number' ? v : -Infinity;
-};
-
-const FORM_ORDER = ['cli', 'ide-plugin', 'ide-app', 'desktop', 'browser', 'framework', 'autonomous'];
-const groups = FORM_ORDER
-  .map((f) => {
-    const list = filtered
-      .filter((r) => r.form === f)
-      .sort((a, b) => numOf(b, sortKey) - numOf(a, sortKey));
-    // 展示序号按当前视图重编（避免开源/闭源过滤后出现 1,2,3,4,6,7 断层）；L3 无序号
-    let n = 0;
-    const rows2 = list.map((r) => ({ ...r, _displayRank: r.score != null ? ++n : null }));
-    return { form: f, rows: rows2 };
-  })
-  .filter((x) => x.rows.length > 0);
-
-const forms = ['all', ...FORM_ORDER];
 const bucketLabel = bucket === 'open' ? '开源' : '闭源';
-const formLabel = (f: string) =>
-  ({ all: '全部', cli: 'CLI', 'ide-plugin': 'IDE 插件', 'ide-app': 'IDE 应用', desktop: '桌面', browser: '浏览器', framework: '框架', autonomous: '自主' })[f] ?? f;
-const gLabel = (x: string) => (x === 'day' ? '日榜' : x === 'week' ? '周榜' : '月榜');
-const sortHint =
-  g === 'day' ? '按当日 Star 增量排序' : g === 'week' ? '按滚动 7 日 Star 增量排序' : '按综合分排序';
-const href = (b: string, f: string, gg: string) => `/top/${b}/${f}/${gg}/`;
-
-const hasDeltas = rows.some((r) => r.delta_7d != null);
-const flagLabel: Record<string, string> = {
-  partial_data: '数据不全',
-  no_data: '数据未公开',
-  installs_may_include_ci: '含 CI 安装',
-  small_group: '样本少',
-};
-const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
-const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半开源' : '闭源');
 ---
 
 <div class="page-head">
   <div class="crumbs">
     <a href="/">AgentNews</a><span>/</span><span>{bucketLabel}榜</span>
   </div>
-  <h1>{bucketLabel}榜 <span class="muted" style="font-size:14px;font-weight:400">· {date}</span></h1>
-  <p class="muted">{sortHint} · <strong>同形态内比较，跨形态不排名</strong> · <a href="/about/">口径说明</a></p>
+  <h1><span id="rank-title">{bucketLabel}榜</span> <span class="muted" style="font-size:14px;font-weight:400">· {date}</span></h1>
+  <p class="muted">
+    <strong>同形态内比较，跨形态不排名</strong> · 点列头可切换排序 · <a href="/about/">口径说明</a>
+  </p>
 </div>
 
-<nav class="tabs" aria-label="形态筛选">
-  {forms.map((f) => (
-    <a class="tab" href={href(bucket, f, g)} aria-current={form === f ? 'page' : undefined}>
-      {formLabel(f)}
-    </a>
-  ))}
-</nav>
+<RankBoard client:load rows={slim} meta={meta} bucket={bucket} form={form} g={g} />
 
-<div class="spread" style="margin-bottom:16px">
-  <div class="row" style="gap:8px">
-    <span class="muted" style="font-size:12px">时间粒度</span>
-    <div class="segmented" role="tablist" aria-label="时间粒度">
-      {['day', 'week', 'month'].map((gg) => (
-        <a href={href(bucket, form, gg)} aria-current={g === gg ? 'page' : undefined}>{gLabel(gg)}</a>
-      ))}
-    </div>
+{rows.length === 0 && <div class="warn" style="margin-top:16px">暂无数据：请先运行 <code>pnpm collect</code>。</div>}
+
+<noscript>
+  <div class="warn" style="margin-top:16px">
+    当前浏览器禁用了 JavaScript，筛选与排序不可用。可直接访问
+    <a href={rankUrl(bucket, 'all', g)}>{bucketLabel}榜全部</a> 或
+    <a href="/archive/">历史归档</a>。
   </div>
-  <span class="muted" style="font-size:12px">
-    {filtered.length} 个 agent · {groups.length} 个形态
-  </span>
-</div>
-
-{!hasDeltas && <div class="warn" style="margin-bottom:16px">增量数据积累中：日榜/周榜将在快照满 1 天后可用（当前按综合分排序）。</div>}
-
-<div class="stack">
-  {groups.map((grp) => (
-    <section>
-      <div class="box">
-        <div class="box-header">
-          <span class="row" style="gap:8px">
-            {formLabel(grp.form)}
-            <span class="counter">{grp.rows.filter((r) => r._displayRank != null).length}</span>
-          </span>
-          <span class="muted" style="font-size:12px;font-weight:400">同形态内排名</span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Agent</th>
-                <th class="num">综合分</th>
-                <th class="num">Star</th>
-                <th class="num">日增</th>
-                <th class="num">7d 增</th>
-                <th class="num">30d 增速</th>
-                <th class="num">安装量</th>
-                <th class="num">活跃</th>
-              </tr>
-            </thead>
-            <tbody>
-              {grp.rows.map((r) => (
-                <tr>
-                  <td class="pos">{r._displayRank ?? '—'}</td>
-                  <td>
-                    <div class="agent-cell">
-                      <AgentIcon
-                        slug={r.slug}
-                        name={r.name ?? r.slug}
-                        icon={meta[r.slug]?.icon}
-                        iconFallback={meta[r.slug]?.iconFallback}
-                        size={24}
-                      />
-                      <span class="tags">
-                        <a class="name" href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
-                        <span class={`badge ${bucketBadge(r.oss_bucket)}`}>{bucketText(r.oss_bucket)}</span>
-                        {r.flags.map((f) => <span class="badge b-semi">{flagLabel[f] ?? f}</span>)}
-                      </span>
-                    </div>
-                  </td>
-                  <td class="num"><strong>{r.score ?? '—'}</strong></td>
-                  <td class="num">{fmt(r.metrics?.stars)}</td>
-                  <td class="num">{r.delta_1d != null ? (r.delta_1d > 0 ? '+' : '') + fmt(r.delta_1d) : '—'}</td>
-                  <td class="num">{r.delta_7d != null ? (r.delta_7d > 0 ? '+' : '') + fmt(r.delta_7d) : '—'}</td>
-                  <td class="num">{fmtPct(r.growth_30d_pct)}</td>
-                  <td class="num">{fmt(r.metrics?.installs)}</td>
-                  <td class="num">{r.metrics?.activity != null ? r.metrics.activity.toFixed(2) : '—'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  ))}
-</div>
-
-{rows.length === 0 && <div class="warn">暂无数据：请先运行 <code>pnpm collect</code>。</div>}
+</noscript>
