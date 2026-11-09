@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "typecheck": "tsc --noEmit",
     "preview": "astro preview",
     "cf:deploy": "wrangler pages deploy dist --project-name agentnews --commit-dirty=true",
     "cf:deploy:preview": "wrangler pages deploy dist --project-name agentnews-preview --commit-dirty=true"
