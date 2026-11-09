@@ -1,0 +1,72 @@
+---
+import { loadLatestScores } from '../lib/data';
+const data = loadLatestScores();
+const rows = data?.rows ?? [];
+const hasData = rows.length > 0;
+const date = data?.date ?? '暂无数据';
+const { pageTitle = 'AI Agent 排行榜' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle} · AgentRank</title>
+    <meta name="description" content="AI Agent 排行榜 —— 开源/闭源双榜，日/周/月粒度，跨生态归一化" />
+    <style>
+      :root { --bg: #0f1117; --card: #161b27; --border: #232a3b; --text: #e6e9f0; --muted: #8b93a7; --accent: #4f8cff; --green: #34d399; --red: #f87171; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; line-height: 1.6; }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      nav { display: flex; gap: 1.2rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--card); align-items: center; flex-wrap: wrap; }
+      nav .brand { font-weight: 700; font-size: 1.1rem; color: var(--text); }
+      nav a.nav { color: var(--muted); }
+      nav a.nav:hover { color: var(--text); }
+      main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+      h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+      .muted { color: var(--muted); }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+      .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; }
+      .card h2 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+      .card .num { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
+      .card .detail { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+      table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+      th, td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--border); }
+      th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+      .pos { color: var(--muted); width: 2.5rem; }
+      .up { color: var(--green); }
+      .down { color: var(--red); }
+      .badge { display: inline-block; padding: 0.1rem 0.45rem; border-radius: 4px; font-size: 0.75rem; margin-left: 0.3rem; }
+      .b-open { background: #16351f; color: #34d399; }
+      .b-semi { background: #3a2f12; color: #fbbf24; }
+      .b-closed { background: #331520; color: #f87171; }
+      .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+      .warn { background: #2a2010; border: 1px solid #57441a; color: #fbbf24; padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; margin-top: 1rem; }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a class="brand" href="/">AgentRank</a>
+      <a class="nav" href="/">双榜</a>
+      <a class="nav" href="/top">榜单</a>
+      <a class="nav" href="/about">口径</a>
+    </nav>
+    <main>
+      {hasData ? (
+        <slot />
+      ) : (
+        <div>
+          <h1>数据积累中</h1>
+          <p class="muted">首次运行后 24 小时内自动生成快照。当前无评分数据。</p>
+        </div>
+      )}
+      <div class="footer">
+        <span>数据更新于 <strong>{date}</strong> · AgentRank 综合分是观点，非客观事实</span>
+        <span><a href="/about">方法与口径</a></span>
+      </div>
+    </main>
+  </body>
+</html>

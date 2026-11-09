@@ -1,0 +1,330 @@
+# AgentRank 收录名单 v1 (M0)
+# 规则见 docs/PRD.md §4
+# - form / oss_bucket 为人工判定
+# - oss_bucket: open=OSI 协议 | semi=源码可见但非 OSI | closed=专有
+# - 闭源项目不得以 github 为主渠道
+# - slug: 小写字母/数字/连字符
+
+# ─────────────────────────────────────────────
+# CLI 编码 agent
+# ─────────────────────────────────────────────
+- slug: aider
+  name: Aider
+  vendor: Paul Gauthier
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://aider.chat
+  sources:
+    - { kind: github, identifier: Aider-AI/aider, is_primary: true }
+    - { kind: pypi, identifier: aider-chat }
+
+- slug: opencode
+  name: OpenCode
+  vendor: SST (Anomaly)
+  form: cli
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://opencode.ai
+  sources:
+    - { kind: github, identifier: sst/opencode, is_primary: true }
+    - { kind: npm, identifier: opencode-ai }
+
+- slug: pi
+  name: Pi
+  vendor: TheLaoGao
+  form: cli
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://github.com/TheLaoGao/pi
+  # ⚠️ M0：repo 不存在（404），待核实正确仓库后修正
+  sources:
+    - { kind: github, identifier: TheLaoGao/pi, is_primary: true }
+
+- slug: goose
+  name: Goose
+  vendor: Block (Brett T.)
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://block.github.io/goose
+  sources:
+    - { kind: github, identifier: block/goose, is_primary: true }
+
+- slug: openhands
+  name: OpenHands
+  vendor: All Hands AI
+  form: cli
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://openhands.ai
+  sources:
+    - { kind: github, identifier: All-Hands-AI/OpenHands, is_primary: true }
+
+- slug: codex-cli
+  name: Codex CLI
+  vendor: OpenAI
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://github.com/openai/codex
+  sources:
+    - { kind: github, identifier: openai/codex, is_primary: true }
+    - { kind: npm, identifier: "@openai/codex" }
+
+- slug: gemini-cli
+  name: Gemini CLI
+  vendor: Google
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://github.com/google-gemini/gemini-cli
+  sources:
+    - { kind: github, identifier: google-gemini/gemini-cli, is_primary: true }
+    - { kind: npm, identifier: "@google/gemini-cli" }
+
+- slug: qwen-code
+  name: Qwen Code
+  vendor: Alibaba
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://github.com/QwenLM/Qwen2.5-Coder
+  sources:
+    - { kind: github, identifier: QwenLM/Qwen2.5-Coder, is_primary: true }
+    - { kind: npm, identifier: "@qwen-code/qwen-code" }
+
+- slug: claude-code
+  name: Claude Code
+  vendor: Anthropic
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://claude.com/claude-code
+  sources:
+    - { kind: npm, identifier: "@anthropic-ai/claude-code", is_primary: true }
+
+- slug: amos
+  name: Amos
+  vendor: Anthropic
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://github.com/anthropics/amos
+  note: 闭源 CLI，GitHub 仓库仅供下载二进制（源码不可见）
+  sources:
+    - { kind: releases, identifier: anthropics/amos, is_primary: true }
+
+- slug: cursor-cli
+  name: Cursor CLI
+  vendor: Anysphere
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://cursor.com
+  sources:
+    - { kind: npm, identifier: cursor-cli, is_primary: true }
+
+- slug: kimi-cli
+  name: Kimi CLI
+  vendor: Moonshot AI
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://platform.moonshot.cn
+  sources:
+    - { kind: npm, identifier: "@moonshot-ai/kimi-code", is_primary: true }
+
+- slug: warp-agent
+  name: Warp Agent Mode
+  vendor: Warp (ex-WeWork)
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://warp.dev
+  sources:
+    - { kind: releases, identifier: warp-terminal, is_primary: true }
+
+# ─────────────────────────────────────────────
+# IDE 插件
+# ─────────────────────────────────────────────
+- slug: cline
+  name: Cline
+  vendor: Cline (saoudrizwan)
+  form: ide-plugin
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://cline.bot
+  sources:
+    - { kind: github, identifier: cline/cline, is_primary: true }
+    - { kind: vscode, identifier: saoudrizwan.claude-dev }
+
+- slug: roo-code
+  name: Roo Code
+  vendor: Roo Code
+  form: ide-plugin
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://roocode.com
+  sources:
+    - { kind: github, identifier: RooCodeInc/Roo-Code, is_primary: true }
+    - { kind: vscode, identifier: rooveterinaryinc.roo-cline }
+
+- slug: continue
+  name: Continue
+  vendor: Continue
+  form: ide-plugin
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://continue.dev
+  sources:
+    - { kind: github, identifier: continuedev/continue, is_primary: true }
+    - { kind: vscode, identifier: Continue.continue }
+
+- slug: kilo-code
+  name: Kilo Code
+  vendor: Kilo Code
+  form: ide-plugin
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://kilocode.ai
+  # ⚠️ M0：KiloCodeInc/Kilo-Code 不存在（404），待核实正确仓库；先用 vscode 渠道
+  sources:
+    - { kind: vscode, identifier: KiloCode.kilocode, is_primary: true }
+
+# ─────────────────────────────────────────────
+# IDE / 编辑器一体化产品
+# ─────────────────────────────────────────────
+- slug: cursor
+  name: Cursor
+  vendor: Anysphere
+  form: ide-app
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://cursor.com
+  sources:
+    - { kind: manual, identifier: cursor-com, is_primary: true }
+
+- slug: windsurf
+  name: Windsurf
+  vendor: Windsurf (ex-Codeium)
+  form: ide-app
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://windsurf.com
+  sources:
+    - { kind: manual, identifier: windsurf-com, is_primary: true }
+
+- slug: trae
+  name: Trae
+  vendor: ByteDance
+  form: ide-app
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.trae.ai
+  sources:
+    - { kind: manual, identifier: trae-ai, is_primary: true }
+
+# ─────────────────────────────────────────────
+# 浏览器 agent
+# ─────────────────────────────────────────────
+- slug: browser-use
+  name: Browser-use
+  vendor: Browser-use
+  form: browser
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://browser-use.com
+  sources:
+    - { kind: github, identifier: browser-use/browser-use, is_primary: true }
+    - { kind: pypi, identifier: browser-use }
+
+- slug: stagehand
+  name: Stagehand
+  vendor: Browserbase
+  form: browser
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://stagehand.dev
+  sources:
+    - { kind: github, identifier: browserbase/stagehand, is_primary: true }
+
+- slug: open-interpreter
+  name: Open Interpreter
+  vendor: Open Interpreter (Killian)
+  form: browser
+  oss_bucket: open
+  license_id: AGPL-3.0
+  homepage: https://openinterpreter.com
+  sources:
+    - { kind: github, identifier: OpenInterpreter/open-interpreter, is_primary: true }
+    - { kind: pypi, identifier: open-interpreter }
+
+# ─────────────────────────────────────────────
+# 多智能体框架
+# ─────────────────────────────────────────────
+- slug: crewai
+  name: CrewAI
+  vendor: CrewAI
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://crewai.com
+  sources:
+    - { kind: github, identifier: crewAIInc/crewAI, is_primary: true }
+    - { kind: pypi, identifier: crewai }
+
+- slug: langgraph
+  name: LangGraph
+  vendor: LangChain
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://www.langchain.com/langgraph
+  sources:
+    - { kind: github, identifier: langchain-ai/langgraph, is_primary: true }
+    - { kind: pypi, identifier: langgraph }
+
+- slug: autogen
+  name: AutoGen
+  vendor: Microsoft
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://microsoft.github.io/autogen
+  sources:
+    - { kind: github, identifier: microsoft/autogen, is_primary: true }
+    - { kind: pypi, identifier: autogen-agentchat }
+
+- slug: agno
+  name: Agno
+  vendor: Agno
+  form: framework
+  oss_bucket: open
+  license_id: MPL-2.0
+  homepage: https://agno.build
+  sources:
+    - { kind: github, identifier: agno-agi/agno, is_primary: true }
+    - { kind: pypi, identifier: agno }
+
+- slug: pydantic-ai
+  name: Pydantic AI
+  vendor: Pydantic
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://ai.pydantic.dev
+  sources:
+    - { kind: github, identifier: pydantic/pydantic-ai, is_primary: true }
+    - { kind: pypi, identifier: pydantic-ai }
+
+- slug: openai-agents
+  name: OpenAI Agents SDK
+  vendor: OpenAI
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://openai.github.io/openai-agents-python
+  sources:
+    - { kind: github, identifier: openai/openai-agents-python, is_primary: true }
+    - { kind: pypi, identifier: openai-agents }

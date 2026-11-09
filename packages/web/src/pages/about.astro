@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base pageTitle="方法与口径 · AgentRank">
+  <h1>方法与口径</h1>
+  <p class="muted">我们公开算法与数据来源 —— 综合分是观点，不是客观事实；所有原始指标都可切换排序。</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>综合分</h2>
+      <div class="detail">
+        <ol style="padding-left:1.2rem;margin-top:0.5rem">
+          <li>每个指标 log 压缩（抑制数量级差距）</li>
+          <li>同形态组内分位数归一 ∈ [0,1]</li>
+          <li>缺失指标权重重分配给其余指标</li>
+          <li>加权求和 → [0,100]</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card">
+      <h2>权重（v1）</h2>
+      <div class="detail" style="margin-top:0.5rem">
+        <div>Star 总量 20%</div>
+        <div>30 日增速 25%</div>
+        <div>活跃度 15%</div>
+        <div>安装量 20%</div>
+        <div>贡献者 10%</div>
+        <div>生态 5%</div>
+        <div>Fork 5%</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>开源/闭源判定</h2>
+      <div class="detail" style="margin-top:0.5rem">按 License 与源码可见性，不按分发渠道。Claude Code 走 npm 但闭源；Aider 走 PyPI 但开源。</div>
+    </div>
+    <div class="card">
+      <h2>数据来源</h2>
+      <div class="detail" style="margin-top:0.5rem">GitHub API · npm registry · PyPI (pypistats) · VS Code Marketplace（低频）。每日 UTC 02:00 采集，快照归档。</div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:2rem">反作弊</h2>
+  <ul style="padding-left:1.2rem;color:var(--muted)">
+    <li>单日 star 增幅 &gt; 5% 且无 release/报道佐证 → 打 suspicious，趋势榜剔除</li>
+    <li>增速基准低于 FLOOR（7d=50，30d=200）→ 不参与增速榜（防小基数暴涨）</li>
+  </ul>
+
+  <h2 style="margin-top:2rem">免责</h2>
+  <p class="muted">榜单为独立整理，与任何厂商无利益关联。数据可能有延迟或错误，欢迎提交 Issue 纠错。</p>
+</Base>

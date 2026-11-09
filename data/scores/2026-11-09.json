@@ -1,0 +1,452 @@
+{
+  "date": "2026-11-09",
+  "version": "v1",
+  "rows": [
+    {
+      "slug": "codex-cli",
+      "form": "cli",
+      "score": 78.6,
+      "rank_in_form": 1,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "claude-code",
+      "form": "cli",
+      "score": 70.4,
+      "rank_in_form": 2,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "opencode",
+      "form": "cli",
+      "score": 62.2,
+      "rank_in_form": 3,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "gemini-cli",
+      "form": "cli",
+      "score": 54.1,
+      "rank_in_form": 4,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "pi",
+      "form": "cli",
+      "score": 50,
+      "rank_in_form": 5,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "goose",
+      "form": "cli",
+      "score": 50,
+      "rank_in_form": 6,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "openhands",
+      "form": "cli",
+      "score": 50,
+      "rank_in_form": 7,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "amos",
+      "form": "cli",
+      "score": 50,
+      "rank_in_form": 8,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "warp-agent",
+      "form": "cli",
+      "score": 50,
+      "rank_in_form": 9,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "qwen-code",
+      "form": "cli",
+      "score": 45.9,
+      "rank_in_form": 10,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "kimi-cli",
+      "form": "cli",
+      "score": 37.8,
+      "rank_in_form": 11,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "aider",
+      "form": "cli",
+      "score": 29.6,
+      "rank_in_form": 12,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "cursor-cli",
+      "form": "cli",
+      "score": 21.4,
+      "rank_in_form": 13,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "cline",
+      "form": "ide-plugin",
+      "score": 78.6,
+      "rank_in_form": 1,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "continue",
+      "form": "ide-plugin",
+      "score": 59.5,
+      "rank_in_form": 2,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "roo-code",
+      "form": "ide-plugin",
+      "score": 40.5,
+      "rank_in_form": 3,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "kilo-code",
+      "form": "ide-plugin",
+      "score": 21.4,
+      "rank_in_form": 4,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "cursor",
+      "form": "ide-app",
+      "score": 50,
+      "rank_in_form": 1,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "windsurf",
+      "form": "ide-app",
+      "score": 50,
+      "rank_in_form": 2,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "trae",
+      "form": "ide-app",
+      "score": 50,
+      "rank_in_form": 3,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [],
+      "score_version": "v1"
+    },
+    {
+      "slug": "browser-use",
+      "form": "browser",
+      "score": 78.6,
+      "rank_in_form": 1,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "stagehand",
+      "form": "browser",
+      "score": 50,
+      "rank_in_form": 2,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L3",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "open-interpreter",
+      "form": "browser",
+      "score": 21.4,
+      "rank_in_form": 3,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "langgraph",
+      "form": "framework",
+      "score": 78.6,
+      "rank_in_form": 1,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "openai-agents",
+      "form": "framework",
+      "score": 67.1,
+      "rank_in_form": 2,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "pydantic-ai",
+      "form": "framework",
+      "score": 55.7,
+      "rank_in_form": 3,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "crewai",
+      "form": "framework",
+      "score": 44.3,
+      "rank_in_form": 4,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "agno",
+      "form": "framework",
+      "score": 32.9,
+      "rank_in_form": 5,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    },
+    {
+      "slug": "autogen",
+      "form": "framework",
+      "score": 21.4,
+      "rank_in_form": 6,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "score_version": "v1"
+    }
+  ]
+}

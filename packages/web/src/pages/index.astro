@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import { loadLatestScores, fmt, fmtPct } from '../lib/data';
+const data = loadLatestScores();
+const rows = data?.rows ?? [];
+const date = data?.date ?? '—';
+
+const open = rows.filter((r) => r.oss_bucket !== 'closed');
+const closed = rows.filter((r) => r.oss_bucket === 'closed');
+const topOpen = [...open].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
+const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
+---
+
+<Base pageTitle="AI Agent 排行榜">
+  <h1>AI Agent 排行榜</h1>
+  <p class="muted">数据截至 {date} · 跨生态归一化 · 开源/闭源双榜 · 日/周/月粒度</p>
+
+  <div class="grid">
+    <a href="/top?bucket=open" class="card" style="text-decoration:none;color:inherit">
+      <h2>开源榜 <span class="badge b-open">OPEN</span></h2>
+      <div class="num">{open.length}</div>
+      <div class="detail">OSI 协议 · MIT/Apache/AGPL 等 · 覆盖 {new Set(open.map(r => r.form)).size} 种形态</div>
+      <table>
+        <tr><th>#</th><th>Agent</th><th class="num">综合分</th><th class="num">30d 增速</th></tr>
+        {topOpen.map((r, i) => (
+          <tr>
+            <td class="pos">{i + 1}</td>
+            <td><a href={`/agent/${r.slug}`}>{r.slug}</a></td>
+            <td class="num">{r.score}</td>
+            <td class="num">{fmtPct(r.growth_30d_pct)}</td>
+          </tr>
+        ))}
+      </table>
+    </a>
+
+    <a href="/top?bucket=closed" class="card" style="text-decoration:none;color:inherit">
+      <h2>闭源榜 <span class="badge b-closed">CLOSED</span></h2>
+      <div class="num">{closed.length}</div>
+      <div class="detail">专有 License · 数据缺失时按收录区展示（不排名）</div>
+      <table>
+        <tr><th>#</th><th>Agent</th><th class="num">综合分</th><th class="num">30d 增速</th></tr>
+        {topClosed.map((r, i) => (
+          <tr>
+            <td class="pos">{i + 1}</td>
+            <td><a href={`/agent/${r.slug}`}>{r.slug}</a></td>
+            <td class="num">{r.score}</td>
+            <td class="num">{fmtPct(r.growth_30d_pct)}</td>
+          </tr>
+        ))}
+      </table>
+    </a>
+  </div>
+
+  {!data && <div class="warn">暂无数据：请先运行 <code>pnpm collect</code> 生成快照。</div>}
+</Base>
