@@ -18,6 +18,11 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      # 站点地址（可在 Repo Settings → Variables 里用 SITE_URL 覆盖）
+      SITE_URL: ${{ vars.SITE_URL || 'https://agentnews-c5h.pages.dev' }}
+      # 只有在配置了 CF secrets 时才部署（未配置则只采集+提交）
+      CF_READY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -32,21 +37,21 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # 数据契约先校验；算法回归先跑
+      # 数据契约先校验；算法回归先跑（校验失败绝不出榜）
       - run: pnpm validate
       - run: pnpm test
 
       - name: Collect & score
         run: pnpm collect
         env:
-          # 默认 token：5000 次/小时，足够覆盖 500 个 repo
+          # Actions 自动注入：5000 次/小时，足够覆盖当前 47 个 repo × 3 请求
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit snapshots
         run: |
           git config user.name  'agentnews-bot'
           git config user.email 'bot@agentnews.dev'
-          git add data/
+          git add data/ agents.yaml
           if git diff --staged --quiet; then
             echo "无数据变更，跳过提交"
           else
@@ -54,12 +59,22 @@ jobs:
             git push
           fi
 
-      # 可选：构建产物留档（Cloudflare Pages 通常由 GitHub 集成自动构建）
+      # 构建 + 直接部署到 Cloudflare Pages（不依赖 CF↔GitHub 集成）
       - name: Build site
         run: pnpm build
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: site
-          path: packages/web/dist
-          retention-days: 7
+      - name: Deploy to Cloudflare Pages
+        if: env.CF_READY == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        # --force：wrangler 4 默认会委托给新版 Workers-Pages，CI 非交互环境需强制走 Pages
+        run: pnpm --filter @agentnews/web exec wrangler pages deploy dist --project-name agentnews --force
+
+      - name: Summary
+        run: |
+          echo "### 采集完成" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- 数据：$(ls data/scores | tail -1)" >> $GITHUB_STEP_SUMMARY
+          echo "- 在榜：$(node -e "const j=require('./data/scores/'+require('fs').readdirSync('data/scores').sort().pop());console.log(j.rows.filter(r=>r.rank_in_form!=null).length)") 个" >> $GITHUB_STEP_SUMMARY
+          echo "- 站点：https://agentnews-c5h.pages.dev" >> $GITHUB_STEP_SUMMARY
