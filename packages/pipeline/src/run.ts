@@ -89,7 +89,6 @@ async function buildScorables(
   const prev = await readSnapshot(prevDate(today));
   const weekAgo = await readSnapshot(daysAgo(today, 7));
   const monthAgo = await readSnapshot(daysAgo(today, 30));
-  const now = new Date();
 
   return agents.map((agent) => {
     const m = metricsMap.get(agent.slug) ?? {};

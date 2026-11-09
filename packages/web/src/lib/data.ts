@@ -10,8 +10,38 @@ const AGENTS_YAML = join(ROOT, 'agents.yaml');
 const ICONS_MANIFEST = join(DATA_DIR, 'icons.json');
 const ICONS_DIR = join(ROOT, 'packages', 'web', 'public', 'icons');
 
-export type ScoreFile = { date: string; version: string; rows: ScoreRow[] };
-export type ArchiveFile = {
+const SCORES_DIR = join(DATA_DIR, 'scores');
+const ARCHIVE_DIR = join(DATA_DIR, 'archive');
+const SNAPSHOT_DIR = join(DATA_DIR, 'snapshots');
+const EVENTS_DIR = join(DATA_DIR, 'events');
+const SECURITY_DIR = join(DATA_DIR, 'security');
+
+/** 读 JSON 文件；不存在 / 解析失败 → null */
+function readJson<T>(path: string): T | null {
+  try {
+    return JSON.parse(readFileSync(path, 'utf8')) as T;
+  } catch {
+    return null;
+  }
+}
+
+/** 目录下文件名排序后的末尾一个；目录不存在或为空 → null */
+function latestFile(dir: string, ext = '.json'): string | null {
+  if (!existsSync(dir)) return null;
+  const files = readdirSync(dir).filter((f) => f.endsWith(ext)).sort();
+  return files.length ? files[files.length - 1]! : null;
+}
+
+/** 读目录下全部 JSON（按文件名排序，desc=true 时最新在前），跳过解析失败的 */
+function readJsonDir<T>(dir: string, desc = false): T[] {
+  if (!existsSync(dir)) return [];
+  const files = readdirSync(dir).filter((f) => f.endsWith('.json')).sort();
+  if (desc) files.reverse();
+  return files.map((f) => readJson<T>(join(dir, f))).filter((x): x is T => x != null);
+}
+
+type ScoreFile = { date: string; version: string; rows: ScoreRow[] };
+type ArchiveFile = {
   period: 'week' | 'month';
   label: string;
   end: string;
@@ -21,37 +51,16 @@ export type ArchiveFile = {
 
 /** 读最新评分快照（构建时） */
 export function loadLatestScores(): ScoreFile | null {
-  const dir = join(DATA_DIR, 'scores');
-  if (!existsSync(dir)) return null;
-  const files = readdirSync(dir).filter((f) => f.endsWith('.json')).sort();
-  if (!files.length) return null;
-  const latest = files[files.length - 1]!;
-  try {
-    return JSON.parse(readFileSync(join(dir, latest), 'utf8')) as ScoreFile;
-  } catch {
-    return null;
-  }
+  const f = latestFile(SCORES_DIR);
+  return f ? readJson<ScoreFile>(join(SCORES_DIR, f)) : null;
 }
 
 /** 读所有历史评分快照（按日期倒序） */
 export function loadAllScores(): ScoreFile[] {
-  const dir = join(DATA_DIR, 'scores');
-  if (!existsSync(dir)) return [];
-  return readdirSync(dir)
-    .filter((f) => f.endsWith('.json'))
-    .sort()
-    .reverse()
-    .map((f) => {
-      try {
-        return JSON.parse(readFileSync(join(dir, f), 'utf8')) as ScoreFile;
-      } catch {
-        return null;
-      }
-    })
-    .filter((x): x is ScoreFile => x != null);
+  return readJsonDir<ScoreFile>(SCORES_DIR, true);
 }
 
-export type HistoryPoint = {
+type HistoryPoint = {
   date: string;
   score: number | null;
   stars: number | null;
@@ -88,36 +97,17 @@ export function loadDailyCounts(): Array<{ date: string; ranked: number; listed:
 
 /** 读所有归档（周档 + 月档，按结束日倒序） */
 export function loadArchives(): ArchiveFile[] {
-  const dir = join(DATA_DIR, 'archive');
-  if (!existsSync(dir)) return [];
-  return readdirSync(dir)
-    .filter((f) => f.endsWith('.json'))
-    .sort()
-    .reverse()
-    .map((f) => {
-      try {
-        return JSON.parse(readFileSync(join(dir, f), 'utf8')) as ArchiveFile;
-      } catch {
-        return null;
-      }
-    })
-    .filter((x): x is ArchiveFile => x != null);
+  return readJsonDir<ArchiveFile>(ARCHIVE_DIR, true);
 }
 
 /** 读单个归档 */
 export function loadArchive(label: string): ArchiveFile | null {
-  const p = join(DATA_DIR, 'archive', `${label}.json`);
-  if (!existsSync(p)) return null;
-  try {
-    return JSON.parse(readFileSync(p, 'utf8')) as ArchiveFile;
-  } catch {
-    return null;
-  }
+  return readJson<ArchiveFile>(join(ARCHIVE_DIR, `${label}.json`));
 }
 
 /* ───────────────── 版本历史 ───────────────── */
 
-export type VersionEntry = {
+type VersionEntry = {
   date: string;
   version: string;
   version_at: string | null;
@@ -133,13 +123,12 @@ let _versions: Record<string, VersionEntry[]> | null = null;
 export function loadVersionHistory(slug: string): VersionEntry[] {
   if (!_versions) {
     const out: Record<string, VersionEntry[]> = {};
-    const dir = join(DATA_DIR, 'snapshots');
-    if (existsSync(dir)) {
-      for (const f of readdirSync(dir).filter((x) => x.endsWith('.jsonl')).sort()) {
+    if (existsSync(SNAPSHOT_DIR)) {
+      for (const f of readdirSync(SNAPSHOT_DIR).filter((x) => x.endsWith('.jsonl')).sort()) {
         const date = f.slice(0, 10);
         let raw = '';
         try {
-          raw = readFileSync(join(dir, f), 'utf8');
+          raw = readFileSync(join(SNAPSHOT_DIR, f), 'utf8');
         } catch {
           continue;
         }
@@ -171,7 +160,7 @@ export function loadVersionHistory(slug: string): VersionEntry[] {
 
 /* ───────────────── Agent 元信息 / 图标 ───────────────── */
 
-export type AgentMeta = {
+type AgentMeta = {
   name: string;
   vendor: string | null;
   homepage: string | null;
@@ -188,13 +177,8 @@ type IconManifest = Record<string, { file: string; source: string; w: number; h:
 let _iconManifest: IconManifest | null = null;
 
 /** 读 data/icons.json（由 pipeline 每日下载图标后生成） */
-export function loadIconManifest(): IconManifest {
-  if (_iconManifest) return _iconManifest;
-  try {
-    _iconManifest = JSON.parse(readFileSync(ICONS_MANIFEST, 'utf8')) as IconManifest;
-  } catch {
-    _iconManifest = {};
-  }
+function loadIconManifest(): IconManifest {
+  _iconManifest ??= readJson<IconManifest>(ICONS_MANIFEST) ?? {};
   return _iconManifest;
 }
 
@@ -264,7 +248,7 @@ export function loadAgentsMeta(): Record<string, AgentMeta> {
 }
 
 // 纯展示工具统一在 shared.ts（客户端 island 也要用，不能带 node 依赖）
-export { fmt, fmtPct, fmtSigned, bucketBadgeClass, FORM_ORDER, GRANS, defaultSortFor, rankUrl } from './shared';
+export { fmt, fmtPct, fmtSigned, FORM_ORDER, GRANS, defaultSortFor, rankUrl } from './shared';
 
 /* ───────────────── 活动事件流（PRD F-24） ───────────────── */
 
@@ -281,12 +265,11 @@ export type AgentEvent = {
 
 /** 读所有事件（按日期倒序） */
 export function loadEvents(): AgentEvent[] {
-  const dir = join(DATA_DIR, 'events');
-  if (!existsSync(dir)) return [];
+  if (!existsSync(EVENTS_DIR)) return [];
   const out: AgentEvent[] = [];
-  for (const f of readdirSync(dir).filter((x) => x.endsWith('.jsonl')).sort().reverse()) {
+  for (const f of readdirSync(EVENTS_DIR).filter((x) => x.endsWith('.jsonl')).sort().reverse()) {
     try {
-      for (const line of readFileSync(join(dir, f), 'utf8').split('\n')) {
+      for (const line of readFileSync(join(EVENTS_DIR, f), 'utf8').split('\n')) {
         if (line.trim()) out.push(JSON.parse(line) as AgentEvent);
       }
     } catch {
@@ -296,15 +279,11 @@ export function loadEvents(): AgentEvent[] {
   return out;
 }
 
+type AgentState = { started_at: string; agents: Record<string, { first_listed: string; last_seen: string }> };
+
 /** 读首次收录状态 */
-export function loadAgentState(): { started_at: string; agents: Record<string, { first_listed: string; last_seen: string }> } | null {
-  const p = join(DATA_DIR, 'agents-state.json');
-  if (!existsSync(p)) return null;
-  try {
-    return JSON.parse(readFileSync(p, 'utf8'));
-  } catch {
-    return null;
-  }
+export function loadAgentState(): AgentState | null {
+  return readJson<AgentState>(join(DATA_DIR, 'agents-state.json'));
 }
 
 /* ───────────────── 安全公告（PRD F-26） ───────────────── */
@@ -319,15 +298,8 @@ export type SecurityInfo = {
 };
 
 export function loadSecurity(): { date: string; subjects: Record<string, SecurityInfo> } | null {
-  const dir = join(DATA_DIR, 'security');
-  if (!existsSync(dir)) return null;
-  const files = readdirSync(dir).filter((f) => f.endsWith('.json')).sort();
-  if (!files.length) return null;
-  try {
-    return JSON.parse(readFileSync(join(dir, files[files.length - 1]!), 'utf8'));
-  } catch {
-    return null;
-  }
+  const f = latestFile(SECURITY_DIR);
+  return f ? readJson(join(SECURITY_DIR, f)) : null;
 }
 
 /** 安全等级：仅用于视觉提示，不构成安全评级 */

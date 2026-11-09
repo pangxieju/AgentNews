@@ -33,7 +33,7 @@ async function collectGitHubViaUngh(repo: string): Promise<{
 }
 
 /** GitHub REST：单 repo 基础指标（1 次请求/repo） */
-export async function collectGitHub(repo: string, token?: string, mode: GitHubMode = 'api'): Promise<{
+async function collectGitHub(repo: string, token?: string, mode: GitHubMode = 'api'): Promise<{
   stars: number; forks: number; open_issues: number | null;
   last_commit: string; last_release: string | null; repo_created: string | null;
 }> {
@@ -82,7 +82,7 @@ export async function collectGitHub(repo: string, token?: string, mode: GitHubMo
  * 贡献者数：per_page=1 + Link header 的 rel="last" 页号（1 次请求拿总数）
  * 需 API 通道（ungh 不提供），仅在 mode='api' 且额度充足时调用
  */
-export async function collectContributors(repo: string, token?: string): Promise<number | null> {
+async function collectContributors(repo: string, token?: string): Promise<number | null> {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
     'User-Agent': 'agentnews-m0',
@@ -105,7 +105,7 @@ export async function collectContributors(repo: string, token?: string): Promise
 }
 
 /** 最新 release 日期（1 次请求） */
-export async function collectLatestRelease(repo: string, token?: string): Promise<string | null> {
+async function collectLatestRelease(repo: string, token?: string): Promise<string | null> {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
     'User-Agent': 'agentnews-m0',
@@ -126,7 +126,7 @@ export async function collectLatestRelease(repo: string, token?: string): Promis
  * 无 token 时每小时只有 60 次，而每个 repo 需 3 次（repo+contributors+release），
  * 所以门槛必须按待采集 repo 数动态计算；额度不够就整轮走 ungh（只需 1 次/repo，且不占额度）。
  */
-export async function githubQuota(token?: string): Promise<{ remaining: number; enough: boolean }> {
+async function githubQuota(token?: string): Promise<{ remaining: number; enough: boolean }> {
   const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'User-Agent': 'agentnews-m0' };
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
@@ -147,7 +147,7 @@ export async function githubHasQuota(token?: string, needRepos = 0): Promise<boo
 }
 
 /** npm：周/月下载量（无鉴权） */
-export async function collectNpm(pkg: string): Promise<{
+async function collectNpm(pkg: string): Promise<{
   npm_weekly_dl: number;
   npm_monthly_dl: number;
 }> {
@@ -164,7 +164,7 @@ export async function collectNpm(pkg: string): Promise<{
 }
 
 /** PyPI：月下载量（pypistats 经常 429，带重试退避） */
-export async function collectPypi(pkg: string, retries = 3): Promise<{ pypi_monthly_dl: number }> {
+async function collectPypi(pkg: string, retries = 3): Promise<{ pypi_monthly_dl: number }> {
   let lastErr = '';
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
@@ -189,7 +189,7 @@ export async function collectPypi(pkg: string, retries = 3): Promise<{ pypi_mont
 }
 
 /** VS Code Marketplace：当前版本（extensions[0].versions[0].version）+ 更新日期 */
-export async function collectVscodeVersion(extensionId: string): Promise<{
+async function collectVscodeVersion(extensionId: string): Promise<{
   version: string | null;
   version_at: string | null;
 }> {
@@ -215,7 +215,7 @@ export async function collectVscodeVersion(extensionId: string): Promise<{
 }
 
 /** VS Code Marketplace installs（非官方 API，低频） */
-export async function collectVscode(extensionId: string): Promise<{ vscode_installs: number }> {
+async function collectVscode(extensionId: string): Promise<{ vscode_installs: number }> {
   const res = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json;api-version=3.0-preview.1' },
@@ -234,7 +234,7 @@ export async function collectVscode(extensionId: string): Promise<{ vscode_insta
 }
 
 /** npm：当前版本（dist-tags.latest）+ 发布时间（time[version]） */
-export async function collectNpmVersion(pkg: string): Promise<{
+async function collectNpmVersion(pkg: string): Promise<{
   version: string | null;
   version_at: string | null;
 }> {
@@ -256,7 +256,7 @@ export async function collectNpmVersion(pkg: string): Promise<{
 }
 
 /** PyPI：latest version（info.version） */
-export async function collectPypiVersion(pkg: string): Promise<{
+async function collectPypiVersion(pkg: string): Promise<{
   version: string | null;
   version_at: string | null;
 }> {
@@ -279,7 +279,7 @@ export async function collectPypiVersion(pkg: string): Promise<{
 }
 
 /** GitHub release：tag_name + published_at（复用已有的 /releases/latest 请求思路，独立实现） */
-export async function collectGithubVersion(repo: string, token?: string): Promise<{
+async function collectGithubVersion(repo: string, token?: string): Promise<{
   version: string | null;
   version_at: string | null;
   name: string | null;

@@ -31,7 +31,7 @@ export const SourceKind = z.enum([
   'openrouter',
   'manual',
 ]);
-export type SourceKind = z.infer<typeof SourceKind>;
+type SourceKind = z.infer<typeof SourceKind>;
 
 export const SourceSchema = z.object({
   kind: SourceKind,
@@ -82,10 +82,8 @@ export const AgentsFileSchema = z
     }
   });
 
-export type AgentsFile = z.infer<typeof AgentsFileSchema>;
-
 /** 原始指标（metric_raw 的 TS 形态，PRD §8） */
-export type MetricKey =
+type MetricKey =
   | 'stars'
   | 'forks'
   | 'contributors'
@@ -118,20 +116,6 @@ export type MetricKey =
 export type Metrics = Partial<Record<MetricKey, number | string | null>>;
 
 export const SCORE_VERSION = 'v1';
-
-export type ScoreInput = {
-  slug: string;
-  form: Form;
-  oss_bucket: OssBucket;
-  /** 当日采集的指标值；缺失的字段为 null/undefined */
-  metrics: Metrics;
-  /** 参考历史值：t-1 / t-7 / t-30（由 pipeline 从历史快照解析） */
-  ref?: {
-    prev: Metrics;
-    weekAgo: Metrics;
-    monthAgo: Metrics;
-  };
-};
 
 /** 打分输出（score_daily / score_periodic 的 TS 形态） */
 export type ScoreRow = {

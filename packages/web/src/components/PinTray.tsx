@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
-import { PIN_EVENT, TRAY_EVENT, clearPins, readPins, removePin } from '../lib/pins';
+import { PIN_EVENT, clearPins, readPins, removePin } from '../lib/pins';
 import { type Lang, pathFor, t } from '../i18n/dict';
 import AgentIcon from './AgentIcon';
 
@@ -16,18 +16,12 @@ interface Props {
 /** 全局对比托盘：钉选 1–3 个 agent 后出现，随时可跳到 /compare/ */
 export default function PinTray({ meta, lang }: Props) {
   const [pins, setPins] = useState<string[]>([]);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setPins(readPins());
     const onPins = (e: Event) => setPins((e as CustomEvent<string[]>).detail ?? readPins());
-    const onTray = () => setOpen(true);
     window.addEventListener(PIN_EVENT, onPins);
-    window.addEventListener(TRAY_EVENT, onTray);
-    return () => {
-      window.removeEventListener(PIN_EVENT, onPins);
-      window.removeEventListener(TRAY_EVENT, onTray);
-    };
+    return () => window.removeEventListener(PIN_EVENT, onPins);
   }, []);
 
   if (pins.length === 0) return null;
@@ -41,7 +35,7 @@ export default function PinTray({ meta, lang }: Props) {
     `?${pins.map((s, i) => `${['a', 'b', 'c'][i]}=${s}`).join('&')}`;
 
   return (
-    <div class={`pin-tray${open ? ' is-open' : ''}`} role="region" aria-label={t(lang, 'tray.aria')}>
+    <div class="pin-tray" role="region" aria-label={t(lang, 'tray.aria')}>
       <div class="pin-tray-inner">
         <span class="pin-tray-label">
           {t(lang, 'tray.label')} <b>{pins.length}</b>/3

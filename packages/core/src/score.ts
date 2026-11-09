@@ -21,7 +21,7 @@ export type ScoreMetricKey =
 
 export type Weights = Partial<Record<ScoreMetricKey, number>>;
 
-export const DEFAULT_WEIGHTS: Weights = {
+const DEFAULT_WEIGHTS: Weights = {
   stars: 0.2,
   star_growth_30d: 0.25,
   activity: 0.15,
@@ -85,7 +85,7 @@ export function effectiveInstalls(m: Metrics): number | null {
   return null;
 }
 
-export type Scorable = {
+type Scorable = {
   slug: string;
   form: Form;
   oss_bucket: OssBucket;
@@ -99,7 +99,7 @@ export type Scorable = {
 };
 
 /** 取某项指标的分值（未压缩的原始语义），派生量在此计算 */
-export function valueFor(item: Scorable, key: ScoreMetricKey, now: Date): number | null {
+function valueFor(item: Scorable, key: ScoreMetricKey, now: Date): number | null {
   const m = item.metrics;
   switch (key) {
     case 'stars': return num(m.stars);
@@ -117,7 +117,7 @@ export function valueFor(item: Scorable, key: ScoreMetricKey, now: Date): number
   }
 }
 
-export type ScoreResult = { slug: string; score: number }[];
+type ScoreResult = { slug: string; score: number }[];
 
 /**
  * 对一个组（同 form）打分，score ∈ [0,100]

@@ -16,9 +16,6 @@ export const FORM_ORDER = [
 
 export type FormKey = (typeof FORM_ORDER)[number];
 
-export const bucketBadgeClass = (b: string): string =>
-  b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed';
-
 /** 格式化数字（T/B/k 缩写，小于 1k 保留原值） */
 export function fmt(n: number | null | undefined): string {
   if (n == null) return '—';
@@ -51,18 +48,6 @@ export const defaultSortFor = (g: string): string =>
 export const rankUrl = (bucket: string, form: string, g: string): string =>
   `/top/${bucket}/${form}/${g}/`;
 
-
-/* ───────────── 形态的英文名与决策文案 ───────────── */
-
-export const FORM_EN: Record<string, string> = {
-  cli: 'Terminal',
-  'ide-plugin': 'IDE Extension',
-  'ide-app': 'AI IDE',
-  desktop: 'Desktop',
-  browser: 'Browser',
-  framework: 'Framework',
-  autonomous: 'Autonomous',
-};
 
 /* ───────────── 安装渠道 / 入口链接 ───────────── */
 

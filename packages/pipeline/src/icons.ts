@@ -108,23 +108,21 @@ function sniff(buf: Buffer): Image | null {
 
 /* ───────────────────────── 抓取 ───────────────────────── */
 
-async function fetchImage(url: string, timeoutMs = TIMEOUT_MS): Promise<Image | null> {
+/**
+ * 带超时的 GET：超时覆盖「拿到响应头」与「读完 body」全程，
+ * 网络错误 / 非 2xx / read 内抛错统一返回 null。
+ */
+async function get<T>(
+  url: string,
+  headers: Record<string, string>,
+  read: (res: Response) => Promise<T | null>,
+  timeoutMs = TIMEOUT_MS,
+): Promise<T | null> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
-    const res = await fetch(url, {
-      headers: IMAGE_HEADERS,
-      signal: ctrl.signal,
-      redirect: 'follow',
-    });
-    if (!res.ok) return null;
-    const type = res.headers.get('content-type') ?? '';
-    if (!/image\//i.test(type) && !/octet-stream/i.test(type)) return null;
-    const len = Number(res.headers.get('content-length') ?? 0);
-    if (len > MAX_BYTES) return null;
-    const buf = Buffer.from(await res.arrayBuffer());
-    if (buf.length === 0 || buf.length > MAX_BYTES) return null;
-    return sniff(buf);
+    const res = await fetch(url, { headers, signal: ctrl.signal, redirect: 'follow' });
+    return res.ok ? await read(res) : null;
   } catch {
     return null;
   } finally {
@@ -132,25 +130,36 @@ async function fetchImage(url: string, timeoutMs = TIMEOUT_MS): Promise<Image | 
   }
 }
 
+function fetchImage(url: string, timeoutMs = TIMEOUT_MS): Promise<Image | null> {
+  return get(
+    url,
+    IMAGE_HEADERS,
+    async (res) => {
+      const type = res.headers.get('content-type') ?? '';
+      if (!/image\//i.test(type) && !/octet-stream/i.test(type)) return null;
+      if (Number(res.headers.get('content-length') ?? 0) > MAX_BYTES) return null;
+      const buf = Buffer.from(await res.arrayBuffer());
+      return buf.length && buf.length <= MAX_BYTES ? sniff(buf) : null;
+    },
+    timeoutMs,
+  );
+}
+
 /** 抓官网 HTML；返回最终 URL（跟随跳转后），相对 href 要以它为基准解析 */
-async function fetchHtmlOnce(
+function fetchHtmlOnce(
   url: string,
   timeoutMs: number,
 ): Promise<{ html: string; url: string } | null> {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, { headers: HTML_HEADERS, signal: ctrl.signal, redirect: 'follow' });
-    if (!res.ok) return null;
-    const type = res.headers.get('content-type') ?? '';
-    if (!/text\/html/i.test(type)) return null;
-    const text = await res.text();
-    return { html: text.slice(0, 600_000), url: res.url || url };
-  } catch {
-    return null;
-  } finally {
-    clearTimeout(timer);
-  }
+  return get(
+    url,
+    HTML_HEADERS,
+    async (res) => {
+      if (!/text\/html/i.test(res.headers.get('content-type') ?? '')) return null;
+      const text = await res.text();
+      return { html: text.slice(0, 600_000), url: res.url || url };
+    },
+    timeoutMs,
+  );
 }
 
 async function fetchHtml(url: string, timeoutMs = TIMEOUT_MS): Promise<{ html: string; url: string } | null> {

@@ -3,7 +3,6 @@
 const KEY = 'an-pins';
 const MAX = 3;
 export const PIN_EVENT = 'an-pins-change';
-export const TRAY_EVENT = 'an-tray-toggle';
 
 export function readPins(): string[] {
   if (typeof localStorage === 'undefined') return [];
@@ -36,10 +35,6 @@ export function togglePin(slug: string): string[] {
 export function clearPins(): string[] {
   write([]);
   return [];
-}
-
-export function openTray() {
-  window.dispatchEvent(new CustomEvent(TRAY_EVENT, { detail: true }));
 }
 
 export function removePin(slug: string): string[] {

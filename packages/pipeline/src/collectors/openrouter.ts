@@ -31,7 +31,7 @@ type MarketPayload = {
   globalRankingMap?: { day?: RankedItem[]; week?: RankedItem[]; month?: RankedItem[] };
 };
 
-export type OpenRouterUsage = {
+type OpenRouterUsage = {
   appId: number;
   title: string;
   slug: string | null;
@@ -49,7 +49,7 @@ const toNum = (s: string | number | undefined): number => {
 };
 
 /** 拉取并索引榜单（进程内缓存 30 分钟） */
-export async function loadOpenRouterUsage(): Promise<{
+async function loadOpenRouterUsage(): Promise<{
   bySlug: Map<string, OpenRouterUsage>;
   byId: Map<string, OpenRouterUsage>;
 }> {
@@ -102,10 +102,4 @@ export async function collectOpenRouter(identifier: string): Promise<Partial<Met
     openrouter_requests_month: hit.requestsMonth,
     openrouter_rank_month: hit.rankMonth,
   };
-}
-
-/** 供 CLI / 调试：列出榜单前 N 名 */
-export async function listOpenRouterTop(n = 20): Promise<OpenRouterUsage[]> {
-  const { byId } = await loadOpenRouterUsage();
-  return [...byId.values()].sort((a, b) => a.rankMonth - b.rankMonth).slice(0, n);
 }
