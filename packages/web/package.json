@@ -15,7 +15,8 @@
     "@astrojs/preact": "^4.0.0",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.0.0",
-    "preact": "^10.25.0"
+    "preact": "^10.25.0",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
     "typescript": "^5.7.2",

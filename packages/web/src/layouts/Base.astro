@@ -8,7 +8,22 @@ const {
   pageTitle = 'AI Agent 排行榜',
   description = `AI Agent 排行榜：${rows.length} 个 agent 的开源/闭源双榜，按 star、安装量、活跃度跨生态归一化排名。数据截至 ${date}。`,
 } = Astro.props;
+
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentnews.example.com').href;
+const path = Astro.url.pathname;
+
+const NAV = [
+  { href: '/', label: '双榜' },
+  { href: '/top/open/all/month/', label: '榜单' },
+  { href: '/rising/', label: '新秀' },
+  { href: '/activity/', label: '动态' },
+  { href: '/security/', label: '安全' },
+  { href: '/archive/', label: '归档' },
+  { href: '/changelog/', label: '变更' },
+  { href: '/about/', label: '口径' },
+];
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href.replace(/\/$/, ''));
 ---
 
 <!doctype html>
@@ -18,71 +33,537 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentnews.e
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle} · AgentNews</title>
     <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={`${pageTitle} · AgentNews`} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
-    <meta name="theme-color" content="#0f1117" />
-    <style>
-      :root { --bg: #0f1117; --card: #161b27; --border: #232a3b; --text: #e6e9f0; --muted: #8b93a7; --accent: #4f8cff; --green: #34d399; --red: #f87171; }
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('an-theme');
+        if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+      } catch {}
+    </script>
+    <style is:global>
+      /* ── GitHub Primer 风格设计令牌 ───────────────────────────── */
+      :root {
+        color-scheme: light;
+        --gh-canvas: #ffffff;
+        --gh-canvas-subtle: #f6f8fa;
+        --gh-canvas-inset: #f6f8fa;
+        --gh-border: #d0d7de;
+        --gh-border-muted: #d8dee4;
+        --gh-fg: #1f2328;
+        --gh-fg-muted: #656d76;
+        --gh-fg-subtle: #6e7781;
+        --gh-accent: #0969da;
+        --gh-accent-subtle: #ddf4ff;
+        --gh-success: #1a7f37;
+        --gh-success-subtle: #dafbe1;
+        --gh-attention: #9a6700;
+        --gh-attention-subtle: #fff8c5;
+        --gh-danger: #cf222e;
+        --gh-danger-subtle: #ffebe9;
+        --gh-neutral-subtle: rgba(175, 184, 193, 0.2);
+        --gh-btn-bg: #f6f8fa;
+        --gh-btn-hover: #eef1f4;
+        --gh-header-bg: #f6f8fa;
+        --gh-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+        --gh-underline: #fd8c73;
+        --gh-primary: #1f883d;
+        --gh-primary-hover: #1a7f37;
+        --gh-primary-border: rgba(31, 35, 40, 0.15);
+        --gh-scroll-thumb: rgba(31, 35, 40, 0.2);
+
+        /* 兼容旧变量名 */
+        --bg: var(--gh-canvas);
+        --card: var(--gh-canvas);
+        --border: var(--gh-border);
+        --text: var(--gh-fg);
+        --muted: var(--gh-fg-muted);
+        --accent: var(--gh-accent);
+        --green: var(--gh-success);
+        --red: var(--gh-danger);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          color-scheme: dark;
+          --gh-canvas: #0d1117;
+          --gh-canvas-subtle: #161b22;
+          --gh-canvas-inset: #010409;
+          --gh-border: #30363d;
+          --gh-border-muted: #21262d;
+          --gh-fg: #e6edf3;
+          --gh-fg-muted: #8b949e;
+          --gh-fg-subtle: #6e7681;
+          --gh-accent: #58a6ff;
+          --gh-accent-subtle: #121d2f;
+          --gh-success: #3fb950;
+          --gh-success-subtle: #12261e;
+          --gh-attention: #d29922;
+          --gh-attention-subtle: #272115;
+          --gh-danger: #f85149;
+          --gh-danger-subtle: #25171c;
+          --gh-neutral-subtle: rgba(110, 118, 129, 0.4);
+          --gh-btn-bg: #21262d;
+          --gh-btn-hover: #30363d;
+          --gh-header-bg: #010409;
+          --gh-shadow: 0 1px 0 rgba(1, 4, 9, 0.4);
+          --gh-underline: #f78166;
+          --gh-primary: #238636;
+          --gh-primary-hover: #2ea043;
+          --gh-primary-border: rgba(240, 246, 252, 0.1);
+          --gh-scroll-thumb: rgba(110, 118, 129, 0.4);
+        }
+      }
+      :root[data-theme='dark'] {
+        color-scheme: dark;
+        --gh-canvas: #0d1117;
+        --gh-canvas-subtle: #161b22;
+        --gh-canvas-inset: #010409;
+        --gh-border: #30363d;
+        --gh-border-muted: #21262d;
+        --gh-fg: #e6edf3;
+        --gh-fg-muted: #8b949e;
+        --gh-fg-subtle: #6e7681;
+        --gh-accent: #58a6ff;
+        --gh-accent-subtle: #121d2f;
+        --gh-success: #3fb950;
+        --gh-success-subtle: #12261e;
+        --gh-attention: #d29922;
+        --gh-attention-subtle: #272115;
+        --gh-danger: #f85149;
+        --gh-danger-subtle: #25171c;
+        --gh-neutral-subtle: rgba(110, 118, 129, 0.4);
+        --gh-btn-bg: #21262d;
+        --gh-btn-hover: #30363d;
+        --gh-header-bg: #010409;
+        --gh-shadow: 0 1px 0 rgba(1, 4, 9, 0.4);
+        --gh-underline: #f78166;
+        --gh-primary: #238636;
+        --gh-primary-hover: #2ea043;
+        --gh-primary-border: rgba(240, 246, 252, 0.1);
+        --gh-scroll-thumb: rgba(110, 118, 129, 0.4);
+      }
+
+      /* ── 基础 ─────────────────────────────────────────────── */
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; line-height: 1.6; }
-      a { color: var(--accent); text-decoration: none; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        background: var(--gh-canvas);
+        color: var(--gh-fg);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial,
+          'PingFang SC', 'Microsoft YaHei', sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: var(--gh-accent); text-decoration: none; }
       a:hover { text-decoration: underline; }
-      nav { display: flex; gap: 1.2rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--card); align-items: center; flex-wrap: wrap; }
-      nav .brand { font-weight: 700; font-size: 1.1rem; color: var(--text); }
-      nav a.nav { color: var(--muted); }
-      nav a.nav:hover { color: var(--text); }
-      main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
-      h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
-      .muted { color: var(--muted); }
-      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-      .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; }
-      .card h2 { font-size: 1.05rem; margin-bottom: 0.4rem; }
-      .card .num { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
-      .card .detail { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
-      table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
-      th, td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--border); }
-      th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+      code, .mono { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace; }
+      code { padding: 0.2em 0.4em; font-size: 85%; background: var(--gh-neutral-subtle); border-radius: 6px; }
+      h1 { font-size: 24px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+      h2 { font-size: 16px; font-weight: 600; }
+      h3 { font-size: 14px; font-weight: 600; }
+      p { margin: 0; }
+      .muted { color: var(--gh-fg-muted); }
+      .subtle { color: var(--gh-fg-subtle); }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+      .stack > * + * { margin-top: 16px; }
+      .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .spread { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+      .skip { position: absolute; left: -9999px; }
+      .skip:focus { left: 8px; top: 8px; z-index: 100; background: var(--gh-canvas); padding: 8px; border-radius: 6px; }
+
+      /* ── 顶部导航（GitHub header） ─────────────────────────── */
+      .gh-header {
+        background: var(--gh-header-bg);
+        border-bottom: 1px solid var(--gh-border);
+        box-shadow: var(--gh-shadow);
+        position: sticky;
+        top: 0;
+        z-index: 30;
+      }
+      .gh-header-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        min-height: 62px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .gh-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--gh-fg);
+        font-size: 15px;
+        font-weight: 600;
+        flex: none;
+      }
+      .gh-brand:hover { text-decoration: none; opacity: 0.85; }
+      .gh-brand svg { flex: none; }
+      .gh-nav {
+        display: flex;
+        align-items: stretch;
+        gap: 2px;
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .gh-nav::-webkit-scrollbar { display: none; }
+      .gh-nav a {
+        display: inline-flex;
+        align-items: center;
+        padding: 0 12px;
+        color: var(--gh-fg-muted);
+        font-size: 14px;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        white-space: nowrap;
+        transition: color 0.12s, border-color 0.12s;
+      }
+      .gh-nav a:hover { color: var(--gh-fg); text-decoration: none; border-bottom-color: var(--gh-border); }
+      .gh-nav a[aria-current='page'] {
+        color: var(--gh-fg);
+        font-weight: 600;
+        border-bottom-color: var(--gh-underline);
+      }
+      .gh-theme-btn {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid var(--gh-border);
+        background: var(--gh-btn-bg);
+        color: var(--gh-fg-muted);
+        cursor: pointer;
+      }
+      .gh-theme-btn:hover { background: var(--gh-btn-hover); color: var(--gh-fg); }
+      .gh-theme-btn .icon-sun { display: none; }
+      .gh-theme-btn .icon-moon { display: block; }
+      :root[data-theme='dark'] .gh-theme-btn .icon-sun { display: block; }
+      :root[data-theme='dark'] .gh-theme-btn .icon-moon { display: none; }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) .gh-theme-btn .icon-sun { display: block; }
+        :root:not([data-theme='light']) .gh-theme-btn .icon-moon { display: none; }
+      }
+
+      /* ── 页面骨架 ─────────────────────────────────────────── */
+      main { padding: 24px 0 48px; }
+      .page-head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+      .page-head h1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .crumbs { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--gh-fg-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--gh-accent); }
+      .section { margin-top: 32px; }
+      .section-title { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+      .section-title h2 { font-size: 16px; }
+
+      /* ── Box / Card（GitHub 容器） ─────────────────────────── */
+      .box {
+        background: var(--gh-canvas);
+        border: 1px solid var(--gh-border);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .box-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 8px 16px;
+        background: var(--gh-canvas-subtle);
+        border-bottom: 1px solid var(--gh-border);
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .box-body { padding: 16px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; }
+      .card {
+        background: var(--gh-canvas);
+        border: 1px solid var(--gh-border);
+        border-radius: 6px;
+        padding: 16px;
+      }
+      .card h2 { font-size: 14px; color: var(--gh-fg-muted); font-weight: 500; }
+      .card .num { font-size: 28px; font-weight: 600; line-height: 1.2; color: var(--gh-fg); margin-top: 4px; }
+      .card .detail { font-size: 12px; color: var(--gh-fg-muted); margin-top: 4px; }
+
+      /* ── 表格 ─────────────────────────────────────────────── */
+      .table-wrap { width: 100%; overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; padding: 8px 12px; vertical-align: middle; }
+      th {
+        background: var(--gh-canvas-subtle);
+        color: var(--gh-fg-muted);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        border-top: 1px solid var(--gh-border);
+        border-bottom: 1px solid var(--gh-border);
+      }
+      td { border-bottom: 1px solid var(--gh-border-muted); }
+      tr:last-child td { border-bottom: 0; }
+      tbody tr:hover td { background: var(--gh-canvas-subtle); }
+      th:first-child, td:first-child { padding-left: 16px; }
+      th:last-child, td:last-child { padding-right: 16px; }
       td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-      .pos { color: var(--muted); width: 2.5rem; }
-      .up { color: var(--green); }
-      .down { color: var(--red); }
-      .badge { display: inline-block; padding: 0.1rem 0.45rem; border-radius: 4px; font-size: 0.75rem; margin-left: 0.3rem; }
-      .b-open { background: #16351f; color: #34d399; }
-      .b-semi { background: #3a2f12; color: #fbbf24; }
-      .b-closed { background: #331520; color: #f87171; }
-      .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
-      .warn { background: #2a2010; border: 1px solid #57441a; color: #fbbf24; padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; margin-top: 1rem; }
+      .pos { color: var(--gh-fg-muted); width: 3rem; font-variant-numeric: tabular-nums; }
+      .up { color: var(--gh-success); }
+      .down { color: var(--gh-danger); }
+
+      /* ── 徽标 / 标签（GitHub Label） ───────────────────────── */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        height: 20px;
+        padding: 0 7px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 18px;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        vertical-align: middle;
+      }
+      .b-open { color: var(--gh-success); background: var(--gh-success-subtle); border-color: color-mix(in srgb, var(--gh-success) 30%, transparent); }
+      .b-semi { color: var(--gh-attention); background: var(--gh-attention-subtle); border-color: color-mix(in srgb, var(--gh-attention) 30%, transparent); }
+      .b-closed { color: var(--gh-danger); background: var(--gh-danger-subtle); border-color: color-mix(in srgb, var(--gh-danger) 30%, transparent); }
+      .counter {
+        display: inline-block;
+        min-width: 20px;
+        padding: 0 6px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 18px;
+        text-align: center;
+        color: var(--gh-fg);
+        background: var(--gh-neutral-subtle);
+        border-radius: 999px;
+      }
+
+      /* ── 按钮 ─────────────────────────────────────────────── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        border-radius: 6px;
+        border: 1px solid var(--gh-border);
+        background: var(--gh-btn-bg);
+        color: var(--gh-fg);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .btn:hover { background: var(--gh-btn-hover); text-decoration: none; }
+      .btn-primary {
+        background: var(--gh-primary);
+        border-color: var(--gh-primary-border);
+        color: #fff;
+      }
+      .btn-primary:hover { background: var(--gh-primary-hover); }
+      .btn-sm { padding: 3px 12px; font-size: 12px; }
+
+      /* ── 下划线标签页 / 分段控件 ───────────────────────────── */
+      .tabs {
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        border-bottom: 1px solid var(--gh-border);
+        margin-bottom: 16px;
+      }
+      .tabs::-webkit-scrollbar { display: none; }
+      .tab {
+        padding: 8px 12px;
+        margin-bottom: -1px;
+        border-bottom: 2px solid transparent;
+        color: var(--gh-fg-muted);
+        font-size: 14px;
+        white-space: nowrap;
+      }
+      .tab:hover { color: var(--gh-fg); text-decoration: none; border-bottom-color: var(--gh-border); }
+      .tab[aria-current='page'] { color: var(--gh-fg); font-weight: 600; border-bottom-color: var(--gh-underline); }
+      .segmented {
+        display: inline-flex;
+        border: 1px solid var(--gh-border);
+        border-radius: 6px;
+        overflow: hidden;
+        background: var(--gh-canvas);
+      }
+      .segmented a {
+        padding: 5px 12px;
+        font-size: 12px;
+        color: var(--gh-fg);
+        border-right: 1px solid var(--gh-border);
+      }
+      .segmented a:last-child { border-right: 0; }
+      .segmented a:hover { background: var(--gh-btn-hover); text-decoration: none; }
+      .segmented a[aria-current='page'] {
+        background: var(--gh-accent-subtle);
+        color: var(--gh-accent);
+        font-weight: 600;
+      }
+
+      /* ── 提示条（GitHub flash） ────────────────────────────── */
+      .warn {
+        background: var(--gh-attention-subtle);
+        border: 1px solid color-mix(in srgb, var(--gh-attention) 40%, transparent);
+        color: var(--gh-fg);
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+      .warn strong { color: var(--gh-attention); }
+
+      /* ── Agent 图标 ───────────────────────────────────────── */
+      .agent-icon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        width: var(--icon-size, 32px);
+        height: var(--icon-size, 32px);
+        border-radius: 6px;
+        border: 1px solid var(--gh-border);
+        background: hsl(var(--icon-hue, 210) 60% 90%);
+        color: hsl(var(--icon-hue, 210) 55% 30%);
+        font-size: calc(var(--icon-size, 32px) * 0.42);
+        font-weight: 700;
+        line-height: 1;
+        overflow: hidden;
+        text-transform: uppercase;
+        user-select: none;
+      }
+      .agent-icon-letter { position: relative; z-index: 1; }
+      .agent-icon img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: var(--gh-canvas);
+        z-index: 2;
+      }
+      :root[data-theme='dark'] .agent-icon {
+        background: hsl(var(--icon-hue, 210) 32% 24%);
+        color: hsl(var(--icon-hue, 210) 70% 76%);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) .agent-icon {
+          background: hsl(var(--icon-hue, 210) 32% 24%);
+          color: hsl(var(--icon-hue, 210) 70% 76%);
+        }
+      }
+      .agent-cell { display: flex; align-items: center; gap: 10px; min-width: 0; }
+      .agent-cell .name { font-weight: 600; color: var(--gh-fg); }
+      .agent-cell .name:hover { color: var(--gh-accent); }
+      .agent-cell .tags { display: inline-flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+
+      /* ── 页脚 ─────────────────────────────────────────────── */
+      .gh-footer {
+        border-top: 1px solid var(--gh-border);
+        padding: 24px 0 40px;
+        font-size: 12px;
+        color: var(--gh-fg-muted);
+      }
+      .gh-footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .gh-footer a { color: var(--gh-fg-muted); }
+      .gh-footer a:hover { color: var(--gh-accent); }
+      .gh-footer nav { display: flex; gap: 16px; flex-wrap: wrap; }
+
+      @media (max-width: 768px) {
+        .container, .gh-header-inner, .gh-footer-inner { padding-left: 16px; padding-right: 16px; }
+        h1 { font-size: 20px; }
+        th, td { padding: 8px 10px; }
+        .gh-brand span { display: none; }
+      }
     </style>
   </head>
   <body>
-    <nav>
-      <a class="brand" href="/">AgentNews</a>
-      <a class="nav" href="/">双榜</a>
-      <a class="nav" href="/top/open/all/month/">榜单</a>
-      <a class="nav" href="/rising/">新秀</a>
-      <a class="nav" href="/activity/">动态</a>
-      <a class="nav" href="/security/">安全</a>
-      <a class="nav" href="/archive/">归档</a>
-      <a class="nav" href="/changelog/">变更</a>
-      <a class="nav" href="/about/">口径</a>
-    </nav>
-    <main>
-      {hasData ? (
-        <slot />
-      ) : (
-        <div>
-          <h1>数据积累中</h1>
-          <p class="muted">首次运行后 24 小时内自动生成快照。当前无评分数据。</p>
-        </div>
-      )}
-      <div class="footer">
-        <span>数据更新于 <strong>{date}</strong> · AgentNews 综合分是观点，非客观事实</span>
-        <span><a href="/about/">方法与口径</a></span>
+    <a class="skip" href="#main">跳到正文</a>
+    <header class="gh-header">
+      <div class="gh-header-inner">
+        <a class="gh-brand" href="/" aria-label="AgentNews 首页">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="0.75" y="0.75" width="22.5" height="22.5" rx="5.25" fill="currentColor" opacity="0.14" />
+            <path d="M7 8l3.4 3.4L7 14.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12.6 15.2H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <span>AgentNews</span>
+        </a>
+        <nav class="gh-nav" aria-label="主导航">
+          {NAV.map((item) => (
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+          ))}
+        </nav>
+        <button class="gh-theme-btn" id="theme-toggle" type="button" aria-label="切换深浅色主题" title="切换深浅色主题">
+          <svg class="icon-moon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M9.6 1.1a6.9 6.9 0 1 0 5.3 10.5A7.4 7.4 0 0 1 9.6 1.1Z" />
+          </svg>
+          <svg class="icon-sun" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 11.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7ZM8 0a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0v-1A.75.75 0 0 1 8 0Zm0 13.5a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0v-1A.75.75 0 0 1 8 13.5ZM2.3 2.3a.75.75 0 0 1 1.06 0l.7.71a.75.75 0 0 1-1.06 1.06l-.7-.7a.75.75 0 0 1 0-1.07Zm9.64 9.64a.75.75 0 0 1 1.06 0l.7.7a.75.75 0 1 1-1.06 1.07l-.7-.71a.75.75 0 0 1 0-1.06ZM0 8a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 0 1.5h-1A.75.75 0 0 1 0 8Zm13.5 0a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1-.75-.75ZM3 11.94a.75.75 0 0 1 0 1.06l-.7.7a.75.75 0 1 1-1.07-1.06l.71-.7a.75.75 0 0 1 1.06 0Zm9.64-9.64a.75.75 0 0 1 0 1.06l-.7.7A.75.75 0 0 1 10.88 3l.7-.7a.75.75 0 0 1 1.06 0Z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="container">
+        {hasData ? (
+          <slot />
+        ) : (
+          <div class="page-head">
+            <h1>数据积累中</h1>
+            <p class="muted">首次运行后 24 小时内自动生成快照。当前无评分数据。</p>
+          </div>
+        )}
       </div>
     </main>
+
+    <footer class="gh-footer">
+      <div class="gh-footer-inner">
+        <span>© {new Date().getFullYear()} AgentNews · 数据更新于 <strong>{date}</strong> · 综合分是观点，非客观事实</span>
+        <nav aria-label="页脚导航">
+          <a href="/about/">方法与口径</a>
+          <a href="/changelog/">变更记录</a>
+          <a href="/archive/">数据归档</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script is:inline>
+      document.getElementById('theme-toggle')?.addEventListener('click', () => {
+        const root = document.documentElement;
+        const current =
+          root.dataset.theme ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('an-theme', next);
+        } catch {}
+      });
+    </script>
   </body>
 </html>

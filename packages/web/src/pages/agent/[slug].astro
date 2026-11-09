@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { loadLatestScores, loadSecurity, fmt, fmtPct } from '../../lib/data';
+import AgentIcon from '../../components/AgentIcon.astro';
+import { loadLatestScores, loadSecurity, loadAgentsMeta, fmt, fmtPct, formLabel } from '../../lib/data';
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
@@ -16,65 +17,111 @@ export function getStaticPaths() {
 const slug = Astro.params.slug!;
 const row = rows.find((r) => r.slug === slug);
 const sec = loadSecurity()?.subjects?.[slug];
+const meta = loadAgentsMeta()[slug];
 if (!row) {
   Astro.redirect('/top');
 }
+
+const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
+const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半开源' : '闭源');
 ---
 
-<Base pageTitle={row ? `${row.slug} · AgentNews` : '未找到'}>
+<Base pageTitle={row ? `${row.name ?? row.slug} · AgentNews` : '未找到'}>
   {row && (
     <>
-      <a href="/top/open/all/month/" class="muted">← 返回榜单</a>
-      <h1 style="margin-top:0.5rem">{row.name ?? row.slug}
-        <span class={`badge ${row.oss_bucket === 'open' ? 'b-open' : row.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
-          {row.oss_bucket === 'open' ? '开源' : row.oss_bucket === 'semi' ? '半开源' : '闭源'}
-        </span>
-      </h1>
-      <p class="muted">形态：{row.form} · 数据截至 {date}</p>
+      <div class="crumbs">
+        <a href="/">AgentNews</a><span>/</span>
+        <a href={`/top/${row.oss_bucket === 'closed' ? 'closed' : 'open'}/all/month/`}>榜单</a><span>/</span>
+        <span>{row.name ?? row.slug}</span>
+      </div>
 
-      <div class="grid" style="margin-top:1rem">
-        <div class="card"><h2>综合分</h2><div class="num">{row.score}</div><div class="detail">组内（{row.form}）分位数加权</div></div>
-        <div class="card"><h2>组内排名</h2><div class="num">#{row.rank_in_form}</div><div class="detail">同形态内排名</div></div>
-        <div class="card"><h2>30d 增速</h2><div class="num {row.growth_30d_pct != null && row.growth_30d_pct > 0 ? 'up' : 'down'}">{fmtPct(row.growth_30d_pct)}</div><div class="detail">滚动 30 日相对增速</div></div>
+      <div class="row" style="gap:16px;align-items:flex-start;margin-bottom:16px">
+        <AgentIcon
+          slug={row.slug}
+          name={row.name ?? row.slug}
+          icon={meta?.icon}
+          iconFallback={meta?.iconFallback}
+          size={64}
+        />
+        <div style="min-width:0">
+          <h1 style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            {row.name ?? row.slug}
+            <span class={`badge ${bucketBadge(row.oss_bucket)}`}>{bucketText(row.oss_bucket)}</span>
+          </h1>
+          <p class="muted">
+            {formLabel(row.form)}{meta?.vendor ? ` · ${meta.vendor}` : ''} · 数据截至 {date}
+          </p>
+          {meta?.homepage && (
+            <a class="btn btn-primary" style="margin-top:8px" href={meta.homepage} target="_blank" rel="noopener">
+              访问官网
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.5-1h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V3.56L8.28 9.28a.75.75 0 0 1-1.06-1.06L13.94 1.5h-3.69a.75.75 0 0 1 0-1.5Z" />
+              </svg>
+            </a>
+          )}
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:0">
+        <div class="card"><h2>综合分</h2><div class="num">{row.score ?? '—'}</div><div class="detail">组内（{formLabel(row.form)}）分位数加权</div></div>
+        <div class="card"><h2>组内排名</h2><div class="num">{row.rank_in_form != null ? `#${row.rank_in_form}` : '—'}</div><div class="detail">同形态内排名</div></div>
+        <div class="card">
+          <h2>30d 增速</h2>
+          <div class={`num ${row.growth_30d_pct != null ? (row.growth_30d_pct > 0 ? 'up' : 'down') : ''}`}>{fmtPct(row.growth_30d_pct)}</div>
+          <div class="detail">滚动 30 日相对增速</div>
+        </div>
         <div class="card"><h2>数据完整度</h2><div class="num">{row.data_level}</div><div class="detail">L1 有数据 / L2 半数据 / L3 仅收录</div></div>
       </div>
 
-      <table style="margin-top:1.5rem">
-        <tr><th>指标</th><th class="num">当前</th><th class="num">1d 增量</th><th class="num">7d 增量</th><th class="num">30d 增量</th></tr>
-        <tr>
-          <td>Star</td>
-          <td class="num">{fmt(row.metrics?.stars)}</td>
-          <td class="num">{fmt(row.delta_1d)}</td>
-          <td class="num">{fmt(row.delta_7d)}</td>
-          <td class="num">{fmt(row.delta_30d)}</td>
-        </tr>
-        <tr><td>Fork</td><td class="num">{fmt(row.metrics?.forks)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
-        <tr><td>贡献者</td><td class="num">{fmt(row.metrics?.contributors)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
-        <tr><td>安装量</td><td class="num">{fmt(row.metrics?.installs)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
-        <tr><td>相对增速</td><td class="num">—</td><td class="num">—</td><td class="num">{fmtPct(row.growth_7d_pct)}</td><td class="num">{fmtPct(row.growth_30d_pct)}</td></tr>
-        <tr><td>活跃度</td><td class="num">{row.metrics?.activity != null ? row.metrics?.activity.toFixed(2) : '—'}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
-      </table>
-
-      {row.flags.includes('partial_data') && (
-        <div class="warn">该 agent 部分数据源采集失败，综合分基于可用指标重算（缺失权重已重分配）。</div>
-      )}
-      {row.data_level === 'L3' && (
-        <div class="warn">数据未公开：仅收录，不参与排名（PRD §5.7）。</div>
-      )}
-
-      <h2 style="margin-top:2.5rem;font-size:1.05rem">安全公告</h2>
-      {sec ? (
-        <div class="card" style="margin-top:0.6rem">
-          <div class="detail">
-            包 <a href={sec.url} target="_blank" rel="noopener"><code>{sec.package}</code></a>（{sec.ecosystem}）在 OSV 上有
-            <strong>{sec.advisories}</strong> 条历史公告{sec.malicious > 0 && <span class="badge b-closed">含 {sec.malicious} 条恶意包</span>}。
-            {sec.latest && <span> 最近一条更新于 {sec.latest.slice(0, 10)}。</span>}
-            <div style="margin-top:0.4rem;color:var(--muted)">仅收录历史公告，不代表当前版本受影响，也不构成安全建议。</div>
+      <section class="section">
+        <div class="box">
+          <div class="box-header">指标明细</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>指标</th><th class="num">当前</th><th class="num">1d 增量</th><th class="num">7d 增量</th><th class="num">30d 增量</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Star</td>
+                  <td class="num">{fmt(row.metrics?.stars)}</td>
+                  <td class="num">{fmt(row.delta_1d)}</td>
+                  <td class="num">{fmt(row.delta_7d)}</td>
+                  <td class="num">{fmt(row.delta_30d)}</td>
+                </tr>
+                <tr><td>Fork</td><td class="num">{fmt(row.metrics?.forks)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+                <tr><td>贡献者</td><td class="num">{fmt(row.metrics?.contributors)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+                <tr><td>安装量</td><td class="num">{fmt(row.metrics?.installs)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+                <tr><td>相对增速</td><td class="num">—</td><td class="num">—</td><td class="num">{fmtPct(row.growth_7d_pct)}</td><td class="num">{fmtPct(row.growth_30d_pct)}</td></tr>
+                <tr><td>活跃度</td><td class="num">{row.metrics?.activity != null ? row.metrics?.activity.toFixed(2) : '—'}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      ) : (
-        <div class="warn" style="margin-top:0.6rem">无包管理渠道，未做 OSV 查询（不会因为“查不到”就说明安全）。</div>
+      </section>
+
+      {row.flags.includes('partial_data') && (
+        <div class="warn" style="margin-top:16px">该 agent 部分数据源采集失败，综合分基于可用指标重算（缺失权重已重分配）。</div>
       )}
+      {row.data_level === 'L3' && (
+        <div class="warn" style="margin-top:16px">数据未公开：仅收录，不参与排名（PRD §5.7）。</div>
+      )}
+
+      <section class="section">
+        <div class="section-title"><h2>安全公告</h2></div>
+        {sec ? (
+          <div class="card">
+            <div class="detail" style="font-size:14px;color:var(--gh-fg)">
+              包 <a href={sec.url} target="_blank" rel="noopener"><code>{sec.package}</code></a>（{sec.ecosystem}）在 OSV 上有
+              <strong>{sec.advisories}</strong> 条历史公告{sec.malicious > 0 && <span class="badge b-closed">含 {sec.malicious} 条恶意包</span>}。
+              {sec.latest && <span> 最近一条更新于 {sec.latest.slice(0, 10)}。</span>}
+              <div style="margin-top:8px;color:var(--gh-fg-muted)">仅收录历史公告，不代表当前版本受影响，也不构成安全建议。</div>
+            </div>
+          </div>
+        ) : (
+          <div class="warn">无包管理渠道，未做 OSV 查询（不会因为“查不到”就说明安全）。</div>
+        )}
+      </section>
     </>
   )}
 </Base>

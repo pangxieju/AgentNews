@@ -1,12 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
-import { loadLatestScores, loadAgentState, fmt } from '../lib/data';
+import AgentIcon from '../components/AgentIcon.astro';
+import { loadLatestScores, loadAgentsMeta, loadAgentState, fmt, formLabel } from '../lib/data';
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
 const state = loadAgentState();
 const startedAt = state?.started_at ?? '—';
+const meta = loadAgentsMeta();
 
 /** 新秀资格（PRD §5.6）：出道 ≤ 180 天 */
 const NEWCOMER_DAYS = 180;
@@ -15,18 +17,21 @@ const newcomers = rows
   .filter((r) => r.age_days != null && r.age_days <= NEWCOMER_DAYS && r.score != null)
   .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
 
-const formLabel = (f: string) =>
-  ({ cli: 'CLI', 'ide-plugin': 'IDE 插件', 'ide-app': 'IDE 应用', desktop: '桌面', browser: '浏览器', framework: '框架', autonomous: '自主' })[f] ?? f;
-
 const youngest = [...rows]
   .filter((r) => r.age_days != null)
   .sort((a, b) => a.age_days! - b.age_days!)
   .slice(0, 10);
+
+const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
+const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半开源' : '闭源');
 ---
 
 <Base pageTitle="新秀榜 · AgentNews">
-  <h1>新秀榜</h1>
-  <p class="muted">出道 ≤ {NEWCOMER_DAYS} 天且已上榜的 agent · 数据截至 {date}</p>
+  <div class="page-head">
+    <div class="crumbs"><a href="/">AgentNews</a><span>/</span><span>新秀榜</span></div>
+    <h1>新秀榜</h1>
+    <p class="muted">出道 ≤ {NEWCOMER_DAYS} 天且已上榜的 agent · 数据截至 {date}</p>
+  </div>
 
   <div class="warn">
     <strong>口径说明：</strong>出道天数 = min（repo 创建至今, 首次收录至今）。
@@ -34,47 +39,94 @@ const youngest = [...rows]
     本系统自 {startedAt} 起记录收录时间，随时间推移，「上线后冒出的新项目」会被准确识别。
   </div>
 
-  {newcomers.length > 0 ? (
-    <table style="margin-top:1.5rem">
-      <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num">首次收录</th><th class="num">综合分</th><th class="num">Star</th><th class="num">安装量</th></tr>
-      {newcomers.map((r, i) => (
-        <tr>
-          <td class="pos">{i + 1}</td>
-          <td>
-            <a href={`/agent/${r.slug}/`}>{r.name}</a>
-            <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
-              {r.oss_bucket === 'open' ? '开源' : r.oss_bucket === 'semi' ? '半开源' : '闭源'}
-            </span>
-          </td>
-          <td class="muted">{formLabel(r.form)}</td>
-          <td class="num">{r.age_days} 天</td>
-          <td class="num muted">{r.first_listed ?? '—'}</td>
-          <td class="num"><strong>{r.score}</strong></td>
-          <td class="num">{fmt(r.metrics?.stars)}</td>
-          <td class="num">{fmt(r.metrics?.installs)}</td>
-        </tr>
-      ))}
-    </table>
-  ) : (
-    <div class="warn" style="margin-top:1.5rem">
-      当前无符合条件的 agent（收录名单里最年轻的也已超过 {NEWCOMER_DAYS} 天）。
-      这说明当前样本偏向成熟项目 —— 新秀榜需要持续收录新项目才有内容。
+  <section class="section">
+    <div class="section-title">
+      <h2>新秀</h2>
+      <span class="counter">{newcomers.length}</span>
     </div>
-  )}
 
-  <h2 style="margin-top:2.5rem;font-size:1.05rem">最年轻的 10 个（参考）</h2>
-  <p class="muted" style="font-size:0.85rem">按 repo 创建时间排序，帮助发现接近新秀资格的项目</p>
-  <table>
-    <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num">首次收录</th><th class="num">综合分</th></tr>
-    {youngest.map((r, i) => (
-      <tr>
-        <td class="pos">{i + 1}</td>
-        <td><a href={`/agent/${r.slug}/`}>{r.name}</a></td>
-        <td class="muted">{formLabel(r.form)}</td>
-        <td class="num">{r.age_days} 天</td>
-        <td class="num muted">{r.first_listed ?? '—'}</td>
-        <td class="num">{r.score ?? '—'}</td>
-      </tr>
-    ))}
-  </table>
+    {newcomers.length > 0 ? (
+      <div class="box">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num">首次收录</th><th class="num">综合分</th><th class="num">Star</th><th class="num">安装量</th></tr>
+            </thead>
+            <tbody>
+              {newcomers.map((r, i) => (
+                <tr>
+                  <td class="pos">{i + 1}</td>
+                  <td>
+                    <div class="agent-cell">
+                      <AgentIcon
+                        slug={r.slug}
+                        name={r.name ?? r.slug}
+                        icon={meta[r.slug]?.icon}
+                        iconFallback={meta[r.slug]?.iconFallback}
+                        size={24}
+                      />
+                      <span class="tags">
+                        <a class="name" href={`/agent/${r.slug}/`}>{r.name}</a>
+                        <span class={`badge ${bucketBadge(r.oss_bucket)}`}>{bucketText(r.oss_bucket)}</span>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="muted">{formLabel(r.form)}</td>
+                  <td class="num">{r.age_days} 天</td>
+                  <td class="num muted">{r.first_listed ?? '—'}</td>
+                  <td class="num"><strong>{r.score}</strong></td>
+                  <td class="num">{fmt(r.metrics?.stars)}</td>
+                  <td class="num">{fmt(r.metrics?.installs)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ) : (
+      <div class="warn">
+        当前无符合条件的 agent（收录名单里最年轻的也已超过 {NEWCOMER_DAYS} 天）。
+        这说明当前样本偏向成熟项目 —— 新秀榜需要持续收录新项目才有内容。
+      </div>
+    )}
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>最年轻的 10 个</h2>
+      <span class="muted" style="font-size:12px">按 repo 创建时间排序，帮助发现接近新秀资格的项目</span>
+    </div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num">首次收录</th><th class="num">综合分</th></tr>
+          </thead>
+          <tbody>
+            {youngest.map((r, i) => (
+              <tr>
+                <td class="pos">{i + 1}</td>
+                <td>
+                  <div class="agent-cell">
+                    <AgentIcon
+                      slug={r.slug}
+                      name={r.name ?? r.slug}
+                      icon={meta[r.slug]?.icon}
+                      iconFallback={meta[r.slug]?.iconFallback}
+                      size={24}
+                    />
+                    <a class="name" href={`/agent/${r.slug}/`}>{r.name}</a>
+                  </div>
+                </td>
+                <td class="muted">{formLabel(r.form)}</td>
+                <td class="num">{r.age_days} 天</td>
+                <td class="num muted">{r.first_listed ?? '—'}</td>
+                <td class="num">{r.score ?? '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 </Base>

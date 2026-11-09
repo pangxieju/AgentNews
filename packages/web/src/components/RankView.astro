@@ -1,5 +1,6 @@
 ---
-import { loadLatestScores, fmt, fmtPct } from '../lib/data';
+import { loadLatestScores, loadAgentsMeta, fmt, fmtPct } from '../lib/data';
+import AgentIcon from './AgentIcon.astro';
 
 interface Props {
   bucket: string;
@@ -12,6 +13,7 @@ const { bucket, form, g } = Astro.props;
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
+const meta = loadAgentsMeta();
 
 let filtered = rows;
 if (bucket === 'open') filtered = filtered.filter((r) => r.oss_bucket !== 'closed');
@@ -56,59 +58,103 @@ const flagLabel: Record<string, string> = {
   installs_may_include_ci: '含 CI 安装',
   small_group: '样本少',
 };
+const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
+const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半开源' : '闭源');
 ---
 
-<h1>{bucketLabel}榜 <span class="muted">· {date}</span></h1>
-<p class="muted">{sortHint} · <strong>同形态内比较，跨形态不排名</strong> · <a href="/about">口径说明</a></p>
+<div class="page-head">
+  <div class="crumbs">
+    <a href="/">AgentNews</a><span>/</span><span>{bucketLabel}榜</span>
+  </div>
+  <h1>{bucketLabel}榜 <span class="muted" style="font-size:14px;font-weight:400">· {date}</span></h1>
+  <p class="muted">{sortHint} · <strong>同形态内比较，跨形态不排名</strong> · <a href="/about/">口径说明</a></p>
+</div>
 
-<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:1rem 0">
+<nav class="tabs" aria-label="形态筛选">
   {forms.map((f) => (
-    <a href={href(bucket, f, g)} style="padding:0.35rem 0.8rem;border-radius:4px;border:1px solid var(--border)" class={form === f ? 'badge b-open' : ''}>{formLabel(f)}</a>
+    <a class="tab" href={href(bucket, f, g)} aria-current={form === f ? 'page' : undefined}>
+      {formLabel(f)}
+    </a>
   ))}
-</div>
+</nav>
 
-<div style="display:flex;gap:0.5rem;margin-bottom:1rem;font-size:0.85rem">
-  {['day', 'week', 'month'].map((gg) => (
-    <a href={href(bucket, form, gg)} class={g === gg ? 'badge b-open' : ''} style="padding:0.3rem 0.8rem;border-radius:4px;border:1px solid var(--border)">{gLabel(gg)}</a>
-  ))}
-</div>
-
-{!hasDeltas && <div class="warn">增量数据积累中：日榜/周榜将在快照满 1 天后可用（当前按综合分排序）。</div>}
-
-{groups.map((grp) => (
-  <section style="margin-top:1.8rem">
-    <h2 style="font-size:1.05rem;margin-bottom:0.2rem">
-      {formLabel(grp.form)}
-      <span class="muted" style="font-weight:400"> · {grp.rows.filter((r) => r._displayRank != null).length} 个在榜</span>
-    </h2>
-    <table>
-      <tr>
-        <th>#</th><th>Agent</th>
-        <th class="num">综合分</th><th class="num">Star</th>
-        <th class="num">日增</th><th class="num">7d 增</th>
-        <th class="num">30d 增速</th><th class="num">安装量</th><th class="num">活跃</th>
-      </tr>
-      {grp.rows.map((r) => (
-        <tr>
-          <td class="pos">{r._displayRank ?? '—'}</td>
-          <td>
-            <a href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
-            <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
-              {r.oss_bucket === 'open' ? '开源' : r.oss_bucket === 'semi' ? '半开源' : '闭源'}
-            </span>
-            {r.flags.map((f) => <span class="badge b-semi">{flagLabel[f] ?? f}</span>)}
-          </td>
-          <td class="num"><strong>{r.score ?? '—'}</strong></td>
-          <td class="num">{fmt(r.metrics?.stars)}</td>
-          <td class="num">{r.delta_1d != null ? (r.delta_1d > 0 ? '+' : '') + fmt(r.delta_1d) : '—'}</td>
-          <td class="num">{r.delta_7d != null ? (r.delta_7d > 0 ? '+' : '') + fmt(r.delta_7d) : '—'}</td>
-          <td class="num">{fmtPct(r.growth_30d_pct)}</td>
-          <td class="num">{fmt(r.metrics?.installs)}</td>
-          <td class="num">{r.metrics?.activity != null ? r.metrics.activity.toFixed(2) : '—'}</td>
-        </tr>
+<div class="spread" style="margin-bottom:16px">
+  <div class="row" style="gap:8px">
+    <span class="muted" style="font-size:12px">时间粒度</span>
+    <div class="segmented" role="tablist" aria-label="时间粒度">
+      {['day', 'week', 'month'].map((gg) => (
+        <a href={href(bucket, form, gg)} aria-current={g === gg ? 'page' : undefined}>{gLabel(gg)}</a>
       ))}
-    </table>
-  </section>
-))}
+    </div>
+  </div>
+  <span class="muted" style="font-size:12px">
+    {filtered.length} 个 agent · {groups.length} 个形态
+  </span>
+</div>
+
+{!hasDeltas && <div class="warn" style="margin-bottom:16px">增量数据积累中：日榜/周榜将在快照满 1 天后可用（当前按综合分排序）。</div>}
+
+<div class="stack">
+  {groups.map((grp) => (
+    <section>
+      <div class="box">
+        <div class="box-header">
+          <span class="row" style="gap:8px">
+            {formLabel(grp.form)}
+            <span class="counter">{grp.rows.filter((r) => r._displayRank != null).length}</span>
+          </span>
+          <span class="muted" style="font-size:12px;font-weight:400">同形态内排名</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Agent</th>
+                <th class="num">综合分</th>
+                <th class="num">Star</th>
+                <th class="num">日增</th>
+                <th class="num">7d 增</th>
+                <th class="num">30d 增速</th>
+                <th class="num">安装量</th>
+                <th class="num">活跃</th>
+              </tr>
+            </thead>
+            <tbody>
+              {grp.rows.map((r) => (
+                <tr>
+                  <td class="pos">{r._displayRank ?? '—'}</td>
+                  <td>
+                    <div class="agent-cell">
+                      <AgentIcon
+                        slug={r.slug}
+                        name={r.name ?? r.slug}
+                        icon={meta[r.slug]?.icon}
+                        iconFallback={meta[r.slug]?.iconFallback}
+                        size={24}
+                      />
+                      <span class="tags">
+                        <a class="name" href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
+                        <span class={`badge ${bucketBadge(r.oss_bucket)}`}>{bucketText(r.oss_bucket)}</span>
+                        {r.flags.map((f) => <span class="badge b-semi">{flagLabel[f] ?? f}</span>)}
+                      </span>
+                    </div>
+                  </td>
+                  <td class="num"><strong>{r.score ?? '—'}</strong></td>
+                  <td class="num">{fmt(r.metrics?.stars)}</td>
+                  <td class="num">{r.delta_1d != null ? (r.delta_1d > 0 ? '+' : '') + fmt(r.delta_1d) : '—'}</td>
+                  <td class="num">{r.delta_7d != null ? (r.delta_7d > 0 ? '+' : '') + fmt(r.delta_7d) : '—'}</td>
+                  <td class="num">{fmtPct(r.growth_30d_pct)}</td>
+                  <td class="num">{fmt(r.metrics?.installs)}</td>
+                  <td class="num">{r.metrics?.activity != null ? r.metrics.activity.toFixed(2) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  ))}
+</div>
 
 {rows.length === 0 && <div class="warn">暂无数据：请先运行 <code>pnpm collect</code>。</div>}

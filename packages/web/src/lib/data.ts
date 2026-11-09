@@ -1,9 +1,12 @@
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parse } from 'yaml';
 import type { ScoreRow } from '@agentnews/core';
 
-const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..', 'data');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const DATA_DIR = join(ROOT, 'data');
+const AGENTS_YAML = join(ROOT, 'agents.yaml');
 
 export type ScoreFile = { date: string; version: string; rows: ScoreRow[] };
 export type ArchiveFile = {
@@ -73,6 +76,70 @@ export function loadArchive(label: string): ArchiveFile | null {
   } catch {
     return null;
   }
+}
+
+/* ───────────────── Agent 元信息 / 图标 ───────────────── */
+
+export type AgentMeta = {
+  name: string;
+  vendor: string | null;
+  homepage: string | null;
+  /** 主图标地址：优先 GitHub 组织头像，其次官网 favicon */
+  icon: string | null;
+  /** 主图标加载失败时的备选（favicon 服务之间互为兜底） */
+  iconFallback: string | null;
+};
+
+let _agentsMeta: Record<string, AgentMeta> | null = null;
+
+/**
+ * 从 agents.yaml 读取展示元信息（构建时一次性读取）。
+ * 图标策略：
+ * - 有 GitHub 渠道 → 用 owner 头像（GitHub 上的真实 logo，最可靠）
+ * - 闭源 / 无 GitHub → 用官网 favicon（DDG 为主，Google 兜底）
+ * - 都没有 → 前端渲染 slug 首字母色块
+ */
+export function loadAgentsMeta(): Record<string, AgentMeta> {
+  if (_agentsMeta) return _agentsMeta;
+  const out: Record<string, AgentMeta> = {};
+  if (!existsSync(AGENTS_YAML)) return (_agentsMeta = out);
+  try {
+    const list = parse(readFileSync(AGENTS_YAML, 'utf8')) as Array<{
+      slug?: string;
+      name?: string;
+      vendor?: string;
+      homepage?: string;
+      sources?: Array<{ kind?: string; identifier?: string }>;
+    }>;
+    for (const a of list ?? []) {
+      if (!a?.slug) continue;
+      const gh = a.sources?.find((s) => s.kind === 'github' && s.identifier);
+      const owner = gh?.identifier?.split('/')[0];
+      let hostname: string | null = null;
+      try {
+        hostname = a.homepage ? new URL(a.homepage).hostname : null;
+      } catch {
+        hostname = null;
+      }
+      const icon = owner
+        ? `https://github.com/${owner}.png?size=96`
+        : hostname
+          ? `https://icons.duckduckgo.com/ip3/${hostname}.ico`
+          : null;
+      const iconFallback =
+        !owner && hostname ? `https://www.google.com/s2/favicons?domain=${hostname}&sz=64` : null;
+      out[a.slug] = {
+        name: a.name ?? a.slug,
+        vendor: a.vendor ?? null,
+        homepage: a.homepage ?? null,
+        icon,
+        iconFallback,
+      };
+    }
+  } catch {
+    // 解析失败 → 全部走字母色块兜底
+  }
+  return (_agentsMeta = out);
 }
 
 /** 格式化数字（k/M 缩写，小于 1k 保留原值） */

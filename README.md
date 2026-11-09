@@ -28,7 +28,7 @@ AgentNews 的做法：
 
 ```bash
 pnpm install          # 安装依赖
-cp .env.example .env  # 配置环境变量（填 GITHUB_TOKEN）
+export GITHUB_TOKEN=ghp_xxx  # 配置环境变量（见下文）
 pnpm validate         # 校验 agents.yaml（不联网）
 pnpm test             # 打分算法单测
 pnpm collect          # 采集 + 打分 → data/
@@ -46,8 +46,7 @@ pnpm --filter @agentnews/web dev
 未认证 GitHub API 只有 **60 次/小时**，而每个 repo 需 3 次请求（repo + contributors + release）。60 个 agent 需要 180 次 —— 不配 token 会必然降级到 ungh 通道，**contributors 和 last_release 永远拿不到**，综合分里 25% 的权重（活跃度 15% + 贡献者 10%）会退化。
 
 ```bash
-# 1. 复制模板
-cp .env.example .env
+# 1. 在仓库根目录新建 .env
 
 # 2. 填入 token（GitHub → Settings → Developer settings → Tokens (classic) → 勾 public_repo）
 GITHUB_TOKEN=ghp_xxxxxxxxxxxx

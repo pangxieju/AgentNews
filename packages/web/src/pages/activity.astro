@@ -1,10 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import { loadEvents, loadLatestScores, EVENT_LABEL } from '../lib/data';
+import AgentIcon from '../components/AgentIcon.astro';
+import { loadEvents, loadLatestScores, loadAgentsMeta, EVENT_LABEL } from '../lib/data';
 
 const events = loadEvents();
 const data = loadLatestScores();
 const date = data?.date ?? '—';
+const meta = loadAgentsMeta();
 
 // 按类型筛选
 const kind = Astro.url.searchParams.get('kind') ?? 'all';
@@ -27,14 +29,17 @@ const badgeClass = (k: string) =>
 ---
 
 <Base pageTitle="动态 · AgentNews">
-  <h1>动态</h1>
-  <p class="muted">发版 / 新收录 / 排名跃迁 / 新秀 · 数据截至 {date}</p>
-
-  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:1rem 0">
-    {kinds.map((k) => (
-      <a href={`/activity?kind=${k}`} style="padding:0.35rem 0.8rem;border-radius:4px;border:1px solid var(--border)" class={kind === k ? 'badge b-open' : ''}>{kindLabel(k)}</a>
-    ))}
+  <div class="page-head">
+    <div class="crumbs"><a href="/">AgentNews</a><span>/</span><span>动态</span></div>
+    <h1>动态</h1>
+    <p class="muted">发版 / 新收录 / 排名跃迁 / 新秀 · 数据截至 {date}</p>
   </div>
+
+  <nav class="tabs" aria-label="事件类型">
+    {kinds.map((k) => (
+      <a class="tab" href={`/activity?kind=${k}`} aria-current={kind === k ? 'page' : undefined}>{kindLabel(k)}</a>
+    ))}
+  </nav>
 
   {dates.length === 0 ? (
     <div class="warn">
@@ -42,23 +47,40 @@ const badgeClass = (k: string) =>
     </div>
   ) : (
     dates.map((d) => (
-      <section style="margin-top:1.8rem">
-        <h2 style="font-size:0.95rem;color:var(--muted);margin-bottom:0.5rem">{d}</h2>
-        <table>
-          {byDate.get(d)!.map((e) => (
-            <tr>
-              <td style="width:5rem"><span class={`badge ${badgeClass(e.kind)}`}>{EVENT_LABEL[e.kind as keyof typeof EVENT_LABEL] ?? e.kind}</span></td>
-              <td>
-                <a href={`/agent/${e.slug}/`}>{e.name}</a>
-                {e.kind === 'release' && e.detail && <span class="muted" style="margin-left:0.5rem">· {e.detail}</span>}
-                {e.kind === 'rank_jump' && e.from != null && e.to != null && (
-                  <span class="muted" style="margin-left:0.5rem">· #{e.from} → #{e.to}</span>
-                )}
-                {e.kind === 'newcomer' && e.detail && <span class="muted" style="margin-left:0.5rem">· {e.detail}</span>}
-              </td>
-            </tr>
-          ))}
-        </table>
+      <section class="section">
+        <div class="section-title"><h2>{d}</h2></div>
+        <div class="box">
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                {byDate.get(d)!.map((e) => (
+                  <tr>
+                    <td style="width:6rem"><span class={`badge ${badgeClass(e.kind)}`}>{EVENT_LABEL[e.kind as keyof typeof EVENT_LABEL] ?? e.kind}</span></td>
+                    <td>
+                      <div class="agent-cell">
+                        <AgentIcon
+                          slug={e.slug}
+                          name={e.name}
+                          icon={meta[e.slug]?.icon}
+                          iconFallback={meta[e.slug]?.iconFallback}
+                          size={24}
+                        />
+                        <span class="tags">
+                          <a class="name" href={`/agent/${e.slug}/`}>{e.name}</a>
+                          {e.kind === 'release' && e.detail && <span class="muted">· {e.detail}</span>}
+                          {e.kind === 'rank_jump' && e.from != null && e.to != null && (
+                            <span class="muted">· #{e.from} → #{e.to}</span>
+                          )}
+                          {e.kind === 'newcomer' && e.detail && <span class="muted">· {e.detail}</span>}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
     ))
   )}

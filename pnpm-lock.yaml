@@ -66,6 +66,9 @@ importers:
       preact:
         specifier: ^10.25.0
         version: 10.29.8(preact-render-to-string@6.8.2)
+      yaml:
+        specifier: ^2.7.0
+        version: 2.9.1
     devDependencies:
       typescript:
         specifier: ^5.7.2

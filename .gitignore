@@ -9,4 +9,3 @@ packages/web/.astro/
 .env
 .env.local
 .env.*.local
-!.env.example

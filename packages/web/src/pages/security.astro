@@ -1,11 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import { loadSecurity, loadLatestScores, securityLevel } from '../lib/data';
+import AgentIcon from '../components/AgentIcon.astro';
+import { loadSecurity, loadLatestScores, loadAgentsMeta, securityLevel } from '../lib/data';
 
 const sec = loadSecurity();
 const data = loadLatestScores();
 const subjects = sec?.subjects ?? {};
 const nameBySlug = new Map((data?.rows ?? []).map((r) => [r.slug, r.name]));
+const meta = loadAgentsMeta();
 
 const rows = Object.entries(subjects)
   .map(([slug, s]) => ({ slug, name: nameBySlug.get(slug) ?? slug, ...s }))
@@ -17,38 +19,62 @@ const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
 ---
 
 <Base pageTitle="安全 · AgentNews">
-  <h1>安全情报</h1>
-  <p class="muted">公开安全公告聚合（来源 OSV.dev）· 数据截至 {sec?.date ?? '—'}</p>
+  <div class="page-head">
+    <div class="crumbs"><a href="/">AgentNews</a><span>/</span><span>安全情报</span></div>
+    <h1>安全情报</h1>
+    <p class="muted">公开安全公告聚合（来源 OSV.dev）· 数据截至 {sec?.date ?? '—'}</p>
+  </div>
 
   <div class="warn">
     <strong>这不是安全评级。</strong>下表只是「该包在 OSV 上的历史公告数」，不区分是否已修复、也不判断你的使用方式是否受影响。
     我们不做安全背书，也不给红黄绿总分 —— 请点原文链接自行核实。
   </div>
 
-  <div class="grid" style="margin-top:1.5rem">
+  <div class="grid">
     <div class="card"><h2>查询覆盖</h2><div class="num">{rows.length}</div><div class="detail">个有包管理渠道的 agent</div></div>
     <div class="card"><h2>有历史公告</h2><div class="num">{withAny.length}</div><div class="detail">个 agent 的包存在公开公告</div></div>
     <div class="card"><h2>公告总数</h2><div class="num">{totalAdvisories}</div><div class="detail">含历史版本，不代表当前版本受影响</div></div>
-    <div class="card"><h2>恶意包告警</h2><div class="num" style={totalMalicious > 0 ? 'color:var(--red)' : ''}>{totalMalicious}</div><div class="detail">OSV 的 MAL-* 条目</div></div>
+    <div class="card"><h2>恶意包告警</h2><div class="num" style={totalMalicious > 0 ? 'color:var(--gh-danger)' : ''}>{totalMalicious}</div><div class="detail">OSV 的 MAL-* 条目</div></div>
   </div>
 
-  <h2 style="margin-top:2rem;font-size:1.05rem">按公告数排序</h2>
-  <table style="margin-top:0.8rem">
-    <tr><th>Agent</th><th>包</th><th>生态</th><th class="num">历史公告</th><th class="num">恶意包</th><th>最近更新</th></tr>
-    {rows.map((r) => (
-      <tr>
-        <td>
-          <a href={`/agent/${r.slug}/`}>{r.name}</a>
-          {securityLevel(r) === 'high' && <span class="badge b-closed">恶意包</span>}
-        </td>
-        <td class="muted"><a href={r.url} target="_blank" rel="noopener">{r.package}</a></td>
-        <td class="muted">{r.ecosystem}</td>
-        <td class="num">{r.advisories || '—'}</td>
-        <td class="num">{r.malicious || '—'}</td>
-        <td class="muted">{r.latest ? r.latest.slice(0, 10) : '—'}</td>
-      </tr>
-    ))}
-  </table>
+  <section class="section">
+    <div class="section-title"><h2>按公告数排序</h2></div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Agent</th><th>包</th><th>生态</th><th class="num">历史公告</th><th class="num">恶意包</th><th>最近更新</th></tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <td>
+                  <div class="agent-cell">
+                    <AgentIcon
+                      slug={r.slug}
+                      name={r.name}
+                      icon={meta[r.slug]?.icon}
+                      iconFallback={meta[r.slug]?.iconFallback}
+                      size={24}
+                    />
+                    <span class="tags">
+                      <a class="name" href={`/agent/${r.slug}/`}>{r.name}</a>
+                      {securityLevel(r) === 'high' && <span class="badge b-closed">恶意包</span>}
+                    </span>
+                  </div>
+                </td>
+                <td class="muted"><a href={r.url} target="_blank" rel="noopener">{r.package}</a></td>
+                <td class="muted">{r.ecosystem}</td>
+                <td class="num">{r.advisories || '—'}</td>
+                <td class="num">{r.malicious || '—'}</td>
+                <td class="muted">{r.latest ? r.latest.slice(0, 10) : '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-  {rows.length === 0 && <div class="warn">尚无安全数据：运行 <code>pnpm collect</code> 生成。</div>}
+  {rows.length === 0 && <div class="warn" style="margin-top:16px">尚无安全数据：运行 <code>pnpm collect</code> 生成。</div>}
 </Base>
