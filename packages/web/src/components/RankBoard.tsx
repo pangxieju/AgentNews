@@ -18,6 +18,8 @@ export type RankRow = {
     stars: number | null;
     installs: number | null;
     activity: number | null;
+    /** OpenRouter 月 token 用量（仅收录在该榜的 agent 有值） */
+    openrouter_tokens_month?: number | null;
   };
   flags: string[];
   data_level: string;
@@ -34,7 +36,7 @@ interface Props {
   lang: Lang;
 }
 
-type SortKey = 'score' | 'stars' | 'delta_1d' | 'delta_7d' | 'growth_30d_pct' | 'installs' | 'activity';
+type SortKey = 'score' | 'stars' | 'delta_1d' | 'delta_7d' | 'growth_30d_pct' | 'installs' | 'activity' | 'openrouter_tokens_month';
 
 type Col = {
   key: SortKey;
@@ -51,6 +53,14 @@ function columns(lang: Lang): Col[] {
     { key: 'stars', label: t(lang, 'metric.stars'), get: (r) => r.metrics.stars, show: (rs) => rs.some((r) => r.metrics.stars != null), format: (r) => fmt(r.metrics.stars), bar: true },
     { key: 'installs', label: t(lang, 'metric.installs'), get: (r) => r.metrics.installs, show: (rs) => rs.some((r) => r.metrics.installs != null), format: (r) => fmt(r.metrics.installs), bar: true },
     { key: 'activity', label: t(lang, 'metric.activityShort'), get: (r) => r.metrics.activity, show: (rs) => rs.some((r) => r.metrics.activity != null), format: (r) => (r.metrics.activity != null ? r.metrics.activity.toFixed(2) : '—') },
+    {
+      key: 'openrouter_tokens_month',
+      label: t(lang, 'metric.openrouterTokens'),
+      get: (r) => r.metrics.openrouter_tokens_month ?? null,
+      show: (rs) => rs.some((r) => r.metrics.openrouter_tokens_month != null),
+      format: (r) => fmt(r.metrics.openrouter_tokens_month),
+      bar: true,
+    },
     { key: 'delta_1d', label: t(lang, 'metric.delta1d'), get: (r) => r.delta_1d, show: (rs) => rs.some((r) => r.delta_1d != null), format: (r) => fmtSigned(r.delta_1d) },
     { key: 'delta_7d', label: t(lang, 'metric.delta7d'), get: (r) => r.delta_7d, show: (rs) => rs.some((r) => r.delta_7d != null), format: (r) => fmtSigned(r.delta_7d) },
     { key: 'growth_30d_pct', label: t(lang, 'metric.growth30d'), get: (r) => r.growth_30d_pct, show: (rs) => rs.some((r) => r.growth_30d_pct != null), format: (r) => fmtPct(r.growth_30d_pct) },

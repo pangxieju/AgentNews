@@ -308,6 +308,35 @@ const versionLink = (() => {
         </div>
       </section>
 
+      {row.metrics?.openrouter_tokens_month != null && (
+        <section class="section">
+          <div class="section-title">
+            <h2>
+              <a href="https://openrouter.ai/apps" target="_blank" rel="noopener" style="color:inherit">
+                {t(lang, 'agent.usage')}
+              </a>
+            </h2>
+            <span class="muted">{t(lang, 'agent.usageNote')}</span>
+          </div>
+          <div class="box">
+            <div class="stat-rail" style="border-top:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+              <div>
+                <span data-k>{t(lang, 'agent.usageTokens')}</span>
+                <b>{fmt(row.metrics.openrouter_tokens_month)}</b>
+              </div>
+              <div>
+                <span data-k>{t(lang, 'agent.usageRequests')}</span>
+                <b>{fmt(row.metrics.openrouter_requests_month)}</b>
+              </div>
+              <div>
+                <span data-k>{t(lang, 'agent.usageRank')}</span>
+                <b>{row.metrics.openrouter_rank_month != null ? `#${row.metrics.openrouter_rank_month}` : '—'}</b>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {row.flags.includes('partial_data') && <div class="warn" style="margin-top:16px">{t(lang, 'agent.partial')}</div>}
       {row.data_level === 'L3' && <div class="warn" style="margin-top:16px">{t(lang, 'agent.l3')}</div>}
 

@@ -273,6 +273,12 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
           release_tag: typeof m.release_tag === 'string' ? m.release_tag : null,
           release_notes: typeof m.release_notes === 'string' ? m.release_notes : null,
           release_url: typeof m.release_url === 'string' ? m.release_url : null,
+          openrouter_tokens_month:
+            typeof m.openrouter_tokens_month === 'number' ? m.openrouter_tokens_month : null,
+          openrouter_requests_month:
+            typeof m.openrouter_requests_month === 'number' ? m.openrouter_requests_month : null,
+          openrouter_rank_month:
+            typeof m.openrouter_rank_month === 'number' ? m.openrouter_rank_month : null,
         },
         data_level: level,
         flags,

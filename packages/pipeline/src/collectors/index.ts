@@ -1,4 +1,5 @@
 import type { Agent, Metrics, Source } from '@agentnews/core';
+import { collectOpenRouter } from './openrouter.js';
 
 export type CollectorResult = {
   agent: Agent;
@@ -419,8 +420,7 @@ export async function collectAgent(
     }
   }
   const vscodeSrc = vscodeSources.find((s) => s.is_primary) ?? vscodeSources[0];
-  if (vscodeSrc) {
-    try {
+  if (vscodeSrc) {    try {
       const [v, vv] = await Promise.all([
         collectVscode(vscodeSrc.identifier),
         collectVscodeVersion(vscodeSrc.identifier),
@@ -431,6 +431,17 @@ export async function collectAgent(
         metrics.version_at = vv.version_at;
         metrics.version_source = 'vscode';
       }
+    } catch (e) {
+      errors.push(String(e instanceof Error ? e.message : e));
+    }
+  }
+
+  // OpenRouter 应用榜单用量（一次请求取全量榜单，进程内缓存，不按 agent 重复拉）
+  const orSrc = agent.sources.find((s) => s.kind === 'openrouter');
+  if (orSrc) {
+    try {
+      const or = await collectOpenRouter(orSrc.identifier);
+      if (or) Object.assign(metrics, or);
     } catch (e) {
       errors.push(String(e instanceof Error ? e.message : e));
     }

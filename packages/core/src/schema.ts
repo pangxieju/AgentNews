@@ -27,6 +27,8 @@ export const SourceKind = z.enum([
   'chrome',
   'appstore',
   'releases',
+  /** OpenRouter 应用榜单上的条目（identifier = app slug，无 slug 时用数字 app_id） */
+  'openrouter',
   'manual',
 ]);
 export type SourceKind = z.infer<typeof SourceKind>;
@@ -106,8 +108,13 @@ export type MetricKey =
   | 'release_tag'
   | 'release_name'
   | 'release_notes'
-  | 'release_url';
-
+  | 'release_url'
+  /** OpenRouter 应用榜单：月/周 token 用量、请求数、名次（来源 openrouter.ai/apps） */
+  | 'openrouter_tokens_month'
+  | 'openrouter_tokens_week'
+  | 'openrouter_requests_month'
+  | 'openrouter_rank_month';
+  
 export type Metrics = Partial<Record<MetricKey, number | string | null>>;
 
 export const SCORE_VERSION = 'v1';
@@ -157,6 +164,11 @@ export type ScoreRow = {
     release_tag: string | null;
     release_notes: string | null;
     release_url: string | null;
+    /** OpenRouter 应用榜单（月）token 用量 / 请求数 / 名次；未收录为 null。
+     *  可选：历史快照（归档）里没有这三个字段 */
+    openrouter_tokens_month?: number | null;
+    openrouter_requests_month?: number | null;
+    openrouter_rank_month?: number | null;
   };
   /** 出道天数（min(repo 创建至今, 首次收录至今)）；无信息则为 null */
   age_days: number | null;

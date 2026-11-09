@@ -19,9 +19,11 @@ export type FormKey = (typeof FORM_ORDER)[number];
 export const bucketBadgeClass = (b: string): string =>
   b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed';
 
-/** 格式化数字（k/M 缩写，小于 1k 保留原值） */
+/** 格式化数字（T/B/k 缩写，小于 1k 保留原值） */
 export function fmt(n: number | null | undefined): string {
   if (n == null) return '—';
+  if (Math.abs(n) >= 1_000_000_000_000) return (n / 1_000_000_000_000).toFixed(1) + 'T';
+  if (Math.abs(n) >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1) + 'B';
   if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
   if (Math.abs(n) >= 10_000) return Math.round(n / 1_000) + 'k';
   if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(1) + 'k';

@@ -26,7 +26,10 @@
         "version_source": "npm",
         "release_tag": "rust-v0.167.0",
         "release_notes": "## New Features\n\n- Open the agent command center with `codex agents --no-daemon`. The command center and session picker now mark unread results (#58238, #58239, #58263, #58264).\n- Switch between connected backends from the terminal session picker and keep your drafts when switching (#58280, #58457).\n- Preview local image attachments while composing on supported terminals, and open viewed local images from clickable transcript paths (#58261, #58446).\n- Find API key and cloud provider options under “Sign in another way.” Enable `gcp_setup_wizard` to set up Google Cloud Vertex AI with Application Default Credentials or a credential file (#57857, #58427).\n- Opt into macOS or Windows system proxy settings from `/experimental` (#58157).\n- Expand patch details directly in the transcript while an approval prompt is open (#58281).\n\n## Bug Fixes\n\n- Saved chats stay visible after you switch model providers. If a chat can’t resume, you can read its transcript and prepare an editable prompt to continue in a new chat (#58202).\n- `Ctrl+L` clears the terminal display while keeping earlier messages available through `Ctrl+T` (#58266).\n- Deleting text that exposes a leading `!` keeps an ordinary draft in chat mode (#58412).\n- Network approval prompts close when their requests end. Concurrent requests to the same endpoint prompt one at a time (#58350, #58351).\n- Long realtime V3 conversations save completed speech to chat history as the transcript grows (#58221).\n- Automatic context compaction now accounts for retained output from failed responses and responses with missing token usage data (",
-        "release_url": "https://github.com/openai/codex/releases/tag/rust-v0.167.0"
+        "release_url": "https://github.com/openai/codex/releases/tag/rust-v0.167.0",
+        "openrouter_tokens_month": 12243161411308,
+        "openrouter_requests_month": 188419854,
+        "openrouter_rank_month": 9
       },
       "data_level": "L1",
       "flags": [
@@ -94,7 +97,10 @@
         "version_source": "npm",
         "release_tag": "v1.5.0",
         "release_notes": "### New Features\n\n- **Extension update changelogs**: see what changed in installed extension packages on the next fresh launch after an update. Package authors can choose the changelog path, and `collapseChangelog` condenses the notices. See [Show a changelog](https://github.com/earendil-works/pi/blob/v1.5.0/packages/coding-agent/docs/packages.md#show-a-changelog).\n- **Faster streaming**: large tool calls are parsed incrementally, and code-heavy answers and tool rows reuse highlighting and rendered Markdown instead of repeating the work on every update. See [Keep rendering responsive](https://github.com/earendil-works/pi/blob/v1.5.0/packages/coding-agent/docs/tui.md#keep-rendering-responsive).\n- **Custom self-update commands**: use `PI_SELF_UPDATE_COMMAND` or `selfUpdateCommand` to update pi through a wrapper or another package manager. See [Custom update command](https://github.com/earendil-works/pi/blob/v1.5.0/packages/coding-agent/docs/cli.md#custom-update-command).\n- **GPT-6.1 Terra**: available through OpenAI, Azure OpenAI Responses, and OpenAI Codex, with tool search, mid-conversation thinking-level changes, and thinking `off`. Codex offers a 500K context window. See [Models](https://github.com/earendil-works/pi/blob/v1.5.0/packages/coding-agent/docs/cli.md#models).\n\n### Breaking Changes\n\n- Tool argument validation runs on `@earendil-works/pi-schema`. TypeBox features outside JSON Schema (`Type.Refine()`, `Type.BigInt()`, `Type.Undefined()`, codecs, `Format.Set()` formats) no longer apply to tool arguments; see [Tool parameter schemas and TypeBox](https://github.com/e",
-        "release_url": "https://github.com/earendil-works/pi/releases/tag/v1.5.0"
+        "release_url": "https://github.com/earendil-works/pi/releases/tag/v1.5.0",
+        "openrouter_tokens_month": 17601934314481,
+        "openrouter_requests_month": 161412738,
+        "openrouter_rank_month": 6
       },
       "data_level": "L1",
       "flags": [
@@ -128,7 +134,10 @@
         "version_source": "github",
         "release_tag": "v1.37.0",
         "release_notes": "## 1.37.0 (2026-11-06)\n\n<!-- Release notes generated using configuration in .github/release.yml at main -->\n\n## What's Changed\n### Features\n* feat(automations): explain each automation with a Mermaid diagram by @VascoSch92 in https://github.com/OpenHands/OpenHands/pull/19318\n### Bug Fixes\n* fix(chat): place resumed sessions after UTC conversation history by @ak684 in https://github.com/OpenHands/OpenHands/pull/19400\n* fix: keep generated conversation titles visible during startup handoff by @ak684 in https://github.com/OpenHands/OpenHands/pull/19404\n* fix: wait for session replay before showing empty chat suggestions by @enyst in https://github.com/OpenHands/OpenHands/pull/19377\n* fix: load the home page at the base path without a trailing slash by @ak684 in https://github.com/OpenHands/OpenHands/pull/19406\n### Performance\n* perf(chat): avoid repeated history scans during live updates by @enyst in https://github.com/OpenHands/OpenHands/pull/19266\n### Maintenance\n* chore: remove merged PR artifacts by @all-hands-bot in https://github.com/OpenHands/OpenHands/pull/19401\n* refactor: name existing control corner radii by @enyst in https://github.com/OpenHands/OpenHands/pull/19263\n* chore(lint): reject arbitrary values in four migrated owners by @enyst in https://github.com/OpenHands/OpenHands/pull/19264\n* chore(deps): bump lucide-react from 1.25.0 to 1.64.0 by @dependabot[bot] in https://github.com/OpenHands/OpenHands/pull/19413\n* chore(deps): bump driver.js from 1.3.6 to 1.10.2 by @dependabot[bot] in https://github.com/OpenHands/OpenHands/pull/19411\n* chore(deps-dev): bump @typ",
-        "release_url": "https://github.com/OpenHands/OpenHands/releases/tag/v1.37.0"
+        "release_url": "https://github.com/OpenHands/OpenHands/releases/tag/v1.37.0",
+        "openrouter_tokens_month": 2865479187591,
+        "openrouter_requests_month": 31326936,
+        "openrouter_rank_month": 19
       },
       "data_level": "L2",
       "flags": [],
@@ -192,7 +201,10 @@
         "version_source": "github",
         "release_tag": "v1.57.0",
         "release_notes": "## ✨ Features\n\n- Allowlist: require HTTPS and validate redirects, block on policy failure [#12619](https://github.com/aaif-goose/goose/pull/12619)\n- Allow callers to supply Goose session IDs [#13098](https://github.com/aaif-goose/goose/pull/13098)\n\n## 🐛 Bug Fixes\n\n- Linux window icons restored in desktop app [#13120](https://github.com/aaif-goose/goose/pull/13120)\n- OpenRouter: resolve variant suffixes like `:free` and `:nitro` to the base model [#12979](https://github.com/aaif-goose/goose/pull/12979)\n- Use catalog_provider_id for vision lookup on custom providers [#12993](https://github.com/aaif-goose/goose/pull/12993)\n- Desktop: start the agent only once after a fork [#13139](https://github.com/aaif-goose/goose/pull/13139)\n- Scheduler: use recipe settings in scheduled runs [#13138](https://github.com/aaif-goose/goose/pull/13138)\n- Voice: use system trust for WebSockets [#13075](https://github.com/aaif-goose/goose/pull/13075)\n- Prompt: surface MiniJinja render errors in custom system prompts [#12794](https://github.com/aaif-goose/goose/pull/12794)\n- Providers: request summarized thinking from Claude models [#13029](https://github.com/aaif-goose/goose/pull/13029)\n- Code-mode: keep recipe final_output tool for the model [#13102](https://github.com/aaif-goose/goose/pull/13102)\n- CLI: configure unavailable default provider [#13024](https://github.com/aaif-goose/goose/pull/13024)\n- Windows build error [#13081](https://github.com/aaif-goose/goose/pull/13081)\n- Developer: terminate owned shell process trees on cancellation [#12958](https://github.com/aaif-goose/goose/pull/12958)",
-        "release_url": "https://github.com/aaif-goose/goose/releases/tag/v1.57.0"
+        "release_url": "https://github.com/aaif-goose/goose/releases/tag/v1.57.0",
+        "openrouter_tokens_month": 402367974609,
+        "openrouter_requests_month": 5556582,
+        "openrouter_rank_month": 56
       },
       "data_level": "L2",
       "flags": [],
@@ -224,7 +236,10 @@
         "version_source": "npm",
         "release_tag": null,
         "release_notes": null,
-        "release_url": null
+        "release_url": null,
+        "openrouter_tokens_month": 45865747858940,
+        "openrouter_requests_month": 415982733,
+        "openrouter_rank_month": 3
       },
       "data_level": "L2",
       "flags": [
@@ -258,7 +273,10 @@
         "version_source": "npm",
         "release_tag": "sdk-typescript-v0.1.30",
         "release_notes": "## Bundled CLI Version\n\nThis SDK release bundles CLI version: 0.27.0\n\nSource: CLI built from source (same branch/ref as SDK)\n\n---\n\nSee commit history for changes.\n",
-        "release_url": "https://github.com/QwenLM/qwen-code/releases/tag/sdk-typescript-v0.1.30"
+        "release_url": "https://github.com/QwenLM/qwen-code/releases/tag/sdk-typescript-v0.1.30",
+        "openrouter_tokens_month": 124077941521,
+        "openrouter_requests_month": 869927,
+        "openrouter_rank_month": 114
       },
       "data_level": "L1",
       "flags": [],
@@ -290,7 +308,10 @@
         "version_source": "npm",
         "release_tag": "v0.100.0",
         "release_notes": "# Subagents, Sysadmin Mode, and PGP/SSH Prompts\r\n\r\nThis is a big one! Crush can now run a team of subagents, permissions are much more flexible, and you can now do GPG and SSH auth right inside Crush! Read on for more.\r\n\r\n## 👩🏼‍🐰‍👩🏽 Subagents\r\n\r\nAt last, subagents. Crush can now spawn a little team of friendly subagents  in the background, as well as check on them, send them mid-run follow-ups, stop them, or move them to a different model. \r\n\r\n<p><img width=\"600\" alt=\"image\" src=\"https://github.com/user-attachments/assets/a8f4f437-dd9a-46bb-ab31-65a14b84c07a\" /></p>\r\n\r\nYou can watch them work right in the transcript, sidebar and header. Every subagent gets its own name, too, so you always know who's doing what. And, if you refer to them by name, Crush will know which of ’em you’re talking about!\r\n\r\n## 🚨 Sysadmin Mode\r\n\r\nEver wish Crush could `DROP SCHEMA public CASCADE;`? Now it can, with Sysadmin mode! In fact, in Sysadmin mode, Crush can run any command on your system. Be careful.\r\n\r\n<p><img width=\"600\" alt=\"image\" src=\"https://github.com/user-attachments/assets/c8ccbd1b-aba2-48cc-bef7-b15045b41241\" /><p>\r\n\r\nFind Sysadmin mode in the command palette (<kbd>ctrl+p</kbd>) or toggle through all modes with <kbd>shift+tab</kbd>.\r\n\r\n## 🙅🏻‍♀️ Safe Commands\r\n\r\nOf course, Yolo Mode still blocks dangerous commands, but now which commands are dangerous is up to you.\r\n\r\n* `permissions safe` marks commands safe for yolo\r\n* `permissions block` blocks commands completely\r\n* `permissions unblock` unblocks restricted commands\r\n\r\n```bash\r\n# Building is fine\r\npermissions safe \"go bui",
-        "release_url": "https://github.com/charmbracelet/crush/releases/tag/v0.100.0"
+        "release_url": "https://github.com/charmbracelet/crush/releases/tag/v0.100.0",
+        "openrouter_tokens_month": 113366777110,
+        "openrouter_requests_month": 681534,
+        "openrouter_rank_month": 124
       },
       "data_level": "L1",
       "flags": [],
@@ -354,7 +375,10 @@
         "version_source": "github",
         "release_tag": "v2.14.0",
         "release_notes": "## Changes\r\n\r\n## 🚀 Features\r\n\r\n- fix:  Claude Opus 5.5 support for claude\\_code and anthropic providers @bogdanr (#3928)\r\n\r\n## 🐛 Bug Fixes\r\n\r\n- fix(deps): pin html2md to 0.2.15 to fix android build @amitksingh1490 (#3949)\r\n- fix: Claude Sonnet 5.5 support for claude\\_code and anthropic providers @bogdanr (#3947)\r\n- fix:  Claude Opus 5.5 support for claude\\_code and anthropic providers @bogdanr (#3928)\r\n- fix(deps): update rust crate posthog-rs to 0.27.0 @[renovate[bot]](https://github.com/apps/renovate) (#3941)\r\n- fix(deps): update rust crate libsqlite3-sys to 0.38.0 @[renovate[bot]](https://github.com/apps/renovate) (#3394)\r\n- fix(deps): update rust crate posthog-rs to 0.22.0 @[renovate[bot]](https://github.com/apps/renovate) (#3822)\r\n- Add gemma 4 31b and deepseek v4 flash to neuralwatt @jonathan-s (#3795)\r\n\r\n## 🧰 Maintenance\r\n\r\n- chore(deps): update dependency ai to v7.0.126 @[renovate[bot]](https://github.com/apps/renovate) (#3956)\r\n- chore(deps): update dependency @ai-sdk/google-vertex to v5.0.101 @[renovate[bot]](https://github.com/apps/renovate) (#3954)\r\n- chore(deps): update dependency ai to v7.0.123 @[renovate[bot]](https://github.com/apps/renovate) (#3955)\r\n- Revert \"chore(deps): update rust crate html2md to v0.2.17\" @amitksingh1490 (#3951)\r\n- chore(deps): update rust crate html2md to v0.2.17 @[renovate[bot]](https://github.com/apps/renovate) (#3950)\r\n- chore(deps): update dependency @ai-sdk/google-vertex to v5.0.98 @[renovate[bot]](https://github.com/apps/renovate) (#3944)\r\n- chore(deps): update dependency ai to v7.0.122 @[renovate[bot]](https://github.com/app",
-        "release_url": "https://github.com/tailcallhq/forgecode/releases/tag/v2.14.0"
+        "release_url": "https://github.com/tailcallhq/forgecode/releases/tag/v2.14.0",
+        "openrouter_tokens_month": 56060566724,
+        "openrouter_requests_month": 528031,
+        "openrouter_rank_month": 222
       },
       "data_level": "L2",
       "flags": [],
@@ -548,7 +572,10 @@
         "version_source": "vscode",
         "release_tag": "v4.1.26",
         "release_notes": "\n### Added\n\n- Cloud tasks: Settings > API Configuration has a Local | Cloud toggle when cloud sessions are on. Cloud picks the Cline model new cloud tasks run on, saved separately from your local models. Clicking the model label in a cloud session's composer opens it there.\n- Starting or resuming a cloud sandbox shows a progress card with the repo, branch and steps (start sandbox, clone repository, start agent). It collapses once the agent starts.\n\n### Changed\n\n- Cloud sessions hide the Plan/Act toggle and the auto-approve bar instead of showing them disabled.\n- With no model chosen, the Cline provider uses Claude Sonnet 5.5 again, which is back at the top of Cline's recommended list.\n- Model requests retry at most 3 times instead of 5.\n- Kimi K3 now gets `max` reasoning for Extra High and Max, instead of an `xhigh` setting it rejects.\n- Refreshed the model catalog. Adds the CommandCode, Reflection, Liquid Inference and Munito AI providers and drops CrofAI, iFlow and Llama. The Cline free list adds Reflection Beam, Nemotron 3.5 Lightning and Laguna S 2.1 and drops Mimo V2.6 Flash and Muse Spark 1.3 Contributor. ClinePass now defaults to Kimi K3.1 Pro and adds MiniMax M3.1 Flash and DeepSeek V4.1 Flash 1017. Default models change for most other providers, mostly to Kimi K3.1 Pro, MiniMax M3.1 Flash or DeepSeek V4.1 Flash 1017. If you use a provider without pinning a model, expect a different default.\n\n### Fixed\n\n- GPT-6 models (such as `gpt-6-sol` and `gpt-6.1-sol`) work on OpenAI and Azure OpenAI-compatible endpoints, and SAP AI Core no longer rejects requests with \"Unsuppo",
-        "release_url": "https://github.com/cline/cline/releases/tag/v4.1.26"
+        "release_url": "https://github.com/cline/cline/releases/tag/v4.1.26",
+        "openrouter_tokens_month": 7850047503591,
+        "openrouter_requests_month": 89022388,
+        "openrouter_rank_month": 12
       },
       "data_level": "L1",
       "flags": [
@@ -582,7 +609,10 @@
         "version_source": "vscode",
         "release_tag": null,
         "release_notes": null,
-        "release_url": null
+        "release_url": null,
+        "openrouter_tokens_month": 66464483057,
+        "openrouter_requests_month": 1284209,
+        "openrouter_rank_month": 193
       },
       "data_level": "L1",
       "flags": [
@@ -616,7 +646,10 @@
         "version_source": "npm",
         "release_tag": "v7.8.27",
         "release_notes": "No notable changes",
-        "release_url": "https://github.com/Kilo-Org/kilocode/releases/tag/v7.8.27"
+        "release_url": "https://github.com/Kilo-Org/kilocode/releases/tag/v7.8.27",
+        "openrouter_tokens_month": 23176826439766,
+        "openrouter_requests_month": 221745644,
+        "openrouter_rank_month": 5
       },
       "data_level": "L1",
       "flags": [],
@@ -648,7 +681,10 @@
         "version_source": "vscode",
         "release_tag": "v3.54.0",
         "release_notes": "Release v3.54.0",
-        "release_url": "https://github.com/RooCodeInc/Roo-Code/releases/tag/v3.54.0"
+        "release_url": "https://github.com/RooCodeInc/Roo-Code/releases/tag/v3.54.0",
+        "openrouter_tokens_month": 227681411971,
+        "openrouter_requests_month": 1364634,
+        "openrouter_rank_month": 71
       },
       "data_level": "L1",
       "flags": [
@@ -912,7 +948,10 @@
         "version_source": null,
         "release_tag": null,
         "release_notes": null,
-        "release_url": null
+        "release_url": null,
+        "openrouter_tokens_month": 1324489096801,
+        "openrouter_requests_month": 11211262,
+        "openrouter_rank_month": 30
       },
       "data_level": "L3",
       "flags": [
@@ -1244,7 +1283,10 @@
         "version_source": "pypi",
         "release_tag": "langchain-core==1.7.6",
         "release_notes": "Changes since langchain-core==1.7.5\n\nrelease(core): 1.7.6 (#41698)\nperf(core): merge streamed `AIMessageChunk`s once when accumulating runnable streams (#41697)\nperf(core): stop `parse_partial_json` from retrying one character at a time (#41467)",
-        "release_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.7.6"
+        "release_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.7.6",
+        "openrouter_tokens_month": 1449410386418,
+        "openrouter_requests_month": 47736095,
+        "openrouter_rank_month": 28
       },
       "data_level": "L1",
       "flags": [
@@ -1868,7 +1910,10 @@
         "version_source": "github",
         "release_tag": "v2.15",
         "release_notes": "# Agent Zero — Release Notes\n\n## Highlights\n\nThis is a large release that promotes core tools into standalone plugins, overhauls the welcome screen, hardens channel security, improves streaming and UI responsiveness, and adds new search, migration, and documentation capabilities.\n\n---\n\n## Tool Plugin Architecture\n\n- **Extracted bundled tools into standalone plugins:** `wait`, `notify_user`, `search_engine`, `a2a_chat`, `scheduler`, `behavior_adjustment`, and the scheduler Tasks UI are now standard plugins, each with dedicated badge styling, log types, and prompt files.\n- **Unified memory tools:** The four separate `memory_load`, `memory_save`, `memory_delete`, and `memory_forget` tools are consolidated into a single `memory` tool with an `action` argument, matching the action-dispatch pattern used by other tools.\n- **Per-action tool permissions:** Profiles can now allow or deny individual operations across all 12 bundled multi-action tools (e.g., allow file reads but block writes, or allow listing scheduled tasks but block deletion). The Agent Editor shows grouped action controls with expandable entries.\n- **Centralized boolean argument coercion** across all promoted and core tools, removing duplicated helpers and strict-validation error paths.\n- **Dedicated badge rendering** for goal, document_query, skills, vision, browser, office, and computer_use_remote tool calls, each with distinct accent colors and descriptive headlines.\n- **Dropped agent-name prefix** from all tool log headlines, warning rows, and fallback entries for cleaner chat output.\n- **Added catalog thumbnail",
-        "release_url": "https://github.com/agent0ai/agent-zero/releases/tag/v2.15"
+        "release_url": "https://github.com/agent0ai/agent-zero/releases/tag/v2.15",
+        "openrouter_tokens_month": 94176116246,
+        "openrouter_requests_month": 2110484,
+        "openrouter_rank_month": 151
       },
       "data_level": "L2",
       "flags": [],

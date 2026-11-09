@@ -40,6 +40,7 @@
   sources:
     - { kind: github, identifier: badlogic/pi-mono, is_primary: true }
     - { kind: npm, identifier: "@earendil-works/pi-coding-agent" }
+    - { kind: openrouter, identifier: pi }
 
 - slug: goose
   name: Goose
@@ -50,6 +51,7 @@
   homepage: https://block.github.io/goose
   sources:
     - { kind: github, identifier: block/goose, is_primary: true }
+    - { kind: openrouter, identifier: "3248223" }
 
 - slug: openhands
   name: OpenHands
@@ -60,6 +62,7 @@
   homepage: https://openhands.ai
   sources:
     - { kind: github, identifier: All-Hands-AI/OpenHands, is_primary: true }
+    - { kind: openrouter, identifier: openhands }
 
 - slug: codex-cli
   name: Codex CLI
@@ -71,6 +74,7 @@
   sources:
     - { kind: github, identifier: openai/codex, is_primary: true }
     - { kind: npm, identifier: "@openai/codex" }
+    - { kind: openrouter, identifier: codex }
 
 - slug: gemini-cli
   name: Gemini CLI
@@ -93,6 +97,7 @@
   sources:
     - { kind: github, identifier: QwenLM/qwen-code, is_primary: true }
     - { kind: npm, identifier: "@qwen-code/qwen-code" }
+    - { kind: openrouter, identifier: qwen-code }
 
 - slug: claude-code
   name: Claude Code
@@ -103,6 +108,7 @@
   homepage: https://claude.com/claude-code
   sources:
     - { kind: npm, identifier: "@anthropic-ai/claude-code", is_primary: true }
+    - { kind: openrouter, identifier: claude-code }
 
 - slug: cursor-cli
   name: Cursor CLI
@@ -150,6 +156,7 @@
   sources:
     - { kind: github, identifier: cline/cline, is_primary: true }
     - { kind: vscode, identifier: saoudrizwan.claude-dev }
+    - { kind: openrouter, identifier: cline }
 
 - slug: roo-code
   name: Roo Code
@@ -161,6 +168,7 @@
   sources:
     - { kind: github, identifier: RooCodeInc/Roo-Code, is_primary: true }
     - { kind: vscode, identifier: rooveterinaryinc.roo-cline }
+    - { kind: openrouter, identifier: roo-code }
 
 - slug: continue
   name: Continue
@@ -172,6 +180,7 @@
   sources:
     - { kind: github, identifier: continuedev/continue, is_primary: true }
     - { kind: vscode, identifier: Continue.continue }
+    - { kind: openrouter, identifier: "181596" }
 
 - slug: kilo-code
   name: Kilo Code
@@ -184,6 +193,7 @@
     - { kind: github, identifier: Kilo-Org/kilocode, is_primary: true }
     - { kind: npm, identifier: "@kilocode/cli" }
     - { kind: vscode, identifier: KiloCode.kilocode }
+    - { kind: openrouter, identifier: kilo-code }
 
 # ─────────────────────────────────────────────
 # IDE / 编辑器一体化产品
@@ -197,6 +207,7 @@
   homepage: https://cursor.com
   sources:
     - { kind: manual, identifier: cursor-com, is_primary: true }
+    - { kind: openrouter, identifier: "2237546" }
 
 - slug: windsurf
   name: Windsurf
@@ -339,6 +350,7 @@
   sources:
     - { kind: github, identifier: charmbracelet/crush, is_primary: true }
     - { kind: npm, identifier: "@charmland/crush" }
+    - { kind: openrouter, identifier: "2351296" }
 
 - slug: mistral-vibe
   name: Mistral Vibe
@@ -359,6 +371,7 @@
   homepage: https://forgecode.dev
   sources:
     - { kind: github, identifier: tailcallhq/forgecode, is_primary: true }
+    - { kind: openrouter, identifier: "3363853" }
 
 - slug: plandex
   name: Plandex
@@ -571,6 +584,7 @@
   sources:
     - { kind: github, identifier: langchain-ai/langchain, is_primary: true }
     - { kind: pypi, identifier: langchain }
+    - { kind: openrouter, identifier: langchain }
 
 # ---------- 自主 ----------
 - slug: autogpt
@@ -593,6 +607,7 @@
   homepage: https://github.com/frdel/agent-zero
   sources:
     - { kind: github, identifier: frdel/agent-zero, is_primary: true }
+    - { kind: openrouter, identifier: agent-zero }
 
 - slug: babyagi
   name: BabyAGI
