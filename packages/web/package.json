@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "deploy": "wrangler pages deploy dist --project-name agentrank --commit-dirty=true",
+    "deploy:preview": "wrangler pages deploy dist --project-name agentrank-preview --commit-dirty=true"
   },
   "dependencies": {
     "@agentrank/core": "workspace:*",
@@ -16,6 +18,7 @@
     "preact": "^10.25.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "wrangler": "^4.158.0"
   }
 }
