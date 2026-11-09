@@ -58,7 +58,13 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
       {
         date: '2026-11-09',
         change: '新增中 / 英文双语',
-        reason: '中文在根路径、英文在 /en/，保留既有 URL；默认按浏览器语言判断，可手动切换',
+        reason: '英文在根路径（默认）、中文在 /zh/；旧的 /en/ 链接 301 到根路径，默认按浏览器语言判断，可手动切换',
+      },
+      {
+        date: '2026-11-09',
+        change: '接入 OpenRouter 应用榜用量',
+        reason:
+          '补上「真的在用多少」的维度（月/周 token、请求数、站内名次）；不参与综合分，且只覆盖经 OpenRouter 转发的流量',
       },
     ],
     entries: [
@@ -155,7 +161,13 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
         date: '2026-11-09',
         change: 'Added Chinese / English',
         reason:
-          'Chinese at the root, English under /en/ so existing URLs keep working. Default follows browser language, with a manual switch.',
+          'English at the root (default), Chinese under /zh/; old /en/ links 301 to the root. Default follows browser language, with a manual switch.',
+      },
+      {
+        date: '2026-11-09',
+        change: 'Added OpenRouter app usage',
+        reason:
+          'Adds a “how much is it actually used” signal (tokens per month/week, requests, in-site rank). Not part of the composite score, and covers OpenRouter-routed traffic only.',
       },
     ],
     entries: [

@@ -43,8 +43,9 @@ AgentNews 的做法：
 
 ## 多语言（中文 / English）
 
-- **路由**：中文在根路径（`/top/open/all/month/`），英文在 `/en/` 前缀（`/en/top/open/all/month/`），既有 URL 不变
-- **自动判断**：首次访问 `/` 时按浏览器语言决定是否跳到 `/en/`（深链不跳，避免打断分享链接）；手动切换后记住选择（`localStorage.an-lang`）
+- **路由**：英文在根路径（默认，`/top/open/all/month/`），中文在 `/zh/` 前缀（`/zh/top/open/all/month/`）
+- **自动判断**：首次访问 `/` 时，浏览器首选中文则跳到 `/zh/`（深链不跳，避免打断分享链接）；手动切换后记住选择（`localStorage.an-lang`）
+- **旧链接**：`/en/...` 通过 `public/_redirects` 301 到根路径
 - **手动切换**：顶栏 `中 / EN`，切换时保留当前路径
 - **SEO**：`<html lang>` 正确、`hreflang` 三组（zh-CN / en / x-default）、canonical 指向当前语言
 
@@ -161,6 +162,15 @@ log 压缩 → 同形态组内分位数归一 → 缺失权重重分配 → 加�
 
 - 日 / 周 / 月榜用**绝对增量**（谁在变大）
 - 综合分 / 趋势榜用**相对增速 %**（谁在变快）
+
+### 外部用量信号：OpenRouter 应用榜
+
+除自有指标外，每个 agent 还会挂上 [OpenRouter 应用榜](https://openrouter.ai/apps) 的月 / 周 token 用量、月请求数和全球名次（`agents.yaml` 里加 `kind: openrouter`，identifier 为 app slug，无 slug 时用数字 app_id）。
+
+- **不参与综合分**：口径与 star / 下载量不同源，混进加权会污染「可比的才排名」
+- **口径限制**：只统计经 OpenRouter 转发的请求，自带 key 直连厂商的用量不计入；名次是 OpenRouter 站内总榜，不是全网份额
+- 采集器：`packages/pipeline/src/collectors/openrouter.ts`（一次请求取全量榜单，进程内缓存 30 分钟）
+- 展示：榜单新增可排序的 `OpenRouter tokens/mo` 列；详情页有「用量 · OpenRouter」区块
 
 ---
 

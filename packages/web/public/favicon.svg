@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="AgentNews">
+  <title>AgentNews</title>
+  <!-- 与顶栏 .brand-mark 同一套几何：ink 方块 + paper 色的等宽 A -->
+  <rect width="32" height="32" fill="#0e0f10" />
+  <g fill="#fcfcfb">
+    <circle cx="16" cy="7.2" r="1.224" />
+    <polygon points="14.864,6.813 8.012,24.122 11.988,25.478 17.136,7.587" />
+    <polygon points="14.864,7.587 20.012,25.478 23.988,24.122 17.136,6.813" />
+    <rect x="11.5" y="18.4" width="9" height="2.6" />
+  </g>
+</svg>

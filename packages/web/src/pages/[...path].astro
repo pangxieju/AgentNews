@@ -1,6 +1,7 @@
 ---
 /**
- * 单一路由分发器：/ 与 /en/ 两套语言共用同一份视图。
+ * 单一路由分发器：/ 与 /zh/ 两套语言共用同一份视图。
+ * 英文在根路径（默认），中文在 /zh/ 前缀。
  *
  * 为什么用 catch-all 而不是复制两套页面：
  * - 视图只写一次，语言作为 prop 传入
@@ -48,14 +49,14 @@ export function getStaticPaths() {
 
   return paths.flatMap((p) => [
     { params: { path: p === '' ? undefined : p } },
-    { params: { path: p === '' ? 'en' : `en/${p}` } },
+    { params: { path: p === '' ? 'zh' : `zh/${p}` } },
   ]);
 }
 
 const raw = Astro.params.path ?? '';
 const seg = raw.split('/').filter(Boolean);
-const lang: Lang = seg[0] === 'en' ? 'en' : 'zh';
-const parts = lang === 'en' ? seg.slice(1) : seg;
+const lang: Lang = seg[0] === 'zh' ? 'zh' : 'en';
+const parts = lang === 'zh' ? seg.slice(1) : seg;
 const [a, b, c, d] = parts;
 ---
 

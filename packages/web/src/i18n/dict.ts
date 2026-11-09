@@ -4,11 +4,13 @@
  * 约定：
  * - 平面 key，用前缀分组（nav.* / rank.* / agent.* …）
  * - `{name}` 占位符由 t(lang, key, { name }) 替换
- * - 路由：中文在根路径，英文在 /en/ 前缀（保留已有 URL，不破坏外链）
+ * - 路由：英文在根路径（默认语言），中文在 /zh/ 前缀
  */
 
 export type Lang = 'zh' | 'en';
-export const LANGS: Lang[] = ['zh', 'en'];
+/** 默认语言：根路径 / 一律是英语 */
+export const DEFAULT_LANG: Lang = 'en';
+export const LANGS: Lang[] = ['en', 'zh'];
 export const LANG_SHORT: Record<Lang, string> = { zh: '中', en: 'EN' };
 export const HTML_LANG: Record<Lang, string> = { zh: 'zh-CN', en: 'en' };
 
@@ -83,6 +85,7 @@ const zh: Dict = {
   'metric.installs': '安装量',
   'metric.activity': '活跃度',
   'metric.activityShort': '活跃',
+  'metric.openrouterTokens': 'OpenRouter 月 token',
   'metric.delta1d': '日增',
   'metric.delta7d': '7d 增',
   'metric.growth30d': '30d 增速',
@@ -224,6 +227,12 @@ const zh: Dict = {
   'agent.delta7d': '7d 增量',
   'agent.delta30d': '30d 增量',
   'agent.relGrowth': '相对增速',
+  'agent.usage': '用量 · OpenRouter',
+  'agent.usageTokens': '月 token',
+  'agent.usageWeek': '周 token',
+  'agent.usageRequests': '月请求',
+  'agent.usageRank': '全球名次',
+  'agent.usageNote': '口径：仅统计经 OpenRouter 转发的请求，不含自带 key 直连厂商的用量；名次为 OpenRouter 应用总榜。',
   'agent.partial': '该 agent 部分数据源采集失败，综合分基于可用指标重算（缺失权重已重分配）。',
   'agent.l3': '数据未公开：仅收录，不参与排名（PRD §5.7）。',
   'agent.peers': '同形态其他选择',
@@ -477,6 +486,7 @@ const en: Dict = {
   'metric.installs': 'Installs',
   'metric.activity': 'Activity',
   'metric.activityShort': 'Active',
+  'metric.openrouterTokens': 'OpenRouter tokens/mo',
   'metric.delta1d': '1d Δ',
   'metric.delta7d': '7d Δ',
   'metric.growth30d': '30d growth',
@@ -613,6 +623,13 @@ const en: Dict = {
   'agent.delta7d': '7d Δ',
   'agent.delta30d': '30d Δ',
   'agent.relGrowth': 'Relative growth',
+  'agent.usage': 'Usage · OpenRouter',
+  'agent.usageTokens': 'Tokens / mo',
+  'agent.usageWeek': 'Tokens / wk',
+  'agent.usageRequests': 'Requests / mo',
+  'agent.usageRank': 'Global rank',
+  'agent.usageNote':
+    'Scope: requests routed through OpenRouter only — direct-to-provider usage with your own key is not counted. Rank is the OpenRouter app leaderboard.',
   'agent.partial': 'Some sources failed for this agent; the score was recomputed on available metrics (missing weights redistributed).',
   'agent.l3': 'Data not public: listed only, not ranked (PRD §5.7).',
   'agent.peers': 'Other options in this form',
@@ -808,20 +825,20 @@ export function t(lang: Lang, key: string, vars?: Record<string, string | number
 /* ───────────── 路由 ───────────── */
 
 export function langOf(pathname: string): Lang {
-  return pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'zh';
+  return pathname === '/zh' || pathname.startsWith('/zh/') ? 'zh' : 'en';
 }
 
 export function stripLang(pathname: string): string {
-  if (pathname === '/en') return '/';
-  if (pathname.startsWith('/en/')) return pathname.slice(3) || '/';
+  if (pathname === '/zh') return '/';
+  if (pathname.startsWith('/zh/')) return pathname.slice(3) || '/';
   return pathname;
 }
 
-/** 把站内路径转成目标语言的路径 */
+/** 把站内路径转成目标语言的路径（英语无前缀，中文在 /zh/） */
 export function pathFor(lang: Lang, path: string): string {
   const p = path.startsWith('/') ? path : '/' + path;
-  if (lang === 'zh') return p;
-  return p === '/' ? '/en/' : '/en' + p;
+  if (lang === 'en') return p;
+  return p === '/' ? '/zh/' : '/zh' + p;
 }
 
 export function swapLangPath(pathname: string, target: Lang): string {
