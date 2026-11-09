@@ -60,10 +60,10 @@
     "h": 180
   },
   "claude-code": {
-    "file": "claude-code.76a62758.png",
-    "source": "html",
-    "w": 192,
-    "h": 192
+    "file": "claude-code.7dab5aca.png",
+    "source": "well-known",
+    "w": 180,
+    "h": 180
   },
   "cline": {
     "file": "cline.10315b11.png",
@@ -72,7 +72,7 @@
     "h": 256
   },
   "codex-cli": {
-    "file": "codex-cli.10c1403f.png",
+    "file": "codex-cli.e9e1fb4e.png",
     "source": "github",
     "w": 192,
     "h": 192
@@ -234,7 +234,7 @@
     "h": 180
   },
   "openai-agents": {
-    "file": "openai-agents.10c1403f.png",
+    "file": "openai-agents.e9e1fb4e.png",
     "source": "github",
     "w": 192,
     "h": 192
@@ -276,14 +276,14 @@
     "h": 192
   },
   "roo-code": {
-    "file": "roo-code.e55f60c7.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "roo-code.bd87dd8f.png",
+    "source": "html",
+    "w": 512,
+    "h": 512
   },
   "semantic-kernel": {
-    "file": "semantic-kernel.a873a2ab.png",
-    "source": "well-known",
+    "file": "semantic-kernel.6bb00c38.png",
+    "source": "github",
     "w": 192,
     "h": 192
   },
@@ -318,10 +318,10 @@
     "h": 192
   },
   "theia": {
-    "file": "theia.690bf35d.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "theia.5da82998.png",
+    "source": "html",
+    "w": 196,
+    "h": 196
   },
   "trae": {
     "file": "trae.57a3ac5e.png",
@@ -336,10 +336,10 @@
     "h": 0
   },
   "void-editor": {
-    "file": "void-editor.2901704a.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "void-editor.89c85433.png",
+    "source": "html",
+    "w": 1200,
+    "h": 1200
   },
   "warp-agent": {
     "file": "warp-agent.e742cc2a.png",
@@ -348,10 +348,10 @@
     "h": 196
   },
   "windsurf": {
-    "file": "windsurf.8935f7ae.svg",
+    "file": "windsurf.2b69ec0d.png",
     "source": "html",
-    "w": 0,
-    "h": 0
+    "w": 568,
+    "h": 568
   },
   "zed": {
     "file": "zed.f4202c3f.png",
