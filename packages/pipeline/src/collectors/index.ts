@@ -77,18 +77,72 @@ export async function collectGitHub(repo: string, token?: string, mode: GitHubMo
   };
 }
 
-/** 探测 GitHub 剩余额度（未认证 60/h）。剩余不足则返回 false，调用方应跳过采集 */
-export async function githubHasQuota(token?: string, minRemaining = 20): Promise<boolean> {
+/**
+ * 贡献者数：per_page=1 + Link header 的 rel="last" 页号（1 次请求拿总数）
+ * 需 API 通道（ungh 不提供），仅在 mode='api' 且额度充足时调用
+ */
+export async function collectContributors(repo: string, token?: string): Promise<number | null> {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'agentrank-m0',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/contributors?per_page=1&anon=true`, { headers });
+    if (!res.ok) return null;
+    const link = res.headers.get('link');
+    if (!link) {
+      // 无 Link 头 → 单页，直接数
+      const arr = (await res.json()) as unknown[];
+      return Array.isArray(arr) ? arr.length : null;
+    }
+    const m = link.match(/[?&]page=(\d+)>;\s*rel="last"/);
+    return m ? Number(m[1]) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** 最新 release 日期（1 次请求） */
+export async function collectLatestRelease(repo: string, token?: string): Promise<string | null> {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'agentrank-m0',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, { headers });
+    if (!res.ok) return null;
+    const d = (await res.json()) as { published_at?: string };
+    return d.published_at ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 探测 GitHub 剩余额度。
+ * 无 token 时每小时只有 60 次，而每个 repo 需 3 次（repo+contributors+release），
+ * 所以门槛必须按待采集 repo 数动态计算；额度不够就整轮走 ungh（只需 1 次/repo，且不占额度）。
+ */
+export async function githubQuota(token?: string): Promise<{ remaining: number; enough: boolean }> {
   const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'User-Agent': 'agentrank-m0' };
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
     const res = await fetch('https://api.github.com/rate_limit', { headers });
-    if (!res.ok) return false;
+    if (!res.ok) return { remaining: 0, enough: false };
     const data = (await res.json()) as { resources: { core: { remaining: number } } };
-    return data.resources.core.remaining >= minRemaining;
+    return { remaining: data.resources.core.remaining, enough: false };
   } catch {
-    return false;
+    return { remaining: 0, enough: false };
   }
+}
+
+/** 兼容旧签名：返回是否足够采完 needRepos 个 repo（每个 3 次请求） */
+export async function githubHasQuota(token?: string, needRepos = 0): Promise<boolean> {
+  const { remaining } = await githubQuota(token);
+  if (needRepos <= 0) return remaining >= 3;
+  return remaining >= needRepos * 3;
 }
 
 /** npm：周/月下载量（无鉴权） */
@@ -168,6 +222,16 @@ export async function collectAgent(
     try {
       const g = await collectGitHub(ghPrimary.identifier, token, ghMode);
       Object.assign(metrics, g);
+
+      // API 通道才补 contributors / latest release（各 1 次请求，不浪费额度）
+      if (ghMode === 'api') {
+        const [contrib, release] = await Promise.all([
+          collectContributors(ghPrimary.identifier, token),
+          collectLatestRelease(ghPrimary.identifier, token),
+        ]);
+        if (contrib != null) metrics.contributors = contrib;
+        if (release != null) metrics.last_release = release;
+      }
     } catch (e) {
       errors.push(String(e instanceof Error ? e.message : e));
     }

@@ -1,0 +1,11 @@
+# Cloudflare Pages 缓存策略
+# 静态资源（带内容哈希）永久缓存
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML 短期缓存（每日重建，但需保证榜单及时更新）
+/*
+  Cache-Control: public, max-age=600, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin

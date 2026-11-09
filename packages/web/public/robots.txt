@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# 榜单页面可被索引；数据文件本身不参与索引
+Disallow: /*.json$
+
+Sitemap: https://agentrank.example.com/sitemap.xml

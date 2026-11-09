@@ -102,10 +102,14 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   const today = isoDate();
   console.log(`[run] ${today} · ${agents.length} agents`);
 
-  // 0. 选 GitHub 通道：有额度用官方 API（字段更全），否则自动降级 ungh（无限流）
-  const hasQuota = await githubHasQuota(opts.token);
+  // 0. 选 GitHub 通道：额度够（3 次/repo）用官方 API（能拿 contributors + release），否则走 ungh
+  const ghRepoCount = agents.filter((a) => a.sources.some((s) => s.kind === 'github')).length;
+  const hasQuota = await githubHasQuota(opts.token, ghRepoCount);
   const ghMode: GitHubMode = hasQuota ? 'api' : 'ungh';
-  console.log(`[run] GitHub 通道：${ghMode}${hasQuota ? '' : '（API 额度不足，降级 ungh）'}`);
+  console.log(
+    `[run] GitHub 通道：${ghMode}` +
+      (hasQuota ? `（额度充足，${ghRepoCount} repo × 3 请求）` : `（额度不足，降级 ungh）`),
+  );
 
   // 1. 采集（串行跑，限流友好；后续可 p-limit 并行）
   const metricsMap = new Map<string, Metrics>();

@@ -4,7 +4,11 @@ const data = loadLatestScores();
 const rows = data?.rows ?? [];
 const hasData = rows.length > 0;
 const date = data?.date ?? '暂无数据';
-const { pageTitle = 'AI Agent 排行榜' } = Astro.props;
+const {
+  pageTitle = 'AI Agent 排行榜',
+  description = `AI Agent 排行榜：${rows.length} 个 agent 的开源/闭源双榜，按 star、安装量、活跃度跨生态归一化排名。数据截至 ${date}。`,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentrank.example.com').href;
 ---
 
 <!doctype html>
@@ -13,7 +17,14 @@ const { pageTitle = 'AI Agent 排行榜' } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle} · AgentRank</title>
-    <meta name="description" content="AI Agent 排行榜 —— 开源/闭源双榜，日/周/月粒度，跨生态归一化" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${pageTitle} · AgentRank`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#0f1117" />
     <style>
       :root { --bg: #0f1117; --card: #161b27; --border: #232a3b; --text: #e6e9f0; --muted: #8b93a7; --accent: #4f8cff; --green: #34d399; --red: #f87171; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -54,6 +65,7 @@ const { pageTitle = 'AI Agent 排行榜' } = Astro.props;
       <a class="nav" href="/top/open/all/month">榜单</a>
       <a class="nav" href="/rising">新秀</a>
       <a class="nav" href="/archive">归档</a>
+      <a class="nav" href="/changelog">变更</a>
       <a class="nav" href="/about">口径</a>
     </nav>
     <main>
