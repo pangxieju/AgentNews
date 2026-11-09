@@ -700,3 +700,199 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: devin, is_primary: true }
+
+# =============================================================
+# 第三批扩充：闭源产品补齐
+# discover 抓不到这些（没有公开 repo），靠人补（PRD §4.4 闭源门槛）
+# 2026-11 核对：homepage 可达 / npm 包经 registry.npmjs.org 验过
+# =============================================================
+
+# ---------- CLI ----------
+- slug: amp
+  name: Amp
+  vendor: Sourcegraph
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://ampcode.com
+  sources:
+    - { kind: npm, identifier: "@ampcode/cli", is_primary: true }
+
+- slug: droid
+  name: Factory Droid
+  vendor: Factory
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://factory.com
+  sources:
+    - { kind: npm, identifier: "@factory/cli", is_primary: true }
+
+- slug: copilot-cli
+  name: Copilot CLI
+  vendor: GitHub
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://github.com/features/copilot/cli
+  note: 与 github-copilot（IDE 插件）同一订阅下的两种形态，指标分开统计
+  sources:
+    - { kind: npm, identifier: "@github/copilot", is_primary: true }
+
+- slug: auggie
+  name: Auggie CLI
+  vendor: Augment Code
+  form: cli
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.augmentcode.com
+  note: Augment 的终端形态；IDE 插件见 watchlist
+  sources:
+    - { kind: npm, identifier: "@augmentcode/auggie", is_primary: true }
+
+# ---------- IDE 插件 ----------
+- slug: lingma
+  name: 通义灵码
+  vendor: Alibaba Cloud
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://lingma.aliyun.com
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: lingma, is_primary: true }
+
+- slug: comate
+  name: 文心快码 Comate
+  vendor: Baidu
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://comate.baidu.com
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: comate, is_primary: true }
+
+- slug: codegeex
+  name: CodeGeeX
+  vendor: Zhipu AI
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://codegeex.cn
+  note: 模型权重开源（codegeex4-all），插件本体闭源；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: codegeex, is_primary: true }
+
+- slug: junie
+  name: Junie
+  vendor: JetBrains
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://junie.jetbrains.com
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: junie, is_primary: true }
+
+- slug: qodo
+  name: Qodo
+  vendor: Qodo
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.qodo.ai
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: qodo, is_primary: true }
+
+- slug: gemini-code-assist
+  name: Gemini Code Assist
+  vendor: Google
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://codeassist.google
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: gemini-code-assist, is_primary: true }
+
+# ---------- IDE 应用 ----------
+- slug: antigravity
+  name: Antigravity
+  vendor: Google
+  form: ide-app
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://antigravity.google
+  note: agent-first IDE；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: antigravity, is_primary: true }
+
+- slug: qoder
+  name: Qoder
+  vendor: Alibaba
+  form: ide-app
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://qoder.com
+  sources:
+    - { kind: manual, identifier: qoder, is_primary: true }
+    - { kind: npm, identifier: "@qoder-ai/qodercli" }
+
+- slug: codebuddy
+  name: CodeBuddy
+  vendor: Tencent
+  form: ide-app
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://copilot.tencent.com
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: codebuddy, is_primary: true }
+
+- slug: firebase-studio
+  name: Firebase Studio
+  vendor: Google
+  form: ide-app
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://firebase.studio
+  note: 云端 IDE；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: firebase-studio, is_primary: true }
+
+# ---------- 浏览器 agent ----------
+- slug: comet
+  name: Comet
+  vendor: Perplexity
+  form: browser
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.perplexity.ai/comet
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: comet, is_primary: true }
+
+- slug: atlas
+  name: ChatGPT Atlas
+  vendor: OpenAI
+  form: browser
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://chatgpt.com/atlas
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: atlas, is_primary: true }
+
+# ---------- 自主 agent ----------
+- slug: jules
+  name: Jules
+  vendor: Google
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://jules.google
+  note: 异步任务托管；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: jules, is_primary: true }
