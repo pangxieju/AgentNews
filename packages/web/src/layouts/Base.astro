@@ -31,7 +31,7 @@ const description =
     : `AI Agent 排行榜：${rows.length} 个 agent 的开源/闭源双榜，按 star、安装量、活跃度跨生态归一化排名。数据截至 ${date}。`);
 
 const canonical = new URL(path, SITE).href;
-const zhHref = new URL(base, SITE).href;
+const zhHref = new URL(pathFor('zh', base), SITE).href;
 const enHref = new URL(pathFor('en', base), SITE).href;
 
 const NAV = [
@@ -78,7 +78,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="zh-CN" href={zhHref} />
     <link rel="alternate" hreflang="en" href={enHref} />
-    <link rel="alternate" hreflang="x-default" href={zhHref} />
+    <link rel="alternate" hreflang="x-default" href={enHref} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={`${pageTitle} · AgentNews`} />
     <meta property="og:description" content={description} />
@@ -91,14 +91,15 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       } catch {}
     </script>
     <script is:inline>
-      // 首次访问：非中文浏览器在中文首页自动跳到 /en/（深链不跳，避免打断分享链接）
+      // 默认语言是英语（根路径）。仅当浏览器首选中文、且用户没手动切过语言时，
+      // 才在根首页跳到 /zh/；深链不跳，避免打断分享链接。
       (function () {
         try {
           var stored = localStorage.getItem('an-lang');
           if (stored === 'zh' || stored === 'en') return;
           var nav = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-          if (/^zh/i.test(nav)) return;
-          if (location.pathname === '/' || location.pathname === '') location.replace('/en/');
+          if (!/^zh/i.test(nav)) return;
+          if (location.pathname === '/' || location.pathname === '') location.replace('/zh/');
         } catch (e) {}
       })();
     </script>
@@ -1549,8 +1550,8 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         <div class="topbar-meta">
           <span class="snap-chip">{t(lang, 'app.snapshot').toUpperCase()} <b>{date}</b></span>
           <div class="segmented lang-switch" role="group" aria-label={t(lang, 'app.lang')}>
-            <a href={swapLangPath(path, 'zh')} data-lang="zh" aria-current={lang === 'zh' ? 'page' : undefined}>中</a>
             <a href={swapLangPath(path, 'en')} data-lang="en" aria-current={lang === 'en' ? 'page' : undefined}>EN</a>
+            <a href={swapLangPath(path, 'zh')} data-lang="zh" aria-current={lang === 'zh' ? 'page' : undefined}>中</a>
           </div>
           <button class="theme-btn" id="theme-toggle" type="button" aria-label={t(lang, 'app.theme')} title={t(lang, 'app.theme')}>
             <svg class="icon-moon" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
