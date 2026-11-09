@@ -2,8 +2,6 @@
 
 AI Agent 排行榜 —— 开源 / 闭源双榜，日 / 周 / 月粒度，跨生态归一化。
 
-> 产品需求见 [`docs/PRD.md`](docs/PRD.md)，技术方案见 [`docs/TECH.md`](docs/TECH.md)。
-
 ---
 
 ## 这个项目解决什么问题
@@ -112,7 +110,6 @@ packages/
   core/                      打分引擎（纯函数，无 I/O，100% 可测）
   pipeline/                  采集器（GitHub / npm / PyPI / VS Code）
   web/                       Astro 静态站
-docs/                        PRD + 技术方案
 ```
 
 ---

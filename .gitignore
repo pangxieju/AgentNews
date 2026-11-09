@@ -12,3 +12,6 @@ packages/web/.astro/
 
 # 本地临时截图/脚本
 .tmp-*
+
+# 本地文档（PRD / TECH / DEPLOY）不入库
+/docs/
