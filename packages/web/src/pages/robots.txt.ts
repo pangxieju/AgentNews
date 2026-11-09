@@ -5,7 +5,7 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = ({ site }) => {
-  const base = site ?? new URL('https://agentrank.example.com');
+  const base = site ?? new URL('https://agentnews.example.com');
   const body = [
     'User-agent: *',
     'Allow: /',

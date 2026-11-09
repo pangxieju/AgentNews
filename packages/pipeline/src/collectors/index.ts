@@ -1,4 +1,4 @@
-import type { Agent, Metrics, Source } from '@agentrank/core';
+import type { Agent, Metrics, Source } from '@agentnews/core';
 
 export type CollectorResult = {
   agent: Agent;
@@ -14,7 +14,7 @@ async function collectGitHubViaUngh(repo: string): Promise<{
   stars: number; forks: number; open_issues: number | null;
   last_commit: string; last_release: string | null; repo_created: string | null;
 }> {
-  const res = await fetch(`https://ungh.cc/repos/${repo}`, { headers: { 'User-Agent': 'agentrank-m0' } });
+  const res = await fetch(`https://ungh.cc/repos/${repo}`, { headers: { 'User-Agent': 'agentnews-m0' } });
   if (!res.ok) throw new Error(`ungh ${repo}: ${res.status}`);
   const data = (await res.json()) as {
     repo?: { stars: number; forks: number; pushedAt: string; createdAt?: string; repo?: string };
@@ -40,7 +40,7 @@ export async function collectGitHub(repo: string, token?: string, mode: GitHubMo
 
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
-    'User-Agent': 'agentrank-m0',
+    'User-Agent': 'agentnews-m0',
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 
@@ -84,7 +84,7 @@ export async function collectGitHub(repo: string, token?: string, mode: GitHubMo
 export async function collectContributors(repo: string, token?: string): Promise<number | null> {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
-    'User-Agent': 'agentrank-m0',
+    'User-Agent': 'agentnews-m0',
   };
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
@@ -107,7 +107,7 @@ export async function collectContributors(repo: string, token?: string): Promise
 export async function collectLatestRelease(repo: string, token?: string): Promise<string | null> {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
-    'User-Agent': 'agentrank-m0',
+    'User-Agent': 'agentnews-m0',
   };
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
@@ -126,7 +126,7 @@ export async function collectLatestRelease(repo: string, token?: string): Promis
  * 所以门槛必须按待采集 repo 数动态计算；额度不够就整轮走 ungh（只需 1 次/repo，且不占额度）。
  */
 export async function githubQuota(token?: string): Promise<{ remaining: number; enough: boolean }> {
-  const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'User-Agent': 'agentrank-m0' };
+  const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'User-Agent': 'agentnews-m0' };
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
     const res = await fetch('https://api.github.com/rate_limit', { headers });
@@ -169,7 +169,7 @@ export async function collectPypi(pkg: string, retries = 3): Promise<{ pypi_mont
     try {
       const res = await fetch(
         `https://pypistats.org/api/packages/${encodeURIComponent(pkg)}/recent`,
-        { headers: { 'User-Agent': 'agentrank-m0 (github.com/agentrank)' } },
+        { headers: { 'User-Agent': 'agentnews-m0 (github.com/pangxieju/AgentNews)' } },
       );
       if (res.status === 429 || res.status >= 500) {
         lastErr = `pypi ${pkg}: ${res.status}`;

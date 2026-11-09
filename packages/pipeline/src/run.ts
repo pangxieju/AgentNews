@@ -13,7 +13,7 @@ import {
   type Agent,
   type Metrics,
   type ScoreRow,
-} from '@agentrank/core';
+} from '@agentnews/core';
 import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/index.js';
 import { diffEvents, readSnapshotMetrics, writeEvents } from './events.js';
 import { collectSecurity, pickSecurityTargets, writeSecurity } from './security.js';

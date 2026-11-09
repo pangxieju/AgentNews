@@ -8,7 +8,7 @@ const {
   pageTitle = 'AI Agent 排行榜',
   description = `AI Agent 排行榜：${rows.length} 个 agent 的开源/闭源双榜，按 star、安装量、活跃度跨生态归一化排名。数据截至 ${date}。`,
 } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentrank.example.com').href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentnews.example.com').href;
 ---
 
 <!doctype html>
@@ -16,11 +16,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentrank.e
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{pageTitle} · AgentRank</title>
+    <title>{pageTitle} · AgentNews</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={`${pageTitle} · AgentRank`} />
+    <meta property="og:title" content={`${pageTitle} · AgentNews`} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
@@ -60,7 +60,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentrank.e
   </head>
   <body>
     <nav>
-      <a class="brand" href="/">AgentRank</a>
+      <a class="brand" href="/">AgentNews</a>
       <a class="nav" href="/">双榜</a>
       <a class="nav" href="/top/open/all/month/">榜单</a>
       <a class="nav" href="/rising/">新秀</a>
@@ -80,7 +80,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentrank.e
         </div>
       )}
       <div class="footer">
-        <span>数据更新于 <strong>{date}</strong> · AgentRank 综合分是观点，非客观事实</span>
+        <span>数据更新于 <strong>{date}</strong> · AgentNews 综合分是观点，非客观事实</span>
         <span><a href="/about/">方法与口径</a></span>
       </div>
     </main>

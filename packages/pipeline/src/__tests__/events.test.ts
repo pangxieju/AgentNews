@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Metrics, ScoreRow } from '@agentrank/core';
+import type { Metrics, ScoreRow } from '@agentnews/core';
 import { diffEvents } from '../events.js';
 
 function row(slug: string, over: Partial<ScoreRow> = {}): ScoreRow {

@@ -20,7 +20,7 @@ const groups = FORM_ORDER
   .filter((g) => g.rows.length > 0);
 ---
 
-<Base pageTitle={`${label} 归档 · AgentRank`}>
+<Base pageTitle={`${label} 归档 · AgentNews`}>
   <a href="/archive" class="muted">← 归档列表</a>
   <h1 style="margin-top:0.5rem">{label} <span class="muted">· {a?.period === 'week' ? '周档' : '月档'}</span></h1>
   <p class="muted">结算日 {a?.end} · 归档为冻结快照，不随新数据变化</p>

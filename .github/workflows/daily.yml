@@ -44,8 +44,8 @@ jobs:
 
       - name: Commit snapshots
         run: |
-          git config user.name  'agentrank-bot'
-          git config user.email 'bot@agentrank.dev'
+          git config user.name  'agentnews-bot'
+          git config user.email 'bot@agentnews.dev'
           git add data/
           if git diff --staged --quiet; then
             echo "无数据变更，跳过提交"

@@ -1,4 +1,4 @@
-# AgentRank
+# AgentNews
 
 AI Agent 排行榜 —— 开源 / 闭源双榜，日 / 周 / 月粒度，跨生态归一化。
 
@@ -15,7 +15,7 @@ AI Agent 排行榜 —— 开源 / 闭源双榜，日 / 周 / 月粒度，跨生
 - npm trends 只看 npm 生态
 - LMArena 只看模型能力，不看工具产品
 
-AgentRank 的做法：
+AgentNews 的做法：
 
 1. **按形态分组排名**（CLI / IDE 插件 / IDE 应用 / 框架 / 浏览器 / 自主），跨形态不比较
 2. **跨生态归一化**（GitHub star + npm/PyPI 下载 + 商店安装，log 压缩 + 组内分位数）
@@ -38,7 +38,7 @@ pnpm build            # 构建静态站点 → packages/web/dist
 本地预览：
 
 ```bash
-pnpm --filter @agentrank/web dev
+pnpm --filter @agentnews/web dev
 ```
 
 ### 关于 GITHUB_TOKEN（必须配置）

@@ -9,7 +9,7 @@
  */
 import { writeFile, mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import type { Agent } from '@agentrank/core';
+import type { Agent } from '@agentnews/core';
 
 export type SecurityInfo = {
   /** 被查询的包名 */
@@ -53,7 +53,7 @@ export async function collectSecurity(
   if (!targets.length) return {};
   const res = await fetch('https://api.osv.dev/v1/querybatch', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'User-Agent': 'agentrank' },
+    headers: { 'Content-Type': 'application/json', 'User-Agent': 'agentnews' },
     body: JSON.stringify({
       queries: targets.map((t) => ({ package: { name: t.name, ecosystem: t.ecosystem } })),
     }),

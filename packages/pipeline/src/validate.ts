@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
-import { AgentsFileSchema } from '@agentrank/core';
+import { AgentsFileSchema } from '@agentnews/core';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const raw = readFileSync(join(ROOT, 'agents.yaml'), 'utf8');

@@ -1,5 +1,5 @@
 {
-  "name": "@agentrank/web",
+  "name": "@agentnews/web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -7,11 +7,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "cf:deploy": "wrangler pages deploy dist --project-name agentrank --commit-dirty=true",
-    "cf:deploy:preview": "wrangler pages deploy dist --project-name agentrank-preview --commit-dirty=true"
+    "cf:deploy": "wrangler pages deploy dist --project-name agentnews --commit-dirty=true",
+    "cf:deploy:preview": "wrangler pages deploy dist --project-name agentnews-preview --commit-dirty=true"
   },
   "dependencies": {
-    "@agentrank/core": "workspace:*",
+    "@agentnews/core": "workspace:*",
     "@astrojs/preact": "^4.0.0",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.0.0",

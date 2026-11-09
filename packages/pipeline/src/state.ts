@@ -20,7 +20,7 @@ export type AgentState = {
   agents: Record<
     string,
     {
-      /** 首次被 AgentRank 收录的日期，一旦写入不再改变 */
+      /** 首次被 AgentNews 收录的日期，一旦写入不再改变 */
       first_listed: string;
       /** 最近一次成功采集到的日期 */
       last_seen: string;

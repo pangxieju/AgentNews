@@ -21,6 +21,6 @@ export function getStaticPaths() {
 const { bucket, form, g } = Astro.params;
 ---
 
-<Base pageTitle={`${bucket === 'open' ? '开源' : '闭源'}榜 · AgentRank`}>
+<Base pageTitle={`${bucket === 'open' ? '开源' : '闭源'}榜 · AgentNews`}>
   <RankView bucket={bucket!} form={form!} g={g!} />
 </Base>

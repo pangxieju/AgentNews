@@ -6,7 +6,7 @@
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { Metrics, ScoreRow } from '@agentrank/core';
+import type { Metrics, ScoreRow } from '@agentnews/core';
 
 export type EventKind =
   | 'release'        // 发版

@@ -71,7 +71,7 @@ async function verifyRepo(repo: string): Promise<{ stars: number; forks: number;
   if (!repo) return null;
   try {
     const res = await fetch(`https://ungh.cc/repos/${repo}`, {
-      headers: { 'User-Agent': 'agentrank-verify' },
+      headers: { 'User-Agent': 'agentnews-verify' },
       signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) return null;
@@ -105,7 +105,7 @@ async function verifyNpm(pkg: string): Promise<number | null> {
 async function verifyPypi(pkg: string): Promise<number | null> {
   try {
     const res = await fetch(`https://pypistats.org/api/packages/${encodeURIComponent(pkg)}/recent`, {
-      headers: { 'User-Agent': 'agentrank-verify' },
+      headers: { 'User-Agent': 'agentnews-verify' },
       signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) return null;

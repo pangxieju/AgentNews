@@ -1,13 +1,13 @@
 {
-  "name": "agentrank",
+  "name": "agentnews",
   "private": true,
   "packageManager": "pnpm@10.4.0",
   "scripts": {
-    "collect": "pnpm --filter @agentrank/pipeline start",
-    "validate": "pnpm --filter @agentrank/pipeline validate",
+    "collect": "pnpm --filter @agentnews/pipeline start",
+    "validate": "pnpm --filter @agentnews/pipeline validate",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
-    "build": "pnpm --filter @agentrank/web build"
+    "build": "pnpm --filter @agentnews/web build"
   },
   "devDependencies": {
     "typescript": "^5.7.2"
