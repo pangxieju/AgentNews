@@ -1,0 +1,149 @@
+---
+/**
+ * 折线图（服务端渲染 SVG + HTML 坐标轴）。
+ *
+ * 自适应方案：SVG 用 `viewBox="0 0 100 100"` + `preserveAspectRatio="none"` 只负责几何，
+ * 坐标轴文字用 HTML 绝对定位 —— 这样横竖两个方向都不拉伸字体，PC / 移动端同一套代码。
+ * 线宽用 `vector-effect: non-scaling-stroke` 保持 2px，不会随容器缩放变粗。
+ */
+import { fmt } from '../../lib/shared';
+
+interface Point {
+  x: string;
+  y: number;
+}
+interface Series {
+  name: string;
+  points: Point[];
+  tone?: 'accent' | 'success' | 'attention' | 'danger';
+}
+
+interface Props {
+  series: Series[];
+  unit?: string;
+  height?: number;
+  /** 计数类指标从 0 起算 */
+  zeroBased?: boolean;
+}
+
+const { series, unit = '', height = 200, zeroBased = false } = Astro.props;
+
+const all = series.flatMap((s) => s.points);
+const xs = [...new Set(all.map((p) => p.x))].sort();
+const ys = all.map((p) => p.y);
+
+let min = ys.length ? Math.min(...ys) : 0;
+let max = ys.length ? Math.max(...ys) : 1;
+if (zeroBased) min = 0;
+if (min === max) {
+  min = zeroBased ? 0 : Math.floor(min * 0.9);
+  max = max === 0 ? 1 : Math.ceil(max * 1.1);
+}
+const padY = (max - min) * 0.08;
+if (!zeroBased) min = Math.max(0, min - padY);
+max += padY * 2;
+
+const TICKS = 4;
+const ticks = Array.from({ length: TICKS + 1 }, (_, i) => min + ((max - min) * i) / TICKS);
+
+const xPct = (x: string) => (xs.length <= 1 ? 0 : (xs.indexOf(x) / (xs.length - 1)) * 100);
+const yPct = (y: number) => (1 - (y - min) / (max - min)) * 100;
+const lineFor = (s: Series) =>
+  s.points.map((p, i) => `${i === 0 ? 'M' : 'L'}${xPct(p.x).toFixed(2)},${yPct(p.y).toFixed(2)}`).join(' ');
+const areaFor = (s: Series) => {
+  if (s.points.length < 2) return '';
+  const first = s.points[0]!;
+  const last = s.points[s.points.length - 1]!;
+  const rest = s.points.map((p) => `${xPct(p.x).toFixed(2)},${yPct(p.y).toFixed(2)}`).join(' L');
+  return `M${xPct(first.x).toFixed(2)},100 L${rest} L${xPct(last.x).toFixed(2)},100 Z`;
+};
+
+/** 只标注能放得下的刻度（移动端不会挤成一团） */
+const labelIdx =
+  xs.length <= 4
+    ? xs.map((_, i) => i)
+    : [0, Math.round((xs.length - 1) / 3), Math.round((2 * (xs.length - 1)) / 3), xs.length - 1];
+const xLabels = [...new Set(labelIdx)].map((i) => ({
+  text: xs[i]!,
+  pct: xPct(xs[i]!),
+  first: i === 0,
+  last: i === xs.length - 1,
+}));
+const fmtX = (x: string) => (/^\d{4}-\d{2}-\d{2}$/.test(x) ? x.slice(5) : x);
+
+const summary = series
+  .map((s) => `${s.name}: ${s.points.map((p) => `${p.x} ${fmt(p.y)}`).join(', ')}`)
+  .join('; ');
+---
+
+<figure
+  class="line-chart"
+  style={`--lc-height:${height}px`}
+  role="img"
+  aria-label={`折线图。${summary}`}
+>
+  <div class="lc-grid-wrap">
+    <div class="lc-yaxis" aria-hidden="true">
+      {ticks.map((t) => (
+        <span style={`top:${yPct(t).toFixed(2)}%`}>{fmt(t)}</span>
+      ))}
+    </div>
+    <div class="lc-canvas">
+      <svg class="lc-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {ticks.map((t) => (
+          <line
+            class="lc-grid"
+            x1="0"
+            x2="100"
+            y1={yPct(t).toFixed(2)}
+            y2={yPct(t).toFixed(2)}
+            vector-effect="non-scaling-stroke"
+          />
+        ))}
+        {series.map((s) => (
+          <path class={`lc-area tone-${s.tone ?? 'accent'}`} d={areaFor(s)} />
+        ))}
+        {series.map((s) => (
+          <path
+            class={`lc-line tone-${s.tone ?? 'accent'}`}
+            d={lineFor(s)}
+            vector-effect="non-scaling-stroke"
+          />
+        ))}
+      </svg>
+      <div class="lc-dots" aria-hidden="true">
+        {series.map((s) =>
+          s.points.map((p) => (
+            <span
+              class={`lc-dot tone-${s.tone ?? 'accent'}`}
+              style={`left:${xPct(p.x).toFixed(2)}%;top:${yPct(p.y).toFixed(2)}%`}
+              title={`${s.name} ${p.x}: ${fmt(p.y)}${unit}`}
+            />
+          )),
+        )}
+      </div>
+    </div>
+  </div>
+
+  <div class="lc-xaxis" aria-hidden="true">
+    {xLabels.map((l) => (
+      <span
+        class={l.first ? 'is-first' : l.last ? 'is-last' : ''}
+        style={`left:${l.pct.toFixed(2)}%`}
+      >
+        {fmtX(l.text)}
+      </span>
+    ))}
+  </div>
+
+  {series.length > 1 && (
+    <ul class="lc-legend">
+      {series.map((s) => (
+        <li>
+          <i class={`swatch tone-${s.tone ?? 'accent'}`} />
+          {s.name}
+        </li>
+      ))}
+    </ul>
+  )}
+</figure>

@@ -34,16 +34,6 @@ export default function AgentIcon({ slug, name, icon, iconFallback, size = 32 }:
           decoding="async"
           referrerpolicy="no-referrer"
           data-fallback={iconFallback ?? ''}
-          onError={(e) => {
-            const el = e.currentTarget as HTMLImageElement;
-            const fb = el.dataset.fallback;
-            if (fb) {
-              el.src = fb;
-              el.dataset.fallback = '';
-            } else {
-              el.remove();
-            }
-          }}
         />
       )}
     </span>

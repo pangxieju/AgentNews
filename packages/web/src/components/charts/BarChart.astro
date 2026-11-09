@@ -1,0 +1,44 @@
+---
+/**
+ * 横向条形图（HTML/CSS，服务端渲染）。
+ * 为什么不用图表库：数据构建期固定，HTML 条形天然响应式、字号不缩放、可访问。
+ */
+export interface BarItem {
+  label: string;
+  value: number;
+  tone?: 'default' | 'accent' | 'success' | 'attention' | 'danger';
+  href?: string;
+}
+
+interface Props {
+  bars: BarItem[];
+  unit?: string;
+  /** 统一比例尺（不传则按最大值归一） */
+  max?: number;
+  emptyText?: string;
+}
+
+const { bars, unit = '', max, emptyText = '暂无数据' } = Astro.props;
+const top = max ?? Math.max(1, ...bars.map((b) => b.value));
+---
+
+{bars.length === 0 ? (
+  <p class="muted" style="font-size:13px">{emptyText}</p>
+) : (
+  <ul class="bar-chart">
+    {bars.map((b) => (
+      <li class="bar-row">
+        <span class="bar-label" title={b.label}>
+          {b.href ? <a href={b.href}>{b.label}</a> : b.label}
+        </span>
+        <span class="bar-track" role="presentation">
+          <span
+            class={`bar-fill tone-${b.tone ?? 'default'}`}
+            style={`width:${top > 0 ? Math.max(2, (b.value / top) * 100).toFixed(1) : 0}%`}
+          />
+        </span>
+        <span class="bar-value">{b.value}{unit}</span>
+      </li>
+    ))}
+  </ul>
+)}

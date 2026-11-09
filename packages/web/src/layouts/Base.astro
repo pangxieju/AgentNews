@@ -46,6 +46,25 @@ const isActive = (href: string) =>
         if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
       } catch {}
     </script>
+    <script is:inline>
+      // 图标降级：静态页面（未 hydrate）也要生效，所以在 head 注册捕获阶段监听。
+      // 顺序：主图标 → 备选 favicon → 移除 img（露出首字母色块），不留碎图。
+      document.addEventListener(
+        'error',
+        function (e) {
+          var el = e.target;
+          if (!el || el.tagName !== 'IMG') return;
+          var fb = el.getAttribute('data-fallback');
+          if (fb) {
+            el.setAttribute('data-fallback', '');
+            el.src = fb;
+            return;
+          }
+          if (el.closest('.agent-icon')) el.remove();
+        },
+        true,
+      );
+    </script>
     <style is:global>
       /* ── GitHub Primer 风格设计令牌 ───────────────────────────── */
       :root {
@@ -661,6 +680,118 @@ const isActive = (href: string) =>
         margin-right: 4px;
       }
 
+      /* ── 图表（服务端渲染，PC/移动端同一套） ─────────────── */
+      .bar-chart { list-style: none; display: grid; gap: 10px; }
+      .bar-row {
+        display: grid;
+        grid-template-columns: minmax(0, 8em) 1fr 3.6em;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+      }
+      .bar-label {
+        color: var(--gh-fg);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bar-label a { color: inherit; }
+      .bar-track {
+        height: 8px;
+        border-radius: 999px;
+        background: var(--gh-neutral-subtle);
+        overflow: hidden;
+      }
+      .bar-fill {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: var(--gh-accent);
+        transition: width 0.3s ease;
+      }
+      .bar-fill.tone-default,
+      .bar-fill.tone-accent { background: var(--gh-accent); }
+      .bar-fill.tone-success { background: var(--gh-success); }
+      .bar-fill.tone-attention { background: var(--gh-attention); }
+      .bar-fill.tone-danger { background: var(--gh-danger); }
+      .bar-value {
+        text-align: right;
+        color: var(--gh-fg-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .line-chart { margin: 0; }
+      .lc-grid-wrap {
+        display: grid;
+        grid-template-columns: 3.4em 1fr;
+        height: var(--lc-height, 200px);
+      }
+      .lc-yaxis { position: relative; font-size: 11px; color: var(--gh-fg-muted); }
+      .lc-yaxis span {
+        position: absolute;
+        right: 8px;
+        transform: translateY(-50%);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .lc-canvas {
+        position: relative;
+        border-left: 1px solid var(--gh-border-muted);
+        border-bottom: 1px solid var(--gh-border-muted);
+      }
+      .lc-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+      .lc-grid { stroke: var(--gh-border-muted); stroke-width: 1; stroke-dasharray: 2 4; }
+      .lc-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+      .lc-line.tone-default,
+      .lc-line.tone-accent { stroke: var(--gh-accent); }
+      .lc-line.tone-success { stroke: var(--gh-success); }
+      .lc-line.tone-attention { stroke: var(--gh-attention); }
+      .lc-line.tone-danger { stroke: var(--gh-danger); }
+      .lc-area { stroke: none; opacity: 0.12; }
+      .lc-area.tone-default,
+      .lc-area.tone-accent { fill: var(--gh-accent); }
+      .lc-area.tone-success { fill: var(--gh-success); }
+      .lc-area.tone-attention { fill: var(--gh-attention); }
+      .lc-area.tone-danger { fill: var(--gh-danger); }
+      .lc-dots { position: absolute; inset: 0; }
+      .lc-dot {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--gh-accent);
+        box-shadow: 0 0 0 2px var(--gh-canvas);
+      }
+      .lc-dot.tone-success { background: var(--gh-success); }
+      .lc-dot.tone-attention { background: var(--gh-attention); }
+      .lc-dot.tone-danger { background: var(--gh-danger); }
+      .lc-xaxis { position: relative; height: 16px; margin: 6px 0 0 3.4em; font-size: 11px; color: var(--gh-fg-muted); }
+      .lc-xaxis span {
+        position: absolute;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .lc-xaxis span.is-first { transform: none; }
+      .lc-xaxis span.is-last { transform: translateX(-100%); }
+      .lc-legend {
+        list-style: none;
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin: 10px 0 0 3.4em;
+        font-size: 12px;
+        color: var(--gh-fg-muted);
+      }
+      .lc-legend li { display: inline-flex; align-items: center; gap: 6px; }
+      .pkg { overflow-wrap: anywhere; word-break: break-word; }
+      .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; background: var(--gh-accent); }
+      .swatch.tone-success { background: var(--gh-success); }
+      .swatch.tone-attention { background: var(--gh-attention); }
+      .swatch.tone-danger { background: var(--gh-danger); }
+      .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+
       /* ── 页脚 ─────────────────────────────────────────────── */
       .gh-footer {
         border-top: 1px solid var(--gh-border);
@@ -694,6 +825,17 @@ const isActive = (href: string) =>
         .rank-toolbar-count { margin-left: 0; width: 100%; }
         .tabs { margin-bottom: 12px; }
         .card .num { font-size: 24px; }
+        /* 窄屏隐藏低优先级列，避免表格横向滚动 */
+        .hide-sm { display: none; }
+        /* 包名等长字符串在窄屏断行，别把表格撑宽 */
+        .pkg { max-width: 8.5em; }
+        /* 小卡片两列排布，避免移动端一屏只有一张卡 */
+        .grid.grid-tight { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .grid.grid-tight .card { padding: 12px; }
+        .grid.grid-tight .card .num { font-size: 20px; }
+        .bar-row { grid-template-columns: minmax(0, 5.6em) 1fr 3em; gap: 8px; font-size: 12px; }
+        .lc-grid-wrap { height: 170px; }
+        .lc-xaxis span { font-size: 10px; }
       }
     </style>
   </head>

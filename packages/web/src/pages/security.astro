@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
+import BarChart from '../components/charts/BarChart.astro';
 import { loadSecurity, loadLatestScores, loadAgentsMeta, securityLevel } from '../lib/data';
 
 const sec = loadSecurity();
@@ -30,7 +31,7 @@ const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
     我们不做安全背书，也不给红黄绿总分 —— 请点原文链接自行核实。
   </div>
 
-  <div class="grid">
+  <div class="grid grid-tight">
     <div class="card"><h2>查询覆盖</h2><div class="num">{rows.length}</div><div class="detail">个有包管理渠道的 agent</div></div>
     <div class="card"><h2>有历史公告</h2><div class="num">{withAny.length}</div><div class="detail">个 agent 的包存在公开公告</div></div>
     <div class="card"><h2>公告总数</h2><div class="num">{totalAdvisories}</div><div class="detail">含历史版本，不代表当前版本受影响</div></div>
@@ -38,12 +39,33 @@ const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
   </div>
 
   <section class="section">
+    <div class="section-title">
+      <h2>公告数 Top 10</h2>
+      <span class="muted" style="font-size:12px">红色 = 存在恶意包（MAL-*）条目</span>
+    </div>
+    <div class="box">
+      <div class="box-body">
+        <BarChart
+          bars={rows.slice(0, 10).map((r) => ({
+            label: r.name,
+            value: r.advisories,
+            href: `/agent/${r.slug}/`,
+            tone: r.malicious > 0 ? ('danger' as const) : ('attention' as const),
+          }))}
+          unit=" 条"
+          emptyText="暂无安全公告数据"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="section-title"><h2>按公告数排序</h2></div>
     <div class="box">
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Agent</th><th>包</th><th>生态</th><th class="num">历史公告</th><th class="num">恶意包</th><th>最近更新</th></tr>
+            <tr><th>Agent</th><th>包</th><th class="hide-sm">生态</th><th class="num">历史公告</th><th class="num">恶意包</th><th class="hide-sm">最近更新</th></tr>
           </thead>
           <tbody>
             {rows.map((r) => (
@@ -63,11 +85,11 @@ const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
                     </span>
                   </div>
                 </td>
-                <td class="muted"><a href={r.url} target="_blank" rel="noopener">{r.package}</a></td>
-                <td class="muted">{r.ecosystem}</td>
+                <td class="muted pkg"><a href={r.url} target="_blank" rel="noopener">{r.package}</a></td>
+                <td class="muted hide-sm">{r.ecosystem}</td>
                 <td class="num">{r.advisories || '—'}</td>
                 <td class="num">{r.malicious || '—'}</td>
-                <td class="muted">{r.latest ? r.latest.slice(0, 10) : '—'}</td>
+                <td class="muted hide-sm">{r.latest ? r.latest.slice(0, 10) : '—'}</td>
               </tr>
             ))}
           </tbody>

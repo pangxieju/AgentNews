@@ -49,6 +49,41 @@ export function loadAllScores(): ScoreFile[] {
     .filter((x): x is ScoreFile => x != null);
 }
 
+export type HistoryPoint = {
+  date: string;
+  score: number | null;
+  stars: number | null;
+  rank_in_form: number | null;
+};
+
+/** 单个 agent 的历史序列（按日期升序）—— 详情页趋势图用 */
+export function loadHistory(slug: string): HistoryPoint[] {
+  return loadAllScores()
+    .slice()
+    .reverse()
+    .map((f) => {
+      const r = f.rows.find((x) => x.slug === slug);
+      return {
+        date: f.date,
+        score: r?.score ?? null,
+        stars: r?.metrics?.stars ?? null,
+        rank_in_form: r?.rank_in_form ?? null,
+      };
+    });
+}
+
+/** 每日快照的在榜数 / 收录数（按日期升序）—— 归档页折线图用 */
+export function loadDailyCounts(): Array<{ date: string; ranked: number; listed: number }> {
+  return loadAllScores()
+    .slice()
+    .reverse()
+    .map((f) => ({
+      date: f.date,
+      ranked: f.rows.filter((r) => r.rank_in_form != null).length,
+      listed: f.rows.length,
+    }));
+}
+
 /** 读所有归档（周档 + 月档，按结束日倒序） */
 export function loadArchives(): ArchiveFile[] {
   const dir = join(DATA_DIR, 'archive');

@@ -1,7 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import AgentIcon from '../../components/AgentIcon';
-import { loadLatestScores, loadSecurity, loadAgentsMeta, fmt, fmtPct, formLabel } from '../../lib/data';
+import LineChart from '../../components/charts/LineChart.astro';
+import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, fmt, fmtPct, formLabel } from '../../lib/data';
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
@@ -18,6 +19,10 @@ const slug = Astro.params.slug!;
 const row = rows.find((r) => r.slug === slug);
 const sec = loadSecurity()?.subjects?.[slug];
 const meta = loadAgentsMeta()[slug];
+const history = loadHistory(slug);
+const starPts = history.filter((h) => h.stars != null).map((h) => ({ x: h.date, y: h.stars! }));
+const scorePts = history.filter((h) => h.score != null).map((h) => ({ x: h.date, y: h.score! }));
+const trendReady = starPts.length >= 2;
 if (!row) {
   Astro.redirect('/top');
 }
@@ -62,7 +67,7 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
         </div>
       </div>
 
-      <div class="grid" style="margin-top:0">
+      <div class="grid grid-tight" style="margin-top:0">
         <div class="card"><h2>综合分</h2><div class="num">{row.score ?? '—'}</div><div class="detail">组内（{formLabel(row.form)}）分位数加权</div></div>
         <div class="card"><h2>组内排名</h2><div class="num">{row.rank_in_form != null ? `#${row.rank_in_form}` : '—'}</div><div class="detail">同形态内排名</div></div>
         <div class="card">
@@ -72,6 +77,34 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
         </div>
         <div class="card"><h2>数据完整度</h2><div class="num">{row.data_level}</div><div class="detail">L1 有数据 / L2 半数据 / L3 仅收录</div></div>
       </div>
+
+      <section class="section">
+        <div class="section-title">
+          <h2>趋势</h2>
+          <span class="muted" style="font-size:12px">每日快照 · {history.length} 个数据点</span>
+        </div>
+        {trendReady ? (
+          <div class="chart-grid">
+            <div class="box">
+              <div class="box-header">Star 走势</div>
+              <div class="box-body">
+                <LineChart series={[{ name: 'Star', points: starPts, tone: 'accent' }]} height={190} />
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-header">综合分走势</div>
+              <div class="box-body">
+                <LineChart series={[{ name: '综合分', points: scorePts, tone: 'success' }]} height={190} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div class="notice">
+            趋势图需要至少 2 天快照。当前首份快照为 <strong>{history[0]?.date ?? date}</strong>，
+            下一次采集后即可看到折线。
+          </div>
+        )}
+      </section>
 
       <section class="section">
         <div class="box">
