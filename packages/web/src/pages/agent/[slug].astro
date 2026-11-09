@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { loadLatestScores, fmt, fmtPct } from '../../lib/data';
+import { loadLatestScores, loadSecurity, fmt, fmtPct } from '../../lib/data';
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
@@ -15,6 +15,7 @@ export function getStaticPaths() {
 
 const slug = Astro.params.slug!;
 const row = rows.find((r) => r.slug === slug);
+const sec = loadSecurity()?.subjects?.[slug];
 if (!row) {
   Astro.redirect('/top');
 }
@@ -59,6 +60,20 @@ if (!row) {
       )}
       {row.data_level === 'L3' && (
         <div class="warn">数据未公开：仅收录，不参与排名（PRD §5.7）。</div>
+      )}
+
+      <h2 style="margin-top:2.5rem;font-size:1.05rem">安全公告</h2>
+      {sec ? (
+        <div class="card" style="margin-top:0.6rem">
+          <div class="detail">
+            包 <a href={sec.url} target="_blank" rel="noopener"><code>{sec.package}</code></a>（{sec.ecosystem}）在 OSV 上有
+            <strong>{sec.advisories}</strong> 条历史公告{sec.malicious > 0 && <span class="badge b-closed">含 {sec.malicious} 条恶意包</span>}。
+            {sec.latest && <span> 最近一条更新于 {sec.latest.slice(0, 10)}。</span>}
+            <div style="margin-top:0.4rem;color:var(--muted)">仅收录历史公告，不代表当前版本受影响，也不构成安全建议。</div>
+          </div>
+        </div>
+      ) : (
+        <div class="warn" style="margin-top:0.6rem">无包管理渠道，未做 OSV 查询（不会因为“查不到”就说明安全）。</div>
       )}
     </>
   )}

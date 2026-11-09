@@ -16,6 +16,7 @@ import {
 } from '@agentrank/core';
 import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/index.js';
 import { diffEvents, readSnapshotMetrics, writeEvents } from './events.js';
+import { collectSecurity, pickSecurityTargets, writeSecurity } from './security.js';
 import { loadState, mergeState, newcomerAgeDays, saveState } from './state.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
@@ -273,6 +274,18 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   if (events.length || !prevRows) {
     const p = await writeEvents(join(DATA_DIR, 'events'), today, events);
     console.log(`[events] ${events.length} 条 → ${p}`);
+  }
+
+  // 5.5 安全模块（PRD F-26）：一次 querybatch 查所有包
+  try {
+    const targets = pickSecurityTargets(agents);
+    const sec = await collectSecurity(targets);
+    const p = await writeSecurity(DATA_DIR, today, sec);
+    const total = Object.values(sec).reduce((s, x) => s + x.advisories, 0);
+    const mal = Object.values(sec).reduce((s, x) => s + x.malicious, 0);
+    console.log(`[security] ${targets.length} 包 · ${total} 条历史公告（含 ${mal} 条恶意包）→ ${p}`);
+  } catch (e) {
+    console.warn(`[security] 跳过：${e instanceof Error ? e.message : e}`);
   }
 
   // 6. 周期归档（PRD §5.5）：周日冻结周档，月末冻结月档

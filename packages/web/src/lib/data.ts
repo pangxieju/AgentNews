@@ -143,3 +143,33 @@ export function loadAgentState(): { started_at: string; agents: Record<string, {
     return null;
   }
 }
+
+/* ───────────────── 安全公告（PRD F-26） ───────────────── */
+
+export type SecurityInfo = {
+  package: string;
+  ecosystem: string;
+  advisories: number;
+  malicious: number;
+  latest: string | null;
+  url: string;
+};
+
+export function loadSecurity(): { date: string; subjects: Record<string, SecurityInfo> } | null {
+  const dir = join(DATA_DIR, 'security');
+  if (!existsSync(dir)) return null;
+  const files = readdirSync(dir).filter((f) => f.endsWith('.json')).sort();
+  if (!files.length) return null;
+  try {
+    return JSON.parse(readFileSync(join(dir, files[files.length - 1]!), 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+/** 安全等级：仅用于视觉提示，不构成安全评级 */
+export function securityLevel(s: SecurityInfo | undefined): 'none' | 'low' | 'high' {
+  if (!s || s.advisories === 0) return 'none';
+  if (s.malicious > 0) return 'high';
+  return 'low';
+}
