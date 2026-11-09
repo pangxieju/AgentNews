@@ -1,12 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
-import { loadLatestScores, fmt, fmtPct } from '../lib/data';
+import { loadLatestScores, loadAgentState, fmt } from '../lib/data';
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
+const state = loadAgentState();
+const startedAt = state?.started_at ?? '—';
 
-/** 新秀资格（PRD §5.6）：repo 创建 ≤ 180 天 */
+/** 新秀资格（PRD §5.6）：出道 ≤ 180 天 */
 const NEWCOMER_DAYS = 180;
 
 const newcomers = rows
@@ -27,13 +29,14 @@ const youngest = [...rows]
   <p class="muted">出道 ≤ {NEWCOMER_DAYS} 天且已上榜的 agent · 数据截至 {date}</p>
 
   <div class="warn">
-    <strong>口径说明：</strong>当前用 repo 创建时间判定「出道」，存在局限 —— 老组织新建项目会被误判为老项目。
-    待积累 90 天历史后，将改为「首次收录时间」与「repo 创建时间」取较晚者。
+    <strong>口径说明：</strong>出道天数 = min（repo 创建至今, 首次收录至今）。
+    其中「首次收录」只在该项目<b>晚于系统上线日（{startedAt}）</b>被收录时计入 —— 因为上线当天收录的条目无法区分「本来就存在」与「刚出现」。
+    本系统自 {startedAt} 起记录收录时间，随时间推移，「上线后冒出的新项目」会被准确识别。
   </div>
 
   {newcomers.length > 0 ? (
     <table style="margin-top:1.5rem">
-      <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num">综合分</th><th class="num">Star</th><th class="num">安装量</th></tr>
+      <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num">首次收录</th><th class="num">综合分</th><th class="num">Star</th><th class="num">安装量</th></tr>
       {newcomers.map((r, i) => (
         <tr>
           <td class="pos">{i + 1}</td>
@@ -45,6 +48,7 @@ const youngest = [...rows]
           </td>
           <td class="muted">{formLabel(r.form)}</td>
           <td class="num">{r.age_days} 天</td>
+          <td class="num muted">{r.first_listed ?? '—'}</td>
           <td class="num"><strong>{r.score}</strong></td>
           <td class="num">{fmt(r.metrics?.stars)}</td>
           <td class="num">{fmt(r.metrics?.installs)}</td>
@@ -61,13 +65,14 @@ const youngest = [...rows]
   <h2 style="margin-top:2.5rem;font-size:1.05rem">最年轻的 10 个（参考）</h2>
   <p class="muted" style="font-size:0.85rem">按 repo 创建时间排序，帮助发现接近新秀资格的项目</p>
   <table>
-    <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num">综合分</th></tr>
+    <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num">首次收录</th><th class="num">综合分</th></tr>
     {youngest.map((r, i) => (
       <tr>
         <td class="pos">{i + 1}</td>
         <td><a href={`/agent/${r.slug}`}>{r.name}</a></td>
         <td class="muted">{formLabel(r.form)}</td>
         <td class="num">{r.age_days} 天</td>
+        <td class="num muted">{r.first_listed ?? '—'}</td>
         <td class="num">{r.score ?? '—'}</td>
       </tr>
     ))}

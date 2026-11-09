@@ -15,6 +15,8 @@ import {
   type ScoreRow,
 } from '@agentrank/core';
 import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/index.js';
+import { diffEvents, readSnapshotMetrics, writeEvents } from './events.js';
+import { loadState, mergeState, newcomerAgeDays, saveState } from './state.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const YAML_PATH = join(ROOT, 'agents.yaml');
@@ -50,6 +52,17 @@ export async function loadAgents(): Promise<Agent[]> {
 }
 
 /** 读取指定日期的历史快照（不存在 → null） */
+/** 读取指定路径的评分快照（不存在 → null） */
+async function readScoreFile(path: string): Promise<ScoreRow[] | null> {
+  try {
+    const raw = await readFile(path, 'utf8');
+    const parsed = JSON.parse(raw) as { rows?: ScoreRow[] };
+    return parsed.rows ?? null;
+  } catch {
+    return null;
+  }
+}
+
 async function readSnapshot(date: string): Promise<Record<string, Metrics> | null> {
   try {
     const raw = await readFile(join(DATA_DIR, 'snapshots', `${date}.jsonl`), 'utf8');
@@ -112,6 +125,18 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   const agents = await loadAgents();
   const today = isoDate();
   console.log(`[run] ${today} · ${agents.length} agents`);
+
+  // 0. 首次收录状态（新秀榜口径，PRD §5.6）
+  const statePath = join(DATA_DIR, 'agents-state.json');
+  const statePrev = await loadState(statePath);
+  const state = mergeState(statePrev, agents.map((a) => a.slug), today);
+  await saveState(statePath, state);
+  console.log(`[state] started_at=${state.started_at} · ${Object.keys(state.agents).length} agents`);
+
+  // 上一次的评分与快照（用于事件 diff）
+  const prevScoreDate = prevDate(today);
+  const prevRows = await readScoreFile(join(DATA_DIR, 'scores', `${prevScoreDate}.json`));
+  const prevMetrics = await readSnapshotMetrics(join(DATA_DIR, 'snapshots'), prevScoreDate);
 
   // 0. 选 GitHub 通道：额度够（3 次/repo）用官方 API（能拿 contributors + release），否则走 ungh
   const ghRepoCount = agents.filter((a) => a.sources.some((s) => s.kind === 'github')).length;
@@ -199,11 +224,10 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       if (installs != null && installs >= 1_000_000) flags.push('installs_may_include_ci');
       if (group.length <= 2 && level !== 'L3') flags.push('small_group');
 
-      // 出道天数（PRD §5.6 新秀资格）
+      // 出道天数（PRD §5.6）：min(repo 创建至今, 首次收录至今)
       const createdAt = typeof m.repo_created === 'string' ? m.repo_created : null;
-      const ageDays = createdAt
-        ? Math.floor((Date.now() - new Date(createdAt).getTime()) / 86_400_000)
-        : null;
+      const firstListed = state.agents[item.slug]?.first_listed ?? null;
+      const ageDays = newcomerAgeDays(createdAt, firstListed, state.started_at, today);
       if (ageDays != null && ageDays <= 180) flags.push('newcomer');
 
       rows.push({
@@ -227,10 +251,12 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
             typeof m.last_commit === 'string' ? m.last_commit : null,
             typeof m.last_release === 'string' ? m.last_release : null,
           ),
+          last_release: typeof m.last_release === 'string' ? m.last_release : null,
         },
         data_level: level,
         flags,
         age_days: ageDays,
+        first_listed: firstListed,
         score_version: SCORE_VERSION,
       });
     }
@@ -242,7 +268,14 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   await writeFile(scorePath, JSON.stringify({ date: today, version: SCORE_VERSION, rows }, null, 2));
   console.log(`[scores] ${rows.length} rows → ${scorePath}`);
 
-  // 5. 周期归档（PRD §5.5）：周日冻结周档，月末冻结月档
+  // 5. 事件流（PRD F-24）
+  const events = diffEvents(today, rows, prevRows, prevMetrics);
+  if (events.length || !prevRows) {
+    const p = await writeEvents(join(DATA_DIR, 'events'), today, events);
+    console.log(`[events] ${events.length} 条 → ${p}`);
+  }
+
+  // 6. 周期归档（PRD §5.5）：周日冻结周档，月末冻结月档
   const archived = await archiveIfNeeded(today, rows);
   if (archived.length) console.log(`[archive] ${archived.join(', ')}`);
 

@@ -15,17 +15,19 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 133860,
-        "forks": 21207,
+        "stars": 133865,
+        "forks": 21208,
         "contributors": 715,
         "installs": 26021465,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-06T01:40:00Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 574,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -41,17 +43,19 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 225541,
-        "forks": 30457,
+        "stars": 225543,
+        "forks": 30456,
         "contributors": 1089,
         "installs": 3431953,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-10-28T06:17:49Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 557,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -71,11 +75,13 @@
         "forks": 14931,
         "contributors": 703,
         "installs": 482840,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-04T20:27:11Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 570,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -91,17 +97,19 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 120867,
+        "stars": 120868,
         "forks": 15563,
         "contributors": 317,
         "installs": 6148981,
-        "activity": 0.999
+        "activity": 0.999,
+        "last_release": "2026-11-02T11:05:31Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 456,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -117,15 +125,17 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 92980,
+        "stars": 92982,
         "forks": 12422,
         "contributors": 594,
         "installs": null,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-06T12:54:14Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 970,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -141,15 +151,17 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 56377,
+        "stars": 56378,
         "forks": 6568,
         "contributors": 680,
         "installs": null,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-10-28T19:26:10Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 807,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -169,13 +181,15 @@
         "forks": null,
         "contributors": null,
         "installs": 14091460,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L2",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -195,11 +209,13 @@
         "forks": 3332,
         "contributors": 645,
         "installs": 127976,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-08T00:55:56Z"
       },
       "data_level": "L1",
       "flags": [],
-      "age_days": 501,
+      "age_days": 500,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -219,11 +235,13 @@
         "forks": 5146,
         "contributors": 182,
         "installs": 60785,
-        "activity": 0
+        "activity": 0,
+        "last_release": "2025-08-09T17:42:19Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 1279,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -243,11 +261,13 @@
         "forks": 1454,
         "contributors": 81,
         "installs": null,
-        "activity": 0.998
+        "activity": 0.998,
+        "last_release": "2026-10-01T08:41:12Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 700,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -267,11 +287,13 @@
         "forks": 2361,
         "contributors": 163,
         "installs": 18481,
-        "activity": 0.993
+        "activity": 0.993,
+        "last_release": "2026-11-05T17:47:22Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 536,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -291,11 +313,13 @@
         "forks": null,
         "contributors": null,
         "installs": 73421,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L2",
       "flags": [],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -315,11 +339,13 @@
         "forks": 1191,
         "contributors": 27,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": "2025-07-16T16:54:55Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 1111,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -335,15 +361,17 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 5339,
+        "stars": 5340,
         "forks": 791,
         "contributors": 15,
         "installs": null,
-        "activity": 0.977
+        "activity": 0.977,
+        "last_release": "2026-11-04T08:16:43Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 335,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -363,11 +391,13 @@
         "forks": 412,
         "contributors": 12,
         "installs": 365,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 469,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -387,13 +417,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -412,14 +444,16 @@
         "stars": 71472,
         "forks": 7898,
         "contributors": 352,
-        "installs": 5875380,
-        "activity": 0.986
+        "installs": 5873418,
+        "activity": 0.986,
+        "last_release": "2026-10-26T09:06:50Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 855,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -438,14 +472,16 @@
         "stars": 36433,
         "forks": 5556,
         "contributors": 507,
-        "installs": 4519532,
-        "activity": 0.859
+        "installs": 4520645,
+        "activity": 0.859,
+        "last_release": "2026-06-19T00:24:01Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 1264,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -465,11 +501,13 @@
         "forks": 3348,
         "contributors": 1273,
         "installs": 56813,
-        "activity": 0.999
+        "activity": 0.999,
+        "last_release": "2026-11-05T12:40:58Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 608,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -489,13 +527,15 @@
         "forks": 3429,
         "contributors": 303,
         "installs": 2120774,
-        "activity": 0.206
+        "activity": 0.206,
+        "last_release": "2026-05-15T17:52:24Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 738,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -515,11 +555,13 @@
         "forks": 484,
         "contributors": 134,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": "2025-07-30T17:40:54Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 1217,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -539,13 +581,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -565,13 +609,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -591,13 +637,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -613,15 +661,17 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 94490,
+        "stars": 94492,
         "forks": 11577,
         "contributors": 2389,
         "installs": null,
-        "activity": 1
+        "activity": 0.999,
+        "last_release": "2026-11-04T17:04:23Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 2087,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -641,11 +691,13 @@
         "forks": 2935,
         "contributors": 433,
         "installs": null,
-        "activity": 1
+        "activity": 0.999,
+        "last_release": "2026-11-05T19:31:06Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 3544,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -665,11 +717,13 @@
         "forks": 2660,
         "contributors": 50,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 788,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -689,13 +743,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -715,13 +771,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -741,13 +799,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -767,13 +827,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -793,13 +855,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -815,17 +879,19 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 120356,
+        "stars": 120358,
         "forks": 13445,
         "contributors": 384,
         "installs": 1881127,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-10-26T22:00:34Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 738,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -845,11 +911,13 @@
         "forks": 5940,
         "contributors": 616,
         "installs": 6574,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-04T03:22:02Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 1213,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -869,11 +937,13 @@
         "forks": 2236,
         "contributors": 96,
         "installs": 1366,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-06T21:29:53Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 984,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -889,15 +959,17 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 25985,
+        "stars": 25986,
         "forks": 1810,
         "contributors": 50,
         "installs": null,
-        "activity": 0.999
+        "activity": 0.999,
+        "last_release": "2026-10-23T18:09:00Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 959,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -917,11 +989,13 @@
         "forks": 1525,
         "contributors": 28,
         "installs": null,
-        "activity": 0.995
+        "activity": 0.995,
+        "last_release": "2026-10-15T15:44:39Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 677,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -937,17 +1011,19 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 149223,
-        "forks": 25096,
+        "stars": 149224,
+        "forks": 25097,
         "contributors": 3751,
         "installs": 39773479,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-05T00:22:12Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 1483,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -967,11 +1043,13 @@
         "forks": 8531,
         "contributors": 2009,
         "installs": 685499,
-        "activity": 0.999
+        "activity": 0.999,
+        "last_release": "2026-09-21T16:22:27Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 1467,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -991,13 +1069,15 @@
         "forks": 5560,
         "contributors": 783,
         "installs": 45312935,
-        "activity": 0.999
+        "activity": 0.999,
+        "last_release": "2026-11-07T19:31:54Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 1265,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1017,13 +1097,15 @@
         "forks": 5017,
         "contributors": 408,
         "installs": 2904950,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-10-15T02:20:12Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 607,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1040,14 +1122,16 @@
       "growth_30d_pct": null,
       "metrics": {
         "stars": 60661,
-        "forks": 9109,
+        "forks": 9110,
         "contributors": 367,
         "installs": 569978,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-09T01:07:14Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 1108,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1067,13 +1151,15 @@
         "forks": 3085,
         "contributors": 701,
         "installs": 1246429,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-04T10:59:56Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 824,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1093,13 +1179,15 @@
         "forks": 7694,
         "contributors": 294,
         "installs": 10446322,
-        "activity": 0.993
+        "activity": 0.993,
+        "last_release": "2026-11-06T03:03:34Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 1187,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1119,13 +1207,15 @@
         "forks": 4323,
         "contributors": 654,
         "installs": 2358844,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-07T00:58:18Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 586,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1145,13 +1235,15 @@
         "forks": 3135,
         "contributors": 658,
         "installs": 1256215,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-04T11:51:46Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 870,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1171,11 +1263,13 @@
         "forks": 6264,
         "contributors": 628,
         "installs": 415233,
-        "activity": 0.997
+        "activity": 0.997,
+        "last_release": "2026-10-29T14:00:55Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 1649,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1195,11 +1289,13 @@
         "forks": 9389,
         "contributors": 536,
         "installs": 88649,
-        "activity": 0.524
+        "activity": 0.524,
+        "last_release": "2025-09-30T06:18:26Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 1178,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1219,13 +1315,15 @@
         "forks": 1486,
         "contributors": 348,
         "installs": 8659583,
-        "activity": 0.998
+        "activity": 0.998,
+        "last_release": "2026-11-04T19:54:03Z"
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
       "age_days": 543,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1245,11 +1343,13 @@
         "forks": 3411,
         "contributors": 556,
         "installs": 132173,
-        "activity": 0.987
+        "activity": 0.987,
+        "last_release": "2026-10-21T19:10:58Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 2551,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1265,15 +1365,17 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 28748,
+        "stars": 28747,
         "forks": 4857,
         "contributors": 460,
         "installs": 70179,
-        "activity": 0.986
+        "activity": 0.986,
+        "last_release": "2026-11-07T01:00:07Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 1350,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1293,11 +1395,13 @@
         "forks": 3200,
         "contributors": 208,
         "installs": 99308,
-        "activity": 0.801
+        "activity": 0.801,
+        "last_release": "2026-05-29T05:09:47Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 703,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1317,11 +1421,13 @@
         "forks": 2594,
         "contributors": 335,
         "installs": 44316,
-        "activity": 0.997
+        "activity": 0.997,
+        "last_release": "2026-11-07T15:52:42Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 559,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1341,11 +1447,13 @@
         "forks": 561,
         "contributors": 58,
         "installs": 2733,
-        "activity": 0.932
+        "activity": 0.932,
+        "last_release": "2026-10-21T13:20:05Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 888,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1365,11 +1473,13 @@
         "forks": 45890,
         "contributors": 876,
         "installs": null,
-        "activity": 1
+        "activity": 1,
+        "last_release": "2026-11-06T03:36:16Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 1333,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1389,11 +1499,13 @@
         "forks": 7264,
         "contributors": 107,
         "installs": 186,
-        "activity": 0
+        "activity": 0,
+        "last_release": "2024-06-06T18:25:22Z"
       },
       "data_level": "L1",
       "flags": [],
       "age_days": 1289,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1413,11 +1525,13 @@
         "forks": 3872,
         "contributors": 73,
         "installs": null,
-        "activity": 0.998
+        "activity": 0.998,
+        "last_release": "2026-11-01T23:52:00Z"
       },
       "data_level": "L2",
       "flags": [],
       "age_days": 881,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1437,11 +1551,13 @@
         "forks": 2835,
         "contributors": 2,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L2",
       "flags": [],
-      "age_days": 1316,
+      "age_days": 1315,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1461,13 +1577,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     },
     {
@@ -1487,13 +1605,15 @@
         "forks": null,
         "contributors": null,
         "installs": null,
-        "activity": 0
+        "activity": 0,
+        "last_release": null
       },
       "data_level": "L3",
       "flags": [
         "no_data"
       ],
       "age_days": null,
+      "first_listed": "2026-11-09",
       "score_version": "v1"
     }
   ]

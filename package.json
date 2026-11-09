@@ -5,7 +5,7 @@
   "scripts": {
     "collect": "pnpm --filter @agentrank/pipeline start",
     "validate": "pnpm --filter @agentrank/pipeline validate",
-    "test": "pnpm --filter @agentrank/core test",
+    "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "build": "pnpm --filter @agentrank/web build"
   },

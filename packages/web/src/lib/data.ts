@@ -93,3 +93,53 @@ export function fmtPct(n: number | null | undefined): string {
 
 export const formLabel = (f: string): string =>
   ({ cli: 'CLI', 'ide-plugin': 'IDE 插件', 'ide-app': 'IDE 应用', desktop: '桌面', browser: '浏览器', framework: '框架', autonomous: '自主' })[f] ?? f;
+
+/* ───────────────── 活动事件流（PRD F-24） ───────────────── */
+
+export type AgentEvent = {
+  slug: string;
+  name: string;
+  kind: 'release' | 'listed' | 'rank_jump' | 'newcomer' | 'license_change' | 'archived';
+  date: string;
+  title: string;
+  detail?: string;
+  from?: number;
+  to?: number;
+};
+
+/** 读所有事件（按日期倒序） */
+export function loadEvents(): AgentEvent[] {
+  const dir = join(DATA_DIR, 'events');
+  if (!existsSync(dir)) return [];
+  const out: AgentEvent[] = [];
+  for (const f of readdirSync(dir).filter((x) => x.endsWith('.jsonl')).sort().reverse()) {
+    try {
+      for (const line of readFileSync(join(dir, f), 'utf8').split('\n')) {
+        if (line.trim()) out.push(JSON.parse(line) as AgentEvent);
+      }
+    } catch {
+      // 跳过损坏文件
+    }
+  }
+  return out;
+}
+
+export const EVENT_LABEL: Record<AgentEvent['kind'], string> = {
+  release: '发版',
+  listed: '新收录',
+  rank_jump: '排名变化',
+  newcomer: '新秀',
+  license_change: 'License',
+  archived: '归档',
+};
+
+/** 读首次收录状态 */
+export function loadAgentState(): { started_at: string; agents: Record<string, { first_listed: string; last_seen: string }> } | null {
+  const p = join(DATA_DIR, 'agents-state.json');
+  if (!existsSync(p)) return null;
+  try {
+    return JSON.parse(readFileSync(p, 'utf8'));
+  } catch {
+    return null;
+  }
+}

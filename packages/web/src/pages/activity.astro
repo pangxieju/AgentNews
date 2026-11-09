@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { loadEvents, loadLatestScores, EVENT_LABEL } from '../lib/data';
+
+const events = loadEvents();
+const data = loadLatestScores();
+const date = data?.date ?? '—';
+
+// 按类型筛选
+const kind = Astro.url.searchParams.get('kind') ?? 'all';
+const filtered = kind === 'all' ? events : events.filter((e) => e.kind === kind);
+
+const kinds = ['all', 'release', 'listed', 'rank_jump', 'newcomer'] as const;
+const kindLabel = (k: string) => (k === 'all' ? '全部' : EVENT_LABEL[k as keyof typeof EVENT_LABEL] ?? k);
+
+// 按日期分组
+const byDate = new Map<string, typeof filtered>();
+for (const e of filtered) {
+  const list = byDate.get(e.date) ?? [];
+  list.push(e);
+  byDate.set(e.date, list);
+}
+const dates = [...byDate.keys()].sort().reverse();
+
+const badgeClass = (k: string) =>
+  k === 'release' ? 'b-open' : k === 'listed' ? 'b-semi' : k === 'rank_jump' ? 'b-semi' : k === 'newcomer' ? 'b-open' : 'b-closed';
+---
+
+<Base pageTitle="动态 · AgentRank">
+  <h1>动态</h1>
+  <p class="muted">发版 / 新收录 / 排名跃迁 / 新秀 · 数据截至 {date}</p>
+
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:1rem 0">
+    {kinds.map((k) => (
+      <a href={`/activity?kind=${k}`} style="padding:0.35rem 0.8rem;border-radius:4px;border:1px solid var(--border)" class={kind === k ? 'badge b-open' : ''}>{kindLabel(k)}</a>
+    ))}
+  </div>
+
+  {dates.length === 0 ? (
+    <div class="warn">
+      尚无事件。事件由「与上一个快照的差异」生成 —— 上线首日没有基线，从第二天起才会产生动态。
+    </div>
+  ) : (
+    dates.map((d) => (
+      <section style="margin-top:1.8rem">
+        <h2 style="font-size:0.95rem;color:var(--muted);margin-bottom:0.5rem">{d}</h2>
+        <table>
+          {byDate.get(d)!.map((e) => (
+            <tr>
+              <td style="width:5rem"><span class={`badge ${badgeClass(e.kind)}`}>{EVENT_LABEL[e.kind as keyof typeof EVENT_LABEL] ?? e.kind}</span></td>
+              <td>
+                <a href={`/agent/${e.slug}`}>{e.name}</a>
+                {e.kind === 'release' && e.detail && <span class="muted" style="margin-left:0.5rem">· {e.detail}</span>}
+                {e.kind === 'rank_jump' && e.from != null && e.to != null && (
+                  <span class="muted" style="margin-left:0.5rem">· #{e.from} → #{e.to}</span>
+                )}
+                {e.kind === 'newcomer' && e.detail && <span class="muted" style="margin-left:0.5rem">· {e.detail}</span>}
+              </td>
+            </tr>
+          ))}
+        </table>
+      </section>
+    ))
+  )}
+</Base>

@@ -133,9 +133,12 @@ export type ScoreRow = {
     contributors: number | null;
     installs: number | null;
     activity: number | null;
+    last_release: string | null;
   };
-  /** 出道天数（repo 创建至今）；无 repo 则为 null */
+  /** 出道天数（min(repo 创建至今, 首次收录至今)）；无信息则为 null */
   age_days: number | null;
+  /** 首次被收录的日期（YYYY-MM-DD） */
+  first_listed: string | null;
   data_level: 'L1' | 'L2' | 'L3';
   flags: string[];
   score_version: typeof SCORE_VERSION;
