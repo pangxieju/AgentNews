@@ -16,7 +16,7 @@ const daily = loadAllScores();
       <tr><th>周期</th><th>类型</th><th>结算日</th><th class="num">在榜数</th></tr>
       {archives.map((a) => (
         <tr>
-          <td><a href={`/archive/${a.label}`}>{a.label}</a></td>
+          <td><a href={`/archive/${a.label}/`}>{a.label}</a></td>
           <td class="muted">{a.period === 'week' ? '周档' : '月档'}</td>
           <td class="muted">{a.end}</td>
           <td class="num">{a.rows.filter((r) => r.rank_in_form != null).length}</td>

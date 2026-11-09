@@ -49,7 +49,7 @@ const badgeClass = (k: string) =>
             <tr>
               <td style="width:5rem"><span class={`badge ${badgeClass(e.kind)}`}>{EVENT_LABEL[e.kind as keyof typeof EVENT_LABEL] ?? e.kind}</span></td>
               <td>
-                <a href={`/agent/${e.slug}`}>{e.name}</a>
+                <a href={`/agent/${e.slug}/`}>{e.name}</a>
                 {e.kind === 'release' && e.detail && <span class="muted" style="margin-left:0.5rem">· {e.detail}</span>}
                 {e.kind === 'rank_jump' && e.from != null && e.to != null && (
                   <span class="muted" style="margin-left:0.5rem">· #{e.from} → #{e.to}</span>

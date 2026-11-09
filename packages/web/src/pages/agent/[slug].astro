@@ -24,7 +24,7 @@ if (!row) {
 <Base pageTitle={row ? `${row.slug} · AgentRank` : '未找到'}>
   {row && (
     <>
-      <a href="/top/open/all/month" class="muted">← 返回榜单</a>
+      <a href="/top/open/all/month/" class="muted">← 返回榜单</a>
       <h1 style="margin-top:0.5rem">{row.name ?? row.slug}
         <span class={`badge ${row.oss_bucket === 'open' ? 'b-open' : row.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
           {row.oss_bucket === 'open' ? '开源' : row.oss_bucket === 'semi' ? '半开源' : '闭源'}

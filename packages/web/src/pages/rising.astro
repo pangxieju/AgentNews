@@ -41,7 +41,7 @@ const youngest = [...rows]
         <tr>
           <td class="pos">{i + 1}</td>
           <td>
-            <a href={`/agent/${r.slug}`}>{r.name}</a>
+            <a href={`/agent/${r.slug}/`}>{r.name}</a>
             <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
               {r.oss_bucket === 'open' ? '开源' : r.oss_bucket === 'semi' ? '半开源' : '闭源'}
             </span>
@@ -69,7 +69,7 @@ const youngest = [...rows]
     {youngest.map((r, i) => (
       <tr>
         <td class="pos">{i + 1}</td>
-        <td><a href={`/agent/${r.slug}`}>{r.name}</a></td>
+        <td><a href={`/agent/${r.slug}/`}>{r.name}</a></td>
         <td class="muted">{formLabel(r.form)}</td>
         <td class="num">{r.age_days} 天</td>
         <td class="num muted">{r.first_listed ?? '—'}</td>

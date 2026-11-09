@@ -62,13 +62,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentrank.e
     <nav>
       <a class="brand" href="/">AgentRank</a>
       <a class="nav" href="/">双榜</a>
-      <a class="nav" href="/top/open/all/month">榜单</a>
-      <a class="nav" href="/rising">新秀</a>
-      <a class="nav" href="/activity">动态</a>
-      <a class="nav" href="/security">安全</a>
-      <a class="nav" href="/archive">归档</a>
-      <a class="nav" href="/changelog">变更</a>
-      <a class="nav" href="/about">口径</a>
+      <a class="nav" href="/top/open/all/month/">榜单</a>
+      <a class="nav" href="/rising/">新秀</a>
+      <a class="nav" href="/activity/">动态</a>
+      <a class="nav" href="/security/">安全</a>
+      <a class="nav" href="/archive/">归档</a>
+      <a class="nav" href="/changelog/">变更</a>
+      <a class="nav" href="/about/">口径</a>
     </nav>
     <main>
       {hasData ? (
@@ -81,7 +81,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentrank.e
       )}
       <div class="footer">
         <span>数据更新于 <strong>{date}</strong> · AgentRank 综合分是观点，非客观事实</span>
-        <span><a href="/about">方法与口径</a></span>
+        <span><a href="/about/">方法与口径</a></span>
       </div>
     </main>
   </body>

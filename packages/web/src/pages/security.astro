@@ -38,7 +38,7 @@ const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
     {rows.map((r) => (
       <tr>
         <td>
-          <a href={`/agent/${r.slug}`}>{r.name}</a>
+          <a href={`/agent/${r.slug}/`}>{r.name}</a>
           {securityLevel(r) === 'high' && <span class="badge b-closed">恶意包</span>}
         </td>
         <td class="muted"><a href={r.url} target="_blank" rel="noopener">{r.package}</a></td>

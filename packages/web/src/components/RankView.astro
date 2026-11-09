@@ -47,7 +47,7 @@ const formLabel = (f: string) =>
 const gLabel = (x: string) => (x === 'day' ? '日榜' : x === 'week' ? '周榜' : '月榜');
 const sortHint =
   g === 'day' ? '按当日 Star 增量排序' : g === 'week' ? '按滚动 7 日 Star 增量排序' : '按综合分排序';
-const href = (b: string, f: string, gg: string) => `/top/${b}/${f}/${gg}`;
+const href = (b: string, f: string, gg: string) => `/top/${b}/${f}/${gg}/`;
 
 const hasDeltas = rows.some((r) => r.delta_7d != null);
 const flagLabel: Record<string, string> = {
@@ -92,7 +92,7 @@ const flagLabel: Record<string, string> = {
         <tr>
           <td class="pos">{r._displayRank ?? '—'}</td>
           <td>
-            <a href={`/agent/${r.slug}`}>{r.name ?? r.slug}</a>
+            <a href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
             <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
               {r.oss_bucket === 'open' ? '开源' : r.oss_bucket === 'semi' ? '半开源' : '闭源'}
             </span>

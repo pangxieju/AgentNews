@@ -16,7 +16,7 @@ const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).sl
   <p class="muted">数据截至 {date} · 跨生态归一化 · 开源/闭源双榜 · 日/周/月粒度</p>
 
   <div class="grid">
-    <a href="/top/open/all/month" class="card" style="text-decoration:none;color:inherit">
+    <a href="/top/open/all/month/" class="card" style="text-decoration:none;color:inherit">
       <h2>开源榜 <span class="badge b-open">OPEN</span></h2>
       <div class="num">{open.length}</div>
       <div class="detail">OSI 协议 · MIT/Apache/AGPL 等 · 覆盖 {new Set(open.map(r => r.form)).size} 种形态</div>
@@ -33,7 +33,7 @@ const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).sl
       </table>
     </a>
 
-    <a href="/top/closed/all/month" class="card" style="text-decoration:none;color:inherit">
+    <a href="/top/closed/all/month/" class="card" style="text-decoration:none;color:inherit">
       <h2>闭源榜 <span class="badge b-closed">CLOSED</span></h2>
       <div class="num">{closed.length}</div>
       <div class="detail">专有 License · 数据缺失时按收录区展示（不排名）</div>
