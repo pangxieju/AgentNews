@@ -9,7 +9,8 @@ import { join } from 'node:path';
 import type { Metrics, ScoreRow } from '@agentnews/core';
 
 export type EventKind =
-  | 'release'        // 发版
+  | 'release'        // 发版（无版本号时按 release 时间判断）
+  | 'version'        // 版本号变化
   | 'listed'         // 首次收录
   | 'rank_jump'      // 排名跃迁 ≥5 位
   | 'newcomer'       // 出道 ≤180 天
@@ -81,24 +82,45 @@ export function diffEvents(
       });
     }
 
-    // 2. 发版：last_release 变化（**必须前后都有值** —— 否则从 ungh 切到 API
-    //    时，release 从「无」变「有」会被误判成 60 条假发版事件）
-    const prevRel = prevMetrics?.[row.slug]?.last_release;
-    const currRel = row.metrics.last_release;
-    if (
-      typeof prevRel === 'string' &&
-      prevRel.length > 0 &&
-      typeof currRel === 'string' &&
-      currRel !== prevRel
-    ) {
+    // 2. 版本变化优先（有版本号时更精确），否则退回 release 时间
+    const prevVer = prevMetrics?.[row.slug]?.version;
+    const currVer = row.metrics.version;
+    const versionChanged =
+      typeof prevVer === 'string' &&
+      prevVer.length > 0 &&
+      typeof currVer === 'string' &&
+      currVer.length > 0 &&
+      currVer !== prevVer;
+
+    if (versionChanged) {
       events.push({
         slug: row.slug,
         name: row.name,
-        kind: 'release',
+        kind: 'version',
         date: today,
-        title: `${row.name} 发布新版本`,
-        detail: currRel.slice(0, 10),
+        title: `${row.name} 更新到 ${currVer}`,
+        detail: `${prevVer} → ${currVer}`,
       });
+    } else {
+      // 发版：last_release 变化（**必须前后都有值** —— 否则从 ungh 切到 API
+      //    时，release 从「无」变「有」会被误判成 60 条假发版事件）
+      const prevRel = prevMetrics?.[row.slug]?.last_release;
+      const currRel = row.metrics.last_release;
+      if (
+        typeof prevRel === 'string' &&
+        prevRel.length > 0 &&
+        typeof currRel === 'string' &&
+        currRel !== prevRel
+      ) {
+        events.push({
+          slug: row.slug,
+          name: row.name,
+          kind: 'release',
+          date: today,
+          title: `${row.name} 发布新版本`,
+          detail: currRel.slice(0, 10),
+        });
+      }
     }
 
     // 3. 排名跃迁

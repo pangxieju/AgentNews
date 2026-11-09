@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import AgentIcon from '../../components/AgentIcon';
 import LineChart from '../../components/charts/LineChart.astro';
-import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, fmt, fmtPct, formLabel } from '../../lib/data';
+import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, loadVersionHistory, fmt, fmtPct, formLabel } from '../../lib/data';
 import { installInfo } from '../../lib/shared';
 
 const data = loadLatestScores();
@@ -24,6 +24,7 @@ const history = loadHistory(slug);
 const starPts = history.filter((h) => h.stars != null).map((h) => ({ x: h.date, y: h.stars! }));
 const scorePts = history.filter((h) => h.score != null).map((h) => ({ x: h.date, y: h.score! }));
 const trendReady = starPts.length >= 2;
+const versions = loadVersionHistory(slug);
 const info = installInfo(meta?.sources ?? [], meta?.homepage ?? null);
 const siblings = rows
   .filter((r) => r.form === row?.form && r.slug !== slug && r.score != null)
@@ -129,6 +130,71 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
             </div>
           </div>
         </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h2>版本 / Releases</h2>
+          <span class="muted">
+            {row.metrics?.version
+              ? `${row.metrics.version}${row.metrics.version_source ? ' · ' + row.metrics.version_source : ''}`
+              : '未采集到版本'}
+          </span>
+        </div>
+        {row.metrics?.version ? (
+          <div class="getstarted-grid">
+            <div>
+              <h3>最新版本与更新说明</h3>
+              <div class="ver-current">
+                <b>{row.metrics.version}</b>
+                <span class="ver-meta">{row.metrics.version_source ?? 'unknown'}</span>
+                {row.metrics.version_at && (
+                  <span class="ver-meta">发布于 {row.metrics.version_at.slice(0, 10)}</span>
+                )}
+              </div>
+              {row.metrics.release_notes ? (
+                <>
+                  <div class="ver-release-head">
+                    {row.metrics.release_tag && <code>{row.metrics.release_tag}</code>}
+                    {row.metrics.release_url && (
+                      <a href={row.metrics.release_url} target="_blank" rel="noopener">GitHub release ↗</a>
+                    )}
+                  </div>
+                  <pre class="release-notes">{row.metrics.release_notes}</pre>
+                </>
+              ) : (
+                <p class="muted" style="font-size:12.5px;margin-top:10px">
+                  该渠道只发布版本号，未提供更新说明（npm / PyPI / 商店）。
+                </p>
+              )}
+            </div>
+            <div>
+              <h3>版本记录</h3>
+              {versions.length > 0 ? (
+                <ol class="ver-history">
+                  {versions
+                    .slice()
+                    .reverse()
+                    .map((v) => (
+                      <li>
+                        <span class="v">{v.version}</span>
+                        <span class="d">
+                          {v.date}
+                          {v.version_at ? ` · ${v.version_at.slice(0, 10)}` : ''}
+                        </span>
+                      </li>
+                    ))}
+                </ol>
+              ) : (
+                <p class="muted" style="font-size:12.5px">从下一次采集开始记录版本变化。</p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div class="notice">
+            未采集到版本信息：该 agent 可能只有 manual 渠道，或包名不在 npm / PyPI / VS Code 市场。
+          </div>
+        )}
       </section>
 
       <section class="section">

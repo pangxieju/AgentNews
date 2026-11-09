@@ -107,9 +107,11 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         --ok: #1f7a4d;
         --bad: #b3261e;
 
-        --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial,
-          'PingFang SC', 'Microsoft YaHei', sans-serif;
-        --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+        /* Windows 优先：Segoe UI + 微软雅黑 UI；macOS 走 system-ui / PingFang */
+        --sans: system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei UI', 'Microsoft YaHei',
+          'PingFang SC', 'Noto Sans SC', 'Hiragino Sans GB', Roboto, Helvetica, Arial, sans-serif;
+        --mono: 'Cascadia Mono', Consolas, ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+          'DejaVu Sans Mono', monospace;
 
         /* 兼容页面里遗留的旧变量名 */
         --gh-canvas: var(--paper-2);
@@ -183,9 +185,9 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         background: var(--paper);
         color: var(--ink);
         font-family: var(--sans);
-        font-size: 14px;
-        line-height: 1.55;
-        -webkit-font-smoothing: antialiased;
+        font-size: 15px;
+        line-height: 1.62;
+        /* 不设 antialiased：Windows 上会关掉次像素渲染，字发虚 */
         font-variant-numeric: tabular-nums;
       }
       a { color: inherit; text-decoration: none; }
@@ -195,9 +197,9 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
 
       /* ── 排版：小、密、克制 ───────────────────────────────── */
       h1, h2, h3 { font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; }
-      h1 { font-size: 26px; letter-spacing: -0.025em; }
-      h2 { font-size: 15px; }
-      h3 { font-size: 14px; }
+      h1 { font-size: 29px; letter-spacing: -0.018em; }
+      h2 { font-size: 16px; }
+      h3 { font-size: 15px; }
       p { margin: 0; }
 
       .container { max-width: 1320px; margin: 0 auto; padding: 0 28px; }
@@ -215,9 +217,9 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         align-items: center;
         gap: 7px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 500;
-        letter-spacing: 0.13em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--ink-3);
       }
@@ -228,11 +230,11 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         background: var(--ink);
         flex: none;
       }
-      .lede { font-size: 13.5px; line-height: 1.65; color: var(--ink-2); max-width: 74ch; }
+      .lede { font-size: 14.5px; line-height: 1.7; color: var(--ink-2); max-width: 74ch; }
       .display {
-        font-size: clamp(26px, 3.4vw, 38px);
+        font-size: clamp(30px, 3.8vw, 42px);
         font-weight: 600;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.02em;
         line-height: 1.12;
         text-wrap: balance;
       }
@@ -289,7 +291,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        font-size: 14.5px;
+        font-size: 15.5px;
         font-weight: 600;
         letter-spacing: -0.02em;
         flex: none;
@@ -304,7 +306,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         background: var(--ink);
         color: var(--paper);
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 700;
         flex: none;
       }
@@ -314,8 +316,8 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         display: inline-flex;
         align-items: baseline;
         gap: 5px;
-        padding: 5px 9px;
-        font-size: 13px;
+        padding: 6px 10px;
+        font-size: 14px;
         color: var(--ink-2);
         white-space: nowrap;
         border: 1px solid transparent;
@@ -323,7 +325,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .topnav a i {
         font-family: var(--mono);
         font-style: normal;
-        font-size: 8.5px;
+        font-size: 9.5px;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--ink-4);
@@ -341,7 +343,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         align-items: center;
         gap: 6px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 0.06em;
         color: var(--ink-3);
         white-space: nowrap;
@@ -377,7 +379,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         align-items: center;
         gap: 7px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--ink-3);
@@ -393,9 +395,9 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       }
       .section-title h2 {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: 11.5px;
         font-weight: 500;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--ink);
         display: inline-flex;
@@ -408,7 +410,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         height: 5px;
         background: var(--ink);
       }
-      .section-title .muted { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; color: var(--ink-3); }
+      .section-title .muted { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); }
 
       /* ── 面板：发丝线，无圆角，无阴影 ─────────────────────── */
       .box { background: var(--paper-2); border: 1px solid var(--rule); }
@@ -417,17 +419,17 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         align-items: center;
         justify-content: space-between;
         gap: 10px;
-        padding: 8px 14px;
+        padding: 9px 14px;
         border-bottom: 1px solid var(--rule);
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 500;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--ink-2);
         background: var(--paper-3);
       }
-      .box-body { padding: 16px; }
+      .box-body { padding: 18px; }
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -443,7 +445,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .card:not(.grid > *) { border: 1px solid var(--rule); }
       .card h2 {
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         font-weight: 500;
         letter-spacing: 0.12em;
         text-transform: uppercase;
@@ -451,18 +453,18 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       }
       .card .num {
         font-family: var(--mono);
-        font-size: 26px;
+        font-size: 28px;
         font-weight: 500;
         letter-spacing: -0.03em;
         line-height: 1.15;
         margin-top: 6px;
       }
-      .card .detail { font-size: 11.5px; line-height: 1.55; color: var(--ink-3); margin-top: 5px; }
+      .card .detail { font-size: 12.5px; line-height: 1.55; color: var(--ink-3); margin-top: 5px; }
       .guide-list { list-style: none; margin-top: 10px; display: grid; gap: 6px; }
       .guide-list li {
         position: relative;
         padding-left: 13px;
-        font-size: 12.5px;
+        font-size: 13.5px;
         line-height: 1.55;
         color: var(--ink-2);
       }
@@ -470,13 +472,13 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
 
       /* ── 表格：账簿式，密而清楚 ───────────────────────────── */
       .table-wrap { width: 100%; overflow-x: auto; }
-      table { width: 100%; border-collapse: collapse; font-size: 13px; }
-      th, td { text-align: left; padding: 7px 10px; vertical-align: middle; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; padding: 8px 12px; vertical-align: middle; }
       th {
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         font-weight: 500;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--ink-3);
         white-space: nowrap;
@@ -492,7 +494,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .pos {
         width: 2.4rem;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: 13px;
         color: var(--ink-3);
       }
       .up { color: var(--ok); }
@@ -502,14 +504,14 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .badge {
         display: inline-flex;
         align-items: center;
-        height: 16px;
+        height: 18px;
         padding: 0 4px;
         border: 1px solid currentColor;
         font-family: var(--mono);
-        font-size: 8.5px;
+        font-size: 10px;
         font-weight: 500;
         letter-spacing: 0.06em;
-        line-height: 14px;
+        line-height: 16px;
         white-space: nowrap;
         vertical-align: middle;
       }
@@ -519,7 +521,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .counter {
         display: inline-block;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         color: var(--ink-3);
         letter-spacing: 0.04em;
       }
@@ -529,12 +531,12 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 5px 11px;
+        padding: 6px 12px;
         border: 1px solid var(--rule-2);
         background: var(--paper-2);
         color: var(--ink);
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 500;
         letter-spacing: 0.07em;
         text-transform: uppercase;
@@ -545,7 +547,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .btn:hover { border-color: var(--ink); text-decoration: none; }
       .btn-primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
       .btn-primary:hover { background: var(--ink); color: var(--paper); opacity: 0.85; }
-      .btn-sm { padding: 3px 8px; font-size: 9px; }
+      .btn-sm { padding: 4px 9px; font-size: 10px; }
 
       /* ── 筛选：刻度式切换 ─────────────────────────────────── */
       .tabs {
@@ -558,13 +560,13 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       }
       .tabs::-webkit-scrollbar { display: none; }
       .tab {
-        padding: 7px 12px;
+        padding: 8px 12px;
         margin-bottom: -1px;
         border: 1px solid transparent;
         border-bottom: 1px solid transparent;
         color: var(--ink-2);
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         white-space: nowrap;
@@ -579,11 +581,11 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       }
       .segmented { display: inline-flex; border: 1px solid var(--rule-2); }
       .segmented a, .segmented button {
-        padding: 3px 9px;
+        padding: 4px 10px;
         border-right: 1px solid var(--rule-2);
         color: var(--ink-2);
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         letter-spacing: 0.06em;
         text-transform: uppercase;
         background: transparent;
@@ -601,9 +603,9 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         border-left: 2px solid var(--gh-attention);
         background: color-mix(in srgb, var(--gh-attention) 8%, transparent);
         padding: 9px 13px;
-        font-size: 12.5px;
+        font-size: 13.5px;
       }
-      .notice { border-left: 2px solid var(--rule-2); background: var(--paper-3); padding: 9px 13px; font-size: 12.5px; color: var(--ink-2); }
+      .notice { border-left: 2px solid var(--rule-2); background: var(--paper-3); padding: 9px 13px; font-size: 13.5px; color: var(--ink-2); }
       .notice strong { color: var(--ink); }
 
       /* ── Agent 图标：方形、无圆角、细边 ──────────────────── */
@@ -619,7 +621,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         background: var(--paper-3);
         color: var(--ink-3);
         font-family: var(--mono);
-        font-size: calc(var(--icon-size, 26px) * 0.38);
+        font-size: calc(var(--icon-size, 26px) * 0.42);
         font-weight: 600;
         line-height: 1;
         overflow: hidden;
@@ -653,14 +655,14 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       }
       .rank-toolbar-count {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 0.05em;
         color: var(--ink-3);
         margin-left: auto;
       }
       .rank-hint {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 0.04em;
         color: var(--ink-3);
         padding: 8px 0;
@@ -674,9 +676,9 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         gap: 4px;
         width: 100%;
         justify-content: flex-end;
-        padding: 7px 10px;
+        padding: 8px 12px;
         font: inherit;
-        font-size: 9.5px;
+        font-size: 10.5px;
         font-weight: 500;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -738,14 +740,14 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .rank-card-main:hover { text-decoration: none; background: var(--paper-3); }
       .rank-card-name { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
       .rank-card-name .name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .rank-card-score { font-family: var(--mono); font-weight: 500; font-size: 14px; }
+      .rank-card-score { font-family: var(--mono); font-weight: 500; font-size: 15px; }
       .rank-card-stats {
         display: flex;
         flex-wrap: wrap;
         gap: 3px 14px;
         padding: 0 14px 10px 49px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         color: var(--ink-2);
       }
       .rank-card-stats em { font-style: normal; color: var(--ink-3); margin-right: 4px; }
@@ -767,7 +769,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         background: var(--paper-2);
       }
       .readout div {
-        padding: 8px 14px;
+        padding: 10px 14px;
         border-right: 1px solid var(--rule);
         text-align: right;
       }
@@ -775,7 +777,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .readout dt, .readout span[data-k] {
         display: block;
         font-family: var(--mono);
-        font-size: 8.5px;
+        font-size: 10px;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--ink-3);
@@ -783,7 +785,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .readout b {
         display: block;
         font-family: var(--mono);
-        font-size: 15px;
+        font-size: 17px;
         font-weight: 500;
         letter-spacing: -0.02em;
         margin-top: 2px;
@@ -803,7 +805,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         flex-direction: column;
         gap: 2px;
         align-items: flex-start;
-        padding: 8px 14px;
+        padding: 10px 14px;
         border: 0;
         border-right: 1px solid var(--rule);
         background: transparent;
@@ -816,11 +818,11 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .metric-bar > button[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
       .metric-bar .m-label {
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         letter-spacing: 0.1em;
         text-transform: uppercase;
       }
-      .metric-bar .m-hint { font-size: 10.5px; opacity: 0.7; }
+      .metric-bar .m-hint { font-size: 11.5px; opacity: 0.7; }
       .metric-bar > button[aria-pressed='true'] .m-hint { opacity: 0.85; }
 
       /* 双榜并列：两列账簿 */
@@ -847,7 +849,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         align-items: baseline;
         gap: 8px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--ink);
@@ -861,18 +863,18 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         gap: 10px;
         padding: 7px 14px;
         border-bottom: 1px solid var(--rule);
-        font-size: 13px;
+        font-size: 14px;
       }
       .board-row:last-child { border-bottom: 0; }
       .board-row:hover { background: var(--paper-3); }
-      .board-rank { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+      .board-rank { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
       .board-name { display: flex; align-items: center; gap: 8px; min-width: 0; }
       .board-name a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .board-val { font-family: var(--mono); font-size: 12.5px; text-align: right; display: flex; align-items: center; gap: 8px; }
+      .board-val { font-family: var(--mono); font-size: 13.5px; text-align: right; display: flex; align-items: center; gap: 8px; }
       .board-foot {
         padding: 8px 14px;
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         letter-spacing: 0.05em;
         color: var(--ink-3);
         border-top: 1px solid var(--rule);
@@ -888,7 +890,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         border-top: 0;
         background: var(--paper-2);
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         letter-spacing: 0.05em;
         color: var(--ink-3);
         flex-wrap: wrap;
@@ -923,7 +925,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         background: none;
         color: var(--ink);
         font-family: var(--sans);
-        font-size: 15px;
+        font-size: 16px;
         line-height: 1.5;
         outline: none;
       }
@@ -954,7 +956,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         background: none;
         color: var(--ink-2);
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 0.05em;
         line-height: 1.7;
         cursor: pointer;
@@ -969,7 +971,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         flex-wrap: wrap;
         padding: 8px 0;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         letter-spacing: 0.05em;
         color: var(--ink-3);
       }
@@ -987,13 +989,13 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .picker-item-main .name { font-weight: 500; }
       .picker-item-meta {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: 11px;
         color: var(--ink-3);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      .picker-item-score { font-family: var(--mono); font-size: 14px; font-weight: 500; min-width: 3rem; text-align: right; }
+      .picker-item-score { font-family: var(--mono); font-size: 15px; font-weight: 500; min-width: 3rem; text-align: right; }
       .picker-empty { padding: 14px 2px; font-size: 12.5px; }
       .link-btn {
         border: 0;
@@ -1020,7 +1022,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         align-items: baseline;
         gap: 7px;
         font-family: var(--mono);
-        font-size: 9px;
+        font-size: 10px;
         letter-spacing: 0.14em;
         color: var(--ink-3);
         text-transform: uppercase;
@@ -1051,7 +1053,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         color: var(--ink-3);
       }
       .cmp-wrap { border: 1px solid var(--rule); margin-top: 16px; }
-      .cmp-table { font-size: 13px; }
+      .cmp-table { font-size: 13.5px; }
       .cmp-table th, .cmp-table td { padding: 8px 14px; }
       .cmp-metric {
         position: sticky;
@@ -1060,7 +1062,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         width: 128px;
         background: var(--paper-2);
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         font-weight: 500;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -1071,11 +1073,11 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .cmp-col { border-top: 0; text-align: left; }
       .cmp-head { display: flex; align-items: center; gap: 8px; }
       .cmp-head:hover { text-decoration: none; }
-      .cmp-head .name { display: block; font-weight: 500; font-size: 13px; }
+      .cmp-head .name { display: block; font-weight: 500; font-size: 14px; }
       .cmp-sub {
         display: block;
         font-family: var(--mono);
-        font-size: 8.5px;
+        font-size: 9.5px;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--ink-3);
@@ -1099,38 +1101,39 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .cmp-empty .muted { font-size: 12.5px; max-width: 46ch; margin: 0 auto; }
 
       /* ── 形态卡片 ─────────────────────────────────────────── */
-      .form-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+      .form-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
       .form-card {
         display: flex;
         flex-direction: column;
         gap: 6px;
         padding: 14px;
+        border: 1px solid var(--rule);
         background: var(--paper-2);
         min-height: 150px;
       }
       .form-card:hover { background: var(--paper-3); text-decoration: none; }
-      .form-card .idx { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: var(--ink-3); text-transform: uppercase; }
-      .form-card h3 { font-size: 14px; display: flex; align-items: baseline; gap: 7px; }
+      .form-card .idx { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--ink-3); text-transform: uppercase; }
+      .form-card h3 { font-size: 15px; display: flex; align-items: baseline; gap: 7px; }
       .form-card h3 em {
         font-style: normal;
         font-family: var(--mono);
-        font-size: 8.5px;
+        font-size: 9.5px;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--ink-3);
       }
-      .form-card .fit { font-size: 11.5px; line-height: 1.5; color: var(--ink-2); }
+      .form-card .fit { font-size: 12.5px; line-height: 1.5; color: var(--ink-2); }
       .form-card .mini {
         margin-top: auto;
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         color: var(--ink-3);
         display: flex;
         flex-direction: column;
         gap: 1px;
       }
       .form-card .mini b { font-weight: 500; color: var(--ink-2); }
-      .form-card .go { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+      .form-card .go { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
 
       /* ── 引导条 ───────────────────────────────────────────── */
       .cta-band {
@@ -1143,8 +1146,8 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         border: 1px solid var(--rule);
         background: var(--paper-3);
       }
-      .cta-band h2 { font-size: 16px; letter-spacing: -0.02em; margin: 6px 0 4px; }
-      .cta-band p { font-size: 12.5px; color: var(--ink-2); max-width: 60ch; }
+      .cta-band h2 { font-size: 17px; letter-spacing: -0.02em; margin: 6px 0 4px; }
+      .cta-band p { font-size: 13.5px; color: var(--ink-2); max-width: 60ch; }
 
       /* ── 详情页 ───────────────────────────────────────────── */
       .agent-hero {
@@ -1168,12 +1171,12 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .stat-rail > div:first-child { border-top: 1px solid var(--rule); }
       .stat-rail span[data-k] {
         font-family: var(--mono);
-        font-size: 9px;
+        font-size: 10px;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--ink-3);
       }
-      .stat-rail b { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: -0.01em; }
+      .stat-rail b { font-family: var(--mono); font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
       .cmd-row {
         display: flex;
         align-items: center;
@@ -1183,7 +1186,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         border: 1px solid var(--rule-2);
         background: var(--paper-3);
       }
-      .cmd-row code { border: 0; background: transparent; padding: 0; font-size: 12.5px; color: var(--ink); overflow-wrap: anywhere; }
+      .cmd-row code { border: 0; background: transparent; padding: 0; font-size: 13.5px; color: var(--ink); overflow-wrap: anywhere; }
       .cmd-row .btn { margin-left: auto; }
       .getstarted-grid {
         display: grid;
@@ -1195,7 +1198,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .getstarted-grid > div { background: var(--paper-2); padding: 16px; }
       .getstarted-grid h3 {
         font-family: var(--mono);
-        font-size: 9px;
+        font-size: 10px;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--ink-3);
@@ -1205,13 +1208,67 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .link-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
       .link-row a {
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         letter-spacing: 0.05em;
         padding: 3px 8px;
         border: 1px solid var(--rule-2);
         color: var(--ink-2);
       }
       .link-row a:hover { border-color: var(--ink); color: var(--ink); text-decoration: none; }
+
+      /* ── 版本区块 ─────────────────────────────────────────── */
+      .ver-current { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+      .ver-current b {
+        font-family: var(--mono);
+        font-size: 22px;
+        font-weight: 500;
+        letter-spacing: -0.03em;
+      }
+      .ver-meta {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        letter-spacing: 0.06em;
+        color: var(--ink-3);
+        border: 1px solid var(--rule-2);
+        padding: 1px 6px;
+      }
+      .ver-release-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: var(--ink-3);
+      }
+      .ver-release-head a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+      .release-notes {
+        margin-top: 8px;
+        padding-left: 12px;
+        border-left: 2px solid var(--rule);
+        font-family: var(--sans);
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-2);
+        white-space: pre-wrap;
+        max-height: 220px;
+        overflow: auto;
+      }
+      .ver-history { list-style: none; display: grid; }
+      .ver-history li {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 5px 0;
+        border-bottom: 1px solid var(--rule);
+        font-family: var(--mono);
+        font-size: 12px;
+      }
+      .ver-history li:last-child { border-bottom: 0; }
+      .ver-history .v { font-weight: 500; }
+      .ver-history .d { font-size: 10.5px; color: var(--ink-3); }
 
       /* ── 图表 ─────────────────────────────────────────────── */
       .bar-chart { list-style: none; display: grid; gap: 8px; }
@@ -1220,7 +1277,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         grid-template-columns: minmax(0, 8em) 1fr 4em;
         align-items: center;
         gap: 12px;
-        font-size: 12px;
+        font-size: 12.5px;
       }
       .bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .bar-track { height: 5px; background: var(--paper-3); overflow: hidden; }
@@ -1230,11 +1287,11 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .bar-fill.tone-success { background: var(--heat-2); }
       .bar-fill.tone-attention { background: var(--heat-3); }
       .bar-fill.tone-danger { background: var(--heat-5); }
-      .bar-value { text-align: right; font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); }
+      .bar-value { text-align: right; font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
 
       .line-chart { margin: 0; }
       .lc-grid-wrap { display: grid; grid-template-columns: 3.2em 1fr; height: var(--lc-height, 190px); }
-      .lc-yaxis { position: relative; font-family: var(--mono); font-size: 9.5px; color: var(--ink-3); }
+      .lc-yaxis { position: relative; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
       .lc-yaxis span { position: absolute; right: 8px; transform: translateY(-50%); white-space: nowrap; }
       .lc-canvas { position: relative; border-left: 1px solid var(--rule-2); border-bottom: 1px solid var(--rule-2); }
       .lc-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -1263,7 +1320,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .lc-dot.tone-success { background: var(--heat-2); }
       .lc-dot.tone-attention { background: var(--heat-3); }
       .lc-dot.tone-danger { background: var(--heat-5); }
-      .lc-xaxis { position: relative; height: 14px; margin: 6px 0 0 3.2em; font-family: var(--mono); font-size: 9.5px; color: var(--ink-3); }
+      .lc-xaxis { position: relative; height: 16px; margin: 6px 0 0 3.2em; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
       .lc-xaxis span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
       .lc-xaxis span.is-first { transform: none; }
       .lc-xaxis span.is-last { transform: translateX(-100%); }
@@ -1274,7 +1331,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         flex-wrap: wrap;
         margin: 9px 0 0 3.2em;
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         color: var(--ink-3);
       }
       .lc-legend li { display: inline-flex; align-items: center; gap: 5px; }
@@ -1307,7 +1364,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       }
       .pin-tray-label {
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--ink-3);
@@ -1322,7 +1379,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         padding: 2px 4px 2px 2px;
         border: 1px solid var(--rule-2);
         background: var(--paper-3);
-        font-size: 12px;
+        font-size: 13px;
       }
       .pin-name { max-width: 10em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .pin-x {
@@ -1337,13 +1394,13 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       }
       .pin-x:hover { color: var(--bad); }
       .pin-tray-actions { display: flex; align-items: center; gap: 10px; flex: none; }
-      .pin-hint { font-family: var(--mono); font-size: 9.5px; color: var(--ink-3); }
+      .pin-hint { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
       .pin-clear {
         border: 0;
         background: none;
         color: var(--ink-3);
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: 10.5px;
         letter-spacing: 0.06em;
         cursor: pointer;
         text-decoration: underline;
@@ -1352,7 +1409,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       .pin-clear:hover { color: var(--ink); }
 
       /* ── 页脚 ─────────────────────────────────────────────── */
-      .colophon { border-top: 1px solid var(--rule); padding: 20px 0 40px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.04em; color: var(--ink-3); }
+      .colophon { border-top: 1px solid var(--rule); padding: 20px 0 40px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-3); line-height: 1.7;}
       .colophon-inner {
         max-width: 1320px;
         margin: 0 auto;
@@ -1381,8 +1438,8 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         .container, .topbar-inner, .colophon-inner, .pin-tray-inner { padding-left: 14px; padding-right: 14px; }
         main { padding: 18px 0 56px; }
         .section { margin-top: 26px; }
-        h1 { font-size: 22px; }
-        .topnav a { padding: 5px 7px; font-size: 12.5px; }
+        h1 { font-size: 24px; }
+        .topnav a { padding: 6px 8px; font-size: 13.5px; }
         .topnav a i { display: none; }
         .snap-chip { display: none; }
         .hide-sm { display: none; }
@@ -1408,14 +1465,17 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         .lc-grid-wrap { height: 160px; }
         .picker-input { font-size: 14px; }
         .cmp-pickers { grid-template-columns: 1fr; }
-        .cmp-metric { width: 92px; }
-        .cmp-table th, .cmp-table td { padding: 7px 10px; }
+        .cmp-metric { width: 86px; font-size: 10px; letter-spacing: 0.04em; }
+        .cmp-table { font-size: 13px; }
+        .cmp-table th, .cmp-table td { padding: 8px 8px; }
+        .cmp-head { gap: 6px; }
+        .cmp-head .name { font-size: 13px; }
         .getstarted-grid { grid-template-columns: 1fr; }
         .agent-hero { grid-template-columns: auto minmax(0, 1fr); gap: 14px; }
         .agent-hero .agent-hero-rail { grid-column: 1 / -1; }
         .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .form-card { padding: 11px; min-height: 0; }
-        .form-card h3 { font-size: 13px; }
+        .form-card h3 { font-size: 14px; }
         .pin-tray-inner { padding-top: 6px; padding-bottom: 6px; }
         .pin-name { max-width: 6.5em; }
         .pin-clear { display: none; }

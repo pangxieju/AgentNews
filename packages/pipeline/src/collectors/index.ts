@@ -281,6 +281,9 @@ export async function collectPypiVersion(pkg: string): Promise<{
 export async function collectGithubVersion(repo: string, token?: string): Promise<{
   version: string | null;
   version_at: string | null;
+  name: string | null;
+  notes: string | null;
+  url: string | null;
 }> {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
@@ -289,11 +292,24 @@ export async function collectGithubVersion(repo: string, token?: string): Promis
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, { headers });
-    if (!res.ok) return { version: null, version_at: null };
-    const d = (await res.json()) as { tag_name?: string; published_at?: string };
-    return { version: d.tag_name ?? null, version_at: d.published_at ?? null };
+    if (!res.ok) return { version: null, version_at: null, name: null, notes: null, url: null };
+    const d = (await res.json()) as {
+      tag_name?: string;
+      published_at?: string;
+      name?: string;
+      body?: string;
+      html_url?: string;
+    };
+    return {
+      version: d.tag_name ?? null,
+      version_at: d.published_at ?? null,
+      name: d.name?.trim() || null,
+      // 截断：只保留摘要，完整内容走 release 链接
+      notes: d.body ? d.body.slice(0, 1600) : null,
+      url: d.html_url ?? null,
+    };
   } catch {
-    return { version: null, version_at: null };
+    return { version: null, version_at: null, name: null, notes: null, url: null };
   }
 }
 
@@ -327,6 +343,12 @@ export async function collectAgent(
           metrics.version = ver.version;
           metrics.version_at = ver.version_at;
           metrics.version_source = 'github';
+        }
+        if (ver.notes != null) {
+          metrics.release_tag = ver.version;
+          metrics.release_name = ver.name;
+          metrics.release_notes = ver.notes;
+          metrics.release_url = ver.url;
         }
       }
     } catch (e) {

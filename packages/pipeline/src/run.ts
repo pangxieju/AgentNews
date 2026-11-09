@@ -17,6 +17,7 @@ import {
 import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/index.js';
 import { diffEvents, readSnapshotMetrics, writeEvents } from './events.js';
 import { collectSecurity, pickSecurityTargets, writeSecurity } from './security.js';
+import { syncIcons } from './icons.js';
 import { loadState, mergeState, newcomerAgeDays, saveState } from './state.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
@@ -126,6 +127,19 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   const agents = await loadAgents();
   const today = isoDate();
   console.log(`[run] ${today} · ${agents.length} agents`);
+
+  // 0. 图标缓存（下载到 packages/web/public/icons，随仓库发布）
+  try {
+    const r = await syncIcons(agents, {
+      dir: join(ROOT, 'packages', 'web', 'public', 'icons'),
+      manifestPath: join(DATA_DIR, 'icons.json'),
+      concurrency: 6,
+      log: (s) => console.log(`[icons]${s}`),
+    });
+    console.log(`[icons] ${r.ok}/${agents.length} 已缓存${r.failed.length ? `，失败：${r.failed.join(', ')}` : ''}`);
+  } catch (e) {
+    console.warn(`[icons] 同步失败（不影响采集）：${e instanceof Error ? e.message : e}`);
+  }
 
   // 0. 首次收录状态（新秀榜口径，PRD §5.6）
   const statePath = join(DATA_DIR, 'agents-state.json');
@@ -256,6 +270,9 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
           version: typeof m.version === 'string' ? m.version : null,
           version_at: typeof m.version_at === 'string' ? m.version_at : null,
           version_source: typeof m.version_source === 'string' ? m.version_source : null,
+          release_tag: typeof m.release_tag === 'string' ? m.release_tag : null,
+          release_notes: typeof m.release_notes === 'string' ? m.release_notes : null,
+          release_url: typeof m.release_url === 'string' ? m.release_url : null,
         },
         data_level: level,
         flags,

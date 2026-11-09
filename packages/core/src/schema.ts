@@ -46,6 +46,8 @@ export const AgentSchema = z.object({
   oss_bucket: OssBucket,
   license_id: z.string().default('unknown'),
   homepage: z.string().url().optional(),
+  /** 人工校准的图标地址（优先级最高，用于自动发现拿错的场景） */
+  icon: z.string().url().optional(),
   sources: z.array(SourceSchema).min(1, '至少需要一个分发渠道'),
   note: z.string().optional(),
 });
@@ -99,7 +101,12 @@ export type MetricKey =
   /** 该版本的发布时间（能拿到才记） */
   | 'version_at'
   /** 版本来源渠道：npm | pypi | vscode | github */
-  | 'version_source';
+  | 'version_source'
+  /** 最近一次 GitHub release 的 tag / 标题 / 说明 / 链接 */
+  | 'release_tag'
+  | 'release_name'
+  | 'release_notes'
+  | 'release_url';
 
 export type Metrics = Partial<Record<MetricKey, number | string | null>>;
 
@@ -146,6 +153,10 @@ export type ScoreRow = {
     version_at: string | null;
     /** 版本来源渠道 */
     version_source: string | null;
+    /** 最近一次 release（用于详情页「更新说明」） */
+    release_tag: string | null;
+    release_notes: string | null;
+    release_url: string | null;
   };
   /** 出道天数（min(repo 创建至今, 首次收录至今)）；无信息则为 null */
   age_days: number | null;

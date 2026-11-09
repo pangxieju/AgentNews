@@ -7,6 +7,8 @@ import type { ScoreRow } from '@agentnews/core';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const DATA_DIR = join(ROOT, 'data');
 const AGENTS_YAML = join(ROOT, 'agents.yaml');
+const ICONS_MANIFEST = join(DATA_DIR, 'icons.json');
+const ICONS_DIR = join(ROOT, 'packages', 'web', 'public', 'icons');
 
 export type ScoreFile = { date: string; version: string; rows: ScoreRow[] };
 export type ArchiveFile = {
@@ -113,6 +115,60 @@ export function loadArchive(label: string): ArchiveFile | null {
   }
 }
 
+/* ───────────────── 版本历史 ───────────────── */
+
+export type VersionEntry = {
+  date: string;
+  version: string;
+  version_at: string | null;
+  source: string | null;
+};
+
+let _versions: Record<string, VersionEntry[]> | null = null;
+
+/**
+ * 从每日快照里还原版本变更（只保留版本号变化的那几天）。
+ * 一次解析全部快照并缓存，避免每个详情页重复读盘。
+ */
+export function loadVersionHistory(slug: string): VersionEntry[] {
+  if (!_versions) {
+    const out: Record<string, VersionEntry[]> = {};
+    const dir = join(DATA_DIR, 'snapshots');
+    if (existsSync(dir)) {
+      for (const f of readdirSync(dir).filter((x) => x.endsWith('.jsonl')).sort()) {
+        const date = f.slice(0, 10);
+        let raw = '';
+        try {
+          raw = readFileSync(join(dir, f), 'utf8');
+        } catch {
+          continue;
+        }
+        for (const line of raw.split('\n')) {
+          if (!line.trim()) continue;
+          let row: { slug?: string; metrics?: { version?: unknown; version_at?: unknown; version_source?: unknown } };
+          try {
+            row = JSON.parse(line);
+          } catch {
+            continue;
+          }
+          const v = row.metrics?.version;
+          if (typeof v !== 'string' || !v || !row.slug) continue;
+          const list = (out[row.slug] ??= []);
+          if (list.length && list[list.length - 1]!.version === v) continue;
+          list.push({
+            date,
+            version: v,
+            version_at: typeof row.metrics?.version_at === 'string' ? row.metrics.version_at : null,
+            source: typeof row.metrics?.version_source === 'string' ? row.metrics.version_source : null,
+          });
+        }
+      }
+    }
+    _versions = out;
+  }
+  return _versions[slug] ?? [];
+}
+
 /* ───────────────── Agent 元信息 / 图标 ───────────────── */
 
 export type AgentMeta = {
@@ -127,6 +183,20 @@ export type AgentMeta = {
   /** 主图标加载失败时的备选（favicon 服务之间互为兜底） */
   iconFallback: string | null;
 };
+
+type IconManifest = Record<string, { file: string; source: string; w: number; h: number }>;
+let _iconManifest: IconManifest | null = null;
+
+/** 读 data/icons.json（由 pipeline 每日下载图标后生成） */
+export function loadIconManifest(): IconManifest {
+  if (_iconManifest) return _iconManifest;
+  try {
+    _iconManifest = JSON.parse(readFileSync(ICONS_MANIFEST, 'utf8')) as IconManifest;
+  } catch {
+    _iconManifest = {};
+  }
+  return _iconManifest;
+}
 
 let _agentsMeta: Record<string, AgentMeta> | null = null;
 
@@ -161,13 +231,19 @@ export function loadAgentsMeta(): Record<string, AgentMeta> {
       } catch {
         hostname = null;
       }
-      const icon = owner
+      // 优先用仓库里缓存的图标（pipeline 每日下载），没有再退回远程
+      const cached = loadIconManifest()[a.slug];
+      const cachedOk = cached ? existsSync(join(ICONS_DIR, cached.file)) : false;
+      const remote = owner
         ? `https://github.com/${owner}.png?size=96`
         : hostname
           ? `https://icons.duckduckgo.com/ip3/${hostname}.ico`
           : null;
+      const icon = cachedOk ? `/icons/${cached!.file}` : remote;
       const iconFallback =
-        !owner && hostname ? `https://www.google.com/s2/favicons?domain=${hostname}&sz=64` : null;
+        !cachedOk && !owner && hostname
+          ? `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`
+          : null;
       out[a.slug] = {
         name: a.name ?? a.slug,
         vendor: a.vendor ?? null,
@@ -195,7 +271,7 @@ export { fmt, fmtPct, fmtSigned, formLabel, bucketText, bucketBadgeClass, FORM_O
 export type AgentEvent = {
   slug: string;
   name: string;
-  kind: 'release' | 'listed' | 'rank_jump' | 'newcomer' | 'license_change' | 'archived';
+  kind: 'release' | 'version' | 'listed' | 'rank_jump' | 'newcomer' | 'license_change' | 'archived';
   date: string;
   title: string;
   detail?: string;
@@ -222,6 +298,7 @@ export function loadEvents(): AgentEvent[] {
 
 export const EVENT_LABEL: Record<AgentEvent['kind'], string> = {
   release: '发版',
+  version: '版本',
   listed: '新收录',
   rank_jump: '排名变化',
   newcomer: '新秀',

@@ -12,7 +12,7 @@ const meta = loadAgentsMeta();
 const kind = Astro.url.searchParams.get('kind') ?? 'all';
 const filtered = kind === 'all' ? events : events.filter((e) => e.kind === kind);
 
-const kinds = ['all', 'release', 'listed', 'rank_jump', 'newcomer'] as const;
+const kinds = ['all', 'version', 'release', 'listed', 'rank_jump', 'newcomer'] as const;
 const kindLabel = (k: string) => (k === 'all' ? '全部' : EVENT_LABEL[k as keyof typeof EVENT_LABEL] ?? k);
 
 // 按日期分组
@@ -25,7 +25,12 @@ for (const e of filtered) {
 const dates = [...byDate.keys()].sort().reverse();
 
 const badgeClass = (k: string) =>
-  k === 'release' ? 'b-open' : k === 'listed' ? 'b-semi' : k === 'rank_jump' ? 'b-semi' : k === 'newcomer' ? 'b-open' : 'b-closed';
+  k === 'version' ? 'b-open'
+    : k === 'release' ? 'b-open'
+      : k === 'listed' ? 'b-semi'
+        : k === 'rank_jump' ? 'b-semi'
+          : k === 'newcomer' ? 'b-open'
+            : 'b-closed';
 ---
 
 <Base pageTitle="动态 · AgentNews">
@@ -68,6 +73,7 @@ const badgeClass = (k: string) =>
                         />
                         <span class="tags">
                           <a class="name" href={`/agent/${e.slug}/`}>{e.name}</a>
+                          {e.kind === 'version' && e.detail && <span class="muted">· {e.detail}</span>}
                           {e.kind === 'release' && e.detail && <span class="muted">· {e.detail}</span>}
                           {e.kind === 'rank_jump' && e.from != null && e.to != null && (
                             <span class="muted">· #{e.from} → #{e.to}</span>
