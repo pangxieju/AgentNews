@@ -19,11 +19,15 @@ import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/inde
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const YAML_PATH = join(ROOT, 'agents.yaml');
 
-// 加载仓库根目录的 .env（Node 24 内置，无需 dotenv）；文件不存在则静默跳过
-try {
-  process.loadEnvFile(join(ROOT, '.env'));
-} catch {
-  // 无 .env → 使用系统环境变量
+// 加载环境变量（Node 24 内置 loadEnvFile，无需 dotenv）
+// 优先级：系统环境变量 > .env.local > .env
+// 原理：loadEnvFile 不覆盖已存在的变量，所以先加载高优先级文件
+for (const file of ['.env.local', '.env']) {
+  try {
+    process.loadEnvFile(join(ROOT, file));
+  } catch {
+    // 文件不存在 → 跳过
+  }
 }
 const DATA_DIR = join(ROOT, 'data');
 

@@ -56,7 +56,9 @@ GITHUB_TOKEN=ghp_xxxxxxxxxxxx
 pnpm collect
 ```
 
-`.env` 已在 `.gitignore` 中排除，不会进 git。也可以直接用系统环境变量 `GITHUB_TOKEN`（优先级相同，`.env` 会被覆盖）。
+`.env` / `.env.local` 已在 `.gitignore` 中排除，不会进 git。
+
+**优先级：系统环境变量 > `.env.local` > `.env`**（两个文件都支持，`.env.local` 用于本地覆盖）。
 
 ---
 
