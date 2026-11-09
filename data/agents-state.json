@@ -21,7 +21,23 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
+    "amp": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "antigravity": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "atlas": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
     "atomic-agents": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "auggie": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
@@ -49,6 +65,14 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
+    "codebuddy": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "codegeex": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
     "codex-cli": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
@@ -57,7 +81,19 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
+    "comate": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "comet": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
     "continue": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "copilot-cli": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
@@ -81,11 +117,23 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
+    "droid": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "firebase-studio": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
     "forgecode": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
     "gemini-cli": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "gemini-code-assist": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
@@ -113,6 +161,14 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
+    "jules": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "junie": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
     "kilo-code": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
@@ -130,6 +186,10 @@
       "last_seen": "2026-11-09"
     },
     "langgraph": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "lingma": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },
@@ -178,6 +238,14 @@
       "last_seen": "2026-11-09"
     },
     "pydantic-ai": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "qoder": {
+      "first_listed": "2026-11-09",
+      "last_seen": "2026-11-09"
+    },
+    "qodo": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-09"
     },

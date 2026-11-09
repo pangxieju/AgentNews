@@ -256,6 +256,46 @@
       "malicious": 0,
       "latest": null,
       "url": "https://osv.dev/list?q=gpt-engineer&ecosystem=PyPI"
+    },
+    "amp": {
+      "package": "@ampcode/cli",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40ampcode%2Fcli&ecosystem=npm"
+    },
+    "droid": {
+      "package": "@factory/cli",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40factory%2Fcli&ecosystem=npm"
+    },
+    "copilot-cli": {
+      "package": "@github/copilot",
+      "ecosystem": "npm",
+      "advisories": 2,
+      "malicious": 0,
+      "latest": "2026-09-10T03:51:05.081988Z",
+      "url": "https://osv.dev/list?q=%40github%2Fcopilot&ecosystem=npm"
+    },
+    "auggie": {
+      "package": "@augmentcode/auggie",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40augmentcode%2Fauggie&ecosystem=npm"
+    },
+    "qoder": {
+      "package": "@qoder-ai/qodercli",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40qoder-ai%2Fqodercli&ecosystem=npm"
     }
   }
 }

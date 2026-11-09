@@ -29,11 +29,29 @@
     "w": 144,
     "h": 144
   },
+  "amp": {
+    "file": "amp.0b4b2dfc.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "antigravity": {
+    "file": "antigravity.7672b07c.png",
+    "source": "html",
+    "w": 276,
+    "h": 276
+  },
   "atomic-agents": {
     "file": "atomic-agents.394d564e.png",
     "source": "github",
     "w": 192,
     "h": 192
+  },
+  "auggie": {
+    "file": "auggie.cf9472e9.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
   },
   "autogen": {
     "file": "autogen.6bb00c38.png",
@@ -60,16 +78,28 @@
     "h": 180
   },
   "claude-code": {
-    "file": "claude-code.7dab5aca.png",
-    "source": "well-known",
-    "w": 180,
-    "h": 180
+    "file": "claude-code.76a62758.png",
+    "source": "html",
+    "w": 192,
+    "h": 192
   },
   "cline": {
     "file": "cline.10315b11.png",
     "source": "html",
     "w": 256,
     "h": 256
+  },
+  "codebuddy": {
+    "file": "codebuddy.b4a24794.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "codegeex": {
+    "file": "codegeex.03d530ab.png",
+    "source": "html",
+    "w": 312,
+    "h": 312
   },
   "codex-cli": {
     "file": "codex-cli.e9e1fb4e.png",
@@ -82,6 +112,12 @@
     "source": "html",
     "w": 0,
     "h": 0
+  },
+  "comate": {
+    "file": "comate.dfc11c7e.ico",
+    "source": "html",
+    "w": 40,
+    "h": 40
   },
   "continue": {
     "file": "continue.86917da3.png",
@@ -118,6 +154,18 @@
     "source": "html",
     "w": 568,
     "h": 568
+  },
+  "droid": {
+    "file": "droid.e4872399.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "firebase-studio": {
+    "file": "firebase-studio.13c73244.png",
+    "source": "html",
+    "w": 192,
+    "h": 192
   },
   "forgecode": {
     "file": "forgecode.e15d60f1.svg",
@@ -197,6 +245,12 @@
     "w": 256,
     "h": 256
   },
+  "lingma": {
+    "file": "lingma.a258aaa1.png",
+    "source": "html",
+    "w": 134,
+    "h": 133
+  },
   "llamaindex": {
     "file": "llamaindex.ce7a14fa.png",
     "source": "html",
@@ -268,6 +322,18 @@
     "source": "well-known",
     "w": 180,
     "h": 180
+  },
+  "qoder": {
+    "file": "qoder.cc7a5811.png",
+    "source": "html",
+    "w": 412,
+    "h": 412
+  },
+  "qodo": {
+    "file": "qodo.113e9437.webp",
+    "source": "html",
+    "w": 300,
+    "h": 300
   },
   "qwen-code": {
     "file": "qwen-code.fc44fda0.png",
