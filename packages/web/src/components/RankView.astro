@@ -53,12 +53,12 @@ const bucketLabel = bucket === 'open' ? '开源' : '闭源';
 
 <div class="page-head">
   <div class="crumbs">
-    <a href="/">AgentNews</a><span>/</span><span>Leaderboard</span>
+    <a href="/">AgentNews</a><span>/</span><span>Board</span>
   </div>
-  <span class="eyebrow">Leaderboard · {bucket === 'open' ? 'Open Source' : 'Closed Source'} · {date}</span>
+  <span class="eyebrow">{bucket === 'open' ? 'Open Source' : 'Closed Source'} · Snapshot {date}</span>
   <h1 id="rank-title">{bucketLabel}榜</h1>
   <p class="lede">
-    同形态内比较，跨形态不排名。点列头切换排序，点行进入详情 —— <a href="/about/">口径说明</a>
+    同形态内比较，跨形态不排名。列头可排序，行尾 <b>+</b> 加入对比 —— <a href="/about/">口径说明</a>
   </p>
 </div>
 

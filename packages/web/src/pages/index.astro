@@ -19,11 +19,10 @@ for (const r of rows) {
 
 const open = rows.filter((r) => r.oss_bucket !== 'closed');
 const closed = rows.filter((r) => r.oss_bucket === 'closed');
-const topOpen = [...open].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
-const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
+const topOpen = [...open].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 6);
+const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 6);
 const hasGrowth = rows.some((r) => r.growth_30d_pct != null);
 
-/** 形态入口：数量 + 前两名（分数排序，只取已上榜的） */
 const formCards = FORM_ORDER.map((f, i) => {
   const list = rows.filter((r) => r.form === f);
   const ranked = [...list].filter((r) => r.score != null).sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
@@ -47,42 +46,45 @@ const pick: PickRow[] = rows.map((r) => ({
   score: r.score,
   stars: r.metrics?.stars ?? null,
 }));
+
+/** 榜单列的最大值，用于行内微条 */
+const maxScore = Math.max(...rows.map((r) => r.score ?? 0), 1);
+const microWidth = (v: number | null) => (v == null ? 0 : Math.max(3, (v / maxScore) * 100));
 ---
 
 <Base pageTitle="AI Agent 排行榜">
-  <section class="hero">
+  <div class="measure-head">
     <div>
-      <span class="eyebrow">AI Agent Index · Daily Snapshot</span>
-      <h1 class="display">选 agent，先看<em>形态</em>，再比数据</h1>
+      <span class="eyebrow">AI Agent Index · Snapshot {date}</span>
+      <h1 class="display">把不同的生态<br />放到同一把尺子上</h1>
       <p class="lede">
-        {rows.length} 个 agent，按 7 种形态分组；GitHub star、npm / PyPI 下载、商店安装量先归一化再排名。
-        先用形态把范围缩到 3–5 个，再并排比较 —— 比翻五个标签页快。
+        GitHub star、npm / PyPI 下载、商店安装量先压缩到组内分位数，再按形态分组排名。
+        {rows.length} 个 agent，7 种形态，跨形态不比总量 —— 先看形态，再比数据。
       </p>
     </div>
-    <aside class="hero-rail">
-      <div class="stat-rail">
-        <div><span data-k>收录</span><b>{rows.length}</b></div>
-        <div><span data-k>开源</span><b>{open.length}</b></div>
-        <div><span data-k>闭源</span><b>{closed.length}</b></div>
-        <div><span data-k>形态</span><b>{formCards.length}</b></div>
-        <div><span data-k>快照</span><b>{date}</b></div>
-      </div>
-    </aside>
-  </section>
+    <div class="readout">
+      <div><span data-k>收录</span><b>{rows.length}</b></div>
+      <div><span data-k>开源</span><b>{open.length}</b></div>
+      <div><span data-k>闭源</span><b>{closed.length}</b></div>
+      <div><span data-k>形态</span><b>{formCards.length}</b></div>
+      <div><span data-k>在榜</span><b>{rows.filter((r) => r.rank_in_form != null).length}</b></div>
+    </div>
+  </div>
+  <div class="ruler" aria-hidden="true"></div>
 
   <section class="section">
     <div class="section-title">
-      <h2>第一步 / 选形态</h2>
-      <span class="muted">你在哪儿用它 · 跨形态不比较</span>
+      <h2>Step 01 · 选形态</h2>
+      <span class="muted">你在哪儿用它 → 跨形态不可比</span>
     </div>
     <div class="form-grid">
       {formCards.map((c) => (
         <a class="form-card" href={`/forms/${c.form}/`}>
-          <span class="idx">FORM {c.idx} · {c.count} 个</span>
+          <span class="idx">Form {c.idx} · {c.count}</span>
           <h3>{c.label} <em>{c.en}</em></h3>
           <p class="fit">{c.fit}</p>
           <div class="mini">
-            {c.top.length === 0 && <span class="subtle">暂无可比数据</span>}
+            {c.top.length === 0 && <span>暂无可比数据</span>}
             {c.top.map((t, i) => (
               <span>{i === 0 ? '①' : '②'} <b>{t.name}</b> {t.score}</span>
             ))}
@@ -95,18 +97,22 @@ const pick: PickRow[] = rows.map((r) => ({
 
   <section class="section">
     <div class="section-title">
-      <h2>第二步 / 找候选</h2>
-      <span class="muted">搜索 · 形态 · 归属</span>
+      <h2>Step 02 · 找候选</h2>
+      <span class="muted">搜索 / 形态 / 归属 · 榜单里按 + 加入对比</span>
     </div>
     <HomePicker client:load items={pick} meta={meta} />
   </section>
 
   <section class="section">
+    <div class="section-title">
+      <h2>Step 03 · 并排比</h2>
+      <span class="muted">同形态内逐行比 12 项</span>
+    </div>
     <div class="cta-band">
       <div>
         <span class="eyebrow">Compare</span>
         <h2>两个候选，逐行比</h2>
-        <p>同形态内比 Star、安装量、活跃度、License —— 综合分只告诉你谁在前，对比才告诉你差在哪。</p>
+        <p>综合分只说明谁在前，对比才说明差在哪：Star、安装量、活跃度、License、最近发版。</p>
       </div>
       <a class="btn btn-primary" href="/compare/">开始对比 →</a>
     </div>
@@ -114,106 +120,71 @@ const pick: PickRow[] = rows.map((r) => ({
 
   <section class="section">
     <div class="section-title">
-      <h2>证据 / 双榜</h2>
-      <span class="muted">同形态内排名 · 数据截至 {date}</span>
+      <h2>证据 · 双榜</h2>
+      <span class="muted">同形态内排名 · {date}</span>
     </div>
-    <div class="ledger-grid">
-      <div class="ledger">
-        <div class="ledger-head">
-          <span class="ledger-title">开源榜 <span class="idx">Open · {open.length}</span></span>
+    <div class="board-2">
+      <div class="board-col">
+        <div class="board-head">
+          <span class="board-title">开源榜 <span>Open · {open.length}</span></span>
           <a class="btn btn-sm" href="/top/open/all/month/">全部 →</a>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th class="pos">#</th><th>Agent</th><th class="num">综合分</th>
-              {hasGrowth && <th class="num">30d</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {topOpen.map((r, i) => (
-              <tr>
-                <td class="pos">{i + 1}</td>
-                <td>
-                  <div class="agent-cell">
-                    <AgentIcon
-                      slug={r.slug}
-                      name={r.name ?? r.slug}
-                      icon={meta[r.slug]?.icon}
-                      iconFallback={meta[r.slug]?.iconFallback}
-                      size={26}
-                    />
-                    <a class="name" href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
-                  </div>
-                </td>
-                <td class="num"><strong>{r.score ?? '—'}</strong></td>
-                {hasGrowth && <td class="num">{fmtPct(r.growth_30d_pct)}</td>}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div class="ledger-foot">OSI 协议 · MIT / Apache / AGPL 等 · {new Set(open.map((r) => r.form)).size} 种形态</div>
+        {topOpen.map((r, i) => (
+          <div class="board-row">
+            <span class="board-rank">{String(i + 1).padStart(2, '0')}</span>
+            <span class="board-name">
+              <AgentIcon
+                slug={r.slug}
+                name={r.name ?? r.slug}
+                icon={meta[r.slug]?.icon}
+                iconFallback={meta[r.slug]?.iconFallback}
+                size={20}
+              />
+              <a href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
+            </span>
+            <span class="board-val">
+              {hasGrowth && <span class="muted" style="font-size:10px">{fmtPct(r.growth_30d_pct)}</span>}
+              <b>{r.score ?? '—'}</b>
+            </span>
+          </div>
+        ))}
+        <div class="board-foot">OSI 协议 · MIT / Apache / AGPL 等</div>
       </div>
 
-      <div class="ledger">
-        <div class="ledger-head">
-          <span class="ledger-title">闭源榜 <span class="idx">Closed · {closed.length}</span></span>
+      <div class="board-col">
+        <div class="board-head">
+          <span class="board-title">闭源榜 <span>Closed · {closed.length}</span></span>
           <a class="btn btn-sm" href="/top/closed/all/month/">全部 →</a>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th class="pos">#</th><th>Agent</th><th class="num">综合分</th>
-              {hasGrowth && <th class="num">30d</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {topClosed.map((r, i) => (
-              <tr>
-                <td class="pos">{i + 1}</td>
-                <td>
-                  <div class="agent-cell">
-                    <AgentIcon
-                      slug={r.slug}
-                      name={r.name ?? r.slug}
-                      icon={meta[r.slug]?.icon}
-                      iconFallback={meta[r.slug]?.iconFallback}
-                      size={26}
-                    />
-                    <a class="name" href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
-                  </div>
-                </td>
-                <td class="num"><strong>{r.score ?? '—'}</strong></td>
-                {hasGrowth && <td class="num">{fmtPct(r.growth_30d_pct)}</td>}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div class="ledger-foot">专有 License · 数据缺失时按收录区展示（不排名）</div>
+        {topClosed.map((r, i) => (
+          <div class="board-row">
+            <span class="board-rank">{String(i + 1).padStart(2, '0')}</span>
+            <span class="board-name">
+              <AgentIcon
+                slug={r.slug}
+                name={r.name ?? r.slug}
+                icon={meta[r.slug]?.icon}
+                iconFallback={meta[r.slug]?.iconFallback}
+                size={20}
+              />
+              <a href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
+            </span>
+            <span class="board-val">
+              {hasGrowth && <span class="muted" style="font-size:10px">{fmtPct(r.growth_30d_pct)}</span>}
+              <b>{r.score ?? '—'}</b>
+            </span>
+          </div>
+        ))}
+        <div class="board-foot">专有 License · 数据缺失按收录区展示</div>
       </div>
+    </div>
+    <div class="scale-strip">
+      <span>归一化尺度</span>
+      <span class="scale-ramp" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <span>组内分位数 0 → 100</span>
+      <span style="margin-left:auto">缺失指标权重重分配 · 不编造名次</span>
     </div>
   </section>
 
-  <section class="section">
-    <div class="section-title">
-      <h2>口径 / Method</h2>
-      <span class="muted">综合分是观点，不是事实</span>
-    </div>
-    <div class="grid">
-      <div class="card">
-        <h2>可比的才排名</h2>
-        <div class="detail">CLI / IDE 插件 / IDE 应用 / 桌面 / 浏览器 / 框架 / 自主 —— 只在同形态内排名。</div>
-      </div>
-      <div class="card">
-        <h2>跨生态归一化</h2>
-        <div class="detail">Star、npm / PyPI 下载、商店安装量压缩到组内分位数再加权，避免单一生态主导。</div>
-      </div>
-      <div class="card">
-        <h2>可审计</h2>
-        <div class="detail">每日快照以 git 提交归档，算法权重、口径变更全部公开，数据可下载。</div>
-      </div>
-    </div>
-  </section>
-
-  {!data && <div class="warn" style="margin-top:24px">暂无数据：请先运行 <code>pnpm collect</code> 生成快照。</div>}
+  {!data && <div class="warn" style="margin-top:20px">暂无数据：请先运行 <code>pnpm collect</code> 生成快照。</div>}
 </Base>

@@ -75,7 +75,8 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
             <tr>
               <th class="pos">#</th><th>Agent</th><th>归属</th>
               <th class="num">综合分</th><th class="num">Star</th>
-              <th class="num hide-sm">安装量</th>{hasGrowth && <th class="num">30d 增速</th>}<th class="hide-sm">最近发版</th>
+              <th class="num hide-sm">安装量</th>{hasGrowth && <th class="num">30d 增速</th>}
+              <th class="hide-sm">当前版本</th><th class="hide-sm">最近发版</th>
             </tr>
           </thead>
           <tbody>
@@ -99,6 +100,10 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
                 <td class="num">{fmt(r.metrics?.stars)}</td>
                 <td class="num hide-sm">{fmt(r.metrics?.installs)}</td>
                 {hasGrowth && <td class="num">{fmtPct(r.growth_30d_pct)}</td>}
+                <td class="mono muted hide-sm" style="font-size:11px">
+                  {r.metrics?.version ?? '—'}
+                  {r.metrics?.version_at ? <span style="opacity:.6"> · {r.metrics.version_at.slice(0, 10)}</span> : ''}
+                </td>
                 <td class="mono muted hide-sm" style="font-size:11px">{r.metrics?.last_release ? r.metrics.last_release.slice(0, 10) : '—'}</td>
               </tr>
             ))}

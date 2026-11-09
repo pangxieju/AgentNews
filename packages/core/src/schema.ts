@@ -93,7 +93,13 @@ export type MetricKey =
   | 'pypi_monthly_dl'
   | 'vscode_installs'
   | 'discord_members'
-  | 'repo_created';
+  | 'repo_created'
+  /** 当前分发版本（npm / PyPI / 商店 / GitHub release tag） */
+  | 'version'
+  /** 该版本的发布时间（能拿到才记） */
+  | 'version_at'
+  /** 版本来源渠道：npm | pypi | vscode | github */
+  | 'version_source';
 
 export type Metrics = Partial<Record<MetricKey, number | string | null>>;
 
@@ -134,6 +140,12 @@ export type ScoreRow = {
     installs: number | null;
     activity: number | null;
     last_release: string | null;
+    /** 当前版本号（如 0.42.1 / v1.2.0），拿不到为 null */
+    version: string | null;
+    /** 版本发布时间（ISO 字符串），拿不到为 null */
+    version_at: string | null;
+    /** 版本来源渠道 */
+    version_source: string | null;
   };
   /** 出道天数（min(repo 创建至今, 首次收录至今)）；无信息则为 null */
   age_days: number | null;

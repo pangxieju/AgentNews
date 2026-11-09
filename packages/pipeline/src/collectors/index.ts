@@ -187,6 +187,32 @@ export async function collectPypi(pkg: string, retries = 3): Promise<{ pypi_mont
   throw new Error(lastErr || `pypi ${pkg}: failed`);
 }
 
+/** VS Code Marketplace：当前版本（extensions[0].versions[0].version）+ 更新日期 */
+export async function collectVscodeVersion(extensionId: string): Promise<{
+  version: string | null;
+  version_at: string | null;
+}> {
+  try {
+    const res = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json;api-version=3.0-preview.1' },
+      body: JSON.stringify({
+        filters: [{ criteria: [{ filterType: 7, value: extensionId }] }],
+        flags: 914,
+      }),
+    });
+    if (!res.ok) return { version: null, version_at: null };
+    const data = (await res.json()) as {
+      results?: { extensions?: { versions?: { version?: string; lastUpdated?: string }[] }[] }[];
+    };
+    const v = data.results?.[0]?.extensions?.[0]?.versions?.[0];
+    if (!v?.version) return { version: null, version_at: null };
+    return { version: v.version, version_at: v.lastUpdated ?? null };
+  } catch {
+    return { version: null, version_at: null };
+  }
+}
+
 /** VS Code Marketplace installs（非官方 API，低频） */
 export async function collectVscode(extensionId: string): Promise<{ vscode_installs: number }> {
   const res = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery', {
@@ -206,6 +232,71 @@ export async function collectVscode(extensionId: string): Promise<{ vscode_insta
   return { vscode_installs: installs };
 }
 
+/** npm：当前版本（dist-tags.latest）+ 发布时间（time[version]） */
+export async function collectNpmVersion(pkg: string): Promise<{
+  version: string | null;
+  version_at: string | null;
+}> {
+  try {
+    const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(pkg)}`, {
+      headers: { 'User-Agent': 'agentnews-m0 (github.com/pangxieju/AgentNews)' },
+    });
+    if (!res.ok) return { version: null, version_at: null };
+    const d = (await res.json()) as {
+      'dist-tags'?: { latest?: string };
+      time?: Record<string, string>;
+    };
+    const v = d['dist-tags']?.latest ?? null;
+    const at = v ? d.time?.[v] ?? null : null;
+    return { version: v, version_at: at ?? null };
+  } catch {
+    return { version: null, version_at: null };
+  }
+}
+
+/** PyPI：latest version（info.version） */
+export async function collectPypiVersion(pkg: string): Promise<{
+  version: string | null;
+  version_at: string | null;
+}> {
+  try {
+    const res = await fetch(`https://pypi.org/pypi/${encodeURIComponent(pkg)}/json`, {
+      headers: { 'User-Agent': 'agentnews-m0 (github.com/pangxieju/AgentNews)' },
+    });
+    if (!res.ok) return { version: null, version_at: null };
+    const d = (await res.json()) as {
+      info?: { version?: string };
+      urls?: Array<{ upload_time?: string }>;
+    };
+    const v = d.info?.version ?? null;
+    // 没有单版本发布时间，用最新上传文件时间近似（PyPI 不提供 release 时间）
+    const at = d.urls?.find((u) => u.upload_time)?.upload_time ?? null;
+    return { version: v, version_at: at ?? null };
+  } catch {
+    return { version: null, version_at: null };
+  }
+}
+
+/** GitHub release：tag_name + published_at（复用已有的 /releases/latest 请求思路，独立实现） */
+export async function collectGithubVersion(repo: string, token?: string): Promise<{
+  version: string | null;
+  version_at: string | null;
+}> {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'agentnews-m0',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, { headers });
+    if (!res.ok) return { version: null, version_at: null };
+    const d = (await res.json()) as { tag_name?: string; published_at?: string };
+    return { version: d.tag_name ?? null, version_at: d.published_at ?? null };
+  } catch {
+    return { version: null, version_at: null };
+  }
+}
+
 /** 按 source.kind 分发采集 */
 export async function collectAgent(
   agent: Agent,
@@ -223,14 +314,20 @@ export async function collectAgent(
       const g = await collectGitHub(ghPrimary.identifier, token, ghMode);
       Object.assign(metrics, g);
 
-      // API 通道才补 contributors / latest release（各 1 次请求，不浪费额度）
+      // API 通道才补 contributors / latest release / version（各 1 次请求，不浪费额度）
       if (ghMode === 'api') {
-        const [contrib, release] = await Promise.all([
+        const [contrib, release, ver] = await Promise.all([
           collectContributors(ghPrimary.identifier, token),
           collectLatestRelease(ghPrimary.identifier, token),
+          collectGithubVersion(ghPrimary.identifier, token),
         ]);
         if (contrib != null) metrics.contributors = contrib;
         if (release != null) metrics.last_release = release;
+        if (ver.version != null) {
+          metrics.version = ver.version;
+          metrics.version_at = ver.version_at;
+          metrics.version_source = 'github';
+        }
       }
     } catch (e) {
       errors.push(String(e instanceof Error ? e.message : e));
@@ -245,8 +342,16 @@ export async function collectAgent(
   const npmSrc: Source | undefined = npmSources.find((s) => s.is_primary) ?? npmSources[0];
   if (npmSrc) {
     try {
-      const n = await collectNpm(npmSrc.identifier);
+      const [n, v] = await Promise.all([
+        collectNpm(npmSrc.identifier),
+        collectNpmVersion(npmSrc.identifier),
+      ]);
       Object.assign(metrics, n);
+      if (v.version != null) {
+        metrics.version = v.version;
+        metrics.version_at = v.version_at;
+        metrics.version_source = 'npm';
+      }
     } catch (e) {
       errors.push(String(e instanceof Error ? e.message : e));
     }
@@ -254,8 +359,16 @@ export async function collectAgent(
   const pypiSrc = pypiSources.find((s) => s.is_primary) ?? pypiSources[0];
   if (pypiSrc) {
     try {
-      const p = await collectPypi(pypiSrc.identifier);
+      const [p, v] = await Promise.all([
+        collectPypi(pypiSrc.identifier),
+        collectPypiVersion(pypiSrc.identifier),
+      ]);
       Object.assign(metrics, p);
+      if (v.version != null) {
+        metrics.version = v.version;
+        metrics.version_at = v.version_at;
+        metrics.version_source = 'pypi';
+      }
     } catch (e) {
       errors.push(String(e instanceof Error ? e.message : e));
     }
@@ -263,8 +376,16 @@ export async function collectAgent(
   const vscodeSrc = vscodeSources.find((s) => s.is_primary) ?? vscodeSources[0];
   if (vscodeSrc) {
     try {
-      const v = await collectVscode(vscodeSrc.identifier);
+      const [v, vv] = await Promise.all([
+        collectVscode(vscodeSrc.identifier),
+        collectVscodeVersion(vscodeSrc.identifier),
+      ]);
       Object.assign(metrics, v);
+      if (vv.version != null) {
+        metrics.version = vv.version;
+        metrics.version_at = vv.version_at;
+        metrics.version_source = 'vscode';
+      }
     } catch (e) {
       errors.push(String(e instanceof Error ? e.message : e));
     }

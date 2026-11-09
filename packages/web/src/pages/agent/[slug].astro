@@ -116,6 +116,15 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
                 <span data-k>最近发版</span>
                 <b style="font-size:12.5px">{row.metrics?.last_release ? row.metrics.last_release.slice(0, 10) : '—'}</b>
               </div>
+              {row.metrics?.version && (
+                <div>
+                  <span data-k>当前版本</span>
+                  <b style="font-size:12.5px" title={row.metrics.version_source ?? undefined}>
+                    {row.metrics.version}
+                    {row.metrics.version_at ? ` · ${row.metrics.version_at.slice(0, 10)}` : ''}
+                  </b>
+                </div>
+              )}
               <div><span data-k>数据完整度</span><b style="font-size:12.5px">{row.data_level}</b></div>
             </div>
           </div>
@@ -171,6 +180,14 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
                 <tr><td>安装量</td><td class="num">{fmt(row.metrics?.installs)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
                 <tr><td>相对增速</td><td class="num">—</td><td class="num">—</td><td class="num">{fmtPct(row.growth_7d_pct)}</td><td class="num">{fmtPct(row.growth_30d_pct)}</td></tr>
                 <tr><td>活跃度</td><td class="num">{row.metrics?.activity != null ? row.metrics?.activity.toFixed(2) : '—'}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+                <tr>
+                  <td>当前版本</td>
+                  <td class="num mono" style="font-size:12px">
+                    {row.metrics?.version ?? '—'}
+                    {row.metrics?.version_at ? <span class="muted" style="opacity:.7"> · {row.metrics.version_at.slice(0, 10)}</span> : ''}
+                  </td>
+                  <td class="num">—</td><td class="num">—</td><td class="num">—</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -198,6 +215,7 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
                     <th class="pos">#</th><th>Agent</th>
                     <th class="num">综合分</th><th class="num">Star</th>
                     <th class="num hide-sm">安装量</th><th class="num hide-sm">30d 增速</th>
+                    <th class="hide-sm">版本</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -220,6 +238,10 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
                       <td class="num">{fmt(r.metrics?.stars)}</td>
                       <td class="num hide-sm">{fmt(r.metrics?.installs)}</td>
                       <td class="num hide-sm">{fmtPct(r.growth_30d_pct)}</td>
+                      <td class="mono muted hide-sm" style="font-size:11px">
+                        {r.metrics?.version ?? '—'}
+                        {r.metrics?.version_at ? <span style="opacity:.6"> · {r.metrics.version_at.slice(0, 10)}</span> : ''}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

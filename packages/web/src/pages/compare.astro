@@ -20,6 +20,8 @@ const items: CompareItem[] = (data?.rows ?? []).map((r) => ({
   growth_30d_pct: r.growth_30d_pct,
   license: meta[r.slug]?.license ?? null,
   last_release: r.metrics?.last_release ?? null,
+  version: r.metrics?.version ?? null,
+  version_at: r.metrics?.version_at ?? null,
   data_level: r.data_level,
   icon: meta[r.slug]?.icon ?? null,
   iconFallback: meta[r.slug]?.iconFallback ?? null,

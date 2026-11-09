@@ -17,6 +17,8 @@ export type CompareItem = {
   growth_30d_pct: number | null;
   license: string | null;
   last_release: string | null;
+  version: string | null;
+  version_at: string | null;
   data_level: string;
   icon: string | null;
   iconFallback: string | null;
@@ -55,6 +57,7 @@ const ROWS: Row[] = [
   { kind: 'text', key: 'bucket', label: '归属', get: (i) => bucketText(i.oss_bucket) },
   { kind: 'text', key: 'license', label: 'License', get: (i) => i.license ?? '—' },
   { kind: 'text', key: 'release', label: '最近发版', get: (i) => (i.last_release ? i.last_release.slice(0, 10) : '—') },
+  { kind: 'text', key: 'version', label: '当前版本', get: (i) => (i.version ? (i.version_at ? `${i.version} · ${i.version_at.slice(0, 10)}` : i.version) : '—') },
 ];
 
 export default function CompareBoard({ items }: Props) {
