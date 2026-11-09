@@ -184,6 +184,13 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       if (installs != null && installs >= 1_000_000) flags.push('installs_may_include_ci');
       if (group.length <= 2 && level !== 'L3') flags.push('small_group');
 
+      // 出道天数（PRD §5.6 新秀资格）
+      const createdAt = typeof m.repo_created === 'string' ? m.repo_created : null;
+      const ageDays = createdAt
+        ? Math.floor((Date.now() - new Date(createdAt).getTime()) / 86_400_000)
+        : null;
+      if (ageDays != null && ageDays <= 180) flags.push('newcomer');
+
       rows.push({
         slug: item.slug,
         name: agentName.get(item.slug) ?? item.slug,
@@ -208,6 +215,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         },
         data_level: level,
         flags,
+        age_days: ageDays,
         score_version: SCORE_VERSION,
       });
     }
@@ -219,7 +227,54 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   await writeFile(scorePath, JSON.stringify({ date: today, version: SCORE_VERSION, rows }, null, 2));
   console.log(`[scores] ${rows.length} rows → ${scorePath}`);
 
+  // 5. 周期归档（PRD §5.5）：周日冻结周档，月末冻结月档
+  const archived = await archiveIfNeeded(today, rows);
+  if (archived.length) console.log(`[archive] ${archived.join(', ')}`);
+
   return { snapshotPath, scorePath, rows };
+}
+
+/** ISO 8601 周号（周一为周起点） */
+function isoWeek(d: Date): { year: number; week: number } {
+  const t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  const dayNum = t.getUTCDay() || 7; // 周日=7
+  t.setUTCDate(t.getUTCDate() + 4 - dayNum); // 移到本周周四
+  const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((t.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  return { year: t.getUTCFullYear(), week };
+}
+
+/** 周日/月末冻结归档；幂等（同一周期重复跑覆盖同文件） */
+async function archiveIfNeeded(today: string, rows: ScoreRow[]): Promise<string[]> {
+  const d = new Date(today + 'T00:00:00Z');
+  const dow = d.getUTCDay(); // 0=周日
+  const tomorrow = new Date(d);
+  tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+  const isMonthEnd = tomorrow.getUTCMonth() !== d.getUTCMonth();
+  const isWeekEnd = dow === 0;
+
+  const written: string[] = [];
+  const dir = join(DATA_DIR, 'archive');
+  await mkdir(dir, { recursive: true });
+
+  if (isWeekEnd) {
+    const { year, week } = isoWeek(d);
+    const name = `${year}-W${String(week).padStart(2, '0')}`;
+    await writeFile(
+      join(dir, `${name}.json`),
+      JSON.stringify({ period: 'week', label: name, end: today, version: SCORE_VERSION, rows }, null, 2),
+    );
+    written.push(name);
+  }
+  if (isMonthEnd) {
+    const name = today.slice(0, 7); // YYYY-MM
+    await writeFile(
+      join(dir, `${name}.json`),
+      JSON.stringify({ period: 'month', label: name, end: today, version: SCORE_VERSION, rows }, null, 2),
+    );
+    written.push(name);
+  }
+  return written;
 }
 
 function growthPctSafe(

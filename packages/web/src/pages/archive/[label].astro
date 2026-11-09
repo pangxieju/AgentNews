@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import { loadArchives, loadArchive, fmt, fmtPct, formLabel } from '../../lib/data';
+
+export function getStaticPaths() {
+  const archives = loadArchives();
+  return archives.map((a) => ({ params: { label: a.label } }));
+}
+
+const { label } = Astro.params;
+const a = loadArchive(label!);
+if (!a) Astro.redirect('/archive');
+
+const FORM_ORDER = ['cli', 'ide-plugin', 'ide-app', 'desktop', 'browser', 'framework', 'autonomous'];
+const groups = FORM_ORDER
+  .map((f) => ({
+    form: f,
+    rows: a!.rows.filter((r) => r.form === f).sort((x, y) => (x.rank_in_form ?? 999) - (y.rank_in_form ?? 999)),
+  }))
+  .filter((g) => g.rows.length > 0);
+---
+
+<Base pageTitle={`${label} 归档 · AgentRank`}>
+  <a href="/archive" class="muted">← 归档列表</a>
+  <h1 style="margin-top:0.5rem">{label} <span class="muted">· {a?.period === 'week' ? '周档' : '月档'}</span></h1>
+  <p class="muted">结算日 {a?.end} · 归档为冻结快照，不随新数据变化</p>
+
+  {groups.map((g) => (
+    <section style="margin-top:1.8rem">
+      <h2 style="font-size:1.05rem;margin-bottom:0.2rem">{formLabel(g.form)}</h2>
+      <table>
+        <tr><th>#</th><th>Agent</th><th class="num">综合分</th><th class="num">Star</th><th class="num">30d 增速</th><th class="num">安装量</th></tr>
+        {g.rows.map((r) => (
+          <tr>
+            <td class="pos">{r.rank_in_form ?? '—'}</td>
+            <td>
+              <a href={`/agent/${r.slug}`}>{r.name ?? r.slug}</a>
+              <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
+                {r.oss_bucket === 'open' ? '开源' : r.oss_bucket === 'semi' ? '半开源' : '闭源'}
+              </span>
+            </td>
+            <td class="num"><strong>{r.score ?? '—'}</strong></td>
+            <td class="num">{fmt(r.metrics?.stars)}</td>
+            <td class="num">{fmtPct(r.growth_30d_pct)}</td>
+            <td class="num">{fmt(r.metrics?.installs)}</td>
+          </tr>
+        ))}
+      </table>
+    </section>
+  ))}
+</Base>

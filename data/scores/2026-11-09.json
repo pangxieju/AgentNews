@@ -7,7 +7,7 @@
       "name": "Codex CLI",
       "form": "cli",
       "oss_bucket": "open",
-      "score": 86.7,
+      "score": 92,
       "rank_in_form": 1,
       "delta_1d": null,
       "delta_7d": null,
@@ -25,6 +25,7 @@
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 574,
       "score_version": "v1"
     },
     {
@@ -32,7 +33,7 @@
       "name": "OpenCode",
       "form": "cli",
       "oss_bucket": "open",
-      "score": 71.4,
+      "score": 78.1,
       "rank_in_form": 2,
       "delta_1d": null,
       "delta_7d": null,
@@ -50,6 +51,7 @@
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 557,
       "score_version": "v1"
     },
     {
@@ -57,7 +59,7 @@
       "name": "Pi",
       "form": "cli",
       "oss_bucket": "open",
-      "score": 65.2,
+      "score": 75.1,
       "rank_in_form": 3,
       "delta_1d": null,
       "delta_7d": null,
@@ -75,6 +77,7 @@
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 456,
       "score_version": "v1"
     },
     {
@@ -82,7 +85,7 @@
       "name": "OpenHands",
       "form": "cli",
       "oss_bucket": "open",
-      "score": 59.7,
+      "score": 65.5,
       "rank_in_form": 4,
       "delta_1d": null,
       "delta_7d": null,
@@ -94,10 +97,59 @@
         "forks": 12407,
         "contributors": null,
         "installs": null,
-        "activity": 0.594
+        "activity": 0.593
       },
       "data_level": "L2",
       "flags": [],
+      "age_days": 970,
+      "score_version": "v1"
+    },
+    {
+      "slug": "gemini-cli",
+      "name": "Gemini CLI",
+      "form": "cli",
+      "oss_bucket": "open",
+      "score": 65.2,
+      "rank_in_form": 5,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 108771,
+        "forks": 14931,
+        "contributors": null,
+        "installs": 482840,
+        "activity": 0.593
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 570,
+      "score_version": "v1"
+    },
+    {
+      "slug": "goose",
+      "name": "Goose",
+      "form": "cli",
+      "oss_bucket": "open",
+      "score": 60.7,
+      "rank_in_form": 6,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 56343,
+        "forks": 6567,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.593
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 807,
       "score_version": "v1"
     },
     {
@@ -105,8 +157,8 @@
       "name": "Claude Code",
       "form": "cli",
       "oss_bucket": "closed",
-      "score": 54.2,
-      "rank_in_form": 5,
+      "score": 56.6,
+      "rank_in_form": 7,
       "delta_1d": null,
       "delta_7d": null,
       "delta_30d": null,
@@ -123,52 +175,7 @@
       "flags": [
         "installs_may_include_ci"
       ],
-      "score_version": "v1"
-    },
-    {
-      "slug": "gemini-cli",
-      "name": "Gemini CLI",
-      "form": "cli",
-      "oss_bucket": "open",
-      "score": 51.7,
-      "rank_in_form": 6,
-      "delta_1d": null,
-      "delta_7d": null,
-      "delta_30d": null,
-      "growth_7d_pct": null,
-      "growth_30d_pct": null,
-      "metrics": {
-        "stars": 108771,
-        "forks": 14931,
-        "contributors": null,
-        "installs": 482840,
-        "activity": 0.593
-      },
-      "data_level": "L1",
-      "flags": [],
-      "score_version": "v1"
-    },
-    {
-      "slug": "goose",
-      "name": "Goose",
-      "form": "cli",
-      "oss_bucket": "open",
-      "score": 40,
-      "rank_in_form": 7,
-      "delta_1d": null,
-      "delta_7d": null,
-      "delta_30d": null,
-      "growth_7d_pct": null,
-      "growth_30d_pct": null,
-      "metrics": {
-        "stars": 56343,
-        "forks": 6567,
-        "contributors": null,
-        "installs": null,
-        "activity": 0.593
-      },
-      "data_level": "L2",
-      "flags": [],
+      "age_days": null,
       "score_version": "v1"
     },
     {
@@ -176,7 +183,7 @@
       "name": "Qwen Code",
       "form": "cli",
       "oss_bucket": "open",
-      "score": 34.6,
+      "score": 56.1,
       "rank_in_form": 8,
       "delta_1d": null,
       "delta_7d": null,
@@ -192,14 +199,15 @@
       },
       "data_level": "L1",
       "flags": [],
+      "age_days": 500,
       "score_version": "v1"
     },
     {
-      "slug": "kimi-cli",
-      "name": "Kimi CLI",
+      "slug": "forgecode",
+      "name": "Forge",
       "form": "cli",
-      "oss_bucket": "closed",
-      "score": 18.5,
+      "oss_bucket": "open",
+      "score": 37.6,
       "rank_in_form": 9,
       "delta_1d": null,
       "delta_7d": null,
@@ -207,14 +215,39 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": null,
-        "forks": null,
+        "stars": 7631,
+        "forks": 1454,
         "contributors": null,
-        "installs": 73421,
-        "activity": 0
+        "installs": null,
+        "activity": 0.593
       },
       "data_level": "L2",
       "flags": [],
+      "age_days": 700,
+      "score_version": "v1"
+    },
+    {
+      "slug": "crush",
+      "name": "Crush",
+      "form": "cli",
+      "oss_bucket": "semi",
+      "score": 35.8,
+      "rank_in_form": 10,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 28993,
+        "forks": 2358,
+        "contributors": null,
+        "installs": 18481,
+        "activity": 0.593
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 536,
       "score_version": "v1"
     },
     {
@@ -222,8 +255,8 @@
       "name": "Aider",
       "form": "cli",
       "oss_bucket": "open",
-      "score": 14.4,
-      "rank_in_form": 10,
+      "score": 33.9,
+      "rank_in_form": 11,
       "delta_1d": null,
       "delta_7d": null,
       "delta_30d": null,
@@ -238,6 +271,103 @@
       },
       "data_level": "L1",
       "flags": [],
+      "age_days": 1279,
+      "score_version": "v1"
+    },
+    {
+      "slug": "kimi-cli",
+      "name": "Kimi CLI",
+      "form": "cli",
+      "oss_bucket": "closed",
+      "score": 28,
+      "rank_in_form": 12,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": null,
+        "forks": null,
+        "contributors": null,
+        "installs": 73421,
+        "activity": 0
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": null,
+      "score_version": "v1"
+    },
+    {
+      "slug": "plandex",
+      "name": "Plandex",
+      "form": "cli",
+      "oss_bucket": "open",
+      "score": 22.9,
+      "rank_in_form": 13,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 15904,
+        "forks": 1191,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 1111,
+      "score_version": "v1"
+    },
+    {
+      "slug": "mistral-vibe",
+      "name": "Mistral Vibe",
+      "form": "cli",
+      "oss_bucket": "open",
+      "score": 22.4,
+      "rank_in_form": 14,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 5339,
+        "forks": 790,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.577
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 335,
+      "score_version": "v1"
+    },
+    {
+      "slug": "iflow-cli",
+      "name": "iFlow CLI",
+      "form": "cli",
+      "oss_bucket": "open",
+      "score": 8,
+      "rank_in_form": 15,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 5076,
+        "forks": 412,
+        "contributors": null,
+        "installs": 365,
+        "activity": 0
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 469,
       "score_version": "v1"
     },
     {
@@ -263,6 +393,7 @@
       "flags": [
         "no_data"
       ],
+      "age_days": null,
       "score_version": "v1"
     },
     {
@@ -270,7 +401,7 @@
       "name": "Cline",
       "form": "ide-plugin",
       "oss_bucket": "open",
-      "score": 81.3,
+      "score": 87,
       "rank_in_form": 1,
       "delta_1d": null,
       "delta_7d": null,
@@ -281,13 +412,14 @@
         "stars": 71453,
         "forks": 7889,
         "contributors": null,
-        "installs": 5869944,
+        "installs": 5875380,
         "activity": 0.587
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 855,
       "score_version": "v1"
     },
     {
@@ -295,7 +427,7 @@
       "name": "Continue",
       "form": "ide-plugin",
       "oss_bucket": "open",
-      "score": 56.3,
+      "score": 67.2,
       "rank_in_form": 2,
       "delta_1d": null,
       "delta_7d": null,
@@ -306,13 +438,14 @@
         "stars": 36429,
         "forks": 5557,
         "contributors": null,
-        "installs": 4518929,
+        "installs": 4521142,
         "activity": 0.578
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 1264,
       "score_version": "v1"
     },
     {
@@ -320,7 +453,7 @@
       "name": "Kilo Code",
       "form": "ide-plugin",
       "oss_bucket": "open",
-      "score": 39.6,
+      "score": 46.8,
       "rank_in_form": 3,
       "delta_1d": null,
       "delta_7d": null,
@@ -336,6 +469,7 @@
       },
       "data_level": "L1",
       "flags": [],
+      "age_days": 608,
       "score_version": "v1"
     },
     {
@@ -343,7 +477,7 @@
       "name": "Roo Code",
       "form": "ide-plugin",
       "oss_bucket": "open",
-      "score": 22.9,
+      "score": 34.5,
       "rank_in_form": 4,
       "delta_1d": null,
       "delta_7d": null,
@@ -361,6 +495,181 @@
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 738,
+      "score_version": "v1"
+    },
+    {
+      "slug": "cody",
+      "name": "Cody",
+      "form": "ide-plugin",
+      "oss_bucket": "open",
+      "score": 18,
+      "rank_in_form": 5,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 3802,
+        "forks": 484,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 1217,
+      "score_version": "v1"
+    },
+    {
+      "slug": "amazon-q",
+      "name": "Amazon Q Developer",
+      "form": "ide-plugin",
+      "oss_bucket": "closed",
+      "score": null,
+      "rank_in_form": null,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": null,
+        "forks": null,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L3",
+      "flags": [
+        "no_data"
+      ],
+      "age_days": null,
+      "score_version": "v1"
+    },
+    {
+      "slug": "github-copilot",
+      "name": "GitHub Copilot",
+      "form": "ide-plugin",
+      "oss_bucket": "closed",
+      "score": null,
+      "rank_in_form": null,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": null,
+        "forks": null,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L3",
+      "flags": [
+        "no_data"
+      ],
+      "age_days": null,
+      "score_version": "v1"
+    },
+    {
+      "slug": "tabnine",
+      "name": "Tabnine",
+      "form": "ide-plugin",
+      "oss_bucket": "closed",
+      "score": null,
+      "rank_in_form": null,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": null,
+        "forks": null,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L3",
+      "flags": [
+        "no_data"
+      ],
+      "age_days": null,
+      "score_version": "v1"
+    },
+    {
+      "slug": "zed",
+      "name": "Zed",
+      "form": "ide-app",
+      "oss_bucket": "open",
+      "score": 86.9,
+      "rank_in_form": 1,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 94340,
+        "forks": 11555,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.594
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 2087,
+      "score_version": "v1"
+    },
+    {
+      "slug": "theia",
+      "name": "Eclipse Theia",
+      "form": "ide-app",
+      "oss_bucket": "open",
+      "score": 44,
+      "rank_in_form": 2,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 21744,
+        "forks": 2935,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.586
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 3544,
+      "score_version": "v1"
+    },
+    {
+      "slug": "void-editor",
+      "name": "Void",
+      "form": "ide-app",
+      "oss_bucket": "open",
+      "score": 40.5,
+      "rank_in_form": 3,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 28712,
+        "forks": 2659,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 788,
       "score_version": "v1"
     },
     {
@@ -386,6 +695,33 @@
       "flags": [
         "no_data"
       ],
+      "age_days": null,
+      "score_version": "v1"
+    },
+    {
+      "slug": "kiro",
+      "name": "Kiro",
+      "form": "ide-app",
+      "oss_bucket": "closed",
+      "score": null,
+      "rank_in_form": null,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": null,
+        "forks": null,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L3",
+      "flags": [
+        "no_data"
+      ],
+      "age_days": null,
       "score_version": "v1"
     },
     {
@@ -411,6 +747,7 @@
       "flags": [
         "no_data"
       ],
+      "age_days": null,
       "score_version": "v1"
     },
     {
@@ -436,6 +773,7 @@
       "flags": [
         "no_data"
       ],
+      "age_days": null,
       "score_version": "v1"
     },
     {
@@ -461,6 +799,7 @@
       "flags": [
         "no_data"
       ],
+      "age_days": null,
       "score_version": "v1"
     },
     {
@@ -468,7 +807,7 @@
       "name": "Browser-use",
       "form": "browser",
       "oss_bucket": "open",
-      "score": 76.4,
+      "score": 82.8,
       "rank_in_form": 1,
       "delta_1d": null,
       "delta_7d": null,
@@ -486,6 +825,7 @@
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 738,
       "score_version": "v1"
     },
     {
@@ -493,7 +833,7 @@
       "name": "Open Interpreter",
       "form": "browser",
       "oss_bucket": "open",
-      "score": 45.8,
+      "score": 63.3,
       "rank_in_form": 2,
       "delta_1d": null,
       "delta_7d": null,
@@ -509,6 +849,7 @@
       },
       "data_level": "L1",
       "flags": [],
+      "age_days": 1213,
       "score_version": "v1"
     },
     {
@@ -516,7 +857,7 @@
       "name": "Stagehand",
       "form": "browser",
       "oss_bucket": "open",
-      "score": 16.7,
+      "score": 32.5,
       "rank_in_form": 3,
       "delta_1d": null,
       "delta_7d": null,
@@ -532,6 +873,81 @@
       },
       "data_level": "L2",
       "flags": [],
+      "age_days": 959,
+      "score_version": "v1"
+    },
+    {
+      "slug": "nanobrowser",
+      "name": "Nanobrowser",
+      "form": "browser",
+      "oss_bucket": "open",
+      "score": 32.5,
+      "rank_in_form": 4,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 14262,
+        "forks": 1525,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.595
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 677,
+      "score_version": "v1"
+    },
+    {
+      "slug": "skyvern",
+      "name": "Skyvern",
+      "form": "browser",
+      "oss_bucket": "open",
+      "score": 27.2,
+      "rank_in_form": 5,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 23360,
+        "forks": 2233,
+        "contributors": null,
+        "installs": 1366,
+        "activity": 0.594
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 984,
+      "score_version": "v1"
+    },
+    {
+      "slug": "langchain",
+      "name": "LangChain",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 86.4,
+      "rank_in_form": 1,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 149179,
+        "forks": 25087,
+        "contributors": null,
+        "installs": 39773479,
+        "activity": 0.593
+      },
+      "data_level": "L1",
+      "flags": [
+        "installs_may_include_ci"
+      ],
+      "age_days": 1483,
       "score_version": "v1"
     },
     {
@@ -539,8 +955,8 @@
       "name": "LangGraph",
       "form": "framework",
       "oss_bucket": "open",
-      "score": 65.3,
-      "rank_in_form": 1,
+      "score": 74.2,
+      "rank_in_form": 2,
       "delta_1d": null,
       "delta_7d": null,
       "delta_30d": null,
@@ -557,6 +973,7 @@
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 1187,
       "score_version": "v1"
     },
     {
@@ -564,8 +981,8 @@
       "name": "CrewAI",
       "form": "framework",
       "oss_bucket": "open",
-      "score": 63.9,
-      "rank_in_form": 2,
+      "score": 72.3,
+      "rank_in_form": 3,
       "delta_1d": null,
       "delta_7d": null,
       "delta_30d": null,
@@ -580,6 +997,7 @@
       },
       "data_level": "L1",
       "flags": [],
+      "age_days": 1108,
       "score_version": "v1"
     },
     {
@@ -587,8 +1005,8 @@
       "name": "OpenAI Agents SDK",
       "form": "framework",
       "oss_bucket": "open",
-      "score": 54.2,
-      "rank_in_form": 3,
+      "score": 69.9,
+      "rank_in_form": 4,
       "delta_1d": null,
       "delta_7d": null,
       "delta_30d": null,
@@ -598,44 +1016,22 @@
         "stars": 30549,
         "forks": 5010,
         "contributors": null,
-        "installs": 2904950,
+        "installs": null,
         "activity": 0.594
       },
-      "data_level": "L1",
+      "data_level": "L2",
       "flags": [
-        "installs_may_include_ci"
+        "partial_data"
       ],
+      "age_days": 607,
       "score_version": "v1"
     },
     {
-      "slug": "autogen",
-      "name": "AutoGen",
+      "slug": "vercel-ai-sdk",
+      "name": "Vercel AI SDK",
       "form": "framework",
       "oss_bucket": "open",
-      "score": 43.1,
-      "rank_in_form": 4,
-      "delta_1d": null,
-      "delta_7d": null,
-      "delta_30d": null,
-      "growth_7d_pct": null,
-      "growth_30d_pct": null,
-      "metrics": {
-        "stars": 61743,
-        "forks": 9381,
-        "contributors": null,
-        "installs": 88649,
-        "activity": 0.525
-      },
-      "data_level": "L1",
-      "flags": [],
-      "score_version": "v1"
-    },
-    {
-      "slug": "pydantic-ai",
-      "name": "Pydantic AI",
-      "form": "framework",
-      "oss_bucket": "open",
-      "score": 41.7,
+      "score": 66.2,
       "rank_in_form": 5,
       "delta_1d": null,
       "delta_7d": null,
@@ -643,16 +1039,67 @@
       "growth_7d_pct": null,
       "growth_30d_pct": null,
       "metrics": {
-        "stars": 21085,
-        "forks": 3127,
+        "stars": 27805,
+        "forks": 5549,
         "contributors": null,
-        "installs": 1256215,
-        "activity": 0.594
+        "installs": 45312935,
+        "activity": 0.593
       },
       "data_level": "L1",
       "flags": [
         "installs_may_include_ci"
       ],
+      "age_days": 1265,
+      "score_version": "v1"
+    },
+    {
+      "slug": "llamaindex",
+      "name": "LlamaIndex",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 56.8,
+      "rank_in_form": 6,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 52842,
+        "forks": 8532,
+        "contributors": null,
+        "installs": 685499,
+        "activity": 0.586
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 1467,
+      "score_version": "v1"
+    },
+    {
+      "slug": "mastra",
+      "name": "Mastra",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 54.8,
+      "rank_in_form": 7,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 29399,
+        "forks": 3085,
+        "contributors": null,
+        "installs": 1246429,
+        "activity": 0.593
+      },
+      "data_level": "L1",
+      "flags": [
+        "installs_may_include_ci"
+      ],
+      "age_days": 824,
       "score_version": "v1"
     },
     {
@@ -660,8 +1107,8 @@
       "name": "Agno",
       "form": "framework",
       "oss_bucket": "open",
-      "score": 31.9,
-      "rank_in_form": 6,
+      "score": 47.2,
+      "rank_in_form": 8,
       "delta_1d": null,
       "delta_7d": null,
       "delta_30d": null,
@@ -676,6 +1123,379 @@
       },
       "data_level": "L1",
       "flags": [],
+      "age_days": 1649,
+      "score_version": "v1"
+    },
+    {
+      "slug": "google-adk",
+      "name": "Google ADK",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 46.1,
+      "rank_in_form": 9,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 22137,
+        "forks": 4314,
+        "contributors": null,
+        "installs": 2358844,
+        "activity": 0.589
+      },
+      "data_level": "L1",
+      "flags": [
+        "installs_may_include_ci"
+      ],
+      "age_days": 586,
+      "score_version": "v1"
+    },
+    {
+      "slug": "pydantic-ai",
+      "name": "Pydantic AI",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 45.6,
+      "rank_in_form": 10,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 21085,
+        "forks": 3127,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.594
+      },
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "age_days": 870,
+      "score_version": "v1"
+    },
+    {
+      "slug": "autogen",
+      "name": "AutoGen",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 44.7,
+      "rank_in_form": 11,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 61743,
+        "forks": 9381,
+        "contributors": null,
+        "installs": 88649,
+        "activity": 0.525
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 1178,
+      "score_version": "v1"
+    },
+    {
+      "slug": "semantic-kernel",
+      "name": "Semantic Kernel",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 41.5,
+      "rank_in_form": 12,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 28745,
+        "forks": 4856,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.587
+      },
+      "data_level": "L2",
+      "flags": [
+        "partial_data"
+      ],
+      "age_days": 1350,
+      "score_version": "v1"
+    },
+    {
+      "slug": "strands-agents",
+      "name": "Strands Agents",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 41.2,
+      "rank_in_form": 13,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 9075,
+        "forks": 1482,
+        "contributors": null,
+        "installs": 8659583,
+        "activity": 0.592
+      },
+      "data_level": "L1",
+      "flags": [
+        "installs_may_include_ci"
+      ],
+      "age_days": 543,
+      "score_version": "v1"
+    },
+    {
+      "slug": "agent-framework",
+      "name": "Agent Framework",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 34,
+      "rank_in_form": 14,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 14580,
+        "forks": 2591,
+        "contributors": null,
+        "installs": 44316,
+        "activity": 0.596
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 559,
+      "score_version": "v1"
+    },
+    {
+      "slug": "haystack",
+      "name": "Haystack",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 33.5,
+      "rank_in_form": 15,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 26943,
+        "forks": 3406,
+        "contributors": null,
+        "installs": 132173,
+        "activity": 0.587
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 2551,
+      "score_version": "v1"
+    },
+    {
+      "slug": "smolagents",
+      "name": "smolagents",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 33.3,
+      "rank_in_form": 16,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 30262,
+        "forks": 3200,
+        "contributors": null,
+        "installs": 99308,
+        "activity": 0.565
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 703,
+      "score_version": "v1"
+    },
+    {
+      "slug": "atomic-agents",
+      "name": "Atomic Agents",
+      "form": "framework",
+      "oss_bucket": "open",
+      "score": 4.6,
+      "rank_in_form": 17,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 6320,
+        "forks": 561,
+        "contributors": null,
+        "installs": 2733,
+        "activity": 0.532
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 888,
+      "score_version": "v1"
+    },
+    {
+      "slug": "autogpt",
+      "name": "AutoGPT",
+      "form": "autonomous",
+      "oss_bucket": "semi",
+      "score": 89.1,
+      "rank_in_form": 1,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 187933,
+        "forks": 45898,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.593
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 1333,
+      "score_version": "v1"
+    },
+    {
+      "slug": "gpt-engineer",
+      "name": "gpt-engineer",
+      "form": "autonomous",
+      "oss_bucket": "open",
+      "score": 51,
+      "rank_in_form": 2,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 54965,
+        "forks": 7264,
+        "contributors": null,
+        "installs": 186,
+        "activity": 0
+      },
+      "data_level": "L1",
+      "flags": [],
+      "age_days": 1289,
+      "score_version": "v1"
+    },
+    {
+      "slug": "agent-zero",
+      "name": "Agent Zero",
+      "form": "autonomous",
+      "oss_bucket": "open",
+      "score": 39.1,
+      "rank_in_form": 3,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 19794,
+        "forks": 3871,
+        "contributors": null,
+        "installs": null,
+        "activity": 0.576
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 881,
+      "score_version": "v1"
+    },
+    {
+      "slug": "babyagi",
+      "name": "BabyAGI",
+      "form": "autonomous",
+      "oss_bucket": "open",
+      "score": 32.8,
+      "rank_in_form": 4,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": 22354,
+        "forks": 2835,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L2",
+      "flags": [],
+      "age_days": 1316,
+      "score_version": "v1"
+    },
+    {
+      "slug": "devin",
+      "name": "Devin",
+      "form": "autonomous",
+      "oss_bucket": "closed",
+      "score": null,
+      "rank_in_form": null,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": null,
+        "forks": null,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L3",
+      "flags": [
+        "no_data"
+      ],
+      "age_days": null,
+      "score_version": "v1"
+    },
+    {
+      "slug": "manus",
+      "name": "Manus",
+      "form": "autonomous",
+      "oss_bucket": "closed",
+      "score": null,
+      "rank_in_form": null,
+      "delta_1d": null,
+      "delta_7d": null,
+      "delta_30d": null,
+      "growth_7d_pct": null,
+      "growth_30d_pct": null,
+      "metrics": {
+        "stars": null,
+        "forks": null,
+        "contributors": null,
+        "installs": null,
+        "activity": 0
+      },
+      "data_level": "L3",
+      "flags": [
+        "no_data"
+      ],
+      "age_days": null,
       "score_version": "v1"
     }
   ]

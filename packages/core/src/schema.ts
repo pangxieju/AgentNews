@@ -92,7 +92,8 @@ export type MetricKey =
   | 'npm_monthly_dl'
   | 'pypi_monthly_dl'
   | 'vscode_installs'
-  | 'discord_members';
+  | 'discord_members'
+  | 'repo_created';
 
 export type Metrics = Partial<Record<MetricKey, number | string | null>>;
 
@@ -133,6 +134,8 @@ export type ScoreRow = {
     installs: number | null;
     activity: number | null;
   };
+  /** 出道天数（repo 创建至今）；无 repo 则为 null */
+  age_days: number | null;
   data_level: 'L1' | 'L2' | 'L3';
   flags: string[];
   score_version: typeof SCORE_VERSION;

@@ -12,12 +12,12 @@ export type GitHubMode = 'api' | 'ungh';
 /** ungh.cc（unjs 提供的 GitHub 只读代理，无鉴权、无限流），作为 API 限流时的降级通道 */
 async function collectGitHubViaUngh(repo: string): Promise<{
   stars: number; forks: number; open_issues: number | null;
-  last_commit: string; last_release: string | null;
+  last_commit: string; last_release: string | null; repo_created: string | null;
 }> {
   const res = await fetch(`https://ungh.cc/repos/${repo}`, { headers: { 'User-Agent': 'agentrank-m0' } });
   if (!res.ok) throw new Error(`ungh ${repo}: ${res.status}`);
   const data = (await res.json()) as {
-    repo?: { stars: number; forks: number; pushedAt: string; repo?: string };
+    repo?: { stars: number; forks: number; pushedAt: string; createdAt?: string; repo?: string };
   };
   const r = data.repo;
   if (!r) throw new Error(`ungh ${repo}: empty`);
@@ -27,13 +27,14 @@ async function collectGitHubViaUngh(repo: string): Promise<{
     open_issues: null,
     last_commit: r.pushedAt,
     last_release: null,
+    repo_created: r.createdAt ?? null,
   };
 }
 
 /** GitHub REST：单 repo 基础指标（1 次请求/repo） */
 export async function collectGitHub(repo: string, token?: string, mode: GitHubMode = 'api'): Promise<{
   stars: number; forks: number; open_issues: number | null;
-  last_commit: string; last_release: string | null;
+  last_commit: string; last_release: string | null; repo_created: string | null;
 }> {
   if (mode === 'ungh') return collectGitHubViaUngh(repo);
 
@@ -61,6 +62,7 @@ export async function collectGitHub(repo: string, token?: string, mode: GitHubMo
     forks_count: number;
     open_issues_count: number;
     pushed_at: string;
+    created_at: string;
     license?: { spdx_id: string } | null;
   };
 
@@ -71,6 +73,7 @@ export async function collectGitHub(repo: string, token?: string, mode: GitHubMo
     last_commit: repoData.pushed_at,
     // M0：不发 releases 请求（限流）。last_release 待 T1 有 token 后补
     last_release: null,
+    repo_created: repoData.created_at ?? null,
   };
 }
 

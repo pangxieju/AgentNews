@@ -321,3 +321,365 @@
   sources:
     - { kind: github, identifier: openai/openai-agents-python, is_primary: true }
     - { kind: pypi, identifier: openai-agents }
+
+# =============================================================
+# 第二批扩充（M1）
+# 全部经 ungh.cc（star/fork/pushedAt）+ raw.githubusercontent.com（LICENSE）核验
+# =============================================================
+
+# ---------- CLI ----------
+- slug: crush
+  name: Crush
+  vendor: Charm
+  form: cli
+  oss_bucket: semi
+  license_id: FSL-1.1-MIT
+  homepage: https://github.com/charmbracelet/crush
+  note: Functional Source License（非 OSI），两年后转 MIT
+  sources:
+    - { kind: github, identifier: charmbracelet/crush, is_primary: true }
+    - { kind: npm, identifier: "@charmland/crush" }
+
+- slug: mistral-vibe
+  name: Mistral Vibe
+  vendor: Mistral AI
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://github.com/mistralai/mistral-vibe
+  sources:
+    - { kind: github, identifier: mistralai/mistral-vibe, is_primary: true }
+
+- slug: forgecode
+  name: Forge
+  vendor: Tailcall
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://forgecode.dev
+  sources:
+    - { kind: github, identifier: tailcallhq/forgecode, is_primary: true }
+
+- slug: plandex
+  name: Plandex
+  vendor: Plandex
+  form: cli
+  oss_bucket: open
+  license_id: AGPL-3.0
+  homepage: https://plandex.ai
+  note: 2025-10 后更新缓慢
+  sources:
+    - { kind: github, identifier: plandex-ai/plandex, is_primary: true }
+
+- slug: iflow-cli
+  name: iFlow CLI
+  vendor: iFlow
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://github.com/iflow-ai/iflow-cli
+  sources:
+    - { kind: github, identifier: iflow-ai/iflow-cli, is_primary: true }
+    - { kind: npm, identifier: "@iflow-ai/iflow-cli" }
+
+# ---------- IDE 插件 ----------
+- slug: cody
+  name: Cody
+  vendor: Sourcegraph
+  form: ide-plugin
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://sourcegraph.com/cody
+  note: 仓库已归档为 cody-public-snapshot（2025-08 停止活跃）
+  sources:
+    - { kind: github, identifier: sourcegraph/cody-public-snapshot, is_primary: true }
+
+# ---------- IDE 应用 ----------
+- slug: zed
+  name: Zed
+  vendor: Zed Industries
+  form: ide-app
+  oss_bucket: open
+  license_id: GPL-3.0 OR Apache-2.0
+  homepage: https://zed.dev
+  note: 编辑器本体开源，agent 功能部分依赖云端
+  sources:
+    - { kind: github, identifier: zed-industries/zed, is_primary: true }
+
+- slug: void-editor
+  name: Void
+  vendor: Void
+  form: ide-app
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://voideditor.com
+  sources:
+    - { kind: github, identifier: voideditor/void, is_primary: true }
+
+- slug: theia
+  name: Eclipse Theia
+  vendor: Eclipse Foundation
+  form: ide-app
+  oss_bucket: open
+  license_id: EPL-2.0 OR GPL-2.0
+  homepage: https://theia-ide.org
+  note: IDE 平台框架，非开箱即用的 agent 产品
+  sources:
+    - { kind: github, identifier: eclipse-theia/theia, is_primary: true }
+
+# ---------- 浏览器 ----------
+- slug: skyvern
+  name: Skyvern
+  vendor: Skyvern AI
+  form: browser
+  oss_bucket: open
+  license_id: AGPL-3.0
+  homepage: https://skyvern.com
+  sources:
+    - { kind: github, identifier: Skyvern-AI/skyvern, is_primary: true }
+    - { kind: pypi, identifier: skyvern }
+
+- slug: nanobrowser
+  name: Nanobrowser
+  vendor: Nanobrowser
+  form: browser
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://nanobrowser.ai
+  sources:
+    - { kind: github, identifier: nanobrowser/nanobrowser, is_primary: true }
+
+# ---------- 框架 ----------
+- slug: mastra
+  name: Mastra
+  vendor: Mastra
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://mastra.ai
+  note: 核心 Apache-2.0，ee/ 目录为商业授权
+  sources:
+    - { kind: github, identifier: mastra-ai/mastra, is_primary: true }
+    - { kind: npm, identifier: mastra }
+
+- slug: vercel-ai-sdk
+  name: Vercel AI SDK
+  vendor: Vercel
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://sdk.vercel.ai
+  sources:
+    - { kind: github, identifier: vercel/ai, is_primary: true }
+    - { kind: npm, identifier: ai }
+
+- slug: semantic-kernel
+  name: Semantic Kernel
+  vendor: Microsoft
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://learn.microsoft.com/semantic-kernel
+  sources:
+    - { kind: github, identifier: microsoft/semantic-kernel, is_primary: true }
+    - { kind: pypi, identifier: semantic-kernel }
+
+- slug: llamaindex
+  name: LlamaIndex
+  vendor: LlamaIndex
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://llamaindex.ai
+  sources:
+    - { kind: github, identifier: run-llama/llama_index, is_primary: true }
+    - { kind: pypi, identifier: llama-index }
+
+- slug: haystack
+  name: Haystack
+  vendor: deepset
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://haystack.deepset.ai
+  sources:
+    - { kind: github, identifier: deepset-ai/haystack, is_primary: true }
+    - { kind: pypi, identifier: haystack-ai }
+
+- slug: smolagents
+  name: smolagents
+  vendor: Hugging Face
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://huggingface.co/docs/smolagents
+  sources:
+    - { kind: github, identifier: huggingface/smolagents, is_primary: true }
+    - { kind: pypi, identifier: smolagents }
+
+- slug: google-adk
+  name: Google ADK
+  vendor: Google
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://google.github.io/adk-docs
+  sources:
+    - { kind: github, identifier: google/adk-python, is_primary: true }
+    - { kind: pypi, identifier: google-adk }
+
+- slug: strands-agents
+  name: Strands Agents
+  vendor: AWS
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://strandsagents.com
+  sources:
+    - { kind: github, identifier: strands-agents/sdk-python, is_primary: true }
+    - { kind: pypi, identifier: strands-agents }
+
+- slug: agent-framework
+  name: Agent Framework
+  vendor: Microsoft
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://github.com/microsoft/agent-framework
+  sources:
+    - { kind: github, identifier: microsoft/agent-framework, is_primary: true }
+    - { kind: pypi, identifier: agent-framework }
+
+- slug: atomic-agents
+  name: Atomic Agents
+  vendor: BrainBlend AI
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://github.com/BrainBlend-AI/atomic-agents
+  sources:
+    - { kind: github, identifier: BrainBlend-AI/atomic-agents, is_primary: true }
+    - { kind: pypi, identifier: atomic-agents }
+
+- slug: langchain
+  name: LangChain
+  vendor: LangChain
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://langchain.com
+  sources:
+    - { kind: github, identifier: langchain-ai/langchain, is_primary: true }
+    - { kind: pypi, identifier: langchain }
+
+# ---------- 自主 ----------
+- slug: autogpt
+  name: AutoGPT
+  vendor: Significant Gravitas
+  form: autonomous
+  oss_bucket: semi
+  license_id: MIT + Polyform-Shield
+  homepage: https://agpt.co
+  note: autogpt_platform 目录为 Polyform Shield（非 OSI）
+  sources:
+    - { kind: github, identifier: Significant-Gravitas/AutoGPT, is_primary: true }
+
+- slug: agent-zero
+  name: Agent Zero
+  vendor: Agent Zero
+  form: autonomous
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://github.com/frdel/agent-zero
+  sources:
+    - { kind: github, identifier: frdel/agent-zero, is_primary: true }
+
+- slug: babyagi
+  name: BabyAGI
+  vendor: Yohei Nakajima
+  form: autonomous
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://github.com/yoheinakajima/babyagi
+  note: 2026-01 后更新缓慢
+  sources:
+    - { kind: github, identifier: yoheinakajima/babyagi, is_primary: true }
+
+- slug: gpt-engineer
+  name: gpt-engineer
+  vendor: Anton Osika
+  form: autonomous
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://github.com/AntonOsika/gpt-engineer
+  note: 2025-05 后停止活跃
+  sources:
+    - { kind: github, identifier: AntonOsika/gpt-engineer, is_primary: true }
+    - { kind: pypi, identifier: gpt-engineer }
+
+# ---------- 闭源（L3 收录区）----------
+- slug: github-copilot
+  name: GitHub Copilot
+  vendor: GitHub
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://github.com/features/copilot
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: github-copilot, is_primary: true }
+
+- slug: amazon-q
+  name: Amazon Q Developer
+  vendor: AWS
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://aws.amazon.com/q/developer
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: amazon-q, is_primary: true }
+
+- slug: tabnine
+  name: Tabnine
+  vendor: Tabnine
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://tabnine.com
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: tabnine, is_primary: true }
+
+- slug: kiro
+  name: Kiro
+  vendor: AWS
+  form: ide-app
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://kiro.dev
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: kiro, is_primary: true }
+
+- slug: manus
+  name: Manus
+  vendor: Manus
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://manus.im
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: manus, is_primary: true }
+
+- slug: devin
+  name: Devin
+  vendor: Cognition
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://devin.ai
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: devin, is_primary: true }

@@ -3,10 +3,16 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { ScoreRow } from '@agentrank/core';
 
-/** 数据根目录（仓库根 data/，从 web 包向上两级） */
 const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..', 'data');
 
 export type ScoreFile = { date: string; version: string; rows: ScoreRow[] };
+export type ArchiveFile = {
+  period: 'week' | 'month';
+  label: string;
+  end: string;
+  version: string;
+  rows: ScoreRow[];
+};
 
 /** 读最新评分快照（构建时） */
 export function loadLatestScores(): ScoreFile | null {
@@ -29,6 +35,7 @@ export function loadAllScores(): ScoreFile[] {
   return readdirSync(dir)
     .filter((f) => f.endsWith('.json'))
     .sort()
+    .reverse()
     .map((f) => {
       try {
         return JSON.parse(readFileSync(join(dir, f), 'utf8')) as ScoreFile;
@@ -39,18 +46,40 @@ export function loadAllScores(): ScoreFile[] {
     .filter((x): x is ScoreFile => x != null);
 }
 
-/** 读 agents.yaml 附带的元数据（name/vendor/homepage 等，供详情页） */
-export function loadAgentMeta() {
-  const yamlPath = join(DATA_DIR, '..', 'agents.yaml');
-  if (!existsSync(yamlPath)) return new Map<string, Record<string, unknown>>();
-  // 简化：从快照里带 name（未来从 YAML 解析）
-  return new Map();
+/** 读所有归档（周档 + 月档，按结束日倒序） */
+export function loadArchives(): ArchiveFile[] {
+  const dir = join(DATA_DIR, 'archive');
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .sort()
+    .reverse()
+    .map((f) => {
+      try {
+        return JSON.parse(readFileSync(join(dir, f), 'utf8')) as ArchiveFile;
+      } catch {
+        return null;
+      }
+    })
+    .filter((x): x is ArchiveFile => x != null);
 }
 
-/** 格式化数字（k/M 缩写） */
+/** 读单个归档 */
+export function loadArchive(label: string): ArchiveFile | null {
+  const p = join(DATA_DIR, 'archive', `${label}.json`);
+  if (!existsSync(p)) return null;
+  try {
+    return JSON.parse(readFileSync(p, 'utf8')) as ArchiveFile;
+  } catch {
+    return null;
+  }
+}
+
+/** 格式化数字（k/M 缩写，小于 1k 保留原值） */
 export function fmt(n: number | null | undefined): string {
   if (n == null) return '—';
   if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (Math.abs(n) >= 10_000) return Math.round(n / 1_000) + 'k';
   if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(1) + 'k';
   return String(Math.round(n));
 }
@@ -61,3 +90,6 @@ export function fmtPct(n: number | null | undefined): string {
   const v = n * 100;
   return (v > 0 ? '+' : '') + v.toFixed(1) + '%';
 }
+
+export const formLabel = (f: string): string =>
+  ({ cli: 'CLI', 'ide-plugin': 'IDE 插件', 'ide-app': 'IDE 应用', desktop: '桌面', browser: '浏览器', framework: '框架', autonomous: '自主' })[f] ?? f;
