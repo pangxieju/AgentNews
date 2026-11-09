@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import HomePicker, { type PickRow } from '../components/HomePicker';
 import BarChart from '../components/charts/BarChart.astro';
-import { loadLatestScores, loadAgentsMeta, fmt, fmtPct } from '../lib/data';
+import { loadLatestScores, loadAgentsMeta, fmtPct } from '../lib/data';
 import { FORM_ORDER, formLabel } from '../lib/shared';
 
 const data = loadLatestScores();
@@ -21,11 +21,9 @@ const open = rows.filter((r) => r.oss_bucket !== 'closed');
 const closed = rows.filter((r) => r.oss_bucket === 'closed');
 const topOpen = [...open].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
 const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
-
-/** 首日没有增速数据：隐藏该列，避免整列都是「—」 */
 const hasGrowth = rows.some((r) => r.growth_30d_pct != null);
+const forms = new Set(rows.map((r) => r.form)).size;
 
-/** 形态分布：条数 + 直达该形态的榜单 */
 const formBars = FORM_ORDER.map((f) => {
   const list = rows.filter((r) => r.form === f);
   const openCount = list.filter((r) => r.oss_bucket !== 'closed').length;
@@ -49,39 +47,50 @@ const pick: PickRow[] = rows.map((r) => ({
 ---
 
 <Base pageTitle="AI Agent 排行榜">
-  <div class="page-head">
-    <h1>AI Agent 排行榜</h1>
-    <p class="muted">
-      数据截至 {date} · 跨生态归一化 · 开源/闭源双榜 · 日/周/月粒度 —— 先按形态缩小范围，再比指标。
-    </p>
-  </div>
-
-  <section class="box" style="margin-bottom:16px">
-    <div class="box-header">
-      <span>选型入口</span>
-      <span class="muted" style="font-size:12px;font-weight:400">搜索 / 按形态筛选，跨形态不排名</span>
+  <section class="hero">
+    <div>
+      <span class="eyebrow">AI Agent Index · Daily Snapshot</span>
+      <h1 class="display">看见 AI Agent 的<em>真实热度</em>与走向</h1>
+      <p class="lede">
+        把 GitHub star、npm / PyPI 下载、商店安装量压缩到同一把尺子，再按形态分组排名。
+        开源与闭源双榜，日 / 周 / 月三条时间线 —— 可比的才排名，不可比的就标注。
+      </p>
     </div>
-    <div class="box-body">
-      <HomePicker client:load items={pick} meta={meta} />
-    </div>
+    <aside class="hero-rail">
+      <div class="stat-rail">
+        <div><span data-k>收录</span><b>{rows.length}</b></div>
+        <div><span data-k>开源</span><b>{open.length}</b></div>
+        <div><span data-k>闭源</span><b>{closed.length}</b></div>
+        <div><span data-k>形态</span><b>{forms}</b></div>
+        <div><span data-k>快照</span><b>{date}</b></div>
+      </div>
+    </aside>
   </section>
 
-  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr))">
-    <section class="box">
-      <div class="box-header">
-        <span class="row" style="gap:8px">
-          开源榜
-          <span class="badge b-open">OPEN</span>
-          <span class="counter">{open.length}</span>
-        </span>
-        <a class="btn btn-sm" href="/top/open/all/month/">查看全部</a>
-      </div>
-      <div class="table-wrap">
+  <section class="section">
+    <div class="section-title">
+      <h2>选型 / Find</h2>
+      <span class="muted">搜索 · 形态 · 归属</span>
+    </div>
+    <HomePicker client:load items={pick} meta={meta} />
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>双榜 / Leaderboard</h2>
+      <span class="muted">同形态内排名 · 跨形态不比较</span>
+    </div>
+    <div class="ledger-grid">
+      <div class="ledger">
+        <div class="ledger-head">
+          <span class="ledger-title">开源榜 <span class="idx">Open · {open.length}</span></span>
+          <a class="btn btn-sm" href="/top/open/all/month/">全部 →</a>
+        </div>
         <table>
           <thead>
             <tr>
-              <th>#</th><th>Agent</th><th class="num">综合分</th>
-              {hasGrowth && <th class="num">30d 增速</th>}
+              <th class="pos">#</th><th>Agent</th><th class="num">综合分</th>
+              {hasGrowth && <th class="num">30d</th>}
             </tr>
           </thead>
           <tbody>
@@ -95,7 +104,7 @@ const pick: PickRow[] = rows.map((r) => ({
                       name={r.name ?? r.slug}
                       icon={meta[r.slug]?.icon}
                       iconFallback={meta[r.slug]?.iconFallback}
-                      size={24}
+                      size={26}
                     />
                     <a class="name" href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
                   </div>
@@ -106,27 +115,19 @@ const pick: PickRow[] = rows.map((r) => ({
             ))}
           </tbody>
         </table>
+        <div class="ledger-foot">OSI 协议 · MIT / Apache / AGPL 等 · {new Set(open.map((r) => r.form)).size} 种形态</div>
       </div>
-      <div class="box-body muted" style="border-top:1px solid var(--gh-border);font-size:12px">
-        OSI 协议 · MIT/Apache/AGPL 等 · 覆盖 {new Set(open.map((r) => r.form)).size} 种形态
-      </div>
-    </section>
 
-    <section class="box">
-      <div class="box-header">
-        <span class="row" style="gap:8px">
-          闭源榜
-          <span class="badge b-closed">CLOSED</span>
-          <span class="counter">{closed.length}</span>
-        </span>
-        <a class="btn btn-sm" href="/top/closed/all/month/">查看全部</a>
-      </div>
-      <div class="table-wrap">
+      <div class="ledger">
+        <div class="ledger-head">
+          <span class="ledger-title">闭源榜 <span class="idx">Closed · {closed.length}</span></span>
+          <a class="btn btn-sm" href="/top/closed/all/month/">全部 →</a>
+        </div>
         <table>
           <thead>
             <tr>
-              <th>#</th><th>Agent</th><th class="num">综合分</th>
-              {hasGrowth && <th class="num">30d 增速</th>}
+              <th class="pos">#</th><th>Agent</th><th class="num">综合分</th>
+              {hasGrowth && <th class="num">30d</th>}
             </tr>
           </thead>
           <tbody>
@@ -140,7 +141,7 @@ const pick: PickRow[] = rows.map((r) => ({
                       name={r.name ?? r.slug}
                       icon={meta[r.slug]?.icon}
                       iconFallback={meta[r.slug]?.iconFallback}
-                      size={24}
+                      size={26}
                     />
                     <a class="name" href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
                   </div>
@@ -151,37 +152,32 @@ const pick: PickRow[] = rows.map((r) => ({
             ))}
           </tbody>
         </table>
-      </div>
-      <div class="box-body muted" style="border-top:1px solid var(--gh-border);font-size:12px">
-        专有 License · 数据缺失时按收录区展示（不排名）
-      </div>
-    </section>
-  </div>
-
-  <section class="section">
-    <div class="section-title">
-      <h2>收录分布</h2>
-      <span class="muted" style="font-size:12px">按形态 · 共 {rows.length} 个，点名称进对应榜单</span>
-    </div>
-    <div class="box">
-      <div class="box-body">
-        <BarChart bars={formBars} unit=" 个" />
+        <div class="ledger-foot">专有 License · 数据缺失时按收录区展示（不排名）</div>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="section-title">
-      <h2>怎么看这份榜</h2>
+      <h2>收录分布 / Coverage</h2>
+      <span class="muted">按形态 · 点名称进入对应榜单</span>
     </div>
-    <div class="grid" style="margin-top:0">
+    <BarChart bars={formBars} unit=" 个" />
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>口径 / Method</h2>
+      <span class="muted">综合分是观点，不是事实</span>
+    </div>
+    <div class="grid">
       <div class="card">
         <h2>按形态分组</h2>
         <div class="detail">CLI / IDE 插件 / IDE 应用 / 桌面 / 浏览器 / 框架 / 自主 —— 跨形态不比较。</div>
       </div>
       <div class="card">
         <h2>跨生态归一化</h2>
-        <div class="detail">Star、npm/PyPI 下载、商店安装量统一压缩到组内分位数再加权。</div>
+        <div class="detail">Star、npm / PyPI 下载、商店安装量统一压缩到组内分位数再加权。</div>
       </div>
       <div class="card">
         <h2>可审计</h2>
@@ -190,5 +186,5 @@ const pick: PickRow[] = rows.map((r) => ({
     </div>
   </section>
 
-  {!data && <div class="warn">暂无数据：请先运行 <code>pnpm collect</code> 生成快照。</div>}
+  {!data && <div class="warn" style="margin-top:24px">暂无数据：请先运行 <code>pnpm collect</code> 生成快照。</div>}
 </Base>

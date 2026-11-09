@@ -37,46 +37,42 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
       <div class="crumbs">
         <a href="/">AgentNews</a><span>/</span>
         <a href={`/top/${row.oss_bucket === 'closed' ? 'closed' : 'open'}/all/month/`}>榜单</a><span>/</span>
-        <span>{row.name ?? row.slug}</span>
+        <span>{formLabel(row.form)}</span>
       </div>
 
-      <div class="row" style="gap:16px;align-items:flex-start;margin-bottom:16px">
+      <section class="agent-hero">
         <AgentIcon
           slug={row.slug}
           name={row.name ?? row.slug}
           icon={meta?.icon}
           iconFallback={meta?.iconFallback}
-          size={64}
+          size={84}
         />
         <div style="min-width:0">
-          <h1 style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="eyebrow">{formLabel(row.form)}{meta?.vendor ? ` · ${meta.vendor}` : ''}</span>
+          <h1 style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
             {row.name ?? row.slug}
             <span class={`badge ${bucketBadge(row.oss_bucket)}`}>{bucketText(row.oss_bucket)}</span>
           </h1>
-          <p class="muted">
-            {formLabel(row.form)}{meta?.vendor ? ` · ${meta.vendor}` : ''} · 数据截至 {date}
-          </p>
+          <p class="lede" style="font-size:13.5px">数据截至 {date} · 综合分在同形态组内归一化</p>
           {meta?.homepage && (
-            <a class="btn btn-primary" style="margin-top:8px" href={meta.homepage} target="_blank" rel="noopener">
-              访问官网
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                <path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.5-1h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V3.56L8.28 9.28a.75.75 0 0 1-1.06-1.06L13.94 1.5h-3.69a.75.75 0 0 1 0-1.5Z" />
-              </svg>
+            <a class="btn" style="margin-top:14px" href={meta.homepage} target="_blank" rel="noopener">
+              访问官网 ↗
             </a>
           )}
         </div>
-      </div>
-
-      <div class="grid grid-tight" style="margin-top:0">
-        <div class="card"><h2>综合分</h2><div class="num">{row.score ?? '—'}</div><div class="detail">组内（{formLabel(row.form)}）分位数加权</div></div>
-        <div class="card"><h2>组内排名</h2><div class="num">{row.rank_in_form != null ? `#${row.rank_in_form}` : '—'}</div><div class="detail">同形态内排名</div></div>
-        <div class="card">
-          <h2>30d 增速</h2>
-          <div class={`num ${row.growth_30d_pct != null ? (row.growth_30d_pct > 0 ? 'up' : 'down') : ''}`}>{fmtPct(row.growth_30d_pct)}</div>
-          <div class="detail">滚动 30 日相对增速</div>
-        </div>
-        <div class="card"><h2>数据完整度</h2><div class="num">{row.data_level}</div><div class="detail">L1 有数据 / L2 半数据 / L3 仅收录</div></div>
-      </div>
+        <aside class="agent-hero-rail">
+          <div class="stat-rail">
+            <div><span data-k>综合分</span><b>{row.score ?? '—'}</b></div>
+            <div><span data-k>组内排名</span><b>{row.rank_in_form != null ? `#${row.rank_in_form}` : '—'}</b></div>
+            <div>
+              <span data-k>30d 增速</span>
+              <b class={row.growth_30d_pct != null ? (row.growth_30d_pct > 0 ? 'up' : 'down') : ''}>{fmtPct(row.growth_30d_pct)}</b>
+            </div>
+            <div><span data-k>完整度</span><b>{row.data_level}</b></div>
+          </div>
+        </aside>
+      </section>
 
       <section class="section">
         <div class="section-title">

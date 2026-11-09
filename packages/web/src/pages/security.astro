@@ -22,6 +22,7 @@ const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
 <Base pageTitle="安全 · AgentNews">
   <div class="page-head">
     <div class="crumbs"><a href="/">AgentNews</a><span>/</span><span>安全情报</span></div>
+    <span class="eyebrow">Security · OSV Advisories</span>
     <h1>安全情报</h1>
     <p class="muted">公开安全公告聚合（来源 OSV.dev）· 数据截至 {sec?.date ?? '—'}</p>
   </div>
@@ -31,7 +32,7 @@ const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
     我们不做安全背书，也不给红黄绿总分 —— 请点原文链接自行核实。
   </div>
 
-  <div class="grid grid-tight">
+  <div class="grid grid-4">
     <div class="card"><h2>查询覆盖</h2><div class="num">{rows.length}</div><div class="detail">个有包管理渠道的 agent</div></div>
     <div class="card"><h2>有历史公告</h2><div class="num">{withAny.length}</div><div class="detail">个 agent 的包存在公开公告</div></div>
     <div class="card"><h2>公告总数</h2><div class="num">{totalAdvisories}</div><div class="detail">含历史版本，不代表当前版本受影响</div></div>
@@ -50,7 +51,7 @@ const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
             label: r.name,
             value: r.advisories,
             href: `/agent/${r.slug}/`,
-            tone: r.malicious > 0 ? ('danger' as const) : ('attention' as const),
+            tone: r.malicious > 0 ? ('danger' as const) : ('accent' as const),
           }))}
           unit=" 条"
           emptyText="暂无安全公告数据"
