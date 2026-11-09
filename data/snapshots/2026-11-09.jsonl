@@ -10,9 +10,9 @@
 {"slug":"cursor-cli","form":"cli","oss_bucket":"closed","metrics":{}}
 {"slug":"kimi-cli","form":"cli","oss_bucket":"closed","metrics":{"npm_weekly_dl":73421,"npm_monthly_dl":311573}}
 {"slug":"warp-agent","form":"desktop","oss_bucket":"closed","metrics":{}}
-{"slug":"cline","form":"ide-plugin","oss_bucket":"open","metrics":{"stars":71453,"forks":7889,"open_issues":null,"last_commit":"2026-11-07T00:08:40Z","last_release":null,"repo_created":"2024-07-06T07:28:10Z","vscode_installs":5875380}}
+{"slug":"cline","form":"ide-plugin","oss_bucket":"open","metrics":{"stars":71453,"forks":7889,"open_issues":null,"last_commit":"2026-11-07T00:08:40Z","last_release":null,"repo_created":"2024-07-06T07:28:10Z","vscode_installs":5875770}}
 {"slug":"roo-code","form":"ide-plugin","oss_bucket":"open","metrics":{"stars":24239,"forks":3428,"open_issues":null,"last_commit":"2026-05-15T18:08:47Z","last_release":null,"repo_created":"2024-10-31T17:56:50Z","vscode_installs":2120774}}
-{"slug":"continue","form":"ide-plugin","oss_bucket":"open","metrics":{"stars":36429,"forks":5557,"open_issues":null,"last_commit":"2026-11-05T15:28:28Z","last_release":null,"repo_created":"2023-05-24T03:39:39Z","vscode_installs":4521142}}
+{"slug":"continue","form":"ide-plugin","oss_bucket":"open","metrics":{"stars":36429,"forks":5557,"open_issues":null,"last_commit":"2026-11-05T15:28:28Z","last_release":null,"repo_created":"2023-05-24T03:39:39Z","vscode_installs":4520692}}
 {"slug":"kilo-code","form":"ide-plugin","oss_bucket":"open","metrics":{"stars":27906,"forks":3345,"open_issues":null,"last_commit":"2026-11-07T23:16:30Z","last_release":null,"repo_created":"2025-03-10T15:34:26Z","npm_weekly_dl":56813,"npm_monthly_dl":172283,"vscode_installs":0}}
 {"slug":"cursor","form":"ide-app","oss_bucket":"closed","metrics":{}}
 {"slug":"windsurf","form":"ide-app","oss_bucket":"closed","metrics":{}}
@@ -24,8 +24,8 @@
 {"slug":"langgraph","form":"framework","oss_bucket":"open","metrics":{"stars":44628,"forks":7690,"open_issues":null,"last_commit":"2026-11-08T00:33:40Z","last_release":null,"repo_created":"2023-08-09T18:33:12Z","pypi_monthly_dl":44769952}}
 {"slug":"autogen","form":"framework","oss_bucket":"open","metrics":{"stars":61743,"forks":9381,"open_issues":null,"last_commit":"2026-10-28T14:45:27Z","last_release":null,"repo_created":"2023-08-18T11:43:45Z","pypi_monthly_dl":379923}}
 {"slug":"agno","form":"framework","oss_bucket":"open","metrics":{"stars":43101,"forks":6260,"open_issues":null,"last_commit":"2026-11-06T22:07:31Z","last_release":null,"repo_created":"2022-05-04T15:23:02Z","pypi_monthly_dl":1779568}}
-{"slug":"pydantic-ai","form":"framework","oss_bucket":"open","metrics":{"stars":21085,"forks":3127,"open_issues":null,"last_commit":"2026-11-08T04:20:33Z","last_release":null,"repo_created":"2024-06-21T15:55:04Z"}}
-{"slug":"openai-agents","form":"framework","oss_bucket":"open","metrics":{"stars":30549,"forks":5010,"open_issues":null,"last_commit":"2026-11-08T03:21:19Z","last_release":null,"repo_created":"2025-03-11T03:42:36Z"}}
+{"slug":"pydantic-ai","form":"framework","oss_bucket":"open","metrics":{"stars":21085,"forks":3127,"open_issues":null,"last_commit":"2026-11-08T04:20:33Z","last_release":null,"repo_created":"2024-06-21T15:55:04Z","pypi_monthly_dl":5383780}}
+{"slug":"openai-agents","form":"framework","oss_bucket":"open","metrics":{"stars":30549,"forks":5010,"open_issues":null,"last_commit":"2026-11-08T03:21:19Z","last_release":null,"repo_created":"2025-03-11T03:42:36Z","pypi_monthly_dl":12449784}}
 {"slug":"crush","form":"cli","oss_bucket":"semi","metrics":{"stars":28993,"forks":2358,"open_issues":null,"last_commit":"2026-11-08T00:45:57Z","last_release":null,"repo_created":"2025-05-21T12:14:57Z","npm_weekly_dl":18481,"npm_monthly_dl":60558}}
 {"slug":"mistral-vibe","form":"cli","oss_bucket":"open","metrics":{"stars":5339,"forks":790,"open_issues":null,"last_commit":"2026-11-05T13:09:11Z","last_release":null,"repo_created":"2025-12-08T18:56:59Z"}}
 {"slug":"forgecode","form":"cli","oss_bucket":"open","metrics":{"stars":7631,"forks":1454,"open_issues":null,"last_commit":"2026-11-07T22:22:39Z","last_release":null,"repo_created":"2024-12-08T20:33:37Z"}}
@@ -38,8 +38,8 @@
 {"slug":"skyvern","form":"browser","oss_bucket":"open","metrics":{"stars":23360,"forks":2233,"open_issues":null,"last_commit":"2026-11-08T03:53:15Z","last_release":null,"repo_created":"2024-02-28T15:45:19Z","pypi_monthly_dl":5856}}
 {"slug":"nanobrowser","form":"browser","oss_bucket":"open","metrics":{"stars":14262,"forks":1525,"open_issues":null,"last_commit":"2026-11-08T07:20:44Z","last_release":null,"repo_created":"2024-12-31T08:11:27Z"}}
 {"slug":"mastra","form":"framework","oss_bucket":"open","metrics":{"stars":29399,"forks":3085,"open_issues":null,"last_commit":"2026-11-08T00:35:43Z","last_release":null,"repo_created":"2024-08-06T20:44:31Z","npm_weekly_dl":1246429,"npm_monthly_dl":4031082}}
-{"slug":"vercel-ai-sdk","form":"framework","oss_bucket":"open","metrics":{"stars":27805,"forks":5549,"open_issues":null,"last_commit":"2026-11-07T23:16:52Z","last_release":null,"repo_created":"2023-05-23T15:04:08Z","npm_weekly_dl":45312935,"npm_monthly_dl":142426105}}
-{"slug":"semantic-kernel","form":"framework","oss_bucket":"open","metrics":{"stars":28745,"forks":4856,"open_issues":null,"last_commit":"2026-11-07T00:59:55Z","last_release":null,"repo_created":"2023-02-27T17:39:42Z"}}
+{"slug":"vercel-ai-sdk","form":"framework","oss_bucket":"open","metrics":{"stars":27818,"forks":5560,"open_issues":null,"last_commit":"2026-11-08T23:51:55Z","last_release":null,"repo_created":"2023-05-23T15:04:08Z","npm_weekly_dl":45312935,"npm_monthly_dl":142426105}}
+{"slug":"semantic-kernel","form":"framework","oss_bucket":"open","metrics":{"stars":28745,"forks":4856,"open_issues":null,"last_commit":"2026-11-07T00:59:55Z","last_release":null,"repo_created":"2023-02-27T17:39:42Z","pypi_monthly_dl":300767}}
 {"slug":"llamaindex","form":"framework","oss_bucket":"open","metrics":{"stars":52842,"forks":8532,"open_issues":null,"last_commit":"2026-11-06T22:58:11Z","last_release":null,"repo_created":"2022-11-02T04:24:54Z","pypi_monthly_dl":2937852}}
 {"slug":"haystack","form":"framework","oss_bucket":"open","metrics":{"stars":26943,"forks":3406,"open_issues":null,"last_commit":"2026-11-07T02:11:09Z","last_release":null,"repo_created":"2019-11-14T09:05:28Z","pypi_monthly_dl":566454}}
 {"slug":"smolagents","form":"framework","oss_bucket":"open","metrics":{"stars":30262,"forks":3200,"open_issues":null,"last_commit":"2026-11-03T18:36:41Z","last_release":null,"repo_created":"2024-12-05T11:28:04Z","pypi_monthly_dl":425605}}

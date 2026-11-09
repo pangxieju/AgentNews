@@ -18,6 +18,13 @@ import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/inde
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const YAML_PATH = join(ROOT, 'agents.yaml');
+
+// 加载仓库根目录的 .env（Node 24 内置，无需 dotenv）；文件不存在则静默跳过
+try {
+  process.loadEnvFile(join(ROOT, '.env'));
+} catch {
+  // 无 .env → 使用系统环境变量
+}
 const DATA_DIR = join(ROOT, 'data');
 
 function isoDate(d = new Date()): string {
@@ -293,7 +300,13 @@ function growthPctSafe(
 
 // 直接运行时执行
 if (process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'))) {
-  runDaily({ token: process.env.GITHUB_TOKEN }).then(
+  const token = process.env.GITHUB_TOKEN?.trim();
+  console.log(
+    token
+      ? `[env] GITHUB_TOKEN 已加载（${token.slice(0, 4)}…${token.slice(-4)}，len=${token.length}）`
+      : '[env] 未发现 GITHUB_TOKEN —— 将走 ungh 降级通道（拿不到 contributors/release）',
+  );
+  runDaily({ token }).then(
     () => process.exit(0),
     (e) => {
       console.error(e);
