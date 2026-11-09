@@ -1,0 +1,80 @@
+---
+/**
+ * 单一路由分发器：/ 与 /en/ 两套语言共用同一份视图。
+ *
+ * 为什么用 catch-all 而不是复制两套页面：
+ * - 视图只写一次，语言作为 prop 传入
+ * - 路径在 getStaticPaths 里集中枚举，避免 28 个重复的路由文件
+ */
+import Home from '../views/Home.astro';
+import Rank from '../components/RankView.astro';
+import Agent from '../views/Agent.astro';
+import Forms from '../views/Forms.astro';
+import Compare from '../views/Compare.astro';
+import Rising from '../views/Rising.astro';
+import Activity from '../views/Activity.astro';
+import Security from '../views/Security.astro';
+import ArchiveIndex from '../views/ArchiveIndex.astro';
+import ArchiveLabel from '../views/ArchiveLabel.astro';
+import About from '../views/About.astro';
+import Changelog from '../views/Changelog.astro';
+import { loadLatestScores, loadArchives } from '../lib/data';
+import { FORM_ORDER } from '../lib/shared';
+import type { Lang } from '../i18n/dict';
+
+export function getStaticPaths() {
+  const BUCKETS = ['open', 'closed'];
+  const FORMS = ['all', ...FORM_ORDER];
+  const GRANS = ['day', 'week', 'month'];
+  const rows = loadLatestScores()?.rows ?? [];
+  const slugs = [...new Set(rows.map((r) => r.slug))];
+  const archives = loadArchives().map((a) => a.label);
+
+  const paths: string[] = [
+    '',
+    'top',
+    ...BUCKETS.flatMap((b) => FORMS.flatMap((f) => GRANS.map((g) => `top/${b}/${f}/${g}`))),
+    ...slugs.map((s) => `agent/${s}`),
+    ...FORM_ORDER.map((f) => `forms/${f}`),
+    'rising',
+    'activity',
+    'security',
+    'archive',
+    ...archives.map((l) => `archive/${l}`),
+    'compare',
+    'about',
+    'changelog',
+  ];
+
+  return paths.flatMap((p) => [
+    { params: { path: p === '' ? undefined : p } },
+    { params: { path: p === '' ? 'en' : `en/${p}` } },
+  ]);
+}
+
+const raw = Astro.params.path ?? '';
+const seg = raw.split('/').filter(Boolean);
+const lang: Lang = seg[0] === 'en' ? 'en' : 'zh';
+const parts = lang === 'en' ? seg.slice(1) : seg;
+const [a, b, c, d] = parts;
+---
+
+{a === undefined && <Home lang={lang} />}
+
+{a === 'top' && b === undefined && <Rank lang={lang} bucket="open" form="all" g="month" />}
+{a === 'top' && b !== undefined && c !== undefined && d !== undefined && (
+  <Rank lang={lang} bucket={b} form={c} g={d} />
+)}
+
+{a === 'agent' && b !== undefined && <Agent lang={lang} slug={b} />}
+
+{a === 'forms' && b !== undefined && <Forms lang={lang} form={b} />}
+
+{a === 'compare' && b === undefined && <Compare lang={lang} />}
+{a === 'rising' && b === undefined && <Rising lang={lang} />}
+{a === 'activity' && b === undefined && <Activity lang={lang} />}
+{a === 'security' && b === undefined && <Security lang={lang} />}
+{a === 'archive' && b === undefined && <ArchiveIndex lang={lang} />}
+{a === 'archive' && b !== undefined && <ArchiveLabel lang={lang} label={b} />}
+{a === 'about' && b === undefined && <About lang={lang} />}
+{a === 'changelog' && b === undefined && <Changelog lang={lang} />}

@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import AgentIcon from '../components/AgentIcon';
+import BarChart from '../components/charts/BarChart.astro';
+import { loadSecurity, loadLatestScores, loadAgentsMeta, securityLevel } from '../lib/data';
+import { type Lang, pathFor, t } from '../i18n/dict';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const h = (p: string) => pathFor(lang, p);
+
+const sec = loadSecurity();
+const data = loadLatestScores();
+const subjects = sec?.subjects ?? {};
+const nameBySlug = new Map((data?.rows ?? []).map((r) => [r.slug, r.name]));
+const meta = loadAgentsMeta();
+
+const rows = Object.entries(subjects)
+  .map(([slug, s]) => ({ slug, name: nameBySlug.get(slug) ?? slug, ...s }))
+  .sort((a, b) => b.malicious - a.malicious || b.advisories - a.advisories);
+
+const withAny = rows.filter((r) => r.advisories > 0);
+const totalAdvisories = rows.reduce((s, r) => s + r.advisories, 0);
+const totalMalicious = rows.reduce((s, r) => s + r.malicious, 0);
+---
+
+<Base lang={lang} pageTitle={`${t(lang, 'security.title')} · AgentNews`}>
+  <div class="page-head">
+    <div class="crumbs"><a href={h('/')}>AgentNews</a><span>/</span><span>{t(lang, 'security.crumb')}</span></div>
+    <span class="eyebrow">{lang === 'en' ? 'Security · OSV Advisories' : '安全 · OSV 公告'}</span>
+    <h1>{t(lang, 'security.title')}</h1>
+    <p class="lede">{t(lang, 'security.lede', { date: sec?.date ?? '—' })}</p>
+  </div>
+
+  <div class="warn">
+    <strong>{t(lang, 'security.warnTitle')}</strong>{t(lang, 'security.warn')}
+  </div>
+
+  <div class="grid grid-4">
+    <div class="card">
+      <h2>{t(lang, 'security.coverage')}</h2>
+      <div class="num">{rows.length}</div>
+      <div class="detail">{t(lang, 'security.coverageHint')}</div>
+    </div>
+    <div class="card">
+      <h2>{t(lang, 'security.withAny')}</h2>
+      <div class="num">{withAny.length}</div>
+      <div class="detail">{t(lang, 'security.withAnyHint')}</div>
+    </div>
+    <div class="card">
+      <h2>{t(lang, 'security.total')}</h2>
+      <div class="num">{totalAdvisories}</div>
+      <div class="detail">{t(lang, 'security.totalHint')}</div>
+    </div>
+    <div class="card">
+      <h2>{t(lang, 'security.malicious')}</h2>
+      <div class="num" style={totalMalicious > 0 ? 'color:var(--bad)' : ''}>{totalMalicious}</div>
+      <div class="detail">{t(lang, 'security.maliciousHint')}</div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>{t(lang, 'security.top')}</h2>
+      <span class="muted">{t(lang, 'security.topHint')}</span>
+    </div>
+    <div class="box">
+      <div class="box-body">
+        <BarChart
+          bars={rows.slice(0, 10).map((r) => ({
+            label: r.name,
+            value: r.advisories,
+            href: h(`/agent/${r.slug}/`),
+            tone: r.malicious > 0 ? ('danger' as const) : ('accent' as const),
+          }))}
+          unit={lang === 'en' ? '' : ' 条'}
+          emptyText={t(lang, 'security.empty')}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><h2>{t(lang, 'security.table')}</h2></div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Agent</th><th>{t(lang, 'security.colPackage')}</th>
+              <th class="hide-sm">{t(lang, 'security.colEcosystem')}</th>
+              <th class="num">{t(lang, 'security.colAdvisories')}</th>
+              <th class="num hide-sm">{t(lang, 'security.colMalicious')}</th>
+              <th class="hide-sm">{t(lang, 'security.colUpdated')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <td>
+                  <div class="agent-cell">
+                    <AgentIcon
+                      slug={r.slug}
+                      name={r.name}
+                      icon={meta[r.slug]?.icon}
+                      iconFallback={meta[r.slug]?.iconFallback}
+                      size={24}
+                    />
+                    <span class="tags">
+                      <a class="name" href={h(`/agent/${r.slug}/`)}>{r.name}</a>
+                      {securityLevel(r) === 'high' && (
+                        <span class="badge b-closed">{lang === 'en' ? 'malicious' : '恶意包'}</span>
+                      )}
+                    </span>
+                  </div>
+                </td>
+                <td class="muted pkg"><a href={r.url} target="_blank" rel="noopener">{r.package}</a></td>
+                <td class="muted hide-sm">{r.ecosystem}</td>
+                <td class="num">{r.advisories || '—'}</td>
+                <td class="num hide-sm">{r.malicious || '—'}</td>
+                <td class="muted hide-sm">{r.latest ? r.latest.slice(0, 10) : '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {rows.length === 0 && <div class="warn" style="margin-top:16px">{t(lang, 'security.empty')}</div>}
+</Base>

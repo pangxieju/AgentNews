@@ -1,7 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
-import { loadLatestScores, loadAgentsMeta, loadAgentState, fmt, formLabel } from '../lib/data';
+import { loadLatestScores, loadAgentsMeta, loadAgentState, fmt } from '../lib/data';
+import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const h = (p: string) => pathFor(lang, p);
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
@@ -23,26 +30,24 @@ const youngest = [...rows]
   .slice(0, 10);
 
 const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
-const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半开源' : '闭源');
 ---
 
-<Base pageTitle="新秀榜 · AgentNews">
+<Base lang={lang} pageTitle={`${t(lang, 'rising.title')} · AgentNews`}>
   <div class="page-head">
-    <div class="crumbs"><a href="/">AgentNews</a><span>/</span><span>新秀榜</span></div>
-    <span class="eyebrow">Rising · Debut ≤ 180 days</span>
-    <h1>新秀榜</h1>
-    <p class="muted">出道 ≤ {NEWCOMER_DAYS} 天且已上榜的 agent · 数据截至 {date}</p>
+    <div class="crumbs"><a href={h('/')}>AgentNews</a><span>/</span><span>{t(lang, 'rising.crumb')}</span></div>
+    <span class="eyebrow">{lang === 'en' ? 'Rising · Age ≤ 180 days' : '新秀 · 出道 ≤ 180 天'}</span>
+    <h1>{t(lang, 'rising.title')}</h1>
+    <p class="lede">{t(lang, 'rising.lede', { days: NEWCOMER_DAYS, date })}</p>
   </div>
 
   <div class="warn">
-    <strong>口径说明：</strong>出道天数 = min（repo 创建至今, 首次收录至今）。
-    其中「首次收录」只在该项目<b>晚于系统上线日（{startedAt}）</b>被收录时计入 —— 因为上线当天收录的条目无法区分「本来就存在」与「刚出现」。
-    本系统自 {startedAt} 起记录收录时间，随时间推移，「上线后冒出的新项目」会被准确识别。
+    <strong>{lang === 'en' ? 'How age is measured: ' : '口径说明：'}</strong>
+    {t(lang, 'rising.explain', { started: startedAt })}
   </div>
 
   <section class="section">
     <div class="section-title">
-      <h2>新秀</h2>
+      <h2>{t(lang, 'rising.list')}</h2>
       <span class="counter">{newcomers.length}</span>
     </div>
 
@@ -51,7 +56,14 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
         <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num hide-sm">首次收录</th><th class="num">综合分</th><th class="num">Star</th><th class="num hide-sm">安装量</th></tr>
+              <tr>
+                <th class="pos">#</th><th>Agent</th><th>{lang === 'en' ? 'Form' : '形态'}</th>
+                <th class="num">{t(lang, 'rising.age')}</th>
+                <th class="num hide-sm">{t(lang, 'rising.firstListed')}</th>
+                <th class="num">{t(lang, 'metric.score')}</th>
+                <th class="num hide-sm">{t(lang, 'metric.stars')}</th>
+                <th class="num hide-sm">{t(lang, 'metric.installs')}</th>
+              </tr>
             </thead>
             <tbody>
               {newcomers.map((r, i) => (
@@ -67,16 +79,16 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
                         size={24}
                       />
                       <span class="tags">
-                        <a class="name" href={`/agent/${r.slug}/`}>{r.name}</a>
-                        <span class={`badge ${bucketBadge(r.oss_bucket)}`}>{bucketText(r.oss_bucket)}</span>
+                        <a class="name" href={h(`/agent/${r.slug}/`)}>{r.name}</a>
+                        <span class={`badge ${bucketBadge(r.oss_bucket)}`}>{bucketText(lang, r.oss_bucket)}</span>
                       </span>
                     </div>
                   </td>
-                  <td class="muted">{formLabel(r.form)}</td>
-                  <td class="num">{r.age_days} 天</td>
+                  <td class="muted">{formLabel(lang, r.form)}</td>
+                  <td class="num">{t(lang, 'rising.days', { n: r.age_days! })}</td>
                   <td class="num muted hide-sm">{r.first_listed ?? '—'}</td>
                   <td class="num"><strong>{r.score}</strong></td>
-                  <td class="num">{fmt(r.metrics?.stars)}</td>
+                  <td class="num hide-sm">{fmt(r.metrics?.stars)}</td>
                   <td class="num hide-sm">{fmt(r.metrics?.installs)}</td>
                 </tr>
               ))}
@@ -85,23 +97,25 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
         </div>
       </div>
     ) : (
-      <div class="notice">
-        当前无符合条件的 agent（收录名单里最年轻的也已超过 {NEWCOMER_DAYS} 天）。
-        这说明当前样本偏向成熟项目 —— 新秀榜需要持续收录新项目才有内容。
-      </div>
+      <div class="notice">{t(lang, 'rising.empty', { days: NEWCOMER_DAYS })}</div>
     )}
   </section>
 
   <section class="section">
     <div class="section-title">
-      <h2>最年轻的 10 个</h2>
-      <span class="muted" style="font-size:12px">按 repo 创建时间排序，帮助发现接近新秀资格的项目</span>
+      <h2>{t(lang, 'rising.youngest')}</h2>
+      <span class="muted">{t(lang, 'rising.youngestHint')}</span>
     </div>
     <div class="box">
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>#</th><th>Agent</th><th>形态</th><th class="num">出道</th><th class="num hide-sm">首次收录</th><th class="num">综合分</th></tr>
+            <tr>
+              <th class="pos">#</th><th>Agent</th><th>{lang === 'en' ? 'Form' : '形态'}</th>
+              <th class="num">{t(lang, 'rising.age')}</th>
+              <th class="num hide-sm">{t(lang, 'rising.firstListed')}</th>
+              <th class="num">{t(lang, 'metric.score')}</th>
+            </tr>
           </thead>
           <tbody>
             {youngest.map((r, i) => (
@@ -116,11 +130,11 @@ const bucketText = (b: string) => (b === 'open' ? '开源' : b === 'semi' ? '半
                       iconFallback={meta[r.slug]?.iconFallback}
                       size={24}
                     />
-                    <a class="name" href={`/agent/${r.slug}/`}>{r.name}</a>
+                    <a class="name" href={h(`/agent/${r.slug}/`)}>{r.name}</a>
                   </div>
                 </td>
-                <td class="muted">{formLabel(r.form)}</td>
-                <td class="num">{r.age_days} 天</td>
+                <td class="muted">{formLabel(lang, r.form)}</td>
+                <td class="num">{t(lang, 'rising.days', { n: r.age_days! })}</td>
                 <td class="num muted hide-sm">{r.first_listed ?? '—'}</td>
                 <td class="num">{r.score ?? '—'}</td>
               </tr>

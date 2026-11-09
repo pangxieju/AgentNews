@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'preact/hooks';
 import AgentIcon from './AgentIcon';
-import { FORM_ORDER, bucketBadgeClass, bucketText, formLabel, fmt, rankUrl } from '../lib/shared';
+import { type Lang, pathFor, t, formLabel, bucketText } from '../i18n/dict';
+import { fmt } from '../lib/shared';
 import type { IconMeta } from './RankBoard';
 
 export type PickRow = {
@@ -16,16 +17,18 @@ export type PickRow = {
 interface Props {
   items: PickRow[];
   meta: Record<string, IconMeta>;
+  lang: Lang;
 }
 
 /**
  * 首页选型入口：搜索 + 形态/归属筛选，全部在客户端完成。
- * 目标：不用先进榜单再筛，30 秒内找到候选 agent（PRD G1）。
  */
-export default function HomePicker({ items, meta }: Props) {
+export default function HomePicker({ items, meta, lang }: Props) {
   const [q, setQ] = useState('');
   const [bucket, setBucket] = useState<'open' | 'closed'>('open');
   const [form, setForm] = useState('all');
+
+  const H = (p: string) => pathFor(lang, p);
 
   const list = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -41,8 +44,10 @@ export default function HomePicker({ items, meta }: Props) {
 
   const shown = list.slice(0, 8);
   const go = (slug: string) => {
-    window.location.href = `/agent/${slug}/`;
+    window.location.href = H(`/agent/${slug}/`);
   };
+
+  const forms = ['all', ...new Set(items.map((i) => i.form))];
 
   return (
     <div class="picker">
@@ -54,8 +59,8 @@ export default function HomePicker({ items, meta }: Props) {
           class="picker-input"
           type="search"
           value={q}
-          placeholder="搜索 agent：名称、厂商或 slug"
-          aria-label="搜索 agent"
+          placeholder={t(lang, 'picker.placeholder')}
+          aria-label={t(lang, 'picker.searchAria')}
           autocomplete="off"
           onInput={(e) => setQ((e.currentTarget as HTMLInputElement).value)}
           onKeyDown={(e) => {
@@ -63,58 +68,55 @@ export default function HomePicker({ items, meta }: Props) {
           }}
         />
         {q && (
-          <button class="picker-clear" type="button" aria-label="清空搜索" onClick={() => setQ('')}>
+          <button class="picker-clear" type="button" aria-label={t(lang, 'picker.clear')} onClick={() => setQ('')}>
             ×
           </button>
         )}
       </div>
 
       <div class="picker-filters">
-        <div class="segmented" role="group" aria-label="归属">
+        <div class="segmented" role="group" aria-label={t(lang, 'picker.owner')}>
           {(['open', 'closed'] as const).map((b) => (
-            <a
-              href={rankUrl(b, form, 'month')}
+            <button
+              type="button"
               aria-current={bucket === b ? 'page' : undefined}
-              onClick={(e) => {
-                e.preventDefault();
-                setBucket(b);
-              }}
+              onClick={() => setBucket(b)}
             >
-              {b === 'open' ? '开源' : '闭源'}
-            </a>
+              {b === 'open' ? t(lang, 'picker.openOnly') : t(lang, 'picker.closedOnly')}
+            </button>
           ))}
         </div>
-        <div class="chips" role="group" aria-label="形态">
-          {(['all', ...FORM_ORDER] as string[]).map((f) => (
+        <div class="chips" role="group" aria-label={t(lang, 'picker.form')}>
+          {forms.map((f) => (
             <button type="button" class="chip" aria-pressed={form === f} onClick={() => setForm(f)}>
-              {formLabel(f)}
+              {f === 'all' ? t(lang, 'app.all') : formLabel(lang, f)}
             </button>
           ))}
         </div>
       </div>
 
       <div class="picker-summary">
-        <span class="muted">
-          {q ? `${list.length} 个匹配` : `共 ${list.length} 个${bucket === 'open' ? '开源' : '闭源'} agent`}
-          {list.length > shown.length ? ` · 显示前 ${shown.length} 个` : ''}
+        <span>
+          {q ? t(lang, 'picker.matches', { n: list.length }) : t(lang, 'picker.count', { n: list.length, bucket: bucket === 'open' ? (lang === 'en' ? 'open' : '开源') : lang === 'en' ? 'closed' : '闭源' })}
+          {list.length > shown.length ? t(lang, 'picker.showing', { n: shown.length }) : ''}
         </span>
-        <a class="btn btn-sm" href={rankUrl(bucket, form, 'month')}>
-          查看完整榜单 →
+        <a class="btn btn-sm" href={H(bucket === 'open' ? `/top/open/${form}/month/` : `/top/closed/${form}/month/`)}>
+          {t(lang, 'picker.fullBoard')}
         </a>
       </div>
 
       {shown.length === 0 ? (
-        <div class="picker-empty muted">
-          没有匹配的 agent。换个关键词，或
+        <div class="picker-empty">
+          {t(lang, 'picker.empty')}
           <button type="button" class="link-btn" onClick={() => { setQ(''); setForm('all'); }}>
-            清除筛选
+            {t(lang, 'picker.reset')}
           </button>
         </div>
       ) : (
         <ul class="picker-list">
           {shown.map((r) => (
             <li>
-              <a class="picker-item" href={`/agent/${r.slug}/`}>
+              <a class="picker-item" href={H(`/agent/${r.slug}/`)}>
                 <AgentIcon
                   slug={r.slug}
                   name={r.name}
@@ -125,12 +127,14 @@ export default function HomePicker({ items, meta }: Props) {
                 <span class="picker-item-main">
                   <span class="row" style="gap:6px">
                     <span class="name">{r.name}</span>
-                    <span class={`badge ${bucketBadgeClass(r.oss_bucket)}`}>{bucketText(r.oss_bucket)}</span>
+                    <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
+                      {bucketText(lang, r.oss_bucket)}
+                    </span>
                   </span>
                   <span class="picker-item-meta">
-                    {formLabel(r.form)}
+                    {formLabel(lang, r.form)}
                     {r.vendor ? ` · ${r.vendor}` : ''}
-                    {r.stars != null ? ` · ${fmt(r.stars)} star` : ''}
+                    {r.stars != null ? ` · ${t(lang, 'picker.star', { n: fmt(r.stars) })}` : ''}
                   </span>
                 </span>
                 <span class="picker-item-score">{r.score != null ? r.score : '—'}</span>

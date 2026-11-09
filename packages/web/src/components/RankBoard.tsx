@@ -1,19 +1,8 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import AgentIcon from './AgentIcon';
 import { PIN_EVENT, readPins, togglePin } from '../lib/pins';
-import {
-  FORM_ORDER,
-  GRANS,
-  bucketBadgeClass,
-  bucketText,
-  defaultSortFor,
-  fmt,
-  fmtPct,
-  fmtSigned,
-  formLabel,
-  granLabel,
-  rankUrl,
-} from '../lib/shared';
+import { fmt, fmtPct, fmtSigned, rankUrl, defaultSortFor, GRANS, FORM_ORDER } from '../lib/shared';
+import { type Lang, bucketText, flagLabel, formLabel, granLabel, pathFor, t } from '../i18n/dict';
 
 export type RankRow = {
   slug: string;
@@ -42,14 +31,8 @@ interface Props {
   bucket: string;
   form: string;
   g: string;
+  lang: Lang;
 }
-
-const FLAG_LABEL: Record<string, string> = {
-  partial_data: '数据不全',
-  no_data: '数据未公开',
-  installs_may_include_ci: '含 CI 安装',
-  small_group: '样本少',
-};
 
 type SortKey = 'score' | 'stars' | 'delta_1d' | 'delta_7d' | 'growth_30d_pct' | 'installs' | 'activity';
 
@@ -59,22 +42,27 @@ type Col = {
   get: (r: RankRow) => number | null;
   show: (rows: RankRow[]) => boolean;
   format: (r: RankRow) => string;
-  /** 行内微条：把数值长度化，方便竖着扫 */
   bar?: boolean;
 };
 
-const COLS: Col[] = [
-  { key: 'score', label: '综合分', get: (r) => r.score, show: () => true, format: (r) => (r.score != null ? String(r.score) : '—'), bar: true },
-  { key: 'stars', label: 'Star', get: (r) => r.metrics.stars, show: (rs) => rs.some((r) => r.metrics.stars != null), format: (r) => fmt(r.metrics.stars), bar: true },
-  { key: 'installs', label: '安装量', get: (r) => r.metrics.installs, show: (rs) => rs.some((r) => r.metrics.installs != null), format: (r) => fmt(r.metrics.installs), bar: true },
-  { key: 'activity', label: '活跃', get: (r) => r.metrics.activity, show: (rs) => rs.some((r) => r.metrics.activity != null), format: (r) => (r.metrics.activity != null ? r.metrics.activity.toFixed(2) : '—') },
-  { key: 'delta_1d', label: '日增', get: (r) => r.delta_1d, show: (rs) => rs.some((r) => r.delta_1d != null), format: (r) => fmtSigned(r.delta_1d) },
-  { key: 'delta_7d', label: '7d 增', get: (r) => r.delta_7d, show: (rs) => rs.some((r) => r.delta_7d != null), format: (r) => fmtSigned(r.delta_7d) },
-  { key: 'growth_30d_pct', label: '30d 增速', get: (r) => r.growth_30d_pct, show: (rs) => rs.some((r) => r.growth_30d_pct != null), format: (r) => fmtPct(r.growth_30d_pct) },
-];
+function columns(lang: Lang): Col[] {
+  return [
+    { key: 'score', label: t(lang, 'metric.score'), get: (r) => r.score, show: () => true, format: (r) => (r.score != null ? String(r.score) : '—'), bar: true },
+    { key: 'stars', label: t(lang, 'metric.stars'), get: (r) => r.metrics.stars, show: (rs) => rs.some((r) => r.metrics.stars != null), format: (r) => fmt(r.metrics.stars), bar: true },
+    { key: 'installs', label: t(lang, 'metric.installs'), get: (r) => r.metrics.installs, show: (rs) => rs.some((r) => r.metrics.installs != null), format: (r) => fmt(r.metrics.installs), bar: true },
+    { key: 'activity', label: t(lang, 'metric.activityShort'), get: (r) => r.metrics.activity, show: (rs) => rs.some((r) => r.metrics.activity != null), format: (r) => (r.metrics.activity != null ? r.metrics.activity.toFixed(2) : '—') },
+    { key: 'delta_1d', label: t(lang, 'metric.delta1d'), get: (r) => r.delta_1d, show: (rs) => rs.some((r) => r.delta_1d != null), format: (r) => fmtSigned(r.delta_1d) },
+    { key: 'delta_7d', label: t(lang, 'metric.delta7d'), get: (r) => r.delta_7d, show: (rs) => rs.some((r) => r.delta_7d != null), format: (r) => fmtSigned(r.delta_7d) },
+    { key: 'growth_30d_pct', label: t(lang, 'metric.growth30d'), get: (r) => r.growth_30d_pct, show: (rs) => rs.some((r) => r.growth_30d_pct != null), format: (r) => fmtPct(r.growth_30d_pct) },
+  ];
+}
 
 export default function RankBoard(props: Props) {
+  const { lang } = props;
   const allRows = props.rows;
+  const COLS = useMemo(() => columns(lang), [lang]);
+  const H = (p: string) => pathFor(lang, p);
+
   const [bucket, setBucket] = useState(props.bucket);
   const [form, setForm] = useState(props.form);
   const [gran, setGran] = useState(props.g);
@@ -89,9 +77,8 @@ export default function RankBoard(props: Props) {
     return () => window.removeEventListener(PIN_EVENT, onPins);
   }, []);
 
-  const cols = useMemo(() => COLS.filter((c) => c.show(allRows)), [allRows]);
+  const cols = useMemo(() => COLS.filter((c) => c.show(allRows)), [COLS, allRows]);
 
-  /** 每个数值列的最大值，用来算微条长度（按全量算，切筛选时长度不跳） */
   const maxOf = useMemo(() => {
     const m: Partial<Record<SortKey, number>> = {};
     for (const c of COLS) {
@@ -99,7 +86,7 @@ export default function RankBoard(props: Props) {
       if (vals.length) m[c.key] = Math.max(...vals.map(Math.abs));
     }
     return m;
-  }, [allRows]);
+  }, [COLS, allRows]);
 
   const filtered = useMemo(() => {
     let list = allRows;
@@ -125,16 +112,16 @@ export default function RankBoard(props: Props) {
       let n = 0;
       return { form: f, rows: rows.map((r) => ({ ...r, _displayRank: r.score != null ? ++n : null })) };
     }).filter((g) => g.rows.length > 0);
-  }, [filtered, sortKey, sortDir]);
+  }, [COLS, filtered, sortKey, sortDir]);
 
   useEffect(() => {
-    const url = rankUrl(bucket, form, gran);
+    const url = H(rankUrl(bucket, form, gran));
     if (window.location.pathname !== url) window.history.replaceState(null, '', url);
-    const title = bucket === 'open' ? '开源榜' : '闭源榜';
+    const title = bucket === 'open' ? t(lang, 'rank.titleOpen') : t(lang, 'rank.titleClosed');
     document.title = `${title} · AgentNews`;
     const h1 = document.getElementById('rank-title');
     if (h1) h1.textContent = title;
-  }, [bucket, form, gran]);
+  }, [bucket, form, gran, lang]);
 
   const changeGran = (next: string) => {
     setGran(next);
@@ -152,68 +139,68 @@ export default function RankBoard(props: Props) {
 
   const rankedCount = groups.reduce((n, g) => n + g.rows.filter((r) => r._displayRank != null).length, 0);
   const hasDeltas = allRows.some((r) => r.delta_1d != null || r.delta_7d != null);
+  const sortLabel = COLS.find((c) => c.key === sortKey)?.label ?? '';
 
   return (
     <div>
       <div class="rank-toolbar">
         <div class="row" style="gap:6px">
-          <span class="eyebrow" style="font-size:9px">归属</span>
-          <div class="segmented" role="group" aria-label="开源闭源">
+          <span class="eyebrow" style="font-size:10px">{t(lang, 'rank.owner')}</span>
+          <div class="segmented" role="group" aria-label={t(lang, 'rank.owner')}>
             {['open', 'closed'].map((b) => (
-              <button
-                type="button"
-                aria-current={bucket === b ? 'page' : undefined}
-                onClick={() => setBucket(b)}
-              >
-                {b === 'open' ? '开源' : '闭源'}
+              <button type="button" aria-current={bucket === b ? 'page' : undefined} onClick={() => setBucket(b)}>
+                {bucketText(lang, b)}
               </button>
             ))}
           </div>
         </div>
         <div class="row" style="gap:6px">
-          <span class="eyebrow" style="font-size:9px">粒度</span>
-          <div class="segmented" role="group" aria-label="时间粒度">
+          <span class="eyebrow" style="font-size:10px">{t(lang, 'rank.gran')}</span>
+          <div class="segmented" role="group" aria-label={t(lang, 'rank.gran')}>
             {GRANS.map((gg) => (
               <button type="button" aria-current={gran === gg ? 'page' : undefined} onClick={() => changeGran(gg)}>
-                {granLabel(gg)}
+                {granLabel(lang, gg)}
               </button>
             ))}
           </div>
         </div>
         <span class="rank-toolbar-count">
-          {filtered.length} agent · {groups.length} 形态 · {rankedCount} 在榜
+          {t(lang, 'rank.count', { n: filtered.length, forms: groups.length, ranked: rankedCount })}
         </span>
       </div>
 
-      <nav class="tabs" aria-label="形态筛选">
+      <nav class="tabs" aria-label={t(lang, 'picker.form')}>
         {(['all', ...FORM_ORDER] as string[]).map((f) => (
           <a
             class="tab"
-            href={rankUrl(bucket, f, gran)}
+            href={H(rankUrl(bucket, f, gran))}
             aria-current={form === f ? 'page' : undefined}
             onClick={(e) => {
               e.preventDefault();
               setForm(f);
             }}
           >
-            {formLabel(f)}
+            {f === 'all' ? t(lang, 'app.all') : formLabel(lang, f)}
           </a>
         ))}
       </nav>
 
-      {!hasDeltas && (
-        <p class="rank-hint">增量数据积累中：日 / 周榜需 ≥1 天历史快照，当前按综合分排序。</p>
-      )}
+      {!hasDeltas && <p class="rank-hint">{t(lang, 'rank.hint')}</p>}
 
       {groups.length === 0 && (
         <div class="box rank-empty">
           <div class="box-body">
-            <h3 style="margin-bottom:3px">当前筛选下没有 agent</h3>
+            <h3 style="margin-bottom:3px">{t(lang, 'rank.emptyTitle')}</h3>
             <p class="muted" style="font-size:12.5px">
-              {form !== 'all' ? `${formLabel(form)} 在${bucket === 'open' ? '开源' : '闭源'}榜暂无收录。` : '该归属下暂无收录条目。'}
+              {form !== 'all'
+                ? t(lang, 'rank.emptyForm', {
+                    form: formLabel(lang, form),
+                    bucket: bucket === 'open' ? bucketText(lang, 'open') : bucketText(lang, 'closed'),
+                  })
+                : t(lang, 'rank.emptyBucket')}
             </p>
             <button class="btn" style="margin-top:10px" onClick={() => { setForm('all'); setBucket('open'); }}>
-              查看全部开源
+              {t(lang, 'rank.emptyCta')}
             </button>
           </div>
         </div>
@@ -224,11 +211,11 @@ export default function RankBoard(props: Props) {
           <section class="box" key={grp.form}>
             <div class="box-header">
               <span class="row" style="gap:7px">
-                {formLabel(grp.form)}
+                {formLabel(lang, grp.form)}
                 <span class="counter">{grp.rows.filter((r) => r._displayRank != null).length}</span>
               </span>
               <span style="font-weight:400;letter-spacing:0.04em">
-                {COLS.find((c) => c.key === sortKey)?.label} {sortDir === 'desc' ? '↓' : '↑'} · 同形态内
+                {t(lang, 'rank.sortBy', { label: sortLabel })} {sortDir === 'desc' ? '↓' : '↑'} · {t(lang, 'rank.sameForm')}
               </span>
             </div>
 
@@ -251,7 +238,7 @@ export default function RankBoard(props: Props) {
                         </button>
                       </th>
                     ))}
-                    <th style="width:2rem" aria-label="钉选"></th>
+                    <th style="width:2rem" aria-label="pin"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -268,10 +255,12 @@ export default function RankBoard(props: Props) {
                             size={22}
                           />
                           <span class="tags">
-                            <a class="name" href={`/agent/${r.slug}/`}>{r.name}</a>
-                            <span class={`badge ${bucketBadgeClass(r.oss_bucket)}`}>{bucketText(r.oss_bucket)}</span>
+                            <a class="name" href={H(`/agent/${r.slug}/`)}>{r.name}</a>
+                            <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
+                              {bucketText(lang, r.oss_bucket)}
+                            </span>
                             {r.flags.map((f) => (
-                              <span class="badge b-semi">{FLAG_LABEL[f] ?? f}</span>
+                              <span class="badge b-semi">{flagLabel(lang, f)}</span>
                             ))}
                           </span>
                         </div>
@@ -298,9 +287,13 @@ export default function RankBoard(props: Props) {
                         <button
                           type="button"
                           class={`pin-btn${pins.includes(r.slug) ? ' is-pinned' : ''}`}
-                          aria-label={pins.includes(r.slug) ? `取消钉选 ${r.name}` : `钉选 ${r.name} 以便对比`}
+                          aria-label={
+                            pins.includes(r.slug)
+                              ? t(lang, 'rank.unpin', { name: r.name })
+                              : t(lang, 'rank.pin', { name: r.name })
+                          }
                           aria-pressed={pins.includes(r.slug)}
-                          title="钉选，稍后对比"
+                          title={t(lang, 'rank.pinTitle')}
                           onClick={(e) => {
                             e.stopPropagation();
                             setPins(togglePin(r.slug));
@@ -318,7 +311,7 @@ export default function RankBoard(props: Props) {
             <ul class="rank-cards">
               {grp.rows.map((r) => (
                 <li class="rank-card">
-                  <a class="rank-card-main" href={`/agent/${r.slug}/`}>
+                  <a class="rank-card-main" href={H(`/agent/${r.slug}/`)}>
                     <span class="pos">{r._displayRank ?? '—'}</span>
                     <AgentIcon
                       slug={r.slug}
@@ -330,9 +323,11 @@ export default function RankBoard(props: Props) {
                     <span class="rank-card-name">
                       <span class="name">{r.name}</span>
                       <span class="tags">
-                        <span class={`badge ${bucketBadgeClass(r.oss_bucket)}`}>{bucketText(r.oss_bucket)}</span>
+                        <span class={`badge ${r.oss_bucket === 'open' ? 'b-open' : r.oss_bucket === 'semi' ? 'b-semi' : 'b-closed'}`}>
+                          {bucketText(lang, r.oss_bucket)}
+                        </span>
                         {r.flags.slice(0, 1).map((f) => (
-                          <span class="badge b-semi">{FLAG_LABEL[f] ?? f}</span>
+                          <span class="badge b-semi">{flagLabel(lang, f)}</span>
                         ))}
                       </span>
                     </span>
@@ -340,7 +335,7 @@ export default function RankBoard(props: Props) {
                     <button
                       type="button"
                       class={`pin-btn${pins.includes(r.slug) ? ' is-pinned' : ''}`}
-                      aria-label="钉选对比"
+                      aria-label={t(lang, 'rank.pin', { name: r.name })}
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();

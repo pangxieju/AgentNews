@@ -264,7 +264,7 @@ export function loadAgentsMeta(): Record<string, AgentMeta> {
 }
 
 // 纯展示工具统一在 shared.ts（客户端 island 也要用，不能带 node 依赖）
-export { fmt, fmtPct, fmtSigned, formLabel, bucketText, bucketBadgeClass, FORM_ORDER, GRANS, granLabel, defaultSortFor, rankUrl } from './shared';
+export { fmt, fmtPct, fmtSigned, bucketBadgeClass, FORM_ORDER, GRANS, defaultSortFor, rankUrl } from './shared';
 
 /* ───────────────── 活动事件流（PRD F-24） ───────────────── */
 
@@ -295,16 +295,6 @@ export function loadEvents(): AgentEvent[] {
   }
   return out;
 }
-
-export const EVENT_LABEL: Record<AgentEvent['kind'], string> = {
-  release: '发版',
-  version: '版本',
-  listed: '新收录',
-  rank_jump: '排名变化',
-  newcomer: '新秀',
-  license_change: 'License',
-  archived: '归档',
-};
 
 /** 读首次收录状态 */
 export function loadAgentState(): { started_at: string; agents: Record<string, { first_listed: string; last_seen: string }> } | null {

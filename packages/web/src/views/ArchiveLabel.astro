@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import AgentIcon from '../components/AgentIcon';
+import { loadArchive, loadAgentsMeta, fmt, fmtPct } from '../lib/data';
+import { FORM_KEYS, type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
+
+interface Props {
+  lang: Lang;
+  label: string;
+}
+const { lang, label } = Astro.props;
+const h = (p: string) => pathFor(lang, p);
+
+const a = loadArchive(label);
+const meta = loadAgentsMeta();
+
+const groups = (a
+  ? FORM_KEYS.map((f) => ({
+      form: f,
+      rows: a.rows.filter((r) => r.form === f).sort((x, y) => (x.rank_in_form ?? 999) - (y.rank_in_form ?? 999)),
+    })).filter((g) => g.rows.length > 0)
+  : []);
+
+const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
+---
+
+<Base lang={lang} pageTitle={`${t(lang, 'archive.labelTitle', { label })} · AgentNews`}>
+  <div class="crumbs"><a href={h('/archive/')}>{t(lang, 'archive.back')}</a></div>
+
+  {!a ? (
+    <div class="page-head"><h1>{t(lang, 'app.none')}</h1></div>
+  ) : (
+    <>
+      <div class="page-head">
+        <h1>
+          {label}
+          <span class="muted" style="font-size:14px;font-weight:400">
+            · {a.period === 'week' ? t(lang, 'archive.week') : t(lang, 'archive.month')}
+          </span>
+        </h1>
+        <p class="lede">{t(lang, 'archive.endAt', { date: a.end })}</p>
+      </div>
+
+      <div class="stack">
+        {groups.map((g) => (
+          <section class="box">
+            <div class="box-header">
+              <span class="row" style="gap:8px">
+                {formLabel(lang, g.form)}
+                <span class="counter">{g.rows.length}</span>
+              </span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="pos">#</th><th>Agent</th>
+                    <th class="num">{t(lang, 'metric.score')}</th>
+                    <th class="num">{t(lang, 'metric.stars')}</th>
+                    <th class="num">{t(lang, 'metric.growth30d')}</th>
+                    <th class="num">{t(lang, 'metric.installs')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {g.rows.map((r) => (
+                    <tr>
+                      <td class="pos">{r.rank_in_form ?? '—'}</td>
+                      <td>
+                        <div class="agent-cell">
+                          <AgentIcon
+                            slug={r.slug}
+                            name={r.name ?? r.slug}
+                            icon={meta[r.slug]?.icon}
+                            iconFallback={meta[r.slug]?.iconFallback}
+                            size={24}
+                          />
+                          <span class="tags">
+                            <a class="name" href={h(`/agent/${r.slug}/`)}>{r.name ?? r.slug}</a>
+                            <span class={`badge ${bucketBadge(r.oss_bucket)}`}>
+                              {bucketText(lang, r.oss_bucket)}
+                            </span>
+                          </span>
+                        </div>
+                      </td>
+                      <td class="num"><strong>{r.score ?? '—'}</strong></td>
+                      <td class="num">{fmt(r.metrics?.stars)}</td>
+                      <td class="num">{fmtPct(r.growth_30d_pct)}</td>
+                      <td class="num">{fmt(r.metrics?.installs)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ))}
+      </div>
+    </>
+  )}
+</Base>

@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import LineChart from '../components/charts/LineChart.astro';
+import { loadArchives, loadAllScores, loadDailyCounts } from '../lib/data';
+import { type Lang, pathFor, t } from '../i18n/dict';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const h = (p: string) => pathFor(lang, p);
+
+const archives = loadArchives();
+const daily = loadAllScores();
+const counts = loadDailyCounts();
+const trendReady = counts.length >= 2;
+---
+
+<Base lang={lang} pageTitle={`${t(lang, 'archive.title')} · AgentNews`}>
+  <div class="page-head">
+    <div class="crumbs"><a href={h('/')}>AgentNews</a><span>/</span><span>{t(lang, 'archive.crumb')}</span></div>
+    <span class="eyebrow">{lang === 'en' ? 'Archive · Weekly & Monthly' : '归档 · 周档与月档'}</span>
+    <h1>{t(lang, 'archive.title')}</h1>
+    <p class="lede">{t(lang, 'archive.lede')}</p>
+  </div>
+
+  <section class="section">
+    <div class="section-title"><h2>{t(lang, 'archive.periods')}</h2></div>
+    {archives.length > 0 ? (
+      <div class="box">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{t(lang, 'archive.period')}</th><th>{t(lang, 'archive.type')}</th>
+                <th>{t(lang, 'archive.end')}</th><th class="num">{t(lang, 'archive.ranked')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {archives.map((a) => (
+                <tr>
+                  <td><a href={h(`/archive/${a.label}/`)}>{a.label}</a></td>
+                  <td class="muted">{a.period === 'week' ? t(lang, 'archive.week') : t(lang, 'archive.month')}</td>
+                  <td class="muted">{a.end}</td>
+                  <td class="num">{a.rows.filter((r) => r.rank_in_form != null).length}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ) : (
+      <div class="notice">{t(lang, 'archive.emptyPeriods')}</div>
+    )}
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>{t(lang, 'archive.daily')}</h2>
+      <span class="muted">{t(lang, 'archive.dailyHint')}</span>
+    </div>
+    {trendReady ? (
+      <div class="box" style="margin-bottom:16px">
+        <div class="box-body">
+          <LineChart
+            series={[
+              { name: t(lang, 'chart.series.listed'), points: counts.map((c) => ({ x: c.date, y: c.listed })), tone: 'accent' },
+              { name: t(lang, 'chart.series.ranked'), points: counts.map((c) => ({ x: c.date, y: c.ranked })), tone: 'success' },
+            ]}
+            zeroBased
+            height={210}
+            unit={lang === 'en' ? '' : ' 个'}
+          />
+        </div>
+      </div>
+    ) : (
+      <div class="notice" style="margin-bottom:16px">
+        {t(lang, 'archive.chartNotice', { n: counts.length, date: counts[0]?.date ?? '—' })}
+      </div>
+    )}
+    {daily.length > 0 ? (
+      <div class="box">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{lang === 'en' ? 'Date' : '日期'}</th>
+                <th class="num">{t(lang, 'archive.ranked')}</th>
+                <th class="num">{t(lang, 'archive.listed')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {daily.map((d) => (
+                <tr>
+                  <td>{d.date}</td>
+                  <td class="num">{d.rows.filter((r) => r.rank_in_form != null).length}</td>
+                  <td class="num">{d.rows.length}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ) : (
+      <div class="notice">{t(lang, 'archive.emptyDaily')}</div>
+    )}
+  </section>
+
+  <div class="notice" style="margin-top:24px">{t(lang, 'archive.download')}</div>
+</Base>

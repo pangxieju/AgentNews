@@ -3,8 +3,15 @@ import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import HomePicker, { type PickRow } from '../components/HomePicker';
 import { loadLatestScores, loadAgentsMeta, fmtPct } from '../lib/data';
-import { FORM_ORDER, formLabel } from '../lib/shared';
-import { FORM_GUIDES } from '../lib/forms';
+import { FORM_ORDER } from '../lib/shared';
+import { FORM_GUIDES } from '../i18n/guides';
+import { type Lang, formLabel, pathFor, t } from '../i18n/dict';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const H = (p: string) => pathFor(lang, p);
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
@@ -23,15 +30,16 @@ const topOpen = [...open].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(
 const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 6);
 const hasGrowth = rows.some((r) => r.growth_30d_pct != null);
 
+const guides = FORM_GUIDES[lang];
 const formCards = FORM_ORDER.map((f, i) => {
   const list = rows.filter((r) => r.form === f);
   const ranked = [...list].filter((r) => r.score != null).sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
   return {
     form: f,
     idx: String(i + 1).padStart(2, '0'),
-    label: formLabel(f),
-    en: FORM_GUIDES[f]?.en ?? '',
-    fit: FORM_GUIDES[f]?.tagline ?? '',
+    label: formLabel(lang, f),
+    en: guides[f]?.en ?? '',
+    fit: guides[f]?.tagline ?? '',
     count: list.length,
     top: ranked.slice(0, 2).map((r) => ({ name: r.name ?? r.slug, score: r.score })),
   };
@@ -47,49 +55,48 @@ const pick: PickRow[] = rows.map((r) => ({
   stars: r.metrics?.stars ?? null,
 }));
 
-/** 榜单列的最大值，用于行内微条 */
-const maxScore = Math.max(...rows.map((r) => r.score ?? 0), 1);
-const microWidth = (v: number | null) => (v == null ? 0 : Math.max(3, (v / maxScore) * 100));
+const titleLines = t(lang, 'home.title').split('\n');
 ---
 
-<Base pageTitle="AI Agent 排行榜">
+<Base lang={lang} pageTitle={t(lang, 'app.tagline')}>
   <div class="measure-head">
     <div>
-      <span class="eyebrow">AI Agent Index · Snapshot {date}</span>
-      <h1 class="display">把不同的生态<br />放到同一把尺子上</h1>
-      <p class="lede">
-        GitHub star、npm / PyPI 下载、商店安装量先压缩到组内分位数，再按形态分组排名。
-        {rows.length} 个 agent，7 种形态，跨形态不比总量 —— 先看形态，再比数据。
-      </p>
+      <span class="eyebrow">{t(lang, 'home.eyebrow', { date })}</span>
+      <h1 class="display">
+        {titleLines.map((line, i) => (
+          <>{i > 0 && <br />}{line}</>
+        ))}
+      </h1>
+      <p class="lede">{t(lang, 'home.lede', { n: rows.length })}</p>
     </div>
     <div class="readout">
-      <div><span data-k>收录</span><b>{rows.length}</b></div>
-      <div><span data-k>开源</span><b>{open.length}</b></div>
-      <div><span data-k>闭源</span><b>{closed.length}</b></div>
-      <div><span data-k>形态</span><b>{formCards.length}</b></div>
-      <div><span data-k>在榜</span><b>{rows.filter((r) => r.rank_in_form != null).length}</b></div>
+      <div><span data-k>{t(lang, 'home.readout.listed')}</span><b>{rows.length}</b></div>
+      <div><span data-k>{t(lang, 'home.readout.open')}</span><b>{open.length}</b></div>
+      <div><span data-k>{t(lang, 'home.readout.closed')}</span><b>{closed.length}</b></div>
+      <div><span data-k>{t(lang, 'home.readout.forms')}</span><b>{formCards.length}</b></div>
+      <div><span data-k>{t(lang, 'home.readout.ranked')}</span><b>{rows.filter((r) => r.rank_in_form != null).length}</b></div>
     </div>
   </div>
   <div class="ruler" aria-hidden="true"></div>
 
   <section class="section">
     <div class="section-title">
-      <h2>Step 01 · 选形态</h2>
-      <span class="muted">你在哪儿用它 → 跨形态不可比</span>
+      <h2>{t(lang, 'home.step1')}</h2>
+      <span class="muted">{t(lang, 'home.step1Hint')}</span>
     </div>
     <div class="form-grid">
       {formCards.map((c) => (
-        <a class="form-card" href={`/forms/${c.form}/`}>
-          <span class="idx">Form {c.idx} · {c.count}</span>
-          <h3>{c.label} <em>{c.en}</em></h3>
+        <a class="form-card" href={H(`/forms/${c.form}/`)}>
+          <span class="idx">{t(lang, 'home.formMeta', { idx: c.idx, n: c.count })}</span>
+          <h3>{c.label}{c.en && c.en.toLowerCase() !== c.label.toLowerCase() && <em>{c.en}</em>}</h3>
           <p class="fit">{c.fit}</p>
           <div class="mini">
-            {c.top.length === 0 && <span>暂无可比数据</span>}
-            {c.top.map((t, i) => (
-              <span>{i === 0 ? '①' : '②'} <b>{t.name}</b> {t.score}</span>
+            {c.top.length === 0 && <span>{t(lang, 'home.noData')}</span>}
+            {c.top.map((x, i) => (
+              <span>{i === 0 ? '①' : '②'} <b>{x.name}</b> {x.score}</span>
             ))}
           </div>
-          <span class="go">形态指南 →</span>
+          <span class="go">{t(lang, 'home.guide')}</span>
         </a>
       ))}
     </div>
@@ -97,37 +104,39 @@ const microWidth = (v: number | null) => (v == null ? 0 : Math.max(3, (v / maxSc
 
   <section class="section">
     <div class="section-title">
-      <h2>Step 02 · 找候选</h2>
-      <span class="muted">搜索 / 形态 / 归属 · 榜单里按 + 加入对比</span>
+      <h2>{t(lang, 'home.step2')}</h2>
+      <span class="muted">{t(lang, 'home.step2Hint')}</span>
     </div>
-    <HomePicker client:load items={pick} meta={meta} />
+    <HomePicker client:load items={pick} meta={meta} lang={lang} />
   </section>
 
   <section class="section">
     <div class="section-title">
-      <h2>Step 03 · 并排比</h2>
-      <span class="muted">同形态内逐行比 12 项</span>
+      <h2>{t(lang, 'home.step3')}</h2>
+      <span class="muted">{t(lang, 'home.step3Hint')}</span>
     </div>
     <div class="cta-band">
       <div>
-        <span class="eyebrow">Compare</span>
-        <h2>两个候选，逐行比</h2>
-        <p>综合分只说明谁在前，对比才说明差在哪：Star、安装量、活跃度、License、最近发版。</p>
+        <span class="eyebrow">{t(lang, 'home.compareEyebrow')}</span>
+        <h2>{t(lang, 'home.compareTitle')}</h2>
+        <p>{t(lang, 'home.compareDesc')}</p>
       </div>
-      <a class="btn btn-primary" href="/compare/">开始对比 →</a>
+      <a class="btn btn-primary" href={H('/compare/')}>{t(lang, 'home.compareCta')}</a>
     </div>
   </section>
 
   <section class="section">
     <div class="section-title">
-      <h2>证据 · 双榜</h2>
-      <span class="muted">同形态内排名 · {date}</span>
+      <h2>{t(lang, 'home.board')}</h2>
+      <span class="muted">{t(lang, 'home.boardHint', { date })}</span>
     </div>
     <div class="board-2">
       <div class="board-col">
         <div class="board-head">
-          <span class="board-title">开源榜 <span>Open · {open.length}</span></span>
-          <a class="btn btn-sm" href="/top/open/all/month/">全部 →</a>
+          <span class="board-title">
+            {t(lang, 'home.boardOpen')} <span>Open · {open.length}</span>
+          </span>
+          <a class="btn btn-sm" href={H('/top/open/all/month/')}>{t(lang, 'app.more')}</a>
         </div>
         {topOpen.map((r, i) => (
           <div class="board-row">
@@ -140,7 +149,7 @@ const microWidth = (v: number | null) => (v == null ? 0 : Math.max(3, (v / maxSc
                 iconFallback={meta[r.slug]?.iconFallback}
                 size={20}
               />
-              <a href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
+              <a href={H(`/agent/${r.slug}/`)}>{r.name ?? r.slug}</a>
             </span>
             <span class="board-val">
               {hasGrowth && <span class="muted" style="font-size:10px">{fmtPct(r.growth_30d_pct)}</span>}
@@ -148,13 +157,15 @@ const microWidth = (v: number | null) => (v == null ? 0 : Math.max(3, (v / maxSc
             </span>
           </div>
         ))}
-        <div class="board-foot">OSI 协议 · MIT / Apache / AGPL 等</div>
+        <div class="board-foot">{t(lang, 'home.boardOpenFoot')}</div>
       </div>
 
       <div class="board-col">
         <div class="board-head">
-          <span class="board-title">闭源榜 <span>Closed · {closed.length}</span></span>
-          <a class="btn btn-sm" href="/top/closed/all/month/">全部 →</a>
+          <span class="board-title">
+            {t(lang, 'home.boardClosed')} <span>Closed · {closed.length}</span>
+          </span>
+          <a class="btn btn-sm" href={H('/top/closed/all/month/')}>{t(lang, 'app.more')}</a>
         </div>
         {topClosed.map((r, i) => (
           <div class="board-row">
@@ -167,7 +178,7 @@ const microWidth = (v: number | null) => (v == null ? 0 : Math.max(3, (v / maxSc
                 iconFallback={meta[r.slug]?.iconFallback}
                 size={20}
               />
-              <a href={`/agent/${r.slug}/`}>{r.name ?? r.slug}</a>
+              <a href={H(`/agent/${r.slug}/`)}>{r.name ?? r.slug}</a>
             </span>
             <span class="board-val">
               {hasGrowth && <span class="muted" style="font-size:10px">{fmtPct(r.growth_30d_pct)}</span>}
@@ -175,16 +186,14 @@ const microWidth = (v: number | null) => (v == null ? 0 : Math.max(3, (v / maxSc
             </span>
           </div>
         ))}
-        <div class="board-foot">专有 License · 数据缺失按收录区展示</div>
+        <div class="board-foot">{t(lang, 'home.boardClosedFoot')}</div>
       </div>
     </div>
     <div class="scale-strip">
-      <span>归一化尺度</span>
+      <span>{t(lang, 'home.scale')}</span>
       <span class="scale-ramp" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-      <span>组内分位数 0 → 100</span>
-      <span style="margin-left:auto">缺失指标权重重分配 · 不编造名次</span>
+      <span>{t(lang, 'home.scaleRange')}</span>
+      <span style="margin-left:auto">{t(lang, 'home.scaleNote')}</span>
     </div>
   </section>
-
-  {!data && <div class="warn" style="margin-top:20px">暂无数据：请先运行 <code>pnpm collect</code> 生成快照。</div>}
 </Base>

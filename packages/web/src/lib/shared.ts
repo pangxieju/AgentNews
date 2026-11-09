@@ -16,22 +16,6 @@ export const FORM_ORDER = [
 
 export type FormKey = (typeof FORM_ORDER)[number];
 
-const FORM_LABELS: Record<string, string> = {
-  all: '全部',
-  cli: 'CLI',
-  'ide-plugin': 'IDE 插件',
-  'ide-app': 'IDE 应用',
-  desktop: '桌面',
-  browser: '浏览器',
-  framework: '框架',
-  autonomous: '自主',
-};
-
-export const formLabel = (f: string): string => FORM_LABELS[f] ?? f;
-
-export const bucketText = (b: string): string =>
-  b === 'open' ? '开源' : b === 'semi' ? '半开源' : '闭源';
-
 export const bucketBadgeClass = (b: string): string =>
   b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed';
 
@@ -58,9 +42,6 @@ export function fmtSigned(n: number | null | undefined): string {
 }
 
 export const GRANS = ['day', 'week', 'month'] as const;
-export const granLabel = (g: string): string =>
-  g === 'day' ? '日榜' : g === 'week' ? '周榜' : '月榜';
-
 /** 粒度 → 默认排序键（PRD §5.5：粒度切换即排序口径切换） */
 export const defaultSortFor = (g: string): string =>
   g === 'day' ? 'delta_1d' : g === 'week' ? 'delta_7d' : 'score';

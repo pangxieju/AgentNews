@@ -1,0 +1,125 @@
+---
+import Base from '../layouts/Base.astro';
+import AgentIcon from '../components/AgentIcon';
+import { loadEvents, loadLatestScores, loadAgentsMeta } from '../lib/data';
+import { type Lang, eventLabel, pathFor, t } from '../i18n/dict';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const h = (p: string) => pathFor(lang, p);
+
+const events = loadEvents();
+const data = loadLatestScores();
+const date = data?.date ?? '—';
+const meta = loadAgentsMeta();
+
+const kinds = ['all', 'version', 'release', 'listed', 'rank_jump', 'newcomer'] as const;
+
+// 按日期分组
+const byDate = new Map<string, typeof events>();
+for (const e of events) {
+  const list = byDate.get(e.date) ?? [];
+  list.push(e);
+  byDate.set(e.date, list);
+}
+const dates = [...byDate.keys()].sort().reverse();
+
+const badgeClass = (k: string) =>
+  k === 'version' ? 'b-open'
+    : k === 'release' ? 'b-open'
+      : k === 'listed' ? 'b-semi'
+        : k === 'rank_jump' ? 'b-semi'
+          : k === 'newcomer' ? 'b-open'
+            : 'b-closed';
+---
+
+<Base lang={lang} pageTitle={`${t(lang, 'activity.title')} · AgentNews`}>
+  <div class="page-head">
+    <div class="crumbs"><a href={h('/')}>AgentNews</a><span>/</span><span>{t(lang, 'activity.crumb')}</span></div>
+    <span class="eyebrow">{lang === 'en' ? 'Activity · Releases & Moves' : '动态 · 发版与变化'}</span>
+    <h1>{t(lang, 'activity.title')}</h1>
+    <p class="lede">{t(lang, 'activity.lede', { date })}</p>
+  </div>
+
+  <nav class="tabs" aria-label={t(lang, 'activity.title')} data-event-tabs>
+    {kinds.map((k) => (
+      <a class="tab" href={`?kind=${k}`} data-kind={k} aria-current={k === 'all' ? 'page' : undefined}>
+        {k === 'all' ? t(lang, 'activity.all') : eventLabel(lang, k)}
+      </a>
+    ))}
+  </nav>
+
+  {dates.length === 0 ? (
+    <div class="notice">{t(lang, 'activity.empty')}</div>
+  ) : (
+    dates.map((d) => (
+      <section class="section">
+        <div class="section-title"><h2>{d}</h2></div>
+        <div class="box">
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                {byDate.get(d)!.map((e) => (
+                  <tr data-kind={e.kind}>
+                    <td style="width:6rem">
+                      <span class={`badge ${badgeClass(e.kind)}`}>{eventLabel(lang, e.kind)}</span>
+                    </td>
+                    <td>
+                      <div class="agent-cell">
+                        <AgentIcon
+                          slug={e.slug}
+                          name={e.name}
+                          icon={meta[e.slug]?.icon}
+                          iconFallback={meta[e.slug]?.iconFallback}
+                          size={24}
+                        />
+                        <span class="tags">
+                          <a class="name" href={h(`/agent/${e.slug}/`)}>{e.name}</a>
+                          {(e.kind === 'version' || e.kind === 'release' || e.kind === 'newcomer') && e.detail && (
+                            <span class="muted">· {e.detail}</span>
+                          )}
+                          {e.kind === 'rank_jump' && e.from != null && e.to != null && (
+                            <span class="muted">· {t(lang, 'activity.rankJump', { from: e.from, to: e.to })}</span>
+                          )}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    ))
+  )}
+</Base>
+
+<script is:inline>
+  // 事件筛选：静态页无法在构建期读 query，改为客户端按 ?kind= 过滤
+  (function () {
+    var tabs = document.querySelectorAll('[data-event-tabs] [data-kind]');
+    function apply() {
+      var kind = new URLSearchParams(location.search).get('kind') || 'all';
+      document.querySelectorAll('tbody tr[data-kind]').forEach(function (tr) {
+        tr.style.display = kind === 'all' || tr.getAttribute('data-kind') === kind ? '' : 'none';
+      });
+      tabs.forEach(function (a) {
+        if (a.getAttribute('data-kind') === kind) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+    }
+    tabs.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var k = a.getAttribute('data-kind');
+        history.replaceState(null, '', '?kind=' + k);
+        apply();
+      });
+    });
+    window.addEventListener('popstate', apply);
+    apply();
+  })();
+</script>

@@ -41,6 +41,28 @@ AgentNews 的做法：
 
 ---
 
+## 多语言（中文 / English）
+
+- **路由**：中文在根路径（`/top/open/all/month/`），英文在 `/en/` 前缀（`/en/top/open/all/month/`），既有 URL 不变
+- **自动判断**：首次访问 `/` 时按浏览器语言决定是否跳到 `/en/`（深链不跳，避免打断分享链接）；手动切换后记住选择（`localStorage.an-lang`）
+- **手动切换**：顶栏 `中 / EN`，切换时保留当前路径
+- **SEO**：`<html lang>` 正确、`hreflang` 三组（zh-CN / en / x-default）、canonical 指向当前语言
+
+代码结构：
+
+```
+packages/web/src/
+  i18n/dict.ts        # 全站 UI 文案（服务端 + 客户端 island 共用）
+  i18n/guides.ts      # 7 种形态的指南文案（中/英）
+  i18n/content.ts     # 变更记录表格数据（中/英）
+  views/*.astro       # 页面视图，接受 lang prop（唯一实现）
+  pages/[...path].astro # 路由分发器：枚举 zh + en 全部路径
+```
+
+加一条文案：在 `i18n/dict.ts` 的 zh / en 两个对象里加同名 key，页面用 `t(lang, 'key')`。
+
+---
+
 ## 快速开始
 
 ```bash

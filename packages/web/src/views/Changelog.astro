@@ -1,0 +1,116 @@
+---
+import Base from '../layouts/Base.astro';
+import { CHANGELOG } from '../i18n/content';
+import { type Lang, pathFor, t } from '../i18n/dict';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const h = (p: string) => pathFor(lang, p);
+const data = CHANGELOG[lang];
+---
+
+<Base lang={lang} pageTitle={`${t(lang, 'changelog.title')} · AgentNews`}>
+  <div class="page-head">
+    <div class="crumbs"><a href={h('/')}>AgentNews</a><span>/</span><span>{t(lang, 'changelog.crumb')}</span></div>
+    <span class="eyebrow">{lang === 'en' ? 'Changelog · Entries & Algorithm' : '变更 · 条目与算法'}</span>
+    <h1>{t(lang, 'changelog.title')}</h1>
+    <p class="lede">{t(lang, 'changelog.lede')}</p>
+  </div>
+
+  <section class="section">
+    <div class="section-title"><h2>{t(lang, 'changelog.algo')}</h2></div>
+    <div class="box">
+      <div class="box-header">
+        <span class="row" style="gap:8px">v1 <span class="badge b-open">{t(lang, 'changelog.current')}</span></span>
+      </div>
+      <div class="box-body muted">
+        <p>{t(lang, 'changelog.weights')}</p>
+        <p style="margin-top:8px">{t(lang, 'changelog.normalize')}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><h2>{t(lang, 'changelog.spec')}</h2></div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{t(lang, 'changelog.date')}</th>
+              <th>{t(lang, 'changelog.change')}</th>
+              <th>{t(lang, 'changelog.reason')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.spec.map((r) => (
+              <tr>
+                <td class="mono">{r.date}</td>
+                <td set:html={r.change} />
+                <td class="muted" set:html={r.reason} />
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><h2>{t(lang, 'changelog.product')}</h2></div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{t(lang, 'changelog.date')}</th>
+              <th>{t(lang, 'changelog.change')}</th>
+              <th>{t(lang, 'changelog.reason')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.product.map((r) => (
+              <tr>
+                <td class="mono">{r.date}</td>
+                <td set:html={r.change} />
+                <td class="muted" set:html={r.reason} />
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><h2>{t(lang, 'changelog.entries')}</h2></div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{t(lang, 'changelog.date')}</th>
+              <th>{t(lang, 'changelog.action')}</th>
+              <th>{t(lang, 'changelog.note')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.entries.map((r) => (
+              <tr>
+                <td class="mono">{r.date}</td>
+                <td set:html={r.change} />
+                <td class="muted" set:html={r.reason} />
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="warn" style="margin-top:24px">
+    <strong>{t(lang, 'changelog.fixNote')}</strong>{t(lang, 'changelog.fixNoteBody')}
+  </div>
+</Base>

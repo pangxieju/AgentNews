@@ -1,32 +1,51 @@
 ---
 import { loadLatestScores, loadAgentsMeta } from '../lib/data';
 import PinTray from '../components/PinTray';
+import {
+  HTML_LANG,
+  type Lang,
+  langOf,
+  pathFor,
+  stripLang,
+  swapLangPath,
+  t,
+} from '../i18n/dict';
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
 const hasData = rows.length > 0;
-const date = data?.date ?? '暂无数据';
+const date = data?.date ?? '—';
 const agentsMeta = loadAgentsMeta();
-const {
-  pageTitle = 'AI Agent Index',
-  description = `AI Agent 排行榜：${rows.length} 个 agent 的开源/闭源双榜，按 star、安装量、活跃度跨生态归一化排名。数据截至 ${date}。`,
-} = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://agentnews.example.com').href;
 const path = Astro.url.pathname;
+const props = Astro.props as { lang?: Lang; pageTitle?: string; description?: string };
+const lang: Lang = props.lang ?? langOf(path);
+const base = stripLang(path);
+const SITE = Astro.site ?? new URL('https://agentnews.example.com');
+
+const pageTitle = props.pageTitle ?? t(lang, 'app.name');
+const description =
+  props.description ??
+  (lang === 'en'
+    ? `AI agent index: ${rows.length} agents across open/closed boards, normalized across ecosystems. Data as of ${date}.`
+    : `AI Agent 排行榜：${rows.length} 个 agent 的开源/闭源双榜，按 star、安装量、活跃度跨生态归一化排名。数据截至 ${date}。`);
+
+const canonical = new URL(path, SITE).href;
+const zhHref = new URL(base, SITE).href;
+const enHref = new URL(pathFor('en', base), SITE).href;
 
 const NAV = [
-  { href: '/', label: '总览', en: 'Index' },
-  { href: '/top/open/all/month/', label: '榜单', en: 'Board' },
-  { href: '/compare/', label: '对比', en: 'Diff' },
-  { href: '/rising/', label: '新秀', en: 'New' },
-  { href: '/activity/', label: '动态', en: 'Log' },
-  { href: '/security/', label: '安全', en: 'OSV' },
-  { href: '/archive/', label: '归档', en: 'Archive' },
-  { href: '/about/', label: '口径', en: 'Method' },
+  { key: 'index', href: '/' },
+  { key: 'board', href: '/top/open/all/month/' },
+  { key: 'compare', href: '/compare/' },
+  { key: 'new', href: '/rising/' },
+  { key: 'log', href: '/activity/' },
+  { key: 'osv', href: '/security/' },
+  { key: 'archive', href: '/archive/' },
+  { key: 'method', href: '/about/' },
 ];
 const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href.replace(/\/$/, ''));
+  href === '/' ? base === '/' || base === '' : base.startsWith(href.replace(/\/$/, ''));
 
 /** 托盘用的轻量元信息 */
 const pinMeta: Record<string, { name: string; form: string; score: number | null; icon: string | null; iconFallback: string | null }> = {};
@@ -43,7 +62,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={HTML_LANG[lang]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,6 +70,9 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="zh-CN" href={zhHref} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="x-default" href={zhHref} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={`${pageTitle} · AgentNews`} />
     <meta property="og:description" content={description} />
@@ -61,6 +83,18 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         const saved = localStorage.getItem('an-theme');
         if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
       } catch {}
+    </script>
+    <script is:inline>
+      // 首次访问：非中文浏览器在中文首页自动跳到 /en/（深链不跳，避免打断分享链接）
+      (function () {
+        try {
+          var stored = localStorage.getItem('an-lang');
+          if (stored === 'zh' || stored === 'en') return;
+          var nav = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+          if (/^zh/i.test(nav)) return;
+          if (location.pathname === '/' || location.pathname === '') location.replace('/en/');
+        } catch (e) {}
+      })();
     </script>
     <script is:inline>
       document.addEventListener(
@@ -486,13 +520,17 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         background: transparent;
       }
       td { border-bottom: 1px solid var(--rule); }
+      /* 英文长单词（包名 / 标量名）不撑破表格 */
+      td, th { overflow-wrap: anywhere; }
       tbody tr:hover td { background: var(--paper-3); }
       th:first-child, td:first-child { padding-left: 14px; }
       th:last-child, td:last-child { padding-right: 14px; }
       td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
       strong { font-weight: 600; }
       .pos {
-        width: 2.4rem;
+        width: 3.4rem;
+        min-width: 3.4rem;
+        white-space: nowrap;
         font-family: var(--mono);
         font-size: 13px;
         color: var(--ink-3);
@@ -1465,9 +1503,9 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         .lc-grid-wrap { height: 160px; }
         .picker-input { font-size: 14px; }
         .cmp-pickers { grid-template-columns: 1fr; }
-        .cmp-metric { width: 86px; font-size: 10px; letter-spacing: 0.04em; }
-        .cmp-table { font-size: 13px; }
-        .cmp-table th, .cmp-table td { padding: 8px 8px; }
+        .cmp-metric { width: 70px; font-size: 9.5px; letter-spacing: 0.01em; }
+        .cmp-table { font-size: 12.5px; }
+        .cmp-table th, .cmp-table td { padding: 8px 6px; }
         .cmp-head { gap: 6px; }
         .cmp-head .name { font-size: 13px; }
         .getstarted-grid { grid-template-columns: 1fr; }
@@ -1487,24 +1525,28 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
     </style>
   </head>
   <body>
-    <a class="skip" href="#main">跳到正文</a>
+    <a class="skip" href="#main">{t(lang, 'app.skip')}</a>
 
     <header class="topbar">
       <div class="topbar-inner">
-        <a class="brand" href="/" aria-label="AgentNews 首页">
+        <a class="brand" href={pathFor(lang, '/')} aria-label="AgentNews">
           <span class="brand-mark" aria-hidden="true">A</span>
           AgentNews
         </a>
-        <nav class="topnav" aria-label="主导航">
+        <nav class="topnav" aria-label={t(lang, 'app.tagline')}>
           {NAV.map((item) => (
-            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
-              {item.label}<i>{item.en}</i>
+            <a href={pathFor(lang, item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
+              {t(lang, `nav.${item.key}`)}{lang === 'zh' && <i>{t(lang, `nav.${item.key}En`)}</i>}
             </a>
           ))}
         </nav>
         <div class="topbar-meta">
-          <span class="snap-chip">SNAPSHOT <b>{date}</b></span>
-          <button class="theme-btn" id="theme-toggle" type="button" aria-label="切换深浅色主题" title="切换深浅色主题">
+          <span class="snap-chip">{t(lang, 'app.snapshot').toUpperCase()} <b>{date}</b></span>
+          <div class="segmented lang-switch" role="group" aria-label={t(lang, 'app.lang')}>
+            <a href={swapLangPath(path, 'zh')} data-lang="zh" aria-current={lang === 'zh' ? 'page' : undefined}>中</a>
+            <a href={swapLangPath(path, 'en')} data-lang="en" aria-current={lang === 'en' ? 'page' : undefined}>EN</a>
+          </div>
+          <button class="theme-btn" id="theme-toggle" type="button" aria-label={t(lang, 'app.theme')} title={t(lang, 'app.theme')}>
             <svg class="icon-moon" width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
               <path d="M9.6 1.1a6.9 6.9 0 1 0 5.3 10.5A7.4 7.4 0 0 1 9.6 1.1Z" />
             </svg>
@@ -1523,8 +1565,12 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         ) : (
           <div class="page-head">
             <span class="eyebrow">Index · Pending</span>
-            <h1>数据积累中</h1>
-            <p class="lede">首次运行后 24 小时内自动生成快照。当前无评分数据。</p>
+            <h1>{lang === 'en' ? 'Waiting for data' : '数据积累中'}</h1>
+            <p class="lede">
+              {lang === 'en'
+                ? 'Snapshots are generated within 24 hours of the first run. No scores yet.'
+                : '首次运行后 24 小时内自动生成快照。当前无评分数据。'}
+            </p>
           </div>
         )}
       </div>
@@ -1533,19 +1579,25 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
     <footer class="colophon">
       <div class="colophon-inner">
         <div>
-          <b>AgentNews</b> · AI Agent Index · 快照 {date} · 开源 {openCount} / 闭源 {rows.length - openCount}<br />
-          可比的才排名 · 综合分是观点，非客观事实
+          {t(lang, 'footer.line', {
+            name: 'AgentNews',
+            tagline: t(lang, 'app.tagline'),
+            date,
+            open: openCount,
+            closed: rows.length - openCount,
+          })}<br />
+          {t(lang, 'footer.principles')}
         </div>
-        <nav aria-label="页脚导航">
-          <a href="/about/">方法与口径</a>
-          <a href="/changelog/">变更记录</a>
-          <a href="/archive/">数据归档</a>
-          <a href="/security/">安全公告</a>
+        <nav aria-label={t(lang, 'footer.method')}>
+          <a href={pathFor(lang, '/about/')}>{t(lang, 'footer.method')}</a>
+          <a href={pathFor(lang, '/changelog/')}>{t(lang, 'footer.changelog')}</a>
+          <a href={pathFor(lang, '/archive/')}>{t(lang, 'footer.archive')}</a>
+          <a href={pathFor(lang, '/security/')}>{t(lang, 'footer.security')}</a>
         </nav>
       </div>
     </footer>
 
-    <PinTray client:idle meta={pinMeta} />
+    <PinTray client:idle meta={pinMeta} lang={lang} />
 
     <script is:inline>
       document.getElementById('theme-toggle')?.addEventListener('click', () => {
@@ -1561,12 +1613,20 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
       });
 
       document.addEventListener('click', (e) => {
+        // 语言切换：记住选择，避免下次访问被自动跳转
+        const langLink = e.target.closest('[data-lang]');
+        if (langLink) {
+          try {
+            localStorage.setItem('an-lang', langLink.getAttribute('data-lang') || 'zh');
+          } catch {}
+          return;
+        }
         const btn = e.target.closest('[data-copy]');
         if (!btn) return;
         const text = btn.getAttribute('data-copy') || '';
         const old = btn.textContent;
         const done = () => {
-          btn.textContent = '已复制';
+          btn.textContent = btn.getAttribute('data-copied') || 'Copied';
           setTimeout(() => (btn.textContent = old), 1200);
         };
         if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done).catch(() => {});

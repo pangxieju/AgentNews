@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import AgentIcon from './AgentIcon';
-import { FORM_ORDER, bucketText, fmt, fmtPct, formLabel } from '../lib/shared';
+import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
+import { fmt, fmtPct } from '../lib/shared';
 
 export type CompareItem = {
   slug: string;
@@ -26,6 +27,7 @@ export type CompareItem = {
 
 interface Props {
   items: CompareItem[];
+  lang: Lang;
 }
 
 type NumRow = {
@@ -44,26 +46,34 @@ type TextRow = {
 };
 type Row = NumRow | TextRow;
 
-const ROWS: Row[] = [
-  { kind: 'num', key: 'score', label: '综合分', get: (i) => i.score, better: 'high', fmt: (n) => String(n) },
-  { kind: 'num', key: 'rank', label: '组内排名', get: (i) => i.rank_in_form, better: 'low', fmt: (n) => `#${n}` },
-  { kind: 'num', key: 'stars', label: 'Star', get: (i) => i.stars, better: 'high', fmt: (n) => fmt(n) },
-  { kind: 'num', key: 'forks', label: 'Fork', get: (i) => i.forks, better: 'high', fmt: (n) => fmt(n) },
-  { kind: 'num', key: 'contributors', label: '贡献者', get: (i) => i.contributors, better: 'high', fmt: (n) => fmt(n) },
-  { kind: 'num', key: 'installs', label: '安装量', get: (i) => i.installs, better: 'high', fmt: (n) => fmt(n) },
-  { kind: 'num', key: 'activity', label: '活跃度', get: (i) => i.activity, better: 'high', fmt: (n) => n.toFixed(2) },
-  { kind: 'num', key: 'growth', label: '30d 增速', get: (i) => i.growth_30d_pct, better: 'high', fmt: (n) => fmtPct(n) },
-  { kind: 'text', key: 'level', label: '数据完整度', get: (i) => i.data_level },
-  { kind: 'text', key: 'bucket', label: '归属', get: (i) => bucketText(i.oss_bucket) },
-  { kind: 'text', key: 'license', label: 'License', get: (i) => i.license ?? '—' },
-  { kind: 'text', key: 'release', label: '最近发版', get: (i) => (i.last_release ? i.last_release.slice(0, 10) : '—') },
-  { kind: 'text', key: 'version', label: '当前版本', get: (i) => (i.version ? (i.version_at ? `${i.version} · ${i.version_at.slice(0, 10)}` : i.version) : '—') },
-];
+function rows(lang: Lang): Row[] {
+  return [
+    { kind: 'num', key: 'score', label: t(lang, 'metric.score'), get: (i) => i.score, better: 'high', fmt: (n) => String(n) },
+    { kind: 'num', key: 'rank', label: t(lang, 'metric.rank'), get: (i) => i.rank_in_form, better: 'low', fmt: (n) => `#${n}` },
+    { kind: 'num', key: 'stars', label: t(lang, 'metric.stars'), get: (i) => i.stars, better: 'high', fmt: (n) => fmt(n) },
+    { kind: 'num', key: 'forks', label: t(lang, 'metric.forks'), get: (i) => i.forks, better: 'high', fmt: (n) => fmt(n) },
+    { kind: 'num', key: 'contributors', label: t(lang, 'metric.contributors'), get: (i) => i.contributors, better: 'high', fmt: (n) => fmt(n) },
+    { kind: 'num', key: 'installs', label: t(lang, 'metric.installs'), get: (i) => i.installs, better: 'high', fmt: (n) => fmt(n) },
+    { kind: 'num', key: 'activity', label: t(lang, 'metric.activity'), get: (i) => i.activity, better: 'high', fmt: (n) => n.toFixed(2) },
+    { kind: 'num', key: 'growth', label: t(lang, 'metric.growth30d'), get: (i) => i.growth_30d_pct, better: 'high', fmt: (n) => fmtPct(n) },
+    { kind: 'text', key: 'level', label: t(lang, 'metric.level'), get: (i) => i.data_level },
+    { kind: 'text', key: 'bucket', label: t(lang, 'metric.bucket'), get: (i) => bucketText(lang, i.oss_bucket) },
+    { kind: 'text', key: 'license', label: t(lang, 'metric.license'), get: (i) => i.license ?? '—' },
+    { kind: 'text', key: 'release', label: t(lang, 'metric.release'), get: (i) => (i.last_release ? i.last_release.slice(0, 10) : '—') },
+    {
+      kind: 'text',
+      key: 'version',
+      label: t(lang, 'metric.version'),
+      get: (i) => (i.version ? (i.version_at ? `${i.version} · ${i.version_at.slice(0, 10)}` : i.version) : '—'),
+    },
+  ];
+}
 
-export default function CompareBoard({ items }: Props) {
+export default function CompareBoard({ items, lang }: Props) {
   const [slots, setSlots] = useState<string[]>(['', '', '']);
+  const H = (p: string) => pathFor(lang, p);
+  const table = rows(lang);
 
-  // URL 是唯一状态源：可分享、可刷新
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     setSlots([p.get('a') ?? '', p.get('b') ?? '', p.get('c') ?? '']);
@@ -89,10 +99,12 @@ export default function CompareBoard({ items }: Props) {
 
   const grouped = useMemo(
     () =>
-      FORM_ORDER.map((f) => ({
-        form: f,
-        list: items.filter((i) => i.form === f).sort((a, b) => (b.score ?? -1) - (a.score ?? -1)),
-      })).filter((g) => g.list.length > 0),
+      [...new Set(items.map((i) => i.form))]
+        .map((f) => ({
+          form: f,
+          list: items.filter((i) => i.form === f).sort((a, b) => (b.score ?? -1) - (a.score ?? -1)),
+        }))
+        .filter((g) => g.list.length > 0),
     [items],
   );
 
@@ -108,13 +120,14 @@ export default function CompareBoard({ items }: Props) {
     setSlots([top[0] ?? '', top[1] ?? '', '']);
   };
 
-  /** 最佳值：只在有 ≥2 个不同数值时标注，避免「唯一有数据」也算赢 */
+  /** 最佳值：只在有 ≥2 个不同数值时标注 */
   const best = (row: NumRow): Set<string> => {
     const vals = active
       .map((i) => ({ slug: i.slug, v: row.get(i) }))
       .filter((x): x is { slug: string; v: number } => x.v != null);
     if (vals.length < 2) return new Set();
-    const target = row.better === 'high' ? Math.max(...vals.map((x) => x.v)) : Math.min(...vals.map((x) => x.v));
+    const target =
+      row.better === 'high' ? Math.max(...vals.map((x) => x.v)) : Math.min(...vals.map((x) => x.v));
     const winners = vals.filter((x) => x.v === target);
     if (winners.length === vals.length) return new Set();
     return new Set(winners.map((x) => x.slug));
@@ -127,19 +140,19 @@ export default function CompareBoard({ items }: Props) {
           <label class="cmp-pick">
             <span class="cmp-pick-label">
               {['A', 'B', 'C'][idx]}
-              <i>{idx === 0 ? '必选' : '可选'}</i>
+              <i>{idx === 0 ? t(lang, 'compare.required') : t(lang, 'compare.optional')}</i>
             </span>
             <select
               value={slug}
               onChange={(e) => setSlot(idx, (e.currentTarget as HTMLSelectElement).value)}
             >
-              <option value="">选择 agent…</option>
+              <option value="">{t(lang, 'compare.pickPlaceholder')}</option>
               {grouped.map((g) => (
-                <optgroup label={formLabel(g.form)}>
+                <optgroup label={formLabel(lang, g.form)}>
                   {g.list.map((i) => (
                     <option value={i.slug} disabled={slots.includes(i.slug) && i.slug !== slug}>
                       {i.name}
-                      {i.score != null ? ` · ${i.score}` : ' · 未上榜'}
+                      {i.score != null ? ` · ${i.score}` : ` · ${t(lang, 'app.notRanked')}`}
                     </option>
                   ))}
                 </optgroup>
@@ -151,10 +164,10 @@ export default function CompareBoard({ items }: Props) {
 
       {active.length < 2 && (
         <div class="cmp-presets">
-          <span class="muted">快速开始：</span>
+          <span>{t(lang, 'compare.quick')}</span>
           {['cli', 'ide-plugin', 'framework', 'browser'].map((f) => (
             <button type="button" class="chip" onClick={() => preset(f)}>
-              比 {formLabel(f)} 前二
+              {t(lang, 'compare.preset', { form: formLabel(lang, f) })}
             </button>
           ))}
         </div>
@@ -162,7 +175,8 @@ export default function CompareBoard({ items }: Props) {
 
       {mixedForms && (
         <div class="notice" style="margin:16px 0">
-          <strong>跨形态对比：</strong>不同形态的 Star / 安装量不可直接比较，综合分也来自不同分组。这里只做参数参考。
+          <strong>{t(lang, 'compare.mixedTitle')}</strong>
+          {t(lang, 'compare.mixed')}
         </div>
       )}
 
@@ -171,10 +185,10 @@ export default function CompareBoard({ items }: Props) {
           <table class="cmp-table">
             <thead>
               <tr>
-                <th class="cmp-metric">指标</th>
+                <th class="cmp-metric">{t(lang, 'agent.metric')}</th>
                 {active.map((i) => (
                   <th class="cmp-col">
-                    <a class="cmp-head" href={`/agent/${i.slug}/`}>
+                    <a class="cmp-head" href={H(`/agent/${i.slug}/`)}>
                       <AgentIcon
                         slug={i.slug}
                         name={i.name}
@@ -184,7 +198,7 @@ export default function CompareBoard({ items }: Props) {
                       />
                       <span>
                         <span class="name">{i.name}</span>
-                        <span class="cmp-sub">{formLabel(i.form)}</span>
+                        <span class="cmp-sub">{formLabel(lang, i.form)}</span>
                       </span>
                     </a>
                   </th>
@@ -192,7 +206,7 @@ export default function CompareBoard({ items }: Props) {
               </tr>
             </thead>
             <tbody>
-              {ROWS.map((row) => {
+              {table.map((row) => {
                 const winners = row.kind === 'num' ? best(row) : new Set<string>();
                 return (
                   <tr>
@@ -204,7 +218,7 @@ export default function CompareBoard({ items }: Props) {
                         return (
                           <td class={`cmp-cell num${win ? ' is-best' : ''}`}>
                             {v == null ? '—' : row.fmt(v)}
-                            {win && <i class="cmp-dot" aria-label="本行最佳" />}
+                            {win && <i class="cmp-dot" aria-label="best in row" />}
                           </td>
                         );
                       }
@@ -219,16 +233,13 @@ export default function CompareBoard({ items }: Props) {
       ) : (
         <div class="cmp-empty">
           <span class="eyebrow">Compare</span>
-          <h3>选两个 agent，并排看差异</h3>
-          <p class="muted">
-            同一形态内的指标才有可比性。上面选 A / B，或用「快速开始」直接对比某形态的前两名。
-          </p>
+          <h3>{t(lang, 'compare.emptyTitle')}</h3>
+          <p class="muted">{t(lang, 'compare.empty')}</p>
         </div>
       )}
 
-      <p class="cmp-foot muted">
-        标注 <i class="cmp-dot" /> 的是该行最优值（仅在有 ≥2 个不同数值时标注）。跨形态不排名，详情见
-        <a href="/about/">口径说明</a>。
+      <p class="cmp-foot">
+        <i class="cmp-dot" /> {t(lang, 'compare.bestNote')} <a href={H('/about/')}>{t(lang, 'rank.method')}</a>.
       </p>
     </div>
   );

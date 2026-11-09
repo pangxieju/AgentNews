@@ -1,21 +1,22 @@
 ---
 /**
- * 榜单容器（服务端壳）。
- * 数据在构建期内联进 HTML，交互交给 RankBoard island：
- * - 默认 `client:load` 时首屏已有 SSR 结果，hydrate 后接管筛选/排序
- * - 用 `client:visible` 会让首屏切换有一瞬原生跳转，这里选 load
+ * 榜单容器（服务端壳）。数据在构建期内联进 HTML，交互交给 RankBoard island。
  */
+import Base from '../layouts/Base.astro';
 import RankBoard, { type RankRow, type IconMeta } from './RankBoard';
 import { loadLatestScores, loadAgentsMeta } from '../lib/data';
-import { rankUrl, formLabel, granLabel, defaultSortFor } from '../lib/shared';
+import { rankUrl } from '../lib/shared';
+import { type Lang, bucketText, pathFor, t } from '../i18n/dict';
 
 interface Props {
   bucket: string;
   form: string;
   g: string;
+  lang: Lang;
 }
 
-const { bucket, form, g } = Astro.props;
+const { bucket, form, g, lang } = Astro.props;
+const H = (p: string) => pathFor(lang, p);
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
@@ -48,28 +49,36 @@ for (const r of rows) {
   if (m) meta[r.slug] = { icon: m.icon, iconFallback: m.iconFallback };
 }
 
-const bucketLabel = bucket === 'open' ? '开源' : '闭源';
+const titleKey = bucket === 'open' ? 'rank.titleOpen' : 'rank.titleClosed';
+const bucketLabel = bucketText(lang, bucket);
 ---
 
+<Base lang={lang} pageTitle={`${t(lang, titleKey)} · AgentNews`}>
 <div class="page-head">
   <div class="crumbs">
-    <a href="/">AgentNews</a><span>/</span><span>Board</span>
+    <a href={H('/')}>AgentNews</a><span>/</span><span>{t(lang, 'rank.crumb')}</span>
   </div>
-  <span class="eyebrow">{bucket === 'open' ? 'Open Source' : 'Closed Source'} · Snapshot {date}</span>
-  <h1 id="rank-title">{bucketLabel}榜</h1>
+  <span class="eyebrow">{t(lang, bucket === 'open' ? 'rank.eyebrowOpen' : 'rank.eyebrowClosed', { date })}</span>
+  <h1 id="rank-title">{t(lang, titleKey)}</h1>
   <p class="lede">
-    同形态内比较，跨形态不排名。列头可排序，行尾 <b>+</b> 加入对比 —— <a href="/about/">口径说明</a>
+    {t(lang, 'rank.lede')} <a href={H('/about/')}>{t(lang, 'rank.method')}</a>
   </p>
 </div>
 
-<RankBoard client:load rows={slim} meta={meta} bucket={bucket} form={form} g={g} />
+<RankBoard client:load rows={slim} meta={meta} bucket={bucket} form={form} g={g} lang={lang} />
 
-{rows.length === 0 && <div class="warn" style="margin-top:16px">暂无数据：请先运行 <code>pnpm collect</code>。</div>}
+{rows.length === 0 && (
+  <div class="warn" style="margin-top:16px">
+    {lang === 'en' ? 'No data yet. Run ' : '暂无数据：请先运行 '}<code>pnpm collect</code>.
+  </div>
+)}
 
 <noscript>
   <div class="warn" style="margin-top:16px">
-    当前浏览器禁用了 JavaScript，筛选与排序不可用。可直接访问
-    <a href={rankUrl(bucket, 'all', g)}>{bucketLabel}榜全部</a> 或
-    <a href="/archive/">历史归档</a>。
+    {t(lang, 'rank.noscript')}
+    <a href={H(rankUrl(bucket, 'all', g))}>{bucketLabel} {lang === 'en' ? 'board' : '榜'}</a>
+    {lang === 'en' ? ' or ' : ' 或 '}
+    <a href={H('/archive/')}>{t(lang, 'footer.archive')}</a>.
   </div>
 </noscript>
+</Base>

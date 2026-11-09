@@ -2,6 +2,13 @@
 import Base from '../layouts/Base.astro';
 import CompareBoard, { type CompareItem } from '../components/CompareBoard';
 import { loadLatestScores, loadAgentsMeta } from '../lib/data';
+import { type Lang, pathFor, t } from '../i18n/dict';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const H = (p: string) => pathFor(lang, p);
 
 const data = loadLatestScores();
 const meta = loadAgentsMeta();
@@ -28,23 +35,20 @@ const items: CompareItem[] = (data?.rows ?? []).map((r) => ({
 }));
 ---
 
-<Base pageTitle="对比 · AgentNews">
+<Base lang={lang} pageTitle={`${t(lang, 'compare.title')} · AgentNews`}>
   <div class="page-head">
-    <div class="crumbs"><a href="/">AgentNews</a><span>/</span><span>Compare</span></div>
-    <span class="eyebrow">Compare · Side by side</span>
-    <h1>并排比较</h1>
-    <p class="lede">
-      同一形态内的指标才有可比性。选 2–3 个 agent，逐行看 Star、安装量、活跃度、License 的差异 ——
-      不用再开五个标签页拼信息。
-    </p>
+    <div class="crumbs"><a href={H('/')}>AgentNews</a><span>/</span><span>{t(lang, 'compare.crumb')}</span></div>
+    <span class="eyebrow">{t(lang, 'compare.eyebrow')}</span>
+    <h1>{t(lang, 'compare.title')}</h1>
+    <p class="lede">{t(lang, 'compare.lede')}</p>
   </div>
 
-  <CompareBoard client:load items={items} />
+  <CompareBoard client:load items={items} lang={lang} />
 
   <noscript>
     <div class="notice" style="margin-top:16px">
-      对比需要 JavaScript。可以直接打开两个 agent 详情页手工比对，或访问
-      <a href="/top/open/all/month/">榜单</a>。
+      {t(lang, 'compare.noscript')}
+      <a href={H('/top/open/all/month/')}>{t(lang, 'rank.crumb')}</a>.
     </div>
   </noscript>
 </Base>
