@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import CompareBoard, { type CompareItem } from '../components/CompareBoard';
+import { loadLatestScores, loadAgentsMeta } from '../lib/data';
+
+const data = loadLatestScores();
+const meta = loadAgentsMeta();
+const items: CompareItem[] = (data?.rows ?? []).map((r) => ({
+  slug: r.slug,
+  name: r.name ?? r.slug,
+  form: r.form,
+  oss_bucket: r.oss_bucket,
+  score: r.score,
+  rank_in_form: r.rank_in_form,
+  stars: r.metrics?.stars ?? null,
+  forks: r.metrics?.forks ?? null,
+  contributors: r.metrics?.contributors ?? null,
+  installs: r.metrics?.installs ?? null,
+  activity: r.metrics?.activity ?? null,
+  growth_30d_pct: r.growth_30d_pct,
+  license: meta[r.slug]?.license ?? null,
+  last_release: r.metrics?.last_release ?? null,
+  data_level: r.data_level,
+  icon: meta[r.slug]?.icon ?? null,
+  iconFallback: meta[r.slug]?.iconFallback ?? null,
+}));
+---
+
+<Base pageTitle="对比 · AgentNews">
+  <div class="page-head">
+    <div class="crumbs"><a href="/">AgentNews</a><span>/</span><span>Compare</span></div>
+    <span class="eyebrow">Compare · Side by side</span>
+    <h1>并排比较</h1>
+    <p class="lede">
+      同一形态内的指标才有可比性。选 2–3 个 agent，逐行看 Star、安装量、活跃度、License 的差异 ——
+      不用再开五个标签页拼信息。
+    </p>
+  </div>
+
+  <CompareBoard client:load items={items} />
+
+  <noscript>
+    <div class="notice" style="margin-top:16px">
+      对比需要 JavaScript。可以直接打开两个 agent 详情页手工比对，或访问
+      <a href="/top/open/all/month/">榜单</a>。
+    </div>
+  </noscript>
+</Base>

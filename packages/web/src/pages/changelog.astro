@@ -57,6 +57,39 @@ import Base from '../layouts/Base.astro';
   </section>
 
   <section class="section">
+    <div class="section-title"><h2>产品结构</h2></div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>日期</th><th>变更</th><th>原因</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="mono">2026-11-09</td>
+              <td>新增并排对比 <code>/compare/</code></td>
+              <td class="muted">选型的最后一步是「A 还是 B」，榜单给不了逐项差异；对比只允许同形态，跨形态标注不可比</td>
+            </tr>
+            <tr>
+              <td class="mono">2026-11-09</td>
+              <td>新增形态指南 <code>/forms/[form]/</code></td>
+              <td class="muted">用户第一个问题是「我在哪儿用它」，不是「谁排第一」；先讲形态取舍，再给榜单</td>
+            </tr>
+            <tr>
+              <td class="mono">2026-11-09</td>
+              <td>首页改为「选形态 → 找候选 → 对比」</td>
+              <td class="muted">原首页以双榜为主角，把选型动作藏在了二级页；主线应该是决策路径</td>
+            </tr>
+            <tr>
+              <td class="mono">2026-11-09</td>
+              <td>详情页新增「上手」与「同形态其他选择」</td>
+              <td class="muted">安装命令与渠道从 agents.yaml 推导（不猜价格、不猜功能），替代项只取同形态</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="section-title"><h2>条目变更</h2></div>
     <div class="box">
       <div class="table-wrap">

@@ -2,9 +2,9 @@
 import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import HomePicker, { type PickRow } from '../components/HomePicker';
-import BarChart from '../components/charts/BarChart.astro';
 import { loadLatestScores, loadAgentsMeta, fmtPct } from '../lib/data';
 import { FORM_ORDER, formLabel } from '../lib/shared';
+import { FORM_GUIDES } from '../lib/forms';
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
@@ -22,18 +22,21 @@ const closed = rows.filter((r) => r.oss_bucket === 'closed');
 const topOpen = [...open].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
 const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 5);
 const hasGrowth = rows.some((r) => r.growth_30d_pct != null);
-const forms = new Set(rows.map((r) => r.form)).size;
 
-const formBars = FORM_ORDER.map((f) => {
+/** 形态入口：数量 + 前两名（分数排序，只取已上榜的） */
+const formCards = FORM_ORDER.map((f, i) => {
   const list = rows.filter((r) => r.form === f);
-  const openCount = list.filter((r) => r.oss_bucket !== 'closed').length;
+  const ranked = [...list].filter((r) => r.score != null).sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
   return {
+    form: f,
+    idx: String(i + 1).padStart(2, '0'),
     label: formLabel(f),
-    value: list.length,
-    href: `/top/${openCount > 0 ? 'open' : 'closed'}/${f}/month/`,
-    tone: 'accent' as const,
+    en: FORM_GUIDES[f]?.en ?? '',
+    fit: FORM_GUIDES[f]?.tagline ?? '',
+    count: list.length,
+    top: ranked.slice(0, 2).map((r) => ({ name: r.name ?? r.slug, score: r.score })),
   };
-}).filter((b) => b.value > 0);
+}).filter((c) => c.count > 0);
 
 const pick: PickRow[] = rows.map((r) => ({
   slug: r.slug,
@@ -50,10 +53,10 @@ const pick: PickRow[] = rows.map((r) => ({
   <section class="hero">
     <div>
       <span class="eyebrow">AI Agent Index · Daily Snapshot</span>
-      <h1 class="display">看见 AI Agent 的<em>真实热度</em>与走向</h1>
+      <h1 class="display">选 agent，先看<em>形态</em>，再比数据</h1>
       <p class="lede">
-        把 GitHub star、npm / PyPI 下载、商店安装量压缩到同一把尺子，再按形态分组排名。
-        开源与闭源双榜，日 / 周 / 月三条时间线 —— 可比的才排名，不可比的就标注。
+        {rows.length} 个 agent，按 7 种形态分组；GitHub star、npm / PyPI 下载、商店安装量先归一化再排名。
+        先用形态把范围缩到 3–5 个，再并排比较 —— 比翻五个标签页快。
       </p>
     </div>
     <aside class="hero-rail">
@@ -61,7 +64,7 @@ const pick: PickRow[] = rows.map((r) => ({
         <div><span data-k>收录</span><b>{rows.length}</b></div>
         <div><span data-k>开源</span><b>{open.length}</b></div>
         <div><span data-k>闭源</span><b>{closed.length}</b></div>
-        <div><span data-k>形态</span><b>{forms}</b></div>
+        <div><span data-k>形态</span><b>{formCards.length}</b></div>
         <div><span data-k>快照</span><b>{date}</b></div>
       </div>
     </aside>
@@ -69,16 +72,50 @@ const pick: PickRow[] = rows.map((r) => ({
 
   <section class="section">
     <div class="section-title">
-      <h2>选型 / Find</h2>
+      <h2>第一步 / 选形态</h2>
+      <span class="muted">你在哪儿用它 · 跨形态不比较</span>
+    </div>
+    <div class="form-grid">
+      {formCards.map((c) => (
+        <a class="form-card" href={`/forms/${c.form}/`}>
+          <span class="idx">FORM {c.idx} · {c.count} 个</span>
+          <h3>{c.label} <em>{c.en}</em></h3>
+          <p class="fit">{c.fit}</p>
+          <div class="mini">
+            {c.top.length === 0 && <span class="subtle">暂无可比数据</span>}
+            {c.top.map((t, i) => (
+              <span>{i === 0 ? '①' : '②'} <b>{t.name}</b> {t.score}</span>
+            ))}
+          </div>
+          <span class="go">形态指南 →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>第二步 / 找候选</h2>
       <span class="muted">搜索 · 形态 · 归属</span>
     </div>
     <HomePicker client:load items={pick} meta={meta} />
   </section>
 
   <section class="section">
+    <div class="cta-band">
+      <div>
+        <span class="eyebrow">Compare</span>
+        <h2>两个候选，逐行比</h2>
+        <p>同形态内比 Star、安装量、活跃度、License —— 综合分只告诉你谁在前，对比才告诉你差在哪。</p>
+      </div>
+      <a class="btn btn-primary" href="/compare/">开始对比 →</a>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="section-title">
-      <h2>双榜 / Leaderboard</h2>
-      <span class="muted">同形态内排名 · 跨形态不比较</span>
+      <h2>证据 / 双榜</h2>
+      <span class="muted">同形态内排名 · 数据截至 {date}</span>
     </div>
     <div class="ledger-grid">
       <div class="ledger">
@@ -159,29 +196,21 @@ const pick: PickRow[] = rows.map((r) => ({
 
   <section class="section">
     <div class="section-title">
-      <h2>收录分布 / Coverage</h2>
-      <span class="muted">按形态 · 点名称进入对应榜单</span>
-    </div>
-    <BarChart bars={formBars} unit=" 个" />
-  </section>
-
-  <section class="section">
-    <div class="section-title">
       <h2>口径 / Method</h2>
       <span class="muted">综合分是观点，不是事实</span>
     </div>
     <div class="grid">
       <div class="card">
-        <h2>按形态分组</h2>
-        <div class="detail">CLI / IDE 插件 / IDE 应用 / 桌面 / 浏览器 / 框架 / 自主 —— 跨形态不比较。</div>
+        <h2>可比的才排名</h2>
+        <div class="detail">CLI / IDE 插件 / IDE 应用 / 桌面 / 浏览器 / 框架 / 自主 —— 只在同形态内排名。</div>
       </div>
       <div class="card">
         <h2>跨生态归一化</h2>
-        <div class="detail">Star、npm / PyPI 下载、商店安装量统一压缩到组内分位数再加权。</div>
+        <div class="detail">Star、npm / PyPI 下载、商店安装量压缩到组内分位数再加权，避免单一生态主导。</div>
       </div>
       <div class="card">
         <h2>可审计</h2>
-        <div class="detail">每日快照以 git 提交归档，算法权重、口径变更全部公开。</div>
+        <div class="detail">每日快照以 git 提交归档，算法权重、口径变更全部公开，数据可下载。</div>
       </div>
     </div>
   </section>

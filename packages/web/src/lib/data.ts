@@ -119,6 +119,9 @@ export type AgentMeta = {
   name: string;
   vendor: string | null;
   homepage: string | null;
+  license: string | null;
+  note: string | null;
+  sources: Array<{ kind: string; identifier: string; is_primary?: boolean }>;
   /** 主图标地址：优先 GitHub 组织头像，其次官网 favicon */
   icon: string | null;
   /** 主图标加载失败时的备选（favicon 服务之间互为兜底） */
@@ -144,7 +147,9 @@ export function loadAgentsMeta(): Record<string, AgentMeta> {
       name?: string;
       vendor?: string;
       homepage?: string;
-      sources?: Array<{ kind?: string; identifier?: string }>;
+      license_id?: string;
+      note?: string;
+      sources?: Array<{ kind?: string; identifier?: string; is_primary?: boolean }>;
     }>;
     for (const a of list ?? []) {
       if (!a?.slug) continue;
@@ -167,6 +172,11 @@ export function loadAgentsMeta(): Record<string, AgentMeta> {
         name: a.name ?? a.slug,
         vendor: a.vendor ?? null,
         homepage: a.homepage ?? null,
+        license: a.license_id && a.license_id !== 'unknown' ? a.license_id : null,
+        note: a.note ?? null,
+        sources: (a.sources ?? [])
+          .filter((x) => x.kind && x.identifier)
+          .map((x) => ({ kind: x.kind!, identifier: x.identifier!, is_primary: x.is_primary })),
         icon,
         iconFallback,
       };
