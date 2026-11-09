@@ -7,7 +7,8 @@
     "validate": "pnpm --filter @agentnews/pipeline validate",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
-    "build": "pnpm --filter @agentnews/web build"
+    "build": "pnpm --filter @agentnews/web build",
+    "discover": "pnpm --filter @agentnews/pipeline discover"
   },
   "devDependencies": {
     "typescript": "^5.7.2"

@@ -8,7 +8,8 @@
     "validate": "tsx src/validate.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "icons": "tsx src/icons-cli.ts"
+    "icons": "tsx src/icons-cli.ts",
+    "discover": "tsx src/discover.ts"
   },
   "dependencies": {
     "@agentnews/core": "workspace:*",

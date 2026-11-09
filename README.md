@@ -137,6 +137,29 @@ packages/
 - 闭源项目不得以 GitHub 为主渠道
 - 至少一个分发渠道
 
+### 找漏掉的 agent
+
+手写 YAML 追不上新项目，所以有一个候选发现脚本（只出清单，不自动收录 —— 人工审核优先）：
+
+```bash
+pnpm discover                    # 三路扫一遍：GitHub 搜索 + 权威清单 + watchlist
+pnpm discover --only-watchlist   # 只核 watchlist（快，约 30 次请求）
+pnpm discover --min-stars 500    # 放宽门槛
+pnpm discover --top 80           # 报告表里只出前 80 条
+```
+
+两路来源：
+
+1. **GitHub 搜索 API**，14 组 topic / 关键词（`topic:ai-agent`、`"coding agent" in:name,description` 等），按 star 排序
+2. **权威清单**（e2b/awesome-ai-agents、kaushikb11/awesome-llm-agents、jamesmurdza/awesome-ai-devtools、sourcegraph/awesome-code-ai）—— 补搜索 API 的盲区：很多项目既不打 topic，描述也不含关键词
+3. **`watchlist.yaml`**（人手维护的种子）—— 闭源产品没有公开 repo，前两路永远看不见；这里记「知道它存在但还没收录」的条目，每次核对状态：`listed` / `pending` / `unreachable` / `archived`
+
+两路都要过 PRD §4.4 门槛（star ≥ 1000、近 180 天有推送、未归档、非 fork），再和 `agents.yaml` 做差集（按 repo / slug / name / 包名比对），最后粗筛掉 skill 包、prompt 集、教程、RAG / 网关等非 agent 产品。
+
+产出 `data/candidates/YYYY-MM-DD.md`（人工审核表）+ `.json`（全量，含自动排除原因）。这个目录不入库 —— 它是工作队列，不是数据。
+
+闭源产品没有公开 repo，脚本抓不到，这部分只能靠人补（竞品页、Product Hunt、HN、商店榜单）。
+
 ---
 
 ## 打分口径
