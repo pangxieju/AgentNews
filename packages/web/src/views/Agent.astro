@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import GroupPos from '../components/GroupPos.astro';
 import LineChart from '../components/charts/LineChart.astro';
-import { backlogPer1kStars, elapsedDays, elapsedHours, forkStarPct, medianReleaseGapDays } from '@agentnews/core';
+import { backlogPer1kStars, elapsedHours, forkStarPct, medianReleaseGapDays } from '@agentnews/core';
 import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, loadVersionHistory, fmt, fmtPct, fmtSigned } from '../lib/data';
 import { buildGroupBoard, type HealthKey } from '../lib/group';
 import { installInfo } from '../lib/shared';

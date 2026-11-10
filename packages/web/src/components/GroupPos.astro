@@ -17,16 +17,14 @@ interface Props {
 
 const { p, n = 0, title, tone = 'accent' } = Astro.props;
 const width = p == null ? 0 : Math.max(3, Math.round(p * 100));
+/** 不传 title 时用纯数字，避免在英文页面泄露中文兜底文案 */
+const label = title ?? (p == null ? '—' : `${width}% · n=${n}`);
 ---
 
 {p == null ? (
   <span class="pos-empty" title={title}>—</span>
 ) : (
-  <span
-    class="pos-bar"
-    title={title ?? `组内位置 ${Math.round(p * 100)}% · n=${n}`}
-    aria-label={title ?? `组内位置 ${Math.round(p * 100)}%`}
-  >
+  <span class="pos-bar" title={label} aria-label={label}>
     <i class={`tone-${tone}`} style={`width:${width}%`} />
   </span>
 )}
