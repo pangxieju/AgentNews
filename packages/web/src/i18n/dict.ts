@@ -237,6 +237,34 @@ const zh: Dict = {
   'agent.securityNone': '无包管理渠道，未做 OSV 查询（不会因为“查不到”就说明安全）。',
   'agent.notFound': '未找到',
 
+  // ── 详情页：维护健康（PRD §7.2）──
+  'agent.health': '维护健康',
+  'agent.healthHint': '同形态 {n} 项内比较 · 中位数为组内基准',
+  'agent.healthCommit': '最近提交',
+  'agent.healthCommitHint': '距最后一次提交的时间',
+  'agent.healthRelease': '最近发版',
+  'agent.healthCadence': '发版节奏：中位 {n} 天一次',
+  'agent.healthCadenceEmpty': '发版节奏需要至少 2 次版本记录（自 {date} 起累积）',
+  'agent.healthBacklog': 'Open issues',
+  'agent.healthBacklogHint': '每千 star {v} 件积压',
+  'agent.healthBacklogNoData': 'star 或 issue 数据不足，不做比较',
+  'agent.healthFork': 'Fork / Star',
+  'agent.healthForkHint': '高于组内中位 = 更多人在基于它自建工作流',
+  'agent.healthMedian': '组内中位 {v}',
+  'agent.healthNote': '本区块不参与综合分：只做事实呈现，用于判断维护投入与长期可用性。',
+  'agent.groupPos': '组内位置',
+  'agent.groupPosLegend': '越长越好 · 竖线为组内中位',
+  'agent.groupPosHint':
+    '条形长度 = 在同形态组内的相对位置（越长越好），中点为组内中位；缺数据不画条。',
+  'agent.posTitle': '组内位置 {p}% · 参与比较 {n} 项',
+  'agent.relJustNow': '1 小时内',
+  'agent.relHours': '{n} 小时前',
+  'agent.relDays': '{n} 天前',
+  'agent.relToday': '当天',
+  'agent.age': '出道',
+  'agent.ageValue': '{n} 天',
+  'agent.ageSince': '{date} 起收录',
+
   // ── 形态指南 ──
   'forms.crumb': 'Form Guide',
   'forms.eyebrow': 'Form Guide · {en}',
@@ -624,6 +652,36 @@ const en: Dict = {
   'agent.securityNone':
     'No package channel, so no OSV query was made (not finding anything does not mean it is safe).',
   'agent.notFound': 'Not found',
+
+  // ── Detail: maintenance health (PRD §7.2) ──
+  'agent.health': 'Maintenance health',
+  'agent.healthHint': 'Compared within {n} same-form entries · median is the group baseline',
+  'agent.healthCommit': 'Last commit',
+  'agent.healthCommitHint': 'Time since the latest commit',
+  'agent.healthRelease': 'Last release',
+  'agent.healthCadence': 'Cadence: a release every {n} days (median)',
+  'agent.healthCadenceEmpty':
+    'Cadence needs at least 2 version records (collecting since {date})',
+  'agent.healthBacklog': 'Open issues',
+  'agent.healthBacklogHint': '{v} per 1k stars',
+  'agent.healthBacklogNoData': 'Not enough star / issue data to compare',
+  'agent.healthFork': 'Fork / Star',
+  'agent.healthForkHint': 'Above the group median = more people building on it',
+  'agent.healthMedian': 'Group median {v}',
+  'agent.healthNote':
+    'Not part of the composite score — facts only, to judge maintenance and long-term availability.',
+  'agent.groupPos': 'In group',
+  'agent.groupPosLegend': 'longer is better · tick = group median',
+  'agent.groupPosHint':
+    'Bar length = position within the same form (longer is better), centred on the group median. No bar when data is missing.',
+  'agent.posTitle': 'Position {p}% · {n} compared',
+  'agent.relJustNow': 'under 1h ago',
+  'agent.relHours': '{n}h ago',
+  'agent.relDays': '{n}d ago',
+  'agent.relToday': 'same day',
+  'agent.age': 'Age',
+  'agent.ageValue': '{n}d',
+  'agent.ageSince': 'listed since {date}',
 
   'forms.crumb': 'Form Guide',
   'forms.eyebrow': 'Form Guide · {en}',

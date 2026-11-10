@@ -231,6 +231,10 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       const weekAgo = typeof item.ref?.weekAgo?.stars === 'number' ? item.ref.weekAgo.stars : null;
       const monthAgo = typeof item.ref?.monthAgo?.stars === 'number' ? item.ref.monthAgo.stars : null;
       const prevStars = typeof item.ref?.prev?.stars === 'number' ? item.ref.prev.stars : null;
+      // 下载量参考值：口径与 effectiveInstalls 一致（渠道降级规则不变）
+      const installsPrev = item.ref?.prev ? effectiveInstalls(item.ref.prev) : null;
+      const installsWeekAgo = item.ref?.weekAgo ? effectiveInstalls(item.ref.weekAgo) : null;
+      const installsMonthAgo = item.ref?.monthAgo ? effectiveInstalls(item.ref.monthAgo) : null;
 
       const flags: string[] = [];
       if (errors.some((err) => err.startsWith(item.slug))) flags.push('partial_data');
@@ -266,6 +270,13 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
             typeof m.last_release === 'string' ? m.last_release : null,
           ),
           last_release: typeof m.last_release === 'string' ? m.last_release : null,
+          // 维护健康（详情页）：最近提交 / issue 积压 / 仓库创建时间 / 下载参考值
+          last_commit: typeof m.last_commit === 'string' ? m.last_commit : null,
+          open_issues: typeof m.open_issues === 'number' ? m.open_issues : null,
+          repo_created: typeof m.repo_created === 'string' ? m.repo_created : null,
+          installs_1d_ago: installsPrev,
+          installs_7d_ago: installsWeekAgo,
+          installs_30d_ago: installsMonthAgo,
           version: typeof m.version === 'string' ? m.version : null,
           version_at: typeof m.version_at === 'string' ? m.version_at : null,
           version_source: typeof m.version_source === 'string' ? m.version_source : null,

@@ -1,0 +1,32 @@
+---
+/**
+ * 组内位置条（纯 HTML/CSS，服务端渲染）
+ *
+ * 读法：填充长度 = 该对象在同形态组内的分位，中间刻度 = 组内中位（分位 0.5）。
+ * 方向统一为「越长越好」：最近提交 / 发版 / issue 积压这类「越小越好」的指标
+ * 在 group.ts 里已经把排位取反，视图层不需要知道方向。
+ *
+ * 缺数据不画条：把「未知」画成「很短」等于伪造评价（PRD §5.7）。
+ */
+interface Props {
+  p: number | null;
+  n?: number;
+  title?: string;
+  tone?: 'default' | 'accent' | 'success' | 'attention' | 'danger';
+}
+
+const { p, n = 0, title, tone = 'accent' } = Astro.props;
+const width = p == null ? 0 : Math.max(3, Math.round(p * 100));
+---
+
+{p == null ? (
+  <span class="pos-empty" title={title}>—</span>
+) : (
+  <span
+    class="pos-bar"
+    title={title ?? `组内位置 ${Math.round(p * 100)}% · n=${n}`}
+    aria-label={title ?? `组内位置 ${Math.round(p * 100)}%`}
+  >
+    <i class={`tone-${tone}`} style={`width:${width}%`} />
+  </span>
+)}

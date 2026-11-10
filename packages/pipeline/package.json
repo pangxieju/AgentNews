@@ -10,7 +10,8 @@
     "test": "vitest run",
     "icons": "tsx src/icons-cli.ts",
     "discover": "tsx src/discover.ts",
-    "icons:audit": "tsx src/icons-audit.ts"
+    "icons:audit": "tsx src/icons-audit.ts",
+    "backfill": "tsx src/backfill.ts"
   },
   "dependencies": {
     "@agentnews/core": "workspace:*",

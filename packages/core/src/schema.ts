@@ -138,6 +138,15 @@ export type ScoreRow = {
     installs: number | null;
     activity: number | null;
     last_release: string | null;
+    /** ── 以下为详情页「维护健康」区块的原料（PRD §7.2）──
+     *  历史归档里可能有缺失，前端按「未知」处理，不得当成 0 */
+    open_issues?: number | null;
+    last_commit?: string | null;
+    repo_created?: string | null;
+    /** 下载量参考值（t-1 / t-7 / t-30 快照），用于算下载增量；无历史快照为 null */
+    installs_1d_ago?: number | null;
+    installs_7d_ago?: number | null;
+    installs_30d_ago?: number | null;
     /** 当前版本号（如 0.42.1 / v1.2.0），拿不到为 null */
     version: string | null;
     /** 版本发布时间（ISO 字符串），拿不到为 null */

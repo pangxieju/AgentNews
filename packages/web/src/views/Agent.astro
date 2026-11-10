@@ -1,8 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
+import GroupPos from '../components/GroupPos.astro';
 import LineChart from '../components/charts/LineChart.astro';
-import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, loadVersionHistory, fmt, fmtPct } from '../lib/data';
+import { backlogPer1kStars, elapsedDays, elapsedHours, forkStarPct, medianReleaseGapDays } from '@agentnews/core';
+import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, loadVersionHistory, fmt, fmtPct, fmtSigned } from '../lib/data';
+import { buildGroupBoard, type HealthKey } from '../lib/group';
 import { installInfo } from '../lib/shared';
 import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
 
@@ -31,6 +34,51 @@ const siblings = rows
   .filter((r) => r.form === row?.form && r.slug !== slug && r.score != null)
   .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
   .slice(0, 4);
+
+/* ── 维护健康（PRD §7.2）──
+ * 「现在」用数据快照日，不用构建时刻：同一份数据每次部署说法一致，
+ * 否则「3 小时前」第二天会变成「27 小时前」，看着像数据在动。 */
+const asOf = new Date(`${date}T23:59:59Z`);
+const board = row ? buildGroupBoard(rows, row.form, asOf) : null;
+const pos = (k: HealthKey) => (row && board ? board.position(k, row.slug) : null);
+const med = (k: HealthKey) => (board ? board.medianOf(k) : null);
+
+/** 「N 天前」文案：组内中位数是原始天数，和相对时间共用一个格式化器 */
+const daysText = (d: number | null | undefined): string => {
+  if (d == null) return '—';
+  if (d < 1) return t(lang, 'agent.relToday');
+  return t(lang, 'agent.relDays', { n: Math.round(d) });
+};
+
+/** ISO → 「N 小时前 / N 天前」，缺数据 → — */
+const rel = (iso: string | null | undefined): string => {
+  const h = elapsedHours(iso, asOf);
+  if (h == null) return '—';
+  if (h < 1) return t(lang, 'agent.relJustNow');
+  if (h < 24) return t(lang, 'agent.relHours', { n: h });
+  return t(lang, 'agent.relDays', { n: Math.floor(h / 24) });
+};
+
+/** 组内位置条的 tooltip：统一口径「分位 % ，n = 参与比较的组内对象数」 */
+const posTitle = (k: HealthKey): string => {
+  const x = pos(k);
+  return x ? t(lang, 'agent.posTitle', { p: Math.round(x.p * 100), n: x.n }) : '';
+};
+
+/** 组内中位文案 */
+const medText = (k: HealthKey, format: (v: number | null) => string): string =>
+  t(lang, 'agent.healthMedian', { v: format(med(k)) });
+
+const backlog = row ? backlogPer1kStars(row.metrics?.open_issues, row.metrics?.stars) : null;
+const forkPct = row ? forkStarPct(row.metrics?.forks, row.metrics?.stars) : null;
+/** 活跃度分只有在存在提交/发版证据时才可信（否则是「未知」而不是 0） */
+const activityEvidence = !!(row?.metrics?.last_commit || row?.metrics?.last_release);
+/** 发版节奏：只认版本的发布时刻（version_at），不认快照日期 */
+const cadence = medianReleaseGapDays(versions.map((v) => v.version_at ?? v.date));
+
+/** 下载增量：t-1 / t-7 / t-30 快照对比；参考值缺失 → — */
+const dlDelta = (then: number | null | undefined): string =>
+  row?.metrics?.installs != null && then != null ? fmtSigned(row.metrics.installs - then) : '—';
 
 const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
 
@@ -155,6 +203,17 @@ const versionLink = (() => {
                 </div>
               )}
               <div><span data-k>{t(lang, 'agent.level')}</span><b style="font-size:12.5px">{row.data_level}</b></div>
+              {row.age_days != null && (
+                <div>
+                  <span data-k>{t(lang, 'agent.age')}</span>
+                  <b
+                    style="font-size:12.5px"
+                    title={row.first_listed ? t(lang, 'agent.ageSince', { date: row.first_listed }) : undefined}
+                  >
+                    {t(lang, 'agent.ageValue', { n: row.age_days })}
+                  </b>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -237,6 +296,60 @@ const versionLink = (() => {
 
       <section class="section">
         <div class="section-title">
+          <h2>{t(lang, 'agent.health')}</h2>
+          <span class="muted">{t(lang, 'agent.healthHint', { n: board?.n ?? 0 })}</span>
+        </div>
+        <div class="grid grid-4">
+          <div class="card health-card">
+            <h2>{t(lang, 'agent.healthCommit')}</h2>
+            <div class="num">{rel(row.metrics?.last_commit)}</div>
+            <div class="detail">{t(lang, 'agent.healthCommitHint')}</div>
+            <div class="health-pos">
+              <GroupPos p={pos('commit')?.p ?? null} n={pos('commit')?.n} title={posTitle('commit')} />
+              <span>{medText('commit', (v) => daysText(v))}</span>
+            </div>
+          </div>
+          <div class="card health-card">
+            <h2>{t(lang, 'agent.healthRelease')}</h2>
+            <div class="num">{rel(row.metrics?.last_release)}</div>
+            <div class="detail">
+              {cadence != null
+                ? t(lang, 'agent.healthCadence', { n: cadence })
+                : t(lang, 'agent.healthCadenceEmpty', { date: history[0]?.date ?? date })}
+            </div>
+            <div class="health-pos">
+              <GroupPos p={pos('release')?.p ?? null} n={pos('release')?.n} title={posTitle('release')} />
+              <span>{medText('release', (v) => daysText(v))}</span>
+            </div>
+          </div>
+          <div class="card health-card">
+            <h2>{t(lang, 'agent.healthBacklog')}</h2>
+            <div class="num">{fmt(row.metrics?.open_issues)}</div>
+            <div class="detail">
+              {backlog != null
+                ? t(lang, 'agent.healthBacklogHint', { v: backlog })
+                : t(lang, 'agent.healthBacklogNoData')}
+            </div>
+            <div class="health-pos">
+              <GroupPos p={pos('backlog')?.p ?? null} n={pos('backlog')?.n} title={posTitle('backlog')} />
+              <span>{medText('backlog', (v) => (v == null ? '—' : String(Math.round(v * 10) / 10)))}</span>
+            </div>
+          </div>
+          <div class="card health-card">
+            <h2>{t(lang, 'agent.healthFork')}</h2>
+            <div class="num">{forkPct != null ? `${forkPct}%` : '—'}</div>
+            <div class="detail">{t(lang, 'agent.healthForkHint')}</div>
+            <div class="health-pos">
+              <GroupPos p={pos('forkStar')?.p ?? null} n={pos('forkStar')?.n} title={posTitle('forkStar')} />
+              <span>{medText('forkStar', (v) => (v == null ? '—' : `${Math.round(v * 10) / 10}%`))}</span>
+            </div>
+          </div>
+        </div>
+        <p class="muted" style="font-size:11.5px;margin-top:10px">{t(lang, 'agent.healthNote')}</p>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
           <h2>{t(lang, 'agent.trend')}</h2>
           <span class="muted">{t(lang, 'agent.trendHint', { n: history.length })}</span>
         </div>
@@ -262,7 +375,12 @@ const versionLink = (() => {
 
       <section class="section">
         <div class="box">
-          <div class="box-header">{t(lang, 'agent.metrics')}</div>
+          <div class="box-header">
+            <span>{t(lang, 'agent.metrics')}</span>
+            <span class="muted" style="font-size:10px;letter-spacing:0.06em">
+              {t(lang, 'agent.groupPosLegend')}
+            </span>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -272,6 +390,9 @@ const versionLink = (() => {
                   <th class="num hide-sm">{t(lang, 'agent.delta1d')}</th>
                   <th class="num hide-sm">{t(lang, 'agent.delta7d')}</th>
                   <th class="num hide-sm">{t(lang, 'agent.delta30d')}</th>
+                  <th class="num" title={t(lang, 'agent.groupPosHint')}>
+                    {t(lang, 'agent.groupPos')}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -281,18 +402,50 @@ const versionLink = (() => {
                   <td class="num hide-sm">{fmt(row.delta_1d)}</td>
                   <td class="num hide-sm">{fmt(row.delta_7d)}</td>
                   <td class="num hide-sm">{fmt(row.delta_30d)}</td>
+                  <td class="num">
+                    <GroupPos p={pos('stars')?.p ?? null} n={pos('stars')?.n} title={posTitle('stars')} />
+                  </td>
                 </tr>
-                <tr><td>{t(lang, 'metric.forks')}</td><td class="num">{fmt(row.metrics?.forks)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
-                <tr><td>{t(lang, 'metric.contributors')}</td><td class="num">{fmt(row.metrics?.contributors)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
-                <tr><td>{t(lang, 'metric.installs')}</td><td class="num">{fmt(row.metrics?.installs)}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+                <tr>
+                  <td>{t(lang, 'metric.forks')}</td>
+                  <td class="num">{fmt(row.metrics?.forks)}</td>
+                  <td class="num">—</td><td class="num">—</td><td class="num">—</td>
+                  <td class="num">
+                    <GroupPos p={pos('forks')?.p ?? null} n={pos('forks')?.n} title={posTitle('forks')} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>{t(lang, 'metric.contributors')}</td>
+                  <td class="num">{fmt(row.metrics?.contributors)}</td>
+                  <td class="num">—</td><td class="num">—</td><td class="num">—</td>
+                  <td class="num">
+                    <GroupPos p={pos('contributors')?.p ?? null} n={pos('contributors')?.n} title={posTitle('contributors')} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>{t(lang, 'metric.installs')}</td>
+                  <td class="num">{fmt(row.metrics?.installs)}</td>
+                  <td class="num hide-sm">{dlDelta(row.metrics?.installs_1d_ago)}</td>
+                  <td class="num hide-sm">{dlDelta(row.metrics?.installs_7d_ago)}</td>
+                  <td class="num hide-sm">{dlDelta(row.metrics?.installs_30d_ago)}</td>
+                  <td class="num">
+                    <GroupPos p={pos('installs')?.p ?? null} n={pos('installs')?.n} title={posTitle('installs')} />
+                  </td>
+                </tr>
                 <tr>
                   <td>{t(lang, 'agent.relGrowth')}</td><td class="num">—</td><td class="num">—</td>
                   <td class="num">{fmtPct(row.growth_7d_pct)}</td><td class="num">{fmtPct(row.growth_30d_pct)}</td>
+                  <td class="num">
+                    <GroupPos p={pos('growth30')?.p ?? null} n={pos('growth30')?.n} title={posTitle('growth30')} />
+                  </td>
                 </tr>
                 <tr>
                   <td>{t(lang, 'metric.activity')}</td>
-                  <td class="num">{row.metrics?.activity != null ? row.metrics.activity.toFixed(2) : '—'}</td>
+                  <td class="num">{activityEvidence && row.metrics?.activity != null ? row.metrics.activity.toFixed(2) : '—'}</td>
                   <td class="num">—</td><td class="num">—</td><td class="num">—</td>
+                  <td class="num">
+                    <GroupPos p={pos('activity')?.p ?? null} n={pos('activity')?.n} title={posTitle('activity')} />
+                  </td>
                 </tr>
                 <tr>
                   <td>{t(lang, 'agent.version')}</td>
@@ -300,7 +453,7 @@ const versionLink = (() => {
                     {row.metrics?.version ?? '—'}
                     {row.metrics?.version_at ? <span class="muted" style="opacity:.7"> · {row.metrics.version_at.slice(0, 10)}</span> : ''}
                   </td>
-                  <td class="num">—</td><td class="num">—</td><td class="num">—</td>
+                  <td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td>
                 </tr>
               </tbody>
             </table>
