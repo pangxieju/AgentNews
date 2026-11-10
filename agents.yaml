@@ -32,13 +32,15 @@
 
 - slug: pi
   name: Pi
-  vendor: Mario Zechner (badlogic)
+  vendor: Earendil Works (Mario Zechner)
   form: cli
   oss_bucket: open
   license_id: MIT
-  homepage: https://github.com/badlogic/pi-mono
+  homepage: https://pi.dev
+  # 官网 logo（README 里声明的同一个文件）；不写会退化到 GitHub owner 头像，那是个人照片
+  icon: https://pi.dev/logo-auto.svg
   sources:
-    - { kind: github, identifier: badlogic/pi-mono, is_primary: true }
+    - { kind: github, identifier: earendil-works/pi, is_primary: true }
     - { kind: npm, identifier: "@earendil-works/pi-coding-agent" }
     - { kind: openrouter, identifier: pi }
 

@@ -306,10 +306,10 @@
     "h": 192
   },
   "pi": {
-    "file": "pi.f0db200c.jpg",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "pi.1bb847e0.svg",
+    "source": "override",
+    "w": 0,
+    "h": 0
   },
   "plandex": {
     "file": "plandex.5a33024f.png",
@@ -330,7 +330,7 @@
     "h": 412
   },
   "qodo": {
-    "file": "qodo.113e9437.webp",
+    "file": "qodo.80e91e84.png",
     "source": "html",
     "w": 300,
     "h": 300
@@ -402,10 +402,10 @@
     "h": 0
   },
   "void-editor": {
-    "file": "void-editor.89c85433.png",
-    "source": "html",
-    "w": 1200,
-    "h": 1200
+    "file": "void-editor.2901704a.png",
+    "source": "github",
+    "w": 192,
+    "h": 192
   },
   "warp-agent": {
     "file": "warp-agent.e742cc2a.png",
