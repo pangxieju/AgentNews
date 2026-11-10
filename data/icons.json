@@ -49,11 +49,11 @@
     "url": "https://antigravity.google/assets/image/antigravity-logo.png"
   },
   "atlas": {
-    "file": "atlas.0c83b11f.png",
-    "source": "logo",
+    "file": "atlas.1d4021e9.png",
+    "source": "html",
     "w": 180,
     "h": 180,
-    "url": "https://icon.horse/icon/chatgpt.com"
+    "url": "https://chatgpt.com/cdn/assets/favicon-180x180.9e0103ce69.png"
   },
   "atomic-agents": {
     "file": "atomic-agents.51ade186.svg",
@@ -147,11 +147,11 @@
     "url": "https://icon.horse/icon/baidu.com"
   },
   "comet": {
-    "file": "comet.42a87489.ico",
-    "source": "logo",
-    "w": 256,
-    "h": 256,
-    "url": "https://favicone.com/www.perplexity.ai?s=256"
+    "file": "comet.3663266b.png",
+    "source": "well-known",
+    "w": 180,
+    "h": 180,
+    "url": "https://www.perplexity.ai/apple-touch-icon.png"
   },
   "continue": {
     "file": "continue.987883db.png",
@@ -281,17 +281,17 @@
   },
   "jules": {
     "file": "jules.771ff79e.svg",
-    "source": "logo",
+    "source": "html",
     "w": 0,
     "h": 0,
-    "url": "https://icon.horse/icon/jules.google"
+    "url": "https://jules.google/favicon.svg"
   },
   "junie": {
-    "file": "junie.1638266d.png",
-    "source": "logo",
-    "w": 180,
-    "h": 180,
-    "url": "https://icon.horse/icon/junie.jetbrains.com"
+    "file": "junie.7401ebfa.png",
+    "source": "manifest",
+    "w": 512,
+    "h": 512,
+    "url": "https://junie.jetbrains.com/favicons/web-app-manifest-512x512.png"
   },
   "kilo-code": {
     "file": "kilo-code.5e025a02.png",
@@ -462,11 +462,11 @@
     "url": "https://icon.horse/icon/skyvern.com"
   },
   "smolagents": {
-    "file": "smolagents.abd50054.png",
-    "source": "github",
-    "w": 192,
-    "h": 192,
-    "url": "https://github.com/huggingface.png?size=192"
+    "file": "smolagents.0b08e717.jpg",
+    "source": "readme",
+    "w": 1908,
+    "h": 1848,
+    "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/smolagents/benchmark_code_agents.jpeg"
   },
   "stagehand": {
     "file": "stagehand.7a94d783.png",
@@ -511,11 +511,11 @@
     "url": "https://icon.horse/icon/sdk.vercel.ai"
   },
   "void-editor": {
-    "file": "void-editor.41e137b4.png",
-    "source": "logo",
-    "w": 256,
-    "h": 256,
-    "url": "https://icon.horse/icon/voideditor.com"
+    "file": "void-editor.89c85433.png",
+    "source": "html",
+    "w": 1200,
+    "h": 1200,
+    "url": "https://voideditor.com/icon.png?fe8088bdbfb5a2cf"
   },
   "warp-agent": {
     "file": "warp-agent.3bedbdd5.png",
