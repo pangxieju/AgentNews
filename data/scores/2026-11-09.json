@@ -29,7 +29,13 @@
         "release_url": "https://github.com/anomalyco/opencode/releases/tag/v1.19.5",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T15:21:39Z",
+        "open_issues": 4188,
+        "repo_created": "2025-04-30T20:08:00Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -66,7 +72,13 @@
         "release_url": "https://github.com/openai/codex/releases/tag/rust-v0.167.0",
         "openrouter_tokens_month": 12243161411308,
         "openrouter_requests_month": 188419854,
-        "openrouter_rank_month": 9
+        "openrouter_rank_month": 9,
+        "last_commit": "2026-11-09T12:55:22Z",
+        "open_issues": 26939,
+        "repo_created": "2025-04-13T05:37:54Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -103,7 +115,13 @@
         "release_url": "https://github.com/earendil-works/pi/releases/tag/v1.5.0",
         "openrouter_tokens_month": 17601934314481,
         "openrouter_requests_month": 161412738,
-        "openrouter_rank_month": 6
+        "openrouter_rank_month": 6,
+        "last_commit": "2026-11-09T15:14:07Z",
+        "open_issues": 264,
+        "repo_created": "2025-08-09T14:03:50Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -140,7 +158,13 @@
         "release_url": "https://github.com/OpenHands/OpenHands/releases/tag/v1.37.0",
         "openrouter_tokens_month": 2865479187591,
         "openrouter_requests_month": 31326936,
-        "openrouter_rank_month": 19
+        "openrouter_rank_month": 19,
+        "last_commit": "2026-11-09T14:10:32Z",
+        "open_issues": 1171,
+        "repo_created": "2024-03-13T03:33:31Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -175,7 +199,13 @@
         "release_url": "https://github.com/aaif-goose/goose/releases/tag/v1.57.0",
         "openrouter_tokens_month": 402367974609,
         "openrouter_requests_month": 5556582,
-        "openrouter_rank_month": 56
+        "openrouter_rank_month": 56,
+        "last_commit": "2026-11-09T15:11:05Z",
+        "open_issues": 571,
+        "repo_created": "2024-08-23T19:03:36Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -210,7 +240,13 @@
         "release_url": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.67.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T01:05:59Z",
+        "open_issues": 738,
+        "repo_created": "2025-04-17T17:04:31Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -245,7 +281,13 @@
         "release_url": null,
         "openrouter_tokens_month": 45865747858940,
         "openrouter_requests_month": 415982733,
-        "openrouter_rank_month": 3
+        "openrouter_rank_month": 3,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [
@@ -282,7 +324,13 @@
         "release_url": "https://github.com/QwenLM/qwen-code/releases/tag/sdk-typescript-v0.1.31",
         "openrouter_tokens_month": 124077941521,
         "openrouter_requests_month": 869927,
-        "openrouter_rank_month": 114
+        "openrouter_rank_month": 114,
+        "last_commit": "2026-11-09T15:22:28Z",
+        "open_issues": 2143,
+        "repo_created": "2025-06-26T01:37:46Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -317,7 +365,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [
@@ -354,7 +408,13 @@
         "release_url": "https://github.com/Aider-AI/aider/releases/tag/v0.86.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-05-22T14:02:20Z",
+        "open_issues": 1960,
+        "repo_created": "2023-05-09T18:57:49Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -389,7 +449,13 @@
         "release_url": "https://github.com/charmbracelet/crush/releases/tag/v0.100.0",
         "openrouter_tokens_month": 113366777110,
         "openrouter_requests_month": 681534,
-        "openrouter_rank_month": 124
+        "openrouter_rank_month": 124,
+        "last_commit": "2026-11-09T14:50:21Z",
+        "open_issues": 531,
+        "repo_created": "2025-05-21T12:14:57Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -424,7 +490,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -459,7 +531,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -494,7 +572,13 @@
         "release_url": "https://github.com/tailcallhq/forgecode/releases/tag/v2.14.0",
         "openrouter_tokens_month": 56060566724,
         "openrouter_requests_month": 528031,
-        "openrouter_rank_month": 222
+        "openrouter_rank_month": 222,
+        "last_commit": "2026-11-09T05:59:35Z",
+        "open_issues": 36,
+        "repo_created": "2024-12-08T20:33:37Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -529,7 +613,13 @@
         "release_url": "https://github.com/mistralai/mistral-vibe/releases/tag/v3.1.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T15:09:57Z",
+        "open_issues": 493,
+        "repo_created": "2025-12-08T18:56:59Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -564,7 +654,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -599,7 +695,13 @@
         "release_url": "https://github.com/plandex-ai/plandex/releases/tag/cli/v2.2.1",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2025-10-03T21:49:58Z",
+        "open_issues": 71,
+        "repo_created": "2023-10-24T22:11:43Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -634,7 +736,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -669,7 +777,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-03-20T03:00:54Z",
+        "open_issues": 84,
+        "repo_created": "2025-07-27T02:38:21Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -704,7 +818,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -741,7 +861,13 @@
         "release_url": "https://github.com/cline/cline/releases/tag/v4.1.26",
         "openrouter_tokens_month": 7850047503591,
         "openrouter_requests_month": 89022388,
-        "openrouter_rank_month": 12
+        "openrouter_rank_month": 12,
+        "last_commit": "2026-11-09T14:41:17Z",
+        "open_issues": 1742,
+        "repo_created": "2024-07-06T07:28:10Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -778,7 +904,13 @@
         "release_url": null,
         "openrouter_tokens_month": 66464483057,
         "openrouter_requests_month": 1284209,
-        "openrouter_rank_month": 193
+        "openrouter_rank_month": 193,
+        "last_commit": "2026-11-05T15:28:28Z",
+        "open_issues": 866,
+        "repo_created": "2023-05-24T03:39:39Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -815,7 +947,13 @@
         "release_url": "https://github.com/Kilo-Org/kilocode/releases/tag/v7.8.27",
         "openrouter_tokens_month": 23176826439766,
         "openrouter_requests_month": 221745644,
-        "openrouter_rank_month": 5
+        "openrouter_rank_month": 5,
+        "last_commit": "2026-11-09T15:16:32Z",
+        "open_issues": 868,
+        "repo_created": "2025-03-10T15:34:26Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -850,7 +988,13 @@
         "release_url": "https://github.com/RooCodeInc/Roo-Code/releases/tag/v3.54.0",
         "openrouter_tokens_month": 227681411971,
         "openrouter_requests_month": 1364634,
-        "openrouter_rank_month": 71
+        "openrouter_rank_month": 71,
+        "last_commit": "2026-05-15T18:08:47Z",
+        "open_issues": 1029,
+        "repo_created": "2024-10-31T17:56:50Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -887,7 +1031,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2025-08-01T14:31:09Z",
+        "open_issues": 43,
+        "repo_created": "2023-07-10T10:13:55Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -922,7 +1072,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -959,7 +1115,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -996,7 +1158,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1033,7 +1201,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1070,7 +1244,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1107,7 +1287,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1144,7 +1330,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1181,7 +1373,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1218,7 +1416,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1255,7 +1459,13 @@
         "release_url": "https://github.com/zed-industries/zed/releases/tag/v1.27.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T14:53:21Z",
+        "open_issues": 3055,
+        "repo_created": "2021-02-20T03:01:06Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -1290,7 +1500,13 @@
         "release_url": "https://github.com/eclipse-theia/theia/releases/tag/v1.77.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T10:16:20Z",
+        "open_issues": 1506,
+        "repo_created": "2017-02-24T14:42:05Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -1325,7 +1541,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -1360,7 +1582,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-06-02T22:03:55Z",
+        "open_issues": 304,
+        "repo_created": "2024-09-11T02:37:00Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -1395,7 +1623,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1432,7 +1666,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1469,7 +1709,13 @@
         "release_url": null,
         "openrouter_tokens_month": 1324489096801,
         "openrouter_requests_month": 11211262,
-        "openrouter_rank_month": 30
+        "openrouter_rank_month": 30,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1506,7 +1752,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1543,7 +1795,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1580,7 +1838,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1617,7 +1881,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1654,7 +1924,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1691,7 +1967,13 @@
         "release_url": "https://github.com/browser-use/browser-use/releases/tag/0.13.14",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T09:48:24Z",
+        "open_issues": 628,
+        "repo_created": "2024-10-31T16:00:56Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -1728,7 +2010,13 @@
         "release_url": "https://github.com/openinterpreter/openinterpreter/releases/tag/rust-v0.0.60",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T01:22:10Z",
+        "open_issues": 37,
+        "repo_created": "2023-07-14T07:10:44Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -1763,7 +2051,13 @@
         "release_url": "https://github.com/browserbase/stagehand/releases/tag/stagehand-server-v3/v3.7.7",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T12:53:06Z",
+        "open_issues": 431,
+        "repo_created": "2024-03-24T19:19:44Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -1798,7 +2092,13 @@
         "release_url": "https://github.com/Skyvern-AI/skyvern/releases/tag/v1.0.57",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T11:22:30Z",
+        "open_issues": 290,
+        "repo_created": "2024-02-28T15:45:19Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -1833,7 +2133,13 @@
         "release_url": "https://github.com/nanobrowser/nanobrowser/releases/tag/v0.3.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-08T09:03:45Z",
+        "open_issues": 53,
+        "repo_created": "2024-12-31T08:11:27Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -1868,7 +2174,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1905,7 +2217,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -1942,7 +2260,13 @@
         "release_url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.7.6",
         "openrouter_tokens_month": 1449410386418,
         "openrouter_requests_month": 47736095,
-        "openrouter_rank_month": 28
+        "openrouter_rank_month": 28,
+        "last_commit": "2026-11-09T08:20:32Z",
+        "open_issues": 730,
+        "repo_created": "2022-10-17T02:58:36Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -1979,7 +2303,13 @@
         "release_url": "https://github.com/openai/openai-agents-python/releases/tag/v0.24.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T14:15:48Z",
+        "open_issues": 27,
+        "repo_created": "2025-03-11T03:42:36Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -2016,7 +2346,13 @@
         "release_url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/vue%403.0.326",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T02:57:28Z",
+        "open_issues": 1517,
+        "repo_created": "2023-05-23T15:04:08Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -2053,7 +2389,13 @@
         "release_url": "https://github.com/run-llama/llama_index/releases/tag/v0.14.25",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-08T21:41:55Z",
+        "open_issues": 1329,
+        "repo_created": "2022-11-02T04:24:54Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2088,7 +2430,13 @@
         "release_url": "https://github.com/agno-agi/agno/releases/tag/v3.1.12",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T14:56:59Z",
+        "open_issues": 1961,
+        "repo_created": "2022-05-04T15:23:02Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2123,7 +2471,13 @@
         "release_url": "https://github.com/mastra-ai/mastra/releases/tag/%40mastra/core%401.82.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T15:24:32Z",
+        "open_issues": 850,
+        "repo_created": "2024-08-06T20:44:31Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -2160,7 +2514,13 @@
         "release_url": "https://github.com/crewAIInc/crewAI/releases/tag/1.15.39",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T10:14:16Z",
+        "open_issues": 1212,
+        "repo_created": "2023-10-27T03:26:59Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2195,7 +2555,13 @@
         "release_url": "https://github.com/langchain-ai/langgraph/releases/tag/sdk%3D%3D0.4.14",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-08T00:33:40Z",
+        "open_issues": 478,
+        "repo_created": "2023-08-09T18:33:12Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -2232,7 +2598,13 @@
         "release_url": "https://github.com/pydantic/pydantic-ai/releases/tag/v2.66.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T15:08:37Z",
+        "open_issues": 1866,
+        "repo_created": "2024-06-21T15:55:04Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -2269,7 +2641,13 @@
         "release_url": "https://github.com/google/adk-python/releases/tag/v2.14.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T06:23:33Z",
+        "open_issues": 437,
+        "repo_created": "2025-04-01T20:44:40Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -2306,7 +2684,13 @@
         "release_url": "https://github.com/microsoft/autogen/releases/tag/python-v0.7.5",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-10-28T14:45:27Z",
+        "open_issues": 1169,
+        "repo_created": "2023-08-18T11:43:45Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2341,7 +2725,13 @@
         "release_url": "https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.24.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T15:24:00Z",
+        "open_issues": 1158,
+        "repo_created": "2025-05-14T19:59:51Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [
@@ -2378,7 +2768,13 @@
         "release_url": "https://github.com/deepset-ai/haystack/releases/tag/v2.31.1",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T15:16:38Z",
+        "open_issues": 162,
+        "repo_created": "2019-11-14T09:05:28Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2413,7 +2809,13 @@
         "release_url": "https://github.com/microsoft/semantic-kernel/releases/tag/dotnet-1.82.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T13:59:00Z",
+        "open_issues": 328,
+        "repo_created": "2023-02-27T17:39:42Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2448,7 +2850,13 @@
         "release_url": "https://github.com/huggingface/smolagents/releases/tag/v1.26.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-03T18:36:41Z",
+        "open_issues": 1054,
+        "repo_created": "2024-12-05T11:28:04Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2483,7 +2891,13 @@
         "release_url": "https://github.com/microsoft/agent-framework/releases/tag/python-1.25.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T13:54:16Z",
+        "open_issues": 904,
+        "repo_created": "2025-04-28T19:40:42Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2518,7 +2932,13 @@
         "release_url": "https://github.com/Eigenwise/atomic-agents/releases/tag/v2.15.0",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-10-29T19:00:20Z",
+        "open_issues": 29,
+        "repo_created": "2024-06-03T08:24:07Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2553,7 +2973,13 @@
         "release_url": "https://github.com/Significant-Gravitas/AutoGPT/releases/tag/autogpt-platform-beta-v0.11.1",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-11-09T15:08:22Z",
+        "open_issues": 702,
+        "repo_created": "2023-03-16T09:21:07Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -2588,7 +3014,13 @@
         "release_url": "https://github.com/AntonOsika/gpt-engineer/releases/tag/v0.3.1",
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2025-05-14T10:15:10Z",
+        "open_issues": 70,
+        "repo_created": "2023-04-29T12:52:15Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L1",
       "flags": [],
@@ -2623,7 +3055,13 @@
         "release_url": "https://github.com/agent0ai/agent-zero/releases/tag/v2.15",
         "openrouter_tokens_month": 94176116246,
         "openrouter_requests_month": 2110484,
-        "openrouter_rank_month": 151
+        "openrouter_rank_month": 151,
+        "last_commit": "2026-11-08T20:43:32Z",
+        "open_issues": 160,
+        "repo_created": "2024-06-10T09:10:45Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -2658,7 +3096,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": "2026-01-31T05:05:45Z",
+        "open_issues": 33,
+        "repo_created": "2023-04-03T00:40:27Z",
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L2",
       "flags": [],
@@ -2693,7 +3137,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -2730,7 +3180,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
@@ -2767,7 +3223,13 @@
         "release_url": null,
         "openrouter_tokens_month": null,
         "openrouter_requests_month": null,
-        "openrouter_rank_month": null
+        "openrouter_rank_month": null,
+        "last_commit": null,
+        "open_issues": null,
+        "repo_created": null,
+        "installs_1d_ago": null,
+        "installs_7d_ago": null,
+        "installs_30d_ago": null
       },
       "data_level": "L3",
       "flags": [
