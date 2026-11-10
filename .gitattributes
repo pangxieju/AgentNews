@@ -1,0 +1,11 @@
+# 图标文件名带内容哈希（slug.<sha1-8>.<ext>），必须字节级保真：
+# 被 core.autocrlf 改写换行会让「文件名哈希」与「内容」对不上。
+packages/web/public/icons/** -text
+
+# 其余文本统一 LF，避免 Windows 上 CRLF/LF 来回抖动
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.md   text eol=lf
