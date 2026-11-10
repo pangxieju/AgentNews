@@ -137,6 +137,37 @@ packages/
 - 闭源项目不得以 GitHub 为主渠道
 - 至少一个分发渠道
 
+### 图标
+
+图标每天自动重抓，落在 `packages/web/public/icons/`（文件名带内容哈希），清单在 `data/icons.json`。取图优先级：
+
+1. `agents.yaml` 的 `icon:` 覆盖（人工校准，最高优先级）
+2. 官网 web app manifest 里的大图标（192/512 PNG）
+3. 官网 `<link rel=icon>` / `apple-touch-icon`（取最大的那个）
+4. 官网 `og:image`（只接受近正方形）
+5. GitHub README 里明确写着 logo 的图（开源项目的产品 logo，通常还是 SVG）
+6. 第三方 logo API（icon.horse → favicone → unavatar → clearbit）
+7. 官网 favicon 服务 / `/favicon.ico`
+8. GitHub owner 头像（最后兜底：个人仓库会拿到维护者头像，不是产品 logo）
+
+两条约束：**只升不降**（某天官网抽风抓到低优先级的图，不会覆盖昨天的高清图）；**来源更可信优先**（README 里的产品 logo 优于母公司 favicon）。
+
+自动取图拿不准时用 `icon:` 覆盖，常见情形：
+
+```yaml
+- slug: pi
+  homepage: https://pi.dev
+  icon: https://pi.dev/logo-auto.svg   # 不写会退化到 GitHub owner 头像（维护者个人照片）
+```
+
+```bash
+pnpm icons                            # 重抓全部
+pnpm icons -- --only=pi,langgraph      # 只重抓指定几个（合并进清单，不动其他图标）
+pnpm icons:audit                       # 体检：缺图 / 低清 / .ico / 组织头像兜底 / 多产品共用一张图
+```
+
+`pnpm icons:audit` 里被标 ⚠️ 的，就是在提示该加 `icon:` 覆盖了。
+
 ### 找漏掉的 agent
 
 手写 YAML 追不上新项目，所以有一个候选发现脚本（只出清单，不自动收录 —— 人工审核优先）：

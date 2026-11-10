@@ -47,6 +47,11 @@ jobs:
           # Actions 自动注入：5000 次/小时，足够覆盖当前 47 个 repo × 3 请求
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # 图标体检：只出报告，不阻断（缺图/低清时在 Summary 里提醒人工加 icon: 覆盖）
+      - name: Icon audit
+        continue-on-error: true
+        run: pnpm icons:audit
+
       - name: Commit snapshots
         run: |
           git config user.name  'agentnews-bot'

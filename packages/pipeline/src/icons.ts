@@ -7,12 +7,18 @@
  *
  * 取图优先级（越靠前越能代表「这个产品」而不是「这个组织」）：
  *   1. agents.yaml 的 icon: 覆盖（人工校准）
- *   2. 官网 HTML 里声明的图标（apple-touch-icon / icon，按尺寸挑最大）
- *   3. 官网 og:image / twitter:image（仅接受近似正方形，避免拿到宣传大图）
- *   4. 官网约定路径 /apple-touch-icon.png、/apple-touch-icon-precomposed.png
- *   5. 官网 favicon 服务（Google s2 → DuckDuckGo）
- *   6. 官网 /favicon.ico（体积小，最后才用）
- *   7. GitHub owner 头像（开源项目通常就是项目 logo）
+ *   2. 官网 web app manifest 里的大图标（manifest.json → 192/512 PNG，常是唯一高清来源）
+ *   3. 官网 HTML 里声明的图标（apple-touch-icon / icon，按尺寸挑最大）
+ *   4. 官网 og:image / twitter:image（仅接受近似正方形，避免拿到宣传大图）
+ *   5. 官网约定路径 /apple-touch-icon.png、/apple-touch-icon-precomposed.png
+ *   6. GitHub README 里明确写着 logo 的图（开源项目的产品 logo，常是 SVG）
+ *   7. 第三方 logo API（icon.horse → favicone → unavatar → clearbit，给 ≥180px 真 logo）
+ *   8. 官网 favicon 服务（Google s2 → DuckDuckGo）
+ *   9. 官网 /favicon.ico（体积小，最后才用）
+ *  10. GitHub owner 头像（最后兜底：个人仓库会拿到维护者头像，需人工核对）
+ *
+ * 任何一档都可能落空 —— 用 `pnpm icons:audit` 看谁退化到了 7~10 档，
+ * 再在 agents.yaml 里加 icon: 覆盖。生产环境优先认「官网自述」，而不是猜测。
  *
  * 原则：只要有「真实官网」，就一定优先从官网取图；GitHub 头像只作为
  * 无官网 / 官网取不到图时的兜底。docs 托管域名（*.github.io、learn.microsoft.com
@@ -39,9 +45,11 @@ const TIMEOUT_MS = 12_000;
 
 export type IconRecord = {
   file: string;
-  source: 'override' | 'html' | 'well-known' | 'github' | 'google' | 'ddg';
+  source: 'override' | 'manifest' | 'html' | 'well-known' | 'readme' | 'logo' | 'github' | 'google' | 'ddg';
   w: number;
   h: number;
+  /** 取图来源 URL：排查「这张图到底是哪来的」时必备 */
+  url?: string;
 };
 
 export type IconManifest = Record<string, IconRecord>;
@@ -286,6 +294,149 @@ function wellKnownFavicon(origin: string): Candidate[] {
   return [{ url: `${origin}/favicon.ico`, score: 32 * 32, source: 'well-known' as const }];
 }
 
+/**
+ * 官网 web app manifest 里的图标：现代站点（Next.js / Astro / Vite）通常在这里声明
+ * 192x192、512x512 的 PNG —— 而 <head> 里只挂了个 32x32 favicon。这是「官网自述」
+ * 里最容易漏掉的高清来源。
+ */
+async function manifestCandidates(html: string, pageUrl: string): Promise<Candidate[]> {
+  const links = html.match(/<link\b[^>]*>/gi) ?? [];
+  const hrefs = new Set<string>();
+  for (const tag of links) {
+    if (!/manifest/i.test(attr(tag, 'rel') ?? '')) continue;
+    const href = attr(tag, 'href');
+    if (!href) continue;
+    try {
+      const u = new URL(href, pageUrl);
+      if (/^https?:$/i.test(u.protocol)) hrefs.add(u.toString());
+    } catch {
+      /* 忽略非法 href */
+    }
+  }
+  const out: Candidate[] = [];
+  const fetchJson = async (url: string): Promise<string | null> => {
+    const rd = async (): Promise<string | null> =>
+      get(url, { 'User-Agent': UA, Accept: 'application/manifest+json,application/json,*/*' }, async (res) =>
+        (await res.text()).slice(0, 200_000),
+      );
+    const first = await rd();
+    if (first) return first;
+    // manifest 抓取失败会把整条官网高清路径打掉，必须重试一次
+    await new Promise((r) => setTimeout(r, 500));
+    return rd();
+  };
+  for (const href of [...hrefs].slice(0, 2)) {
+    const json = await fetchJson(href);
+    if (!json) continue;
+    let icons: unknown;
+    try {
+      icons = (JSON.parse(json) as { icons?: unknown }).icons;
+    } catch {
+      continue;
+    }
+    if (!Array.isArray(icons)) continue;
+    for (const icon of icons) {
+      const src = (icon as { src?: unknown }).src;
+      if (typeof src !== 'string' || !src) continue;
+      let url: string;
+      try {
+        url = new URL(src, href).toString();
+      } catch {
+        continue;
+      }
+      if (!/^https?:/i.test(url)) continue;
+      const sizes = String((icon as { sizes?: unknown }).sizes ?? '');
+      const type = String((icon as { type?: unknown }).type ?? '');
+      let score = sizeScore(sizes);
+      if (/svg/i.test(type) || /\.svg(\?|$)/i.test(url)) score = Math.max(score, 4096);
+      if (!score) score = 192 * 192;
+      out.push({ url, score, source: 'manifest' });
+    }
+  }
+  return out.sort((a, b) => b.score - a.score);
+}
+
+/** 第三方 logo API —— 按「域名」查，返回的是品牌 logo 而不是 32px favicon。
+ *  顺序即可信度：icon.horse 给 256/512 位图，favicone 给 256，unavatar 常给矢量，
+ *  clearbit 在部分网络下不可达（放在最后，失败即跳过）。*/
+function logoApiCandidates(hostname: string, source: IconRecord['source'] = 'logo'): Candidate[] {
+  const h = encodeURIComponent(hostname);
+  return [
+    { url: `https://icon.horse/icon/${h}`, score: 100_000, source },
+    { url: `https://favicone.com/${h}?s=256`, score: 90_000, source },
+    { url: `https://unavatar.io/${h}?fallback=false`, score: 80_000, source },
+    { url: `https://logo.clearbit.com/${h}`, score: 70_000, source },
+  ];
+}
+
+/** 子域 → 父域：junie.jetbrains.com 取不到图时，退到 jetbrains.com（品牌 logo） */
+function parentHosts(hostname: string): string[] {
+  const parts = hostname.split('.').filter(Boolean);
+  const out: string[] = [];
+  for (let i = 1; i < parts.length - 1; i++) out.push(parts.slice(i).join('.'));
+  return out;
+}
+
+/** 徽章/统计图 —— 出现在 README 顶部但不是 logo，必须排除 */
+const BADGE_RE =
+  /shields\.io|badgen|badge\.fury|codecov|travis-ci|circleci|appveyor|snyk\.io|deps\.rs|gitter|discord|opencollective|star-history|visitor-badge|hits\.se|npmjs\.com\/package\/[^\s]*\/badge/i;
+
+/**
+ * GitHub README 里的产品 logo：开源项目往往把真 logo 放在 README 顶部，
+ * 而官网只是个 docs 站（.github.io / readthedocs），官网取图全落空。
+ * 只认「矢量」或「路径/alt 里明确写 logo|icon|brand|avatar」的图，避免抓到截图。
+ */
+function readmeImageCandidates(readmeText: string, rawBase: string): Candidate[] {
+  const out: Candidate[] = [];
+  const push = (src: string, alt: string): void => {
+    if (!src || /^data:/i.test(src)) return;
+    if (BADGE_RE.test(src) || BADGE_RE.test(alt)) return;
+    if (/\.gif(\?|$)/i.test(src)) return;
+    const isSvg = /\.svg(\?|$)/i.test(src);
+    const looksLogo = /logo|icon|brand|avatar|wordmark|mark/i.test(src + ' ' + alt);
+    // 位图只信「明确写着 logo」的，否则很容易抓到 demo 截图
+    if (!isSvg && !looksLogo) return;
+    let url: string;
+    try {
+      url = new URL(src, rawBase).toString();
+    } catch {
+      return;
+    }
+    if (!/^https?:/i.test(url)) return;
+    out.push({
+      url,
+      score: (isSvg ? 4096 : 1024) + (looksLogo ? 512 : 0),
+      source: 'readme',
+      // 位图必须是近正方形：README 里“写着 logo”的宽横幅（1470x414 那种）当图标很难看
+      square: !isSvg,
+    });
+  };
+  // Markdown: ![alt](src "title")
+  for (const m of readmeText.matchAll(/!\[([^\]]*)\]\(\s*<?([^)\s>]+)>?[^)]*\)/g)) push(m[2]!, m[1]!);
+  // HTML: <img src="..." alt="...">
+  for (const m of readmeText.matchAll(/<img\b[^>]*>/gi)) {
+    const src = attr(m[0], 'src');
+    if (src) push(src, attr(m[0], 'alt') ?? '');
+  }
+  return out.sort((a, b) => b.score - a.score);
+}
+
+const README_NAMES = ['README.md', 'readme.md', 'README.markdown', 'Readme.md', 'README.rst'];
+
+/** 抓 GitHub README 文本；raw.githubusercontent 不需要 token，也不吃 API 配额 */
+async function fetchReadme(owner: string, repo: string): Promise<{ text: string; base: string } | null> {
+  for (const name of README_NAMES) {
+    const base = `https://raw.githubusercontent.com/${owner}/${repo}/HEAD/`;
+    const text = await get(
+      base + name,
+      { 'User-Agent': UA, Accept: 'text/plain,*/*' },
+      async (res) => (await res.text()).slice(0, 300_000),
+    );
+    if (text) return { text, base };
+  }
+  return null;
+}
+
 /** 解码 data:image/... 图标 */
 function decodeDataUrl(url: string): Image | null {
   const m = /^data:image\/[a-z0-9.+-]+(;base64)?,(.*)$/is.exec(url);
@@ -327,56 +478,148 @@ export async function resolveIcon(agent: Agent): Promise<Resolved | null> {
 
   // 1. 人工覆盖
   if (agent.icon) {
-    const img = await fetchImage(agent.icon);
+    let img = await fetchImage(agent.icon);
+    if (!img) {
+      await new Promise((r) => setTimeout(r, 600));
+      img = await fetchImage(agent.icon);
+    }
     if (img) return { image: img, source: 'override', url: agent.icon };
   }
 
-  // 2~6. 官网优先
+  /** 高清：矢量，或位图 >= 阈值 */
+  const high = (r: Resolved | null, min = 64): r is Resolved =>
+    !!r && (r.image.ext === 'svg' || Math.min(r.image.w, r.image.h) >= min);
+
+  /** 两份候选里挑更好的：矢量优先，其次尺寸大的；同尺寸时 png/jpg 优先于 ico */
+  const better = (a: Resolved | null, b: Resolved | null): Resolved | null => {
+    if (!a) return b;
+    if (!b) return a;
+    const va = a.image.ext === 'svg';
+    const vb = b.image.ext === 'svg';
+    if (va !== vb) return va ? a : b;
+    const sa = Math.min(a.image.w, a.image.h);
+    const sb = Math.min(b.image.w, b.image.h);
+    if (sa !== sb) return sa > sb ? a : b;
+    return a.image.ext === 'ico' && b.image.ext !== 'ico' ? b : a;
+  };
+
+  /** 网络抖动很常见（GitHub / 各站点都会偶尔超时），候选链整条重试一次 */
+  const tryListRetry = async (cands: Candidate[], allowSmall = true): Promise<Resolved | null> => {
+    const first = await tryList(cands, allowSmall);
+    if (first) return first;
+    await new Promise((r) => setTimeout(r, 600));
+    return tryList(cands, allowSmall);
+  };
+
+  // 2~5. 官网自述优先
+  let fallback: Resolved | null = null; // 官网只给了 32x32 时先存着，继续往后找高清
+  let origin: string | null = null;
+  let host: string | null = null;
+
   const site = siteOrigin(agent);
   if (site) {
     const page = await fetchHtml(site.page);
+    let pageOrigin = site.origin;
     // 站点常整体跳转到另一个域名（ai.pydantic.dev → pydantic.dev/docs），
     // 约定路径与 favicon 服务要用跳转后的 origin 才拿得到图。
-    let pageOrigin = site.origin;
-    // 官网只声明了 32x32 favicon 时，先存着，继续往后找更大的图
-    let smallSite: Resolved | null = null;
     if (page) {
       try {
         pageOrigin = new URL(page.url).origin;
       } catch {
         /* 保留原 origin */
       }
-      // 2. 页面声明的图标
+      const siteHost = (() => {
+        try {
+          return new URL(site.origin).hostname;
+        } catch {
+          return null;
+        }
+      })();
+      const pageHost = (() => {
+        try {
+          return new URL(pageOrigin).hostname;
+        } catch {
+          return null;
+        }
+      })();
+      // 域名被并购/迁移后常整体跳到母公司站（windsurf.com → devin.ai）：
+      // 母公司站给的 icon 是母公司 logo，这时优先用 agent 自己首页域名上的 logo。
+      if (siteHost && pageHost && siteHost !== pageHost) {
+        const own = await tryListRetry(logoApiCandidates(siteHost));
+        if (high(own, 128)) return own;
+        fallback = better(fallback, own);
+      }
+
+      // 2. web app manifest 里声明的大图标（head 里常只挂 32x32 favicon）
+      const mf = await tryList(await manifestCandidates(page.html, page.url));
+      if (high(mf, 128)) return mf;
+      fallback = better(fallback, mf);
+
+      // 3. 页面声明的图标
       const found = await tryList(htmlCandidates(page.html, page.url));
-      if (found && (found.image.ext === 'svg' || Math.min(found.image.w, found.image.h) >= 64)) return found;
-      smallSite = found;
-      // 3. og:image（只认正方形）
+      if (high(found)) return found;
+      fallback = better(fallback, found);
+
+      // 4. og:image（只认正方形）
       const og = await tryList(metaCandidates(page.html, page.url), false);
       if (og) return og;
     }
-    // 4. 约定路径 /apple-touch-icon*.png
-    for (const origin of pageOrigin === site.origin ? [site.origin] : [pageOrigin, site.origin]) {
-      const wk = await tryList(wellKnown(origin), false);
+    // 5. 约定路径 /apple-touch-icon*.png
+    for (const o of pageOrigin === site.origin ? [site.origin] : [pageOrigin, site.origin]) {
+      const wk = await tryList(wellKnown(o), false);
       if (wk) return wk;
     }
-
-    // 5. 官网 favicon 服务（仍属于官网，优先于 GitHub 组织头像）
-    const host = new URL(pageOrigin).hostname;
-    const google = `https://www.google.com/s2/favicons?domain=${host}&sz=128`;
-    const g = await fetchImage(google);
-    if (g && Math.min(g.w, g.h) >= (smallSite ? 48 : 32)) return { image: g, source: 'google', url: google };
-    const ddg = `https://icons.duckduckgo.com/ip3/${host}.ico`;
-    const d = await fetchImage(ddg);
-    if (d && Math.min(d.w, d.h) >= (smallSite ? 48 : 32)) return { image: d, source: 'ddg', url: ddg };
-
-    // 6. 官网 /favicon.ico（通常 32x32，聊胜于无）
-    const fav = await tryList(wellKnownFavicon(pageOrigin));
-    if (fav) return smallSite ?? fav;
-    if (smallSite) return smallSite;
+    origin = pageOrigin;
+    try {
+      host = new URL(pageOrigin).hostname;
+    } catch {
+      host = null;
+    }
   }
 
-  // 7. GitHub owner 头像（无官网或官网取不到图时的兜底）
+  // 6. GitHub README 里明确写着 logo 的图：开源项目的官网常常只是 docs 站，官网取图全落空
   const gh = agent.sources.find((s) => s.kind === 'github');
+  if (gh && !agent.icon) {
+    const [owner, repo] = gh.identifier.split('/');
+    if (owner && repo) {
+      const readme = await fetchReadme(owner, repo);
+      if (readme) {
+        const r = await tryListRetry(readmeImageCandidates(readme.text, readme.base));
+        if (high(r)) return r;
+        fallback = better(fallback, r);
+      }
+    }
+  }
+
+  // 7. 第三方 logo API：先本域，再父域（junie.jetbrains.com → jetbrains.com 品牌 logo）
+  if (host) {
+    for (const h of [host, ...parentHosts(host)]) {
+      const r = await tryListRetry(logoApiCandidates(h));
+      if (high(r, 128)) return r;
+      fallback = better(fallback, r);
+    }
+  }
+
+  // 8. 官网自己给的图（哪怕只有 32~48px），比「服务端放大版」可信
+  if (fallback) return fallback;
+
+  // 9. 官网 favicon 服务
+  if (host) {
+    const google = `https://www.google.com/s2/favicons?domain=${host}&sz=128`;
+    const g = await fetchImage(google);
+    if (g && Math.min(g.w, g.h) >= 32) return { image: g, source: 'google', url: google };
+    const ddg = `https://icons.duckduckgo.com/ip3/${host}.ico`;
+    const d = await fetchImage(ddg);
+    if (d && Math.min(d.w, d.h) >= 32) return { image: d, source: 'ddg', url: ddg };
+  }
+
+  // 10. 官网 /favicon.ico（通常 32x32，聊胜于无）
+  if (origin) {
+    const fav = await tryList(wellKnownFavicon(origin));
+    if (fav) return fav;
+  }
+
+  // 11. GitHub owner 头像（最后兜底：个人仓库会拿到维护者头像，不是产品 logo）
   const owner = gh?.identifier.split('/')[0];
   if (owner) {
     const url = `https://github.com/${owner}.png?size=192`;
@@ -400,6 +643,47 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promis
   });
   await Promise.all(workers);
   return out;
+}
+
+/** 来源可信度：数字越小越能代表「这个产品」本身。同步时只允许向上升级，
+ *  避免某天某个站点抓取抽风，就把昨天的高清官网图换成第三方小图标。 */
+export const SOURCE_RANK: Record<IconRecord['source'], number> = {
+  override: 0,
+  manifest: 1,
+  html: 2,
+  'well-known': 3,
+  readme: 4,
+  logo: 5,
+  google: 6,
+  ddg: 7,
+  github: 8,
+};
+
+/** 分辨率打分：矢量最高，位图取短边 */
+function pixels(r: Pick<IconRecord, 'file' | 'w' | 'h'>): number {
+  if (r.file.endsWith('.svg')) return 4096;
+  return Math.min(r.w, r.h) || 0;
+}
+
+/**
+ * 新抓的图能不能替掉上一轮的：
+ * - 来源更可信 → 换（但新图小得可怜、旧图又够大时保留旧图）
+ * - 来源同级 → 分辨率明显更大才换（避免每日抖动）
+ * - 来源更差 → 不换（不能因为官网今天挂了就退化成组织头像）
+ */
+export function shouldReplace(next: IconRecord, prev: IconRecord): boolean {
+  const rn = SOURCE_RANK[next.source] ?? 99;
+  const rp = SOURCE_RANK[prev.source] ?? 99;
+  const pn = pixels(next);
+  const pp = pixels(prev);
+  if (rn < rp) return !(pn < 64 && pp >= 128);
+  if (rn === rp) {
+    if (pn > pp * 1.2) return true;
+    // 同尺寸下 png/jpg 优于 ico（favicone 等站点只回 ico，尺寸相同但体积大、兼容性差）
+    if (!next.file.endsWith('.ico') && prev.file.endsWith('.ico')) return true;
+    return false;
+  }
+  return false;
 }
 
 export async function syncIcons(
@@ -450,11 +734,21 @@ export async function syncIcons(
     }
     const hash = createHash('sha1').update(r.image.buf).digest('hex').slice(0, 8);
     const file = `${agent.slug}.${hash}.${r.image.ext}`;
-    keep.add(file);
-    manifest[agent.slug] = { file, source: r.source, w: r.image.w, h: r.image.h };
+    const record: IconRecord = { file, source: r.source, w: r.image.w, h: r.image.h, url: r.url };
 
-    const target = join(opts.dir, file);
-    try {
+    // 不许降级：官网今天抽风只会拿到低优先级的图，别把昨天的高清图冲掉
+    const old = prev[agent.slug];
+    if (old && (await exists(old.file)) && !shouldReplace(record, old)) {
+      keep.add(old.file);
+      manifest[agent.slug] = old;
+      if (old.file !== file) log(`  = ${old.file} (${old.source} 优于本轮的 ${record.source}，沿用旧图)`);
+      continue;
+    }
+
+    keep.add(file);
+    manifest[agent.slug] = record;
+
+    const target = join(opts.dir, file);    try {
       await readFile(target);
     } catch {
       await writeFile(target, r.image.buf);

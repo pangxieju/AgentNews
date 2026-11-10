@@ -8,7 +8,9 @@
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "build": "pnpm --filter @agentnews/web build",
-    "discover": "pnpm --filter @agentnews/pipeline discover"
+    "discover": "pnpm --filter @agentnews/pipeline discover",
+    "icons": "pnpm --filter @agentnews/pipeline icons",
+    "icons:audit": "pnpm --filter @agentnews/pipeline icons:audit"
   },
   "devDependencies": {
     "typescript": "^5.7.2"
