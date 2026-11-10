@@ -41,6 +41,12 @@
     "w": 276,
     "h": 276
   },
+  "atlas": {
+    "file": "atlas.1d4021e9.png",
+    "source": "html",
+    "w": 180,
+    "h": 180
+  },
   "atomic-agents": {
     "file": "atomic-agents.394d564e.png",
     "source": "github",
@@ -119,6 +125,12 @@
     "w": 40,
     "h": 40
   },
+  "comet": {
+    "file": "comet.3663266b.png",
+    "source": "well-known",
+    "w": 180,
+    "h": 180
+  },
   "continue": {
     "file": "continue.86917da3.png",
     "source": "html",
@@ -179,6 +191,12 @@
     "w": 192,
     "h": 192
   },
+  "gemini-code-assist": {
+    "file": "gemini-code-assist.6e9ed410.png",
+    "source": "html",
+    "w": 180,
+    "h": 180
+  },
   "github-copilot": {
     "file": "github-copilot.79fd9062.png",
     "source": "override",
@@ -204,8 +222,8 @@
     "h": 192
   },
   "haystack": {
-    "file": "haystack.85582779.ico",
-    "source": "well-known",
+    "file": "haystack.9c0f0948.png",
+    "source": "google",
     "w": 48,
     "h": 48
   },
@@ -215,6 +233,18 @@
     "w": 192,
     "h": 192
   },
+  "jules": {
+    "file": "jules.771ff79e.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0
+  },
+  "junie": {
+    "file": "junie.49cc7051.png",
+    "source": "html",
+    "w": 180,
+    "h": 180
+  },
   "kilo-code": {
     "file": "kilo-code.2575a820.png",
     "source": "html",
@@ -222,8 +252,8 @@
     "h": 512
   },
   "kimi-cli": {
-    "file": "kimi-cli.23e50509.ico",
-    "source": "html",
+    "file": "kimi-cli.dc5df035.png",
+    "source": "google",
     "w": 48,
     "h": 48
   },
@@ -390,8 +420,8 @@
     "h": 196
   },
   "trae": {
-    "file": "trae.57a3ac5e.png",
-    "source": "html",
+    "file": "trae.aeba1292.png",
+    "source": "google",
     "w": 48,
     "h": 48
   },
@@ -402,10 +432,10 @@
     "h": 0
   },
   "void-editor": {
-    "file": "void-editor.2901704a.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "void-editor.89c85433.png",
+    "source": "html",
+    "w": 1200,
+    "h": 1200
   },
   "warp-agent": {
     "file": "warp-agent.e742cc2a.png",
