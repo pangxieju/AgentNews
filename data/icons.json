@@ -3,456 +3,539 @@
     "file": "agent-framework.6bb00c38.png",
     "source": "github",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://github.com/microsoft.png?size=192"
   },
   "agent-zero": {
-    "file": "agent-zero.74d66e8f.jpg",
-    "source": "github",
-    "w": 150,
-    "h": 150
+    "file": "agent-zero.544be6c9.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://raw.githubusercontent.com/frdel/agent-zero/HEAD/docs/res/a0-vector-graphics/horizontal_banner.svg"
   },
   "agno": {
-    "file": "agno.e2c08f8a.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "agno.7a7a00e7.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://agno-public.s3.us-east-1.amazonaws.com/assets/logo-light.svg"
   },
   "aider": {
-    "file": "aider.7f8ee81e.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "aider.1e43fbde.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://aider.chat/assets/logo.svg"
   },
   "amazon-q": {
     "file": "amazon-q.4371db20.png",
     "source": "html",
     "w": 144,
-    "h": 144
+    "h": 144,
+    "url": "https://a0.awsstatic.com/libra-css/images/site/touch-icon-ipad-144-smile.png"
   },
   "amp": {
-    "file": "amp.0b4b2dfc.svg",
-    "source": "html",
-    "w": 0,
-    "h": 0
+    "file": "amp.d0f728c6.png",
+    "source": "manifest",
+    "w": 1024,
+    "h": 1024,
+    "url": "https://ampcode.com/app-icon-1024.png?v=4"
   },
   "antigravity": {
     "file": "antigravity.7672b07c.png",
     "source": "html",
     "w": 276,
-    "h": 276
+    "h": 276,
+    "url": "https://antigravity.google/assets/image/antigravity-logo.png"
   },
   "atlas": {
-    "file": "atlas.1d4021e9.png",
-    "source": "html",
+    "file": "atlas.0c83b11f.png",
+    "source": "logo",
     "w": 180,
-    "h": 180
+    "h": 180,
+    "url": "https://icon.horse/icon/chatgpt.com"
   },
   "atomic-agents": {
-    "file": "atomic-agents.394d564e.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "atomic-agents.51ade186.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.com/eigenwise/atomic-agents/actions/workflows/docs.yml/badge.svg"
   },
   "auggie": {
     "file": "auggie.cf9472e9.svg",
     "source": "html",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://www.augmentcode.com/favicon.svg"
   },
   "autogen": {
-    "file": "autogen.6bb00c38.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "autogen.9ff6571b.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://microsoft.github.io/autogen/0.2/img/ag.svg"
   },
   "autogpt": {
     "file": "autogpt.4507a775.png",
     "source": "html",
     "w": 512,
-    "h": 512
+    "h": 512,
+    "url": "https://agpt.co/favicon.png"
   },
   "babyagi": {
     "file": "babyagi.1c62aa0b.jpg",
     "source": "github",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://github.com/yoheinakajima.png?size=192"
   },
   "browser-use": {
     "file": "browser-use.48189ad5.png",
     "source": "html",
     "w": 180,
-    "h": 180
+    "h": 180,
+    "url": "https://browser-use.com/apple-touch-icon.png"
   },
   "claude-code": {
     "file": "claude-code.76a62758.png",
     "source": "html",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://claude.com/icon.png"
   },
   "cline": {
     "file": "cline.10315b11.png",
     "source": "html",
     "w": 256,
-    "h": 256
+    "h": 256,
+    "url": "https://cline.bot/assets/branding/favicons/favicon-256x256.png"
   },
   "codebuddy": {
     "file": "codebuddy.b4a24794.svg",
     "source": "html",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://download.codebuddy.cn/web/website/7afd4248c8e3c7239ebd5caa879a8f6ef7a9763f/assets/logo.svg"
   },
   "codegeex": {
     "file": "codegeex.03d530ab.png",
     "source": "html",
     "w": 312,
-    "h": 312
+    "h": 312,
+    "url": "https://codegeex.cn/assets/images/only_logo_dark.png"
   },
   "codex-cli": {
     "file": "codex-cli.e9e1fb4e.png",
     "source": "github",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://github.com/openai.png?size=192"
   },
   "cody": {
     "file": "cody.448ea346.svg",
     "source": "html",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://sourcegraph.com/docs/icon.svg?icon.24pqlc06a_6hx.svg"
   },
   "comate": {
-    "file": "comate.dfc11c7e.ico",
-    "source": "html",
-    "w": 40,
-    "h": 40
+    "file": "comate.97d1ed4c.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/baidu.com"
   },
   "comet": {
-    "file": "comet.3663266b.png",
-    "source": "well-known",
-    "w": 180,
-    "h": 180
+    "file": "comet.42a87489.ico",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://favicone.com/www.perplexity.ai?s=256"
   },
   "continue": {
-    "file": "continue.86917da3.png",
-    "source": "html",
-    "w": 256,
-    "h": 256
+    "file": "continue.987883db.png",
+    "source": "manifest",
+    "w": 800,
+    "h": 744,
+    "url": "https://continue.dev/icon-512.png"
+  },
+  "copilot-cli": {
+    "file": "copilot-cli.8cb08c8f.svg",
+    "source": "override",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.githubassets.com/images/modules/site/copilot/copilot-logo.svg"
   },
   "crewai": {
-    "file": "crewai.f411c1b8.ico",
-    "source": "html",
-    "w": 32,
-    "h": 32
+    "file": "crewai.71bc4515.png",
+    "source": "readme",
+    "w": 375,
+    "h": 114,
+    "url": "https://raw.githubusercontent.com/crewAIInc/crewAI/HEAD/docs/images/crewai_logo.png"
   },
   "crush": {
-    "file": "crush.294a5629.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "crush.54f6a28b.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.com/charmbracelet/crush/actions/workflows/build.yml/badge.svg"
   },
   "cursor": {
-    "file": "cursor.f0e88430.png",
-    "source": "html",
-    "w": 192,
-    "h": 192
+    "file": "cursor.08f42bfd.png",
+    "source": "manifest",
+    "w": 512,
+    "h": 512,
+    "url": "https://cursor.com/marketing-static/icon-512x512.png"
   },
   "cursor-cli": {
-    "file": "cursor-cli.f0e88430.png",
-    "source": "html",
-    "w": 192,
-    "h": 192
+    "file": "cursor-cli.08f42bfd.png",
+    "source": "manifest",
+    "w": 512,
+    "h": 512,
+    "url": "https://cursor.com/marketing-static/icon-512x512.png"
   },
   "devin": {
     "file": "devin.2b69ec0d.png",
     "source": "html",
     "w": 568,
-    "h": 568
+    "h": 568,
+    "url": "https://devin.ai/icon.png"
   },
   "droid": {
     "file": "droid.e4872399.svg",
     "source": "html",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://factory.com/favicon.svg"
   },
   "firebase-studio": {
-    "file": "firebase-studio.13c73244.png",
-    "source": "html",
-    "w": 192,
-    "h": 192
+    "file": "firebase-studio.327ff168.png",
+    "source": "manifest",
+    "w": 512,
+    "h": 512,
+    "url": "https://firebase.studio/android-chrome-512x512.png"
   },
   "forgecode": {
     "file": "forgecode.e15d60f1.svg",
     "source": "html",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://forgecode.dev/shared/brand/favicon.svg"
   },
   "gemini-cli": {
-    "file": "gemini-cli.a6c477cf.jpg",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "gemini-cli.e5b83203.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.com/google-gemini/gemini-cli/actions/workflows/ci.yml/badge.svg"
   },
   "gemini-code-assist": {
-    "file": "gemini-code-assist.6e9ed410.png",
-    "source": "html",
-    "w": 180,
-    "h": 180
+    "file": "gemini-code-assist.65e85745.png",
+    "source": "override",
+    "w": 256,
+    "h": 256,
+    "url": "https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png"
   },
   "github-copilot": {
     "file": "github-copilot.79fd9062.png",
     "source": "override",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://github.com/github.png?size=192"
   },
   "google-adk": {
-    "file": "google-adk.f2bb6a32.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "google-adk.b80ffa4f.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.com/google/adk-python/actions/workflows/continuous-integration.yml/badge.svg"
   },
   "goose": {
-    "file": "goose.b452a633.jpg",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "goose.8588e300.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://repology.org/badge/tiny-repos/goose-cli.svg"
   },
   "gpt-engineer": {
-    "file": "gpt-engineer.3d991a0a.jpg",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "gpt-engineer.c2354a77.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.com/codespaces/badge.svg"
   },
   "haystack": {
-    "file": "haystack.9c0f0948.png",
-    "source": "google",
-    "w": 48,
-    "h": 48
+    "file": "haystack.7df54b8b.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.com/deepset-ai/haystack/actions/workflows/tests.yml/badge.svg"
   },
   "iflow-cli": {
-    "file": "iflow-cli.ed0e89e2.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "iflow-cli.5985eb8d.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://awesome.re/mentioned-badge.svg"
   },
   "jules": {
     "file": "jules.771ff79e.svg",
-    "source": "html",
+    "source": "logo",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://icon.horse/icon/jules.google"
   },
   "junie": {
-    "file": "junie.49cc7051.png",
-    "source": "html",
+    "file": "junie.1638266d.png",
+    "source": "logo",
     "w": 180,
-    "h": 180
+    "h": 180,
+    "url": "https://icon.horse/icon/junie.jetbrains.com"
   },
   "kilo-code": {
-    "file": "kilo-code.2575a820.png",
-    "source": "html",
-    "w": 512,
-    "h": 512
+    "file": "kilo-code.5e025a02.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/kilocode.ai"
   },
   "kimi-cli": {
-    "file": "kimi-cli.dc5df035.png",
-    "source": "google",
-    "w": 48,
-    "h": 48
+    "file": "kimi-cli.c989fc95.png",
+    "source": "logo",
+    "w": 192,
+    "h": 192,
+    "url": "https://icon.horse/icon/kimi.com"
   },
   "kiro": {
     "file": "kiro.fff9f20b.png",
     "source": "html",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://kiro.dev/apple-icon.png?4cefa8c54a20b098"
   },
   "langchain": {
     "file": "langchain.05da80e3.png",
     "source": "html",
     "w": 256,
-    "h": 256
+    "h": 256,
+    "url": "https://cdn.prod.website-files.com/65b8cd72835ceeacd4449a53/69a17e4f0c916c644f4de1cd_webclip%20lg.png"
   },
   "langgraph": {
-    "file": "langgraph.05da80e3.png",
-    "source": "html",
-    "w": 256,
-    "h": 256
+    "file": "langgraph.b9af9e2a.svg",
+    "source": "override",
+    "w": 0,
+    "h": 0,
+    "url": "https://raw.githubusercontent.com/langchain-ai/langgraph/HEAD/.github/images/logo-light.svg"
   },
   "lingma": {
     "file": "lingma.a258aaa1.png",
     "source": "html",
     "w": 134,
-    "h": 133
+    "h": 133,
+    "url": "https://img.alicdn.com/imgextra/i1/O1CN01BN6Jtc1lCfJNviV7H_!!6000000004783-2-tps-134-133.png"
   },
   "llamaindex": {
-    "file": "llamaindex.ce7a14fa.png",
-    "source": "html",
+    "file": "llamaindex.4711cab8.png",
+    "source": "logo",
     "w": 180,
-    "h": 180
+    "h": 180,
+    "url": "https://icon.horse/icon/llamaindex.ai"
   },
   "manus": {
     "file": "manus.809c6355.png",
     "source": "html",
     "w": 512,
-    "h": 512
+    "h": 512,
+    "url": "https://manus.im/icon.png?icon.1k-e-nyr3k65n.png"
   },
   "mastra": {
     "file": "mastra.20c60eac.png",
     "source": "html",
     "w": 512,
-    "h": 512
+    "h": 512,
+    "url": "https://mastra.ai/favicon/new-brand/icon-512.png"
   },
   "mistral-vibe": {
-    "file": "mistral-vibe.8b6513fd.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "mistral-vibe.820eb590.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.com/mistralai/mistral-vibe/actions/workflows/ci.yml/badge.svg"
   },
   "nanobrowser": {
-    "file": "nanobrowser.9039d33d.png",
-    "source": "html",
-    "w": 32,
-    "h": 32
+    "file": "nanobrowser.ab28da51.png",
+    "source": "override",
+    "w": 128,
+    "h": 128,
+    "url": "https://raw.githubusercontent.com/nanobrowser/nanobrowser/HEAD/public/icon-128.png"
   },
   "open-interpreter": {
-    "file": "open-interpreter.01ca4aec.png",
-    "source": "html",
+    "file": "open-interpreter.4f9e0ec6.png",
+    "source": "logo",
     "w": 180,
-    "h": 180
+    "h": 180,
+    "url": "https://icon.horse/icon/openinterpreter.com"
   },
   "openai-agents": {
     "file": "openai-agents.e9e1fb4e.png",
     "source": "github",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://github.com/openai.png?size=192"
   },
   "opencode": {
-    "file": "opencode.beda24b9.png",
-    "source": "html",
-    "w": 180,
-    "h": 180
+    "file": "opencode.2737f1c2.png",
+    "source": "manifest",
+    "w": 512,
+    "h": 512,
+    "url": "https://opencode.ai/web-app-manifest-512x512.png"
   },
   "openhands": {
-    "file": "openhands.4c7469bb.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "openhands.5de8ec18.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/openhands.ai"
   },
   "pi": {
     "file": "pi.1bb847e0.svg",
     "source": "override",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://pi.dev/logo-auto.svg"
   },
   "plandex": {
-    "file": "plandex.5a33024f.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "plandex.b0fffdcc.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/plandex.ai"
   },
   "pydantic-ai": {
     "file": "pydantic-ai.9ec640d2.png",
     "source": "well-known",
     "w": 180,
-    "h": 180
+    "h": 180,
+    "url": "https://pydantic.dev/apple-touch-icon.png"
   },
   "qoder": {
     "file": "qoder.cc7a5811.png",
     "source": "html",
     "w": 412,
-    "h": 412
+    "h": 412,
+    "url": "https://img.alicdn.com/imgextra/i4/O1CN01QkSxiCocd3D0prc8_!!6000000008124-2-tps-412-412.png"
   },
   "qodo": {
     "file": "qodo.80e91e84.png",
     "source": "html",
     "w": 300,
-    "h": 300
+    "h": 300,
+    "url": "https://www.qodo.ai/wp-content/uploads/2025/03/qodo-fav-300x300.png"
   },
   "qwen-code": {
-    "file": "qwen-code.fc44fda0.png",
-    "source": "github",
-    "w": 192,
-    "h": 192
+    "file": "qwen-code.cd8f8c8b.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://raw.githubusercontent.com/QwenLM/qwen-code/HEAD/.github/assets/qwen-code-avg-score-trend.svg"
   },
   "roo-code": {
-    "file": "roo-code.bd87dd8f.png",
-    "source": "html",
-    "w": 512,
-    "h": 512
+    "file": "roo-code.5546840d.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/roocode.com"
   },
   "semantic-kernel": {
     "file": "semantic-kernel.6bb00c38.png",
     "source": "github",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://github.com/microsoft.png?size=192"
   },
   "skyvern": {
-    "file": "skyvern.9864a603.png",
-    "source": "html",
+    "file": "skyvern.b2540c99.png",
+    "source": "logo",
     "w": 256,
-    "h": 256
+    "h": 256,
+    "url": "https://icon.horse/icon/skyvern.com"
   },
   "smolagents": {
     "file": "smolagents.abd50054.png",
     "source": "github",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://github.com/huggingface.png?size=192"
   },
   "stagehand": {
-    "file": "stagehand.eaab8524.png",
-    "source": "html",
+    "file": "stagehand.7a94d783.png",
+    "source": "logo",
     "w": 180,
-    "h": 180
+    "h": 180,
+    "url": "https://icon.horse/icon/stagehand.dev"
   },
   "strands-agents": {
     "file": "strands-agents.b1aecde5.svg",
     "source": "html",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://strandsagents.com/favicon.svg"
   },
   "tabnine": {
     "file": "tabnine.efd50868.png",
     "source": "override",
     "w": 192,
-    "h": 192
+    "h": 192,
+    "url": "https://github.com/codota.png?size=192"
   },
   "theia": {
     "file": "theia.5da82998.png",
     "source": "html",
     "w": 196,
-    "h": 196
+    "h": 196,
+    "url": "data:image/png;base64,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"
   },
   "trae": {
-    "file": "trae.aeba1292.png",
-    "source": "google",
+    "file": "trae.57a3ac5e.png",
+    "source": "html",
     "w": 48,
-    "h": 48
+    "h": 48,
+    "url": "https://lf16-web-neutral.traecdn.ai/obj/trae-ai-static/trae_website/favicon.png"
   },
   "vercel-ai-sdk": {
     "file": "vercel-ai-sdk.ac61f601.svg",
-    "source": "html",
+    "source": "logo",
     "w": 0,
-    "h": 0
+    "h": 0,
+    "url": "https://icon.horse/icon/sdk.vercel.ai"
   },
   "void-editor": {
-    "file": "void-editor.89c85433.png",
-    "source": "html",
-    "w": 1200,
-    "h": 1200
+    "file": "void-editor.41e137b4.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/voideditor.com"
   },
   "warp-agent": {
-    "file": "warp-agent.e742cc2a.png",
-    "source": "html",
+    "file": "warp-agent.3bedbdd5.png",
+    "source": "logo",
     "w": 196,
-    "h": 196
+    "h": 196,
+    "url": "https://icon.horse/icon/warp.dev"
   },
   "windsurf": {
-    "file": "windsurf.2b69ec0d.png",
-    "source": "html",
-    "w": 568,
-    "h": 568
+    "file": "windsurf.05f8cafb.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://favicone.com/windsurf.com?s=256"
   },
   "zed": {
     "file": "zed.f4202c3f.png",
     "source": "html",
     "w": 64,
-    "h": 64
+    "h": 64,
+    "url": "https://zed.dev/favicon_black_64.png"
   }
 }

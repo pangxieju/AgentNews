@@ -287,6 +287,8 @@
   oss_bucket: open
   license_id: MIT
   homepage: https://www.langchain.com/langgraph
+  # 官网是母公司站，favicon 是 LangChain 的；产品自己的 logo 在仓库里
+  icon: https://raw.githubusercontent.com/langchain-ai/langgraph/HEAD/.github/images/logo-light.svg
   sources:
     - { kind: github, identifier: langchain-ai/langgraph, is_primary: true }
     - { kind: pypi, identifier: langgraph }
@@ -461,6 +463,8 @@
   oss_bucket: open
   license_id: Apache-2.0
   homepage: https://nanobrowser.ai
+  # 官网只给了 32x32 favicon；仓库里带着扩展用的 128px 官方图标
+  icon: https://raw.githubusercontent.com/nanobrowser/nanobrowser/HEAD/public/icon-128.png
   sources:
     - { kind: github, identifier: nanobrowser/nanobrowser, is_primary: true }
 
@@ -738,6 +742,8 @@
   license_id: proprietary
   homepage: https://github.com/features/copilot/cli
   note: 与 github-copilot（IDE 插件）同一订阅下的两种形态，指标分开统计
+  # 官网只有 GitHub 产品页（favicon 是 GitHub 章鱼猫），只能人工校准成 Copilot 自身 logo
+  icon: https://github.githubassets.com/images/modules/site/copilot/copilot-logo.svg
   sources:
     - { kind: npm, identifier: "@github/copilot", is_primary: true }
 
@@ -815,6 +821,8 @@
   oss_bucket: closed
   license_id: proprietary
   homepage: https://codeassist.google
+  # 官网是跳转页，自动取图拿到的是 Google “G”；产品自己的 sparkle 图标在 gstatic
+  icon: https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: gemini-code-assist, is_primary: true }
