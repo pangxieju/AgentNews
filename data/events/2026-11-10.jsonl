@@ -1,0 +1,13 @@
+{"slug":"pi","name":"Pi","kind":"version","date":"2026-11-10","title":"Pi 更新到 1.5.1","detail":"1.5.0 → 1.5.1"}
+{"slug":"openhands","name":"OpenHands","kind":"version","date":"2026-11-10","title":"OpenHands 更新到 v1.38.0","detail":"v1.37.0 → v1.38.0"}
+{"slug":"goose","name":"Goose","kind":"version","date":"2026-11-10","title":"Goose 更新到 v1.58.1","detail":"v1.57.0 → v1.58.1"}
+{"slug":"claude-code","name":"Claude Code","kind":"version","date":"2026-11-10","title":"Claude Code 更新到 2.1.322","detail":"2.1.319 → 2.1.322"}
+{"slug":"copilot-cli","name":"Copilot CLI","kind":"version","date":"2026-11-10","title":"Copilot CLI 更新到 1.0.108","detail":"1.0.107 → 1.0.108"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-10","title":"Amp 更新到 0.0.1794283240-gd5964f","detail":"0.0.1794225648-g45053b → 0.0.1794283240-gd5964f"}
+{"slug":"mistral-vibe","name":"Mistral Vibe","kind":"version","date":"2026-11-10","title":"Mistral Vibe 更新到 v3.1.1","detail":"v3.1.0 → v3.1.1"}
+{"slug":"auggie","name":"Auggie CLI","kind":"version","date":"2026-11-10","title":"Auggie CLI 更新到 0.37.1","detail":"0.37.0 → 0.37.1"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-10","title":"Factory Droid 更新到 1.7.0","detail":"1.6.0 → 1.7.0"}
+{"slug":"browser-use","name":"Browser-use","kind":"version","date":"2026-11-10","title":"Browser-use 更新到 1.0.0","detail":"0.13.14 → 1.0.0"}
+{"slug":"langchain","name":"LangChain","kind":"release","date":"2026-11-10","title":"LangChain 发布新版本","detail":"2026-11-10"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"release","date":"2026-11-10","title":"Vercel AI SDK 发布新版本","detail":"2026-11-09"}
+{"slug":"langgraph","name":"LangGraph","kind":"rank_jump","date":"2026-11-10","title":"LangGraph 排名 上升 5 位","from":8,"to":3}
