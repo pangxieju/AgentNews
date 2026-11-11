@@ -1,0 +1,16 @@
+{"slug":"codex-cli","name":"Codex CLI","kind":"version","date":"2026-11-11","title":"Codex CLI 更新到 0.167.1","detail":"0.167.0 → 0.167.1"}
+{"slug":"pi","name":"Pi","kind":"version","date":"2026-11-11","title":"Pi 更新到 1.5.2","detail":"1.5.1 → 1.5.2"}
+{"slug":"gemini-cli","name":"Gemini CLI","kind":"version","date":"2026-11-11","title":"Gemini CLI 更新到 0.68.0","detail":"0.67.0 → 0.68.0"}
+{"slug":"goose","name":"Goose","kind":"version","date":"2026-11-11","title":"Goose 更新到 v1.59.0","detail":"v1.58.1 → v1.59.0"}
+{"slug":"qwen-code","name":"Qwen Code","kind":"version","date":"2026-11-11","title":"Qwen Code 更新到 0.27.2","detail":"0.27.1 → 0.27.2"}
+{"slug":"copilot-cli","name":"Copilot CLI","kind":"version","date":"2026-11-11","title":"Copilot CLI 更新到 1.0.109","detail":"1.0.108 → 1.0.109"}
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"version","date":"2026-11-11","title":"Kimi CLI 更新到 2.5.3","detail":"2.5.2 → 2.5.3"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-11","title":"Amp 更新到 0.0.1794355255-g66076e","detail":"0.0.1794297642-g6d0247 → 0.0.1794355255-g66076e"}
+{"slug":"mistral-vibe","name":"Mistral Vibe","kind":"version","date":"2026-11-11","title":"Mistral Vibe 更新到 v3.1.2","detail":"v3.1.1 → v3.1.2"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-11","title":"Factory Droid 更新到 1.7.1","detail":"1.7.0 → 1.7.1"}
+{"slug":"browser-use","name":"Browser-use","kind":"version","date":"2026-11-11","title":"Browser-use 更新到 1.0.1","detail":"1.0.0 → 1.0.1"}
+{"slug":"langchain","name":"LangChain","kind":"version","date":"2026-11-11","title":"LangChain 更新到 1.4.10","detail":"1.4.9 → 1.4.10"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-11","title":"Vercel AI SDK 更新到 7.0.169","detail":"7.0.166 → 7.0.169"}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"version","date":"2026-11-11","title":"Pydantic AI 更新到 2.67.0","detail":"2.66.0 → 2.67.0"}
+{"slug":"strands-agents","name":"Strands Agents","kind":"release","date":"2026-11-11","title":"Strands Agents 发布新版本","detail":"2026-11-10"}
+{"slug":"haystack","name":"Haystack","kind":"version","date":"2026-11-11","title":"Haystack 更新到 3.5.0","detail":"3.4.1 → 3.5.0"}
