@@ -2,8 +2,12 @@ name: daily
 
 on:
   schedule:
-    # UTC 02:00 = 北京时间 10:00
-    - cron: "0 2 * * *"
+    # GitHub 的定时任务在整点（:00）最容易被延迟甚至丢弃：11-10 那次排在 02:00Z，
+    # 实际 09:19Z 才触发（迟到 7 小时 19 分）。所以刻意避开整点。
+    - cron: "17 2 * * *" # UTC 02:17 = 北京时间 10:17
+    # 兜底：主时间点被 GitHub 丢掉时补跑。当天已有快照就跳过采集，只构建+部署
+    # （部署失败也能靠这一轮自愈，不会因为「今天采过了」而放弃发布）。
+    - cron: "43 4 * * *" # UTC 04:43 = 北京时间 12:43
   workflow_dispatch:
 
 # 需要写权限来回写 data/ 快照
@@ -21,7 +25,7 @@ jobs:
     env:
       # 站点地址（可在 Repo Settings → Variables 里用 SITE_URL 覆盖）
       SITE_URL: ${{ vars.SITE_URL || 'https://agentnews-c5h.pages.dev' }}
-      # 只有在配置了 CF secrets 时才部署（未配置则只采集+提交）
+      # 只有在配置了 CF secrets 时才部署（未配置则只采集+提交，并在 Summary 里报警）
       CF_READY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
@@ -37,14 +41,26 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # 今天的快照是否已经采过 —— 兜底那轮不重复采集，只负责构建+部署
+      - name: Check today's snapshot
+        id: snap
+        run: |
+          if [ -f "data/snapshots/$(date -u +%F).jsonl" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "今天已有快照（$(date -u +%F)），跳过采集，只构建+部署"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       # 数据契约先校验；算法回归先跑（校验失败绝不出榜）
       - run: pnpm validate
       - run: pnpm test
 
       - name: Collect & score
+        if: steps.snap.outputs.exists == 'false'
         run: pnpm collect
         env:
-          # Actions 自动注入：5000 次/小时，足够覆盖当前 47 个 repo × 3 请求
+          # Actions 自动注入：5000 次/小时，足够覆盖当前 77 个 agent 的请求量
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # 图标体检：只出报告，不阻断（缺图/低清时在 Summary 里提醒人工加 icon: 覆盖）
@@ -68,6 +84,13 @@ jobs:
       - name: Build site
         run: pnpm build
 
+      # secrets 没配时不要静默跳过：线上不会更新，必须在 Summary 里说清楚
+      - name: Deploy preflight
+        run: |
+          if [ "$CF_READY" != "true" ]; then
+            echo "::warning title=未配置 Cloudflare secrets::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID 未配置，本次只采集不部署，线上站点不会更新。"
+          fi
+
       - name: Deploy to Cloudflare Pages
         if: env.CF_READY == 'true'
         env:
@@ -82,4 +105,9 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- 数据：$(ls data/scores | tail -1)" >> $GITHUB_STEP_SUMMARY
           echo "- 在榜：$(node -e "const j=require('./data/scores/'+require('fs').readdirSync('data/scores').sort().pop());console.log(j.rows.filter(r=>r.rank_in_form!=null).length)") 个" >> $GITHUB_STEP_SUMMARY
+          if [ "$CF_READY" = "true" ]; then
+            echo "- 部署：已发布到 Cloudflare Pages" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- 部署：**跳过** —— 仓库缺少 CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID secrets，线上站点没有更新" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "- 站点：https://agentnews-c5h.pages.dev" >> $GITHUB_STEP_SUMMARY
