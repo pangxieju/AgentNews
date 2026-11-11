@@ -16,3 +16,6 @@ packages/web/.astro/
 
 # 本地文档（PRD / TECH / DEPLOY）不入库
 /docs/
+
+# Worker 手动触发口令（本地保存，不进仓库）
+ops/dispatch-worker/.trigger-key.local

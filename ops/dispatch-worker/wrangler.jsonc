@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agentnews-dispatch",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  // 每天 02:05 UTC = 北京 10:05，比 GitHub 自己的 02:17 早一步；
+  // 两个都跑也只是重复部署一次（daily.yml 有「当天已有快照就跳过采集」的守卫）。
+  "triggers": {
+    "crons": ["5 2 * * *"]
+  },
+  "vars": {
+    "REPO": "pangxieju/AgentNews",
+    "WORKFLOW": "daily.yml",
+    "REF": "main"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
