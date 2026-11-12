@@ -35,8 +35,12 @@ for (const file of ['.env.local', '.env']) {
 }
 const DATA_DIR = join(ROOT, 'data');
 
+/** 业务日期 = 北京时间（UTC+8），不是 UTC。
+ * 定时任务跑在北京时间凌晨 01:00（= UTC 前一天 17:00），
+ * 快照/榜单/标记一律按「北京的天」命名，否则会错位一天。 */
 function isoDate(d = new Date()): string {
-  return d.toISOString().slice(0, 10);
+  const cn = new Date(d.getTime() + 8 * 3_600_000);
+  return cn.toISOString().slice(0, 10);
 }
 
 /** 从 YAML 加载并校验 agent 名单 */

@@ -240,11 +240,11 @@ log 压缩 → 同形态组内分位数归一 → 缺失权重重分配 → 加�
 
 触发链路有两层：
 
-1. `ops/dispatch-worker`（Cloudflare Cron Trigger，北京 **08:05**）主动调 GitHub 的 `workflow_dispatch` —— 不依赖 GitHub 自己的调度器
-2. `daily.yml` 自己的一个 cron（北京 08:45）作为兜底；当天已发布过就直接退出（`data/deploy/<日期>.json` 标记），不会重复部署
+1. `ops/dispatch-worker`（Cloudflare Cron Trigger，**次日北京时间 01:00**）主动调 GitHub 的 `workflow_dispatch` —— 不依赖 GitHub 自己的调度器；采集→构建→部署一次跑完，02:00 前全部完成
+2. `daily.yml` 自己的一个 cron（北京 01:30）作为兜底；当天已发布过就直接退出（`data/deploy/<北京日期>.json` 标记），不会重复部署
 
 实测 GitHub 的 `schedule` 会迟到 7 小时以上甚至不触发，所以主力是第 1 层。
-时间点不能再往前挪：快照按 UTC 日期命名，「今天是否已采过」的守卫也按 UTC 判断，排在 00:00Z 之前会被算成前一天而不采集。；`daily.yml` 里有「当天已有快照就跳过采集，只构建+部署」的守卫，重复触发不会重复采集。详见 [`ops/dispatch-worker/README.md`](ops/dispatch-worker/README.md)。
+所有日期（快照文件名、deployed 标记、年龄/榜单口径）统一用**北京时间**，所以凌晨 01:00（UTC 前一天 17:00）触发不会和前一天错位。详见 [`ops/dispatch-worker/README.md`](ops/dispatch-worker/README.md)。
 
 ---
 

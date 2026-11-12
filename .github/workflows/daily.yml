@@ -2,16 +2,14 @@ name: daily
 
 on:
   schedule:
-    # 正常情况下**每天只跑一次**：由 ops/dispatch-worker（Cloudflare Cron，北京 08:05）
-    # 调 workflow_dispatch 触发，采集 → 构建 → 部署在同一次运行里连着做完（约 2~3 分钟），
-    # 不存在「先采集、过一阵再更新」的间隔。
+    # 每天只跑一次：ops/dispatch-worker（Cloudflare Cron）在北京时间 01:00 触发，
+    # 采集 → 构建 → 部署在同一次运行里连着做完（约 2~3 分钟），02:00 前全部完成。
     #
-    # 下面这个 cron 只是兜底：08:05 那次没成时才补跑一次，同样采集+发布一起做。
+    # 下面这个 cron 只是兜底：01:00 那次没成时才补跑（01:30 启动，同样 02:00 前完成）。
     # 当天已发布过就直接退出（见 Preflight 的 deployed 标记），不会重复部署。
     #
-    # 为什么最早只能排到 00:05Z（北京 08:05）：快照文件名、deployed 标记都用 UTC 日期，
-    # 排在 00:00Z 之前会被算成前一天，守卫会误判成「今天已处理」而不采集。
-    - cron: "45 0 * * *" # UTC 00:45 = 北京时间 08:45（仅兜底）
+    # 所有日期口径都是**北京时间**（UTC+8）：快照/标记的文件名、Preflight 判重都用北京日期。
+    - cron: "30 17 * * *" # UTC 17:30 = 北京时间次日 01:30（仅兜底）
   workflow_dispatch:
 
 # 需要写权限来回写 data/ 快照
@@ -49,7 +47,7 @@ jobs:
       - name: Preflight
         id: pre
         run: |
-          TODAY=$(date -u +%F)
+          TODAY=$(TZ=Asia/Shanghai date +%F)
           if [ -f "data/deploy/$TODAY.json" ]; then
             echo "deployed=true" >> "$GITHUB_OUTPUT"
             echo "今天（$TODAY）已经发布过：$(cat "data/deploy/$TODAY.json")"
@@ -62,9 +60,9 @@ jobs:
           else
             echo "collected=false" >> "$GITHUB_OUTPUT"
           fi
-          if [ -f "data/snapshots/$(date -u +%F).jsonl" ]; then
+          if [ -f "data/snapshots/$(TZ=Asia/Shanghai date +%F).jsonl" ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
-            echo "今天已有快照（$(date -u +%F)），跳过采集，只构建+部署"
+            echo "今天已有快照（$(TZ=Asia/Shanghai date +%F)），跳过采集，只构建+部署"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
@@ -97,7 +95,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "无数据变更，跳过提交"
           else
-            git commit -m "data: snapshot $(date -u +%F)"
+            git commit -m "data: snapshot $(TZ=Asia/Shanghai date +%F)"
             git push
           fi
 
@@ -126,7 +124,7 @@ jobs:
       - name: Record deploy
         if: steps.pre.outputs.deployed != 'true' && env.CF_READY == 'true'
         run: |
-          TODAY=$(date -u +%F)
+          TODAY=$(TZ=Asia/Shanghai date +%F)
           mkdir -p data/deploy
           TODAY=$TODAY node -e "const fs=require('fs');fs.writeFileSync('data/deploy/'+process.env.TODAY+'.json', JSON.stringify({date:process.env.TODAY,deployed_at:new Date().toISOString(),snapshot:fs.readdirSync('data/snapshots').sort().pop()})+String.fromCharCode(10))"
           git config user.name  'agentnews-bot'
