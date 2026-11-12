@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import HomePicker, { type PickRow } from '../components/HomePicker';
-import { loadLatestScores, loadAgentsMeta, fmtPct } from '../lib/data';
+import { loadLatestScores, loadAgentsMeta, loadEvents, type AgentEvent, fmtPct } from '../lib/data';
 import { FOCUS_FORMS, isListed } from '../lib/shared';
 import { FORM_GUIDES } from '../i18n/guides';
 import { type Lang, formLabel, pathFor, t } from '../i18n/dict';
@@ -68,6 +68,38 @@ const pick: PickRow[] = listedRows.map((r) => ({
 }));
 
 const titleLines = t(lang, 'home.title').split('\n');
+
+/* ── 首页「最近动向」：取自 events 流水（跨天去重，小幅排名波动忽略） ── */
+const recentEvents = (() => {
+  const seen = new Set<string>();
+  const out: AgentEvent[] = [];
+  const listedSlugs = new Set(listedRows.map((r) => r.slug));
+  for (const e of loadEvents()) {
+    if (!listedSlugs.has(e.slug)) continue;
+    if (e.kind === 'rank_jump' && Math.abs((e.from ?? 0) - (e.to ?? 0)) < 2) continue;
+    if (seen.has(e.slug)) continue;
+    seen.add(e.slug);
+    out.push(e);
+    if (out.length >= 6) break;
+  }
+  return out;
+})();
+const eventText = (e: AgentEvent): string => {
+  const tail = e.detail?.includes('→') ? e.detail.split('→').pop()?.trim() : e.detail;
+  switch (e.kind) {
+    case 'version': return lang === 'en' ? `${e.name} updated to ${tail ?? ''}` : `${e.name} 更新到 ${tail ?? ''}`;
+    case 'release': return lang === 'en' ? `${e.name} released ${tail ?? ''}` : `${e.name} 发布 ${tail ?? ''}`;
+    case 'rank_jump': {
+      const d = Math.abs((e.from ?? 0) - (e.to ?? 0));
+      const dir = (e.from ?? 0) > (e.to ?? 0);
+      return lang === 'en'
+        ? `${e.name} moved ${dir ? 'down' : 'up'} ${d} ${d === 1 ? 'spot' : 'spots'}`
+        : `${e.name} 排名${dir ? '下降' : '上升'} ${d} 位`;
+    }
+    case 'listed': return lang === 'en' ? `${e.name} newly listed` : `${e.name} 新上榜`;
+    default: return e.title ?? e.name;
+  }
+};
 
 /* ── SEO / 结构化数据 ── */
 const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
@@ -215,6 +247,33 @@ const jsonLd = [
       </div>
     </div>
   </section>
+
+  {recentEvents.length > 0 && (
+    <section class="section">
+      <div class="section-title">
+        <h2>{lang === 'en' ? 'Recent moves' : '最近动向'}</h2>
+        <span class="muted">{lang === 'en' ? 'Version bumps, releases and rank moves' : '发版、版本更新与排名变动'}</span>
+      </div>
+      <div class="box">
+        {recentEvents.map((e) => (
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--rule);font-size:13.5px">
+            <AgentIcon
+              slug={e.slug}
+              name={meta[e.slug]?.name ?? e.name}
+              icon={meta[e.slug]?.icon}
+              iconFallback={meta[e.slug]?.iconFallback}
+              size={20}
+            />
+            <a class="name" href={H(`/agent/${e.slug}/`)} style="font-weight:600;white-space:nowrap">
+              {e.name}
+            </a>
+            <span class="muted" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{eventText(e)}</span>
+            <span class="muted" style="margin-left:auto;font-size:11.5px;white-space:nowrap">{e.date}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
 </Base>
 
 <style>

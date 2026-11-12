@@ -229,4 +229,34 @@ const jsonLd = {
       </div>
     </div>
   </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>{lang === 'en' ? 'Flag legend' : '标记图例'}</h2>
+      <span class="muted">{lang === 'en' ? 'Badges shown on boards and detail pages' : '榜单与详情页上的徽章含义'}</span>
+    </div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{lang === 'en' ? 'Flag' : '标记'}</th>
+              <th>{lang === 'en' ? 'Meaning' : '含义'}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>partial_data</td><td>{lang === 'en' ? 'Some channels failed to collect this run' : '本轮部分渠道采集失败'}</td></tr>
+            <tr><td>no_data</td><td>{lang === 'en' ? 'No public install or star data (listed, not ranked)' : '无公开安装/星标数据（收录但不排名）'}</td></tr>
+            <tr><td>installs_may_include_ci</td><td>{lang === 'en' ? 'npm/PyPI downloads ≥ 1M/week — CI and dependency installs inflate the number' : 'npm/PyPI 周下载 ≥ 100 万 —— 含 CI 与依赖安装'}</td></tr>
+            <tr><td>small_group</td><td>{lang === 'en' ? 'Fewer than 3 comparable entries in the form × namespace group' : '该形态 × 命名空间组内可比样本不足 3 个'}</td></tr>
+            <tr><td>newcomer</td><td>{lang === 'en' ? 'Listed within the last 180 days' : '近 180 天内首次收录'}</td></tr>
+            <tr><td>suspicious</td><td>{lang === 'en' ? 'Growth spike with no release or coverage to back it' : '增量异常且无发版/报道佐证'}</td></tr>
+            <tr><td>dormant</td><td>{lang === 'en' ? 'No commit or release in 180 days — excluded from ranking' : '近 180 天无提交/发版 —— 移出排名'}</td></tr>
+            <tr><td>store_installs</td><td>{lang === 'en' ? 'Installs are store cumulative totals (VS Code / JetBrains), not weekly downloads' : '安装量为商店累计（VS Code / JetBrains），非周下载'}</td></tr>
+            <tr><td>backfilled_installs</td><td>{lang === 'en' ? 'Install deltas derived from a backfilled npm/PyPI history window' : '安装增量来自 npm/PyPI 历史回填窗口'}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 </Base>
