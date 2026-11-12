@@ -15,6 +15,8 @@ export type RankRow = {
   delta_7d: number | null;
   /** 近 7 天安装量增量（快照不足时由 npm/PyPI 历史回填） */
   delta_7d_installs?: number | null;
+  /** 近 30 天安装量增量（同样口径） */
+  installs_delta_30d?: number | null;
   growth_30d_pct: number | null;
   metrics: {
     stars: number | null;
@@ -52,7 +54,8 @@ type SortKey =
   | 'data_level'
   | 'delta_1d'
   | 'delta_7d'
-  | 'delta_7d_installs';
+  | 'delta_7d_installs'
+  | 'installs_delta_30d';
 
 type Col = {
   key: SortKey;
@@ -112,6 +115,13 @@ function columns(lang: Lang, bucket: string): Col[] {
     show: (rs) => rs.some((r) => r.delta_7d_installs != null),
     format: (r) => fmtSigned(r.delta_7d_installs),
   };
+  const deltaInstalls30: Col = {
+    key: 'installs_delta_30d',
+    label: t(lang, 'metric.delta30dInstalls'),
+    get: (r) => r.installs_delta_30d ?? null,
+    show: (rs) => rs.some((r) => r.installs_delta_30d != null),
+    format: (r) => fmtSigned(r.installs_delta_30d),
+  };
   const release: Col = {
     key: 'last_release',
     label: t(lang, 'metric.release'),
@@ -138,8 +148,8 @@ function columns(lang: Lang, bucket: string): Col[] {
 
   // 开闭源看不同指标：闭源看 OpenRouter 用量与数据置信度，开源看活跃度与许可证
   return bucket === 'closed'
-    ? [score, installs, deltaInstalls, tokens, release, level]
-    : [score, installs, deltaInstalls, activity, release, license];
+    ? [score, installs, deltaInstalls, deltaInstalls30, tokens, release, level]
+    : [score, installs, deltaInstalls, deltaInstalls30, activity, release, license];
 }
 
 export default function RankBoard(props: Props) {

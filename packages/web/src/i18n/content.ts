@@ -30,6 +30,12 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
           'GitHub star 没有公开历史接口，无法合法回填（拉 stargazers 在上万 star 时不可行）；安装量可以，且更能反映采用变化。回填条目带 <code>backfilled_installs</code> 标记',
       },
       {
+        date: '2026-11-12',
+        change: '分数命名空间分离：同一形态内开源（open+semi）与闭源分开做组内分位与排名',
+        reason:
+          '开源有 star/contributors，闭源只有安装/用量；混在一个分位里会让闭源系统性吃亏，也让「同形态内可比」不成立。榜单的开/闭源 tab 现在各自对应一套分位',
+      },
+      {
         date: '2026-11-09',
         change: '分位数改为秩中点平滑',
         reason:
@@ -149,6 +155,12 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
         change: 'Weekly board ranks by 7-day install delta (npm / PyPI range backfill)',
         reason:
           'GitHub stars have no public historical API — backfilling stargazers is infeasible at 10k+ scale. Installs can be backfilled and reflect adoption change more directly. Backfilled rows carry <code>backfilled_installs</code>',
+      },
+      {
+        date: '2026-11-12',
+        change: 'Score namespaces split: open (open+semi) and closed now get separate in-form percentiles and ranks',
+        reason:
+          'Open-source entries have stars and contributors; closed ones only have installs and usage. Mixing them in one percentile systematically penalised closed products and broke “comparable within a form”. The open/closed board tabs now map to their own distribution',
       },
       {
         date: '2026-11-09',

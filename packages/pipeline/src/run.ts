@@ -235,9 +235,19 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         isDormant(isoStr(s.metrics.last_commit), isoStr(s.metrics.last_release), new Date()),
       ]),
     );
-    const activeGroup = group.filter((s) => !dormancy.get(s.slug));
-    const scores = scoreGroup(activeGroup, undefined, new Date());
-    const scoreMap = new Map(scores.map((s) => [s.slug, s.score]));
+    // 分数命名空间：开源（open+semi）与闭源分开做组内分位（PRD §5.7）。
+    // 开源套件有 star/contributors，闭源只有安装/用量，混在一个分位里会让闭源系统性吃亏。
+    const bucketOf = (s: { oss_bucket: string }) => (s.oss_bucket === 'closed' ? 'closed' : 'open');
+    const scoreMap = new Map<string, number>();
+    const bucketActiveSize = new Map<string, number>();
+    for (const bucket of ['open', 'closed'] as const) {
+      const activeBucketGroup = group.filter(
+        (s) => bucketOf(s) === bucket && !dormancy.get(s.slug),
+      );
+      bucketActiveSize.set(bucket, activeBucketGroup.length);
+      const scores = scoreGroup(activeBucketGroup, undefined, new Date());
+      for (const s of scores) scoreMap.set(s.slug, s.score);
+    }
 
     const enriched = group.map((item) => {
       const m = item.metrics;
@@ -257,13 +267,18 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       };
     });
 
-    // 仅 L1/L2 且组内 ≥2 项才有资格排名
-    const rankable = enriched
-      .filter((e) => e.score != null)
-      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
-    const rankMap = new Map(rankable.map((e, i) => [e.item.slug, i + 1]));
+    // 仅 L1/L2 且组内 ≥2 项才有资格排名；名次按「形态 × 开源/闭源命名空间」计算
+    const rankMap = new Map<string, number>();
+    for (const bucket of ['open', 'closed'] as const) {
+      const bucketRankable = enriched
+        .filter((e) => bucketOf(e.item) === bucket && e.score != null)
+        .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+      bucketRankable.forEach((e, i) => rankMap.set(e.item.slug, i + 1));
+    }
     const ordered = [
-      ...rankable,
+      ...enriched
+        .filter((e) => e.score != null)
+        .sort((a, b) => (b.score ?? 0) - (a.score ?? 0)),
       ...enriched.filter((e) => e.score == null).sort((a, b) => a.item.slug.localeCompare(b.item.slug)),
     ];
 
@@ -286,7 +301,10 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         hist != null && (installsWeekAgo == null || installsMonthAgo == null) && (hist.installs_7d_ago != null || hist.installs_30d_ago != null);
       const delta7dInstalls =
         installs != null && installsWeekAgoEff != null ? installs - installsWeekAgoEff : null;
+      const delta30dInstalls =
+        installs != null && installsMonthAgoEff != null ? installs - installsMonthAgoEff : null;
       const growth7dInstalls = growthPctSafe(installs, installsWeekAgoEff, 1000);
+      const growth30dInstalls = growthPctSafe(installs, installsMonthAgoEff, 1000);
 
       const flags: string[] = [];
       if (errors.some((err) => err.startsWith(item.slug))) flags.push('partial_data');
@@ -296,7 +314,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       if (basis === 'store_total') flags.push('store_installs');
       if (basis === 'weekly_dl' && installs != null && installs >= 1_000_000) flags.push('installs_may_include_ci');
       if (backfilled) flags.push('backfilled_installs');
-      if (group.length <= 2 && level !== 'L3') flags.push('small_group');
+      if ((bucketActiveSize.get(bucketOf(item)) ?? 0) <= 2 && level !== 'L3') flags.push('small_group');
 
       // 出道天数（PRD §5.6）：min(repo 创建至今, 首次收录至今)
       const createdAt = typeof m.repo_created === 'string' ? m.repo_created : null;
@@ -314,7 +332,9 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         delta_1d: stars != null && prevStars != null ? stars - prevStars : null,
         delta_7d: stars != null && weekAgo != null ? stars - weekAgo : null,
         delta_7d_installs: delta7dInstalls,
+        installs_delta_30d: delta30dInstalls,
         growth_7d_installs_pct: growth7dInstalls,
+        growth_30d_installs_pct: growth30dInstalls,
         delta_30d: stars != null && monthAgo != null ? stars - monthAgo : null,
         growth_7d_pct: growthPctSafe(stars, weekAgo, 50),
         growth_30d_pct: growthPctSafe(stars, monthAgo, 200),

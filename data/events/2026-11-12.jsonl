@@ -1,8 +1,14 @@
 {"slug":"codex-cli","name":"Codex CLI","kind":"version","date":"2026-11-12","title":"Codex CLI 更新到 0.167.2","detail":"0.167.1 → 0.167.2"}
+{"slug":"claude-code","name":"Claude Code","kind":"rank_jump","date":"2026-11-12","title":"Claude Code 排名 上升 6 位","from":7,"to":1}
+{"slug":"copilot-cli","name":"Copilot CLI","kind":"rank_jump","date":"2026-11-12","title":"Copilot CLI 排名 上升 7 位","from":9,"to":2}
 {"slug":"openhands","name":"OpenHands","kind":"version","date":"2026-11-12","title":"OpenHands 更新到 v1.39.0","detail":"v1.38.0 → v1.39.0"}
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"rank_jump","date":"2026-11-12","title":"Kimi CLI 排名 上升 9 位","from":12,"to":3}
 {"slug":"amp","name":"Amp","kind":"version","date":"2026-11-12","title":"Amp 更新到 0.0.1794441653-gbe68d4","detail":"0.0.1794355255-g66076e → 0.0.1794441653-gbe68d4"}
+{"slug":"amp","name":"Amp","kind":"rank_jump","date":"2026-11-12","title":"Amp 排名 上升 10 位","from":14,"to":4}
+{"slug":"auggie","name":"Auggie CLI","kind":"rank_jump","date":"2026-11-12","title":"Auggie CLI 排名 上升 10 位","from":15,"to":5}
 {"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-12","title":"Factory Droid 更新到 1.9.0","detail":"1.7.1 → 1.9.0"}
-{"slug":"kilo-code","name":"Kilo Code","kind":"rank_jump","date":"2026-11-12","title":"Kilo Code 排名 下降 5 位","from":3,"to":8}
+{"slug":"droid","name":"Factory Droid","kind":"rank_jump","date":"2026-11-12","title":"Factory Droid 排名 上升 12 位","from":18,"to":6}
+{"slug":"mistral-vibe","name":"Mistral Vibe","kind":"rank_jump","date":"2026-11-12","title":"Mistral Vibe 排名 上升 6 位","from":17,"to":11}
 {"slug":"zed","name":"Zed","kind":"version","date":"2026-11-12","title":"Zed 更新到 v1.28.1","detail":"v1.27.0 → v1.28.1"}
 {"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-12","title":"Qoder 更新到 1.1.87","detail":"1.1.86 → 1.1.87"}
 {"slug":"browser-use","name":"Browser-use","kind":"version","date":"2026-11-12","title":"Browser-use 更新到 1.0.2","detail":"1.0.1 → 1.0.2"}
@@ -10,5 +16,5 @@
 {"slug":"langchain","name":"LangChain","kind":"version","date":"2026-11-12","title":"LangChain 更新到 1.5.0","detail":"1.4.10 → 1.5.0"}
 {"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-12","title":"Vercel AI SDK 更新到 7.0.170","detail":"7.0.169 → 7.0.170"}
 {"slug":"crewai","name":"CrewAI","kind":"version","date":"2026-11-12","title":"CrewAI 更新到 1.15.40","detail":"1.15.39 → 1.15.40"}
-{"slug":"pydantic-ai","name":"Pydantic AI","kind":"release","date":"2026-11-12","title":"Pydantic AI 发布新版本","detail":"2026-11-12"}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"version","date":"2026-11-12","title":"Pydantic AI 更新到 2.68.0","detail":"2.67.0 → 2.68.0"}
 {"slug":"autogpt","name":"AutoGPT","kind":"version","date":"2026-11-12","title":"AutoGPT 更新到 autogpt-platform-beta-v0.11.2","detail":"autogpt-platform-beta-v0.11.1 → autogpt-platform-beta-v0.11.2"}

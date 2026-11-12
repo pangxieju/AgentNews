@@ -35,6 +35,7 @@ const slim: RankRow[] = rows.map((r) => ({
   delta_1d: r.delta_1d,
   delta_7d: r.delta_7d,
   delta_7d_installs: r.delta_7d_installs ?? null,
+  installs_delta_30d: r.installs_delta_30d ?? null,
   growth_30d_pct: r.growth_30d_pct,
   metrics: {
     stars: r.metrics?.stars ?? null,
