@@ -7,6 +7,7 @@ import { elapsedHours, medianReleaseGapDays } from '@agentnews/core';
 import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, loadVersionHistory, fmt, fmtPct, fmtSigned } from '../lib/data';
 import { buildGroupBoard, type HealthKey } from '../lib/group';
 import { installInfo, isListed } from '../lib/shared';
+import { planFor } from '../lib/plans';
 import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
 
 interface Props {
@@ -87,6 +88,26 @@ const noMetrics = ![
 ].some((v) => v != null);
 /** L3 或整行无指标 → 退化成「事实页」：不排名、不画趋势、不做维护健康 */
 const factsOnly = !!row && (row.data_level === 'L3' || noMetrics);
+
+/* ── 定价与约束（未核验不显示数字） ── */
+const plan = row ? planFor(row.slug, meta?.license, meta?.homepage) : null;
+const planText = (() => {
+  if (!plan) return null;
+  const en = lang === 'en';
+  const free = { yes: en ? 'Yes' : '有', limited: en ? 'Limited' : '有限', no: en ? 'No' : '无', unknown: en ? 'Unknown' : '未知' }[plan.free];
+  const self = { yes: en ? 'Yes' : '可', partial: en ? 'Partial' : '部分', no: en ? 'No' : '不可', unknown: en ? 'Unknown' : '未知' }[plan.self_host];
+  const price =
+    plan.confidence === 'verified' && plan.price_monthly != null
+      ? plan.price_monthly === 0
+        ? en
+          ? '$0 (self-host)'
+          : '$0（自托管）'
+        : `$${plan.price_monthly} / mo`
+      : en
+        ? 'Unverified'
+        : '未核验';
+  return { free, self, price };
+})();
 /** 发版节奏：只认版本的发布时刻（version_at），不认快照日期 */
 const cadence = medianReleaseGapDays(versions.map((v) => v.version_at ?? v.date));
 
@@ -317,6 +338,59 @@ const jsonLd = row
           </div>
         </div>
       </section>
+
+      {plan && planText && (
+        <section class="section">
+          <div class="section-title">
+            <h2>{lang === 'en' ? 'Pricing & constraints' : '定价与约束'}</h2>
+            <span class="muted">
+              {plan.confidence === 'verified'
+                ? lang === 'en'
+                  ? 'Checked against the vendor page'
+                  : '已对照官方页面核验'
+                : lang === 'en'
+                  ? 'Not verified — no price shown'
+                  : '未核验 —— 不显示价格'}
+            </span>
+          </div>
+          <div class="box">
+            <div class="box-body">
+              <div class="stat-rail" style="border-top:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+                <div>
+                  <span data-k>{lang === 'en' ? 'Free tier' : '免费版'}</span>
+                  <b>{planText.free}</b>
+                </div>
+                <div>
+                  <span data-k>{lang === 'en' ? 'Starts at' : '起步价'}</span>
+                  <b>{planText.price}</b>
+                </div>
+                <div>
+                  <span data-k>{lang === 'en' ? 'Self-host' : '自托管'}</span>
+                  <b>{planText.self}</b>
+                </div>
+              </div>
+              {plan.confidence === 'verified' && plan.price_note && (
+                <p style="margin:10px 0 0;font-size:12.5px;color:var(--ink-2)">{plan.price_note}</p>
+              )}
+              {plan.confidence === 'candidate' && (
+                <p style="margin:10px 0 0;font-size:12.5px;color:var(--ink-3)">
+                  {lang === 'en'
+                    ? 'Plan details exist but the price was not verifiable from the vendor page — we do not guess. See the source link.'
+                    : '该产品有定价方案，但未能从官方页面核验价格 —— 不猜数字。可查原始链接。'}
+                </p>
+              )}
+              {plan.source_url && (
+                <p style="margin:8px 0 0;font-size:12px;color:var(--ink-3)">
+                  <a href={plan.source_url} target="_blank" rel="noopener">
+                    {lang === 'en' ? 'Source' : '来源'} ↗
+                  </a>
+                  {plan.checked_at ? ` · ${lang === 'en' ? 'checked' : '核对'} ${plan.checked_at}` : ''}
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {factsOnly ? (
         <section class="section">

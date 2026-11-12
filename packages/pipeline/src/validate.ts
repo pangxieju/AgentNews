@@ -47,3 +47,39 @@ if (warnings.length) {
   console.log(`\n⚠ ${warnings.length} 条警告：`);
   for (const w of warnings) console.log('  - ' + w);
 }
+
+/* ── data/plans.yml 轻量校验：价格数据不允许“未核验却带数字” ── */
+try {
+  const plansRaw = readFileSync(join(ROOT, 'data', 'plans.yml'), 'utf8');
+  const plans = (parse(plansRaw) ?? []) as Array<{
+    slug?: string;
+    confidence?: string;
+    price_monthly?: number | null;
+    checked_at?: string;
+  }>;
+  const seen = new Set<string>();
+  const issues: string[] = [];
+  for (const p of plans) {
+    if (!p.slug) issues.push('存在缺少 slug 的条目');
+    else if (seen.has(p.slug)) issues.push(`${p.slug}: slug 重复`);
+    else seen.add(p.slug);
+    if (p.confidence !== 'verified' && p.confidence !== 'candidate') {
+      issues.push(`${p.slug}: confidence 必须是 verified 或 candidate`);
+    }
+    if (p.confidence !== 'verified' && p.price_monthly != null) {
+      issues.push(`${p.slug}: 未核验条目不得带价格数字`);
+    }
+    if (p.confidence === 'verified' && !p.checked_at) {
+      issues.push(`${p.slug}: 已核验条目必须写 checked_at`);
+    }
+  }
+  if (issues.length) {
+    console.error('✗ data/plans.yml 校验失败：');
+    for (const i of issues) console.error('  - ' + i);
+    process.exit(1);
+  }
+  console.log(`✓ data/plans.yml 校验通过：${plans.length} 条（核验 ${plans.filter((p) => p.confidence === 'verified').length}）`);
+} catch (e) {
+  if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
+  console.log('· data/plans.yml 不存在，跳过定价校验');
+}

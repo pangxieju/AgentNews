@@ -7,6 +7,7 @@
  */
 import { loadAllScores, loadAgentsMeta, loadLatestScores } from './data';
 import { isListed } from './shared';
+import { planFor, type PlanInfo } from './plans';
 
 export const SITE = 'https://agentnews-c5h.pages.dev';
 
@@ -25,6 +26,8 @@ export type PublicRow = {
   flags: string[];
   license: string | null;
   homepage: string | null;
+  /** 定价与约束：未核验不包含价格数字 */
+  plan: PlanInfo;
   metrics: {
     stars: number | null;
     forks: number | null;
@@ -54,6 +57,7 @@ export function buildScoresExport(date?: string) {
     flags: r.flags ?? [],
     license: meta[r.slug]?.license ?? null,
     homepage: meta[r.slug]?.homepage ?? null,
+    plan: planFor(r.slug, meta[r.slug]?.license, meta[r.slug]?.homepage),
     metrics: {
       stars: r.metrics?.stars ?? null,
       forks: r.metrics?.forks ?? null,

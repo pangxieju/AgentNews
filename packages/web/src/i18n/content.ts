@@ -36,6 +36,12 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
           '开源有 star/contributors，闭源只有安装/用量；混在一个分位里会让闭源系统性吃亏，也让「同形态内可比」不成立。榜单的开/闭源 tab 现在各自对应一套分位',
       },
       {
+        date: '2026-11-12',
+        change: '新增「定价与约束」：免费版 / 起步价 / 自托管；只有已核验条目才显示价格数字',
+        reason:
+          '选型最后一公里是「能不能用、多少钱」。价格有地区/年付/席位差异且高频变动，未核验就写死等于编造；因此候选条目只展示「未核验 + 官方来源」，由人工复核后才显示数字',
+      },
+      {
         date: '2026-11-09',
         change: '分位数改为秩中点平滑',
         reason:
@@ -161,6 +167,12 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
         change: 'Score namespaces split (score_version → v2): open (open+semi) and closed now get separate in-form percentiles and ranks',
         reason:
           'Open-source entries have stars and contributors; closed ones only have installs and usage. Mixing them in one percentile systematically penalised closed products and broke “comparable within a form”. The open/closed board tabs now map to their own distribution',
+      },
+      {
+        date: '2026-11-12',
+        change: 'Added pricing & constraints: free tier / starting price / self-host; prices are only shown for verified rows',
+        reason:
+          'The last mile of selection is “can I use it, and what does it cost?”. Pricing varies by region, annual terms and seats, and changes often — writing it down unverified is fabrication. Candidate rows show “unverified + official source” until a human review confirms the number.',
       },
       {
         date: '2026-11-09',

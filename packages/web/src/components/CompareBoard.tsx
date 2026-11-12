@@ -23,6 +23,16 @@ export type CompareItem = {
   data_level: string;
   icon: string | null;
   iconFallback: string | null;
+  /** 定价与约束（来自 data/plans.yml 或 license 推导） */
+  plan: {
+    free: string;
+    price_monthly: number | null;
+    price_note: string | null;
+    self_host: string;
+    confidence: string;
+    source_url: string | null;
+    checked_at: string | null;
+  } | null;
 };
 
 interface Props {
@@ -59,6 +69,35 @@ function rows(lang: Lang): Row[] {
     { kind: 'text', key: 'level', label: t(lang, 'metric.level'), get: (i) => i.data_level },
     { kind: 'text', key: 'bucket', label: t(lang, 'metric.bucket'), get: (i) => bucketText(lang, i.oss_bucket) },
     { kind: 'text', key: 'license', label: t(lang, 'metric.license'), get: (i) => i.license ?? '—' },
+    {
+      kind: 'text',
+      key: 'free',
+      label: lang === 'en' ? 'Free tier' : '免费版',
+      get: (i) =>
+        ({ yes: lang === 'en' ? 'Yes' : '有', limited: lang === 'en' ? 'Limited' : '有限', no: lang === 'en' ? 'No' : '无', unknown: '—' })[
+          i.plan?.free ?? 'unknown'
+        ] ?? '—',
+    },
+    {
+      kind: 'text',
+      key: 'price',
+      label: lang === 'en' ? 'Starts at' : '起步价',
+      get: (i) => {
+        const p = i.plan;
+        if (!p) return '—';
+        if (p.confidence !== 'verified' || p.price_monthly == null) return lang === 'en' ? 'Unverified' : '未核验';
+        return p.price_monthly === 0 ? (lang === 'en' ? '$0 (self-host)' : '$0（自托管）') : `$${p.price_monthly}/mo`;
+      },
+    },
+    {
+      kind: 'text',
+      key: 'selfhost',
+      label: lang === 'en' ? 'Self-host' : '自托管',
+      get: (i) =>
+        ({ yes: lang === 'en' ? 'Yes' : '可', partial: lang === 'en' ? 'Partial' : '部分', no: lang === 'en' ? 'No' : '不可', unknown: '—' })[
+          i.plan?.self_host ?? 'unknown'
+        ] ?? '—',
+    },
     { kind: 'text', key: 'release', label: t(lang, 'metric.release'), get: (i) => (i.last_release ? i.last_release.slice(0, 10) : '—') },
     {
       kind: 'text',

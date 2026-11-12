@@ -1,0 +1,236 @@
+# 定价与使用约束（人工核验）
+#
+# 规则：
+# - confidence: verified  → 可以把 price_monthly 展示为数字（附 source_url + checked_at）
+# - confidence: candidate → 只展示「未核验」，绝不显示具体数字（避免编造）
+# - 开源条目不在本文件里：由 license 推导为「自托管免费」（见 web/src/lib/plans.ts）
+#
+# free:        yes | limited | no | unknown
+# self_host:   yes | partial | no | unknown
+# price_monthly: 个人版起步价（USD / seat / month），仅 verified 时有值
+#
+- slug: claude-code
+  free: limited
+  price_monthly: 20
+  price_note: "Pro $20/mo (annual $17) · Max $100 · Max 20x $200"
+  self_host: no
+  source_url: https://claude.com/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: cursor
+  free: limited
+  price_monthly: 8
+  price_note: "Plus $8 · Premium $30 · Super $100 · Ultra $200 /mo"
+  self_host: no
+  source_url: https://cursor.com/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: cursor-cli
+  free: limited
+  price_monthly: 8
+  price_note: "Shares Cursor plans: Plus $8 · Premium $30 · Super $100 · Ultra $200 /mo"
+  self_host: no
+  source_url: https://cursor.com/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: windsurf
+  free: limited
+  price_monthly: 20
+  price_note: "Pro $20 · Max $200 · Teams $80 + $40/seat /mo"
+  self_host: no
+  source_url: https://windsurf.com/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: trae
+  free: limited
+  price_monthly: 20
+  price_note: "Pro $20 · Pro+ $60 · Ultra $200 /mo"
+  self_host: no
+  source_url: https://www.trae.ai/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: github-copilot
+  free: limited
+  price_monthly: 10
+  price_note: "Pro $10 · Pro+ $39 · Max $100 · Business $19/seat /mo"
+  self_host: no
+  source_url: https://docs.github.com/en/copilot/get-started/plans
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: copilot-cli
+  free: limited
+  price_monthly: 10
+  price_note: "Shares Copilot plans: Pro $10 · Pro+ $39 · Max $100 · Business $19/seat /mo"
+  self_host: no
+  source_url: https://docs.github.com/en/copilot/get-started/plans
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: amazon-q
+  free: limited
+  price_monthly: 19
+  price_note: "Pro $19/user/mo (free tier available)"
+  self_host: no
+  source_url: https://aws.amazon.com/q/developer/pricing/
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: kiro
+  free: limited
+  price_monthly: 20
+  price_note: "Pro $20 · Pro+ $40 · Pro Max $100 per user/mo"
+  self_host: no
+  source_url: https://kiro.dev/pricing/
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: droid
+  free: yes
+  price_monthly: 20
+  price_note: "BYOK $0 · Pro $20 · higher tiers $100/$200 per mo"
+  self_host: no
+  source_url: https://factory.com/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: auggie
+  free: no
+  price_monthly: 20
+  price_note: "Standard $20 flat/team/mo (≤50 seats) · Business $100 flat/team/mo"
+  self_host: no
+  source_url: https://www.augmentcode.com/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: qodo
+  free: unknown
+  price_monthly: 30
+  price_note: "Pro Team $30 (usage credits $0.015/credit)"
+  self_host: no
+  source_url: https://www.qodo.ai/pricing/
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: amp
+  free: unknown
+  price_monthly: 20
+  price_note: "Individual $20/mo · students $10"
+  self_host: no
+  source_url: https://ampcode.com/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+# ── 未能从官方页面核验到价格：只展示「未核验」，不显示数字 ──
+
+- slug: kimi-cli
+  free: unknown
+  self_host: no
+  source_url: https://platform.moonshot.cn
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: tabnine
+  free: unknown
+  self_host: no
+  source_url: https://tabnine.com/pricing
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: junie
+  free: unknown
+  self_host: no
+  source_url: https://www.jetbrains.com/junie/
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: manus
+  free: unknown
+  self_host: no
+  source_url: https://manus.im/pricing
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: devin
+  free: unknown
+  self_host: no
+  source_url: https://devin.ai
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: lingma
+  free: unknown
+  self_host: no
+  source_url: https://lingma.aliyun.com
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: comate
+  free: unknown
+  self_host: no
+  source_url: https://comate.baidu.com
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: codegeex
+  free: unknown
+  self_host: no
+  source_url: https://codegeex.cn
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: qoder
+  free: unknown
+  self_host: no
+  source_url: https://qoder.com
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: codebuddy
+  free: unknown
+  self_host: no
+  source_url: https://copilot.tencent.com
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: antigravity
+  free: unknown
+  self_host: no
+  source_url: https://antigravity.google
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: firebase-studio
+  free: unknown
+  self_host: no
+  source_url: https://firebase.studio
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: warp-agent
+  free: limited
+  price_monthly: 20
+  price_note: "Pro $20 · Max $200 /mo"
+  self_host: no
+  source_url: https://www.warp.dev/pricing
+  checked_at: 2026-11-12
+  confidence: verified
+
+- slug: comet
+  free: unknown
+  self_host: no
+  source_url: https://www.perplexity.ai/comet
+  checked_at: 2026-11-12
+  confidence: candidate
+
+- slug: atlas
+  free: unknown
+  self_host: no
+  source_url: https://chatgpt.com/atlas
+  checked_at: 2026-11-12
+  confidence: candidate

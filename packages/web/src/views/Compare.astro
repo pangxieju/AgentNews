@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import CompareBoard, { type CompareItem } from '../components/CompareBoard';
 import { loadLatestScores, loadAgentsMeta } from '../lib/data';
 import { isListed } from '../lib/shared';
+import { planFor } from '../lib/plans';
 import { type Lang, pathFor, t } from '../i18n/dict';
 
 interface Props {
@@ -27,6 +28,7 @@ const items: CompareItem[] = (data?.rows ?? []).filter(isListed).map((r) => ({
   activity: r.metrics?.activity ?? null,
   growth_30d_pct: r.growth_30d_pct,
   license: meta[r.slug]?.license ?? null,
+  plan: planFor(r.slug, meta[r.slug]?.license, meta[r.slug]?.homepage),
   last_release: r.metrics?.last_release ?? null,
   version: r.metrics?.version ?? null,
   version_at: r.metrics?.version_at ?? null,

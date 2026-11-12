@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { SCORE_VERSION } from '@agentnews/core';
 import type { Metrics, ScoreRow } from '@agentnews/core';
 import { diffEvents } from '../events.js';
 
@@ -33,7 +34,7 @@ function row(slug: string, over: Partial<ScoreRow> = {}): ScoreRow {
     first_listed: '2026-11-09',
     data_level: 'L2',
     flags: [],
-    score_version: 'v1',
+    score_version: SCORE_VERSION,
     ...over,
   };
 }
