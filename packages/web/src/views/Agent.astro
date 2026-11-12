@@ -7,6 +7,7 @@ import { elapsedHours, medianReleaseGapDays } from '@agentnews/core';
 import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, loadVersionHistory, fmt, fmtPct, fmtSigned } from '../lib/data';
 import { buildGroupBoard, type HealthKey } from '../lib/group';
 import { installInfo, isListed } from '../lib/shared';
+import { buildPairs, pairSlug } from '../lib/pairs';
 import { planFor } from '../lib/plans';
 import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
 
@@ -38,6 +39,12 @@ const siblings = rows
   .filter((r) => isListed(r) && r.form === row?.form && r.slug !== slug && r.score != null)
   .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
   .slice(0, 4);
+
+/** 高意图对比页：这个产品参与的常见「X vs Y」 */
+const popularPairs = buildPairs(rows.filter(isListed))
+  .filter((p) => p.a === slug || p.b === slug)
+  .slice(0, 4);
+const nameBySlug = new Map(rows.map((r) => [r.slug, r.name ?? r.slug]));
 
 /* ── 维护健康（PRD §7.2）──
  * 「现在」用数据快照日，不用构建时刻：同一份数据每次部署说法一致，
@@ -730,6 +737,22 @@ const jsonLd = row
               {t(lang, 'agent.peersCompare')}
             </a>
           </div>
+        </section>
+      )}
+
+      {popularPairs.length > 0 && (
+        <section class="section">
+          <div class="section-title">
+            <h2>{lang === 'en' ? 'Popular comparisons' : '常见对比'}</h2>
+            <span class="muted">{lang === 'en' ? 'Same-form, side by side' : '同形态，逐项对比'}</span>
+          </div>
+          <p style="display:flex;gap:8px;flex-wrap:wrap">
+            {popularPairs.map((p) => (
+              <a class="btn btn-sm" href={H(`/vs/${pairSlug(p.a, p.b)}/`)}>
+                {nameBySlug.get(slug)} vs {nameBySlug.get(p.a === slug ? p.b : p.a)}
+              </a>
+            ))}
+          </p>
         </section>
       )}
 

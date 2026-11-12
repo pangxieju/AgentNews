@@ -10,9 +10,11 @@ import Forms from '../views/Forms.astro';
 import Compare from '../views/Compare.astro';
 import About from '../views/About.astro';
 import Data from '../views/Data.astro';
+import Vs from '../views/Vs.astro';
 import NotFound from '../views/NotFound.astro';
 import { loadLatestScores } from '../lib/data';
-import { FOCUS_FORMS, GRANS_UI } from '../lib/shared';
+import { FOCUS_FORMS, GRANS_UI, isListed } from '../lib/shared';
+import { buildPairs, pairSlug, parsePair } from '../lib/pairs';
 import type { Lang } from '../i18n/dict';
 
 export function getStaticPaths() {
@@ -21,12 +23,14 @@ export function getStaticPaths() {
   const GRANS = [...GRANS_UI];
   const rows = loadLatestScores()?.rows ?? [];
   const slugs = [...new Set(rows.map((r) => r.slug))];
+  const pairs = buildPairs(rows.filter(isListed));
   const paths: string[] = [
     '',
     'top',
     ...BUCKETS.flatMap((b) => FORMS.flatMap((f) => GRANS.map((g) => `top/${b}/${f}/${g}`))),
     ...slugs.map((s) => `agent/${s}`),
     ...FOCUS_FORMS.map((f) => `forms/${f}`),
+    ...pairs.map((p) => `vs/${pairSlug(p.a, p.b)}`),
     'compare',
     'about',
     'data',
@@ -41,7 +45,8 @@ const seg = raw.split('/').filter(Boolean);
 const lang: Lang = seg[0] === 'zh' ? 'zh' : 'en';
 const parts = lang === 'zh' ? seg.slice(1) : seg;
 const [a, b, c, d] = parts;
-const IS_UNKNOWN = a !== undefined && a !== 'top' && a !== 'agent' && a !== 'forms' && a !== 'compare' && a !== 'about' && a !== 'data';
+const pair = a === 'vs' && b ? parsePair(b) : null;
+const IS_UNKNOWN = a !== undefined && a !== 'top' && a !== 'agent' && a !== 'forms' && a !== 'compare' && a !== 'about' && a !== 'data' && a !== 'vs';
 ---
 {a === undefined && <Home lang={lang} />}
 {a === 'top' && b === undefined && <Rank lang={lang} bucket="open" form="all" g="month" />}
@@ -53,4 +58,5 @@ const IS_UNKNOWN = a !== undefined && a !== 'top' && a !== 'agent' && a !== 'for
 {a === 'compare' && b === undefined && <Compare lang={lang} />}
 {a === 'about' && b === undefined && <About lang={lang} />}
 {a === 'data' && b === undefined && <Data lang={lang} />}
+{a === 'vs' && pair !== null && <Vs lang={lang} aSlug={pair.a} bSlug={pair.b} />}
 {IS_UNKNOWN && <NotFound lang={lang} />}
