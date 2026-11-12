@@ -108,7 +108,7 @@ data/
   scores/YYYY-MM-DD.json     评分结果（每日）
 packages/
   core/                      打分引擎（纯函数，无 I/O，100% 可测）
-  pipeline/                  采集器（GitHub / npm / PyPI / VS Code）
+  pipeline/                  采集器（GitHub / npm / PyPI / VS Code / JetBrains / OpenRouter / OSV）
   web/                       Astro 静态站
 ```
 
@@ -198,6 +198,11 @@ pnpm discover --top 80           # 报告表里只出前 80 条
 ```
 log 压缩 → 同形态组内分位数归一 → 缺失权重重分配 → 加权求和 → 0~100
 ```
+
+**两个硬闸门（2026-11-12 起）**
+
+- **停更闸门**：近 180 天既无提交也无发版 → `dormant`，不参与排名（也不参与组内分位计算），详情页保留并标注「已停更」。
+- **安装量口径分离**：npm / PyPI 周下载与商店累计安装（VS Code / JetBrains）不是同一单位，商店口径的条目带 `store_installs` 标记；`installs_may_include_ci` 只对周下载流生效。
 
 | 指标 | 权重 | 说明 |
 |---|---|---|

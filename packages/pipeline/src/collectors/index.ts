@@ -233,6 +233,20 @@ async function collectVscode(extensionId: string): Promise<{ vscode_installs: nu
   return { vscode_installs: installs };
 }
 
+/**
+ * JetBrains Marketplace downloads（官方公开 API）。
+ * identifier 用插件数字 id（如 Junie = 26104）；下载量是累计值，口径与商店 install 同类。
+ */
+async function collectJetbrains(pluginId: string): Promise<{ jetbrains_downloads: number }> {
+  const res = await fetch(`https://plugins.jetbrains.com/api/plugins/${encodeURIComponent(pluginId)}`, {
+    headers: { 'User-Agent': 'agentnews-m0 (github.com/pangxieju/AgentNews)' },
+  });
+  if (!res.ok) throw new Error(`jetbrains ${pluginId}: ${res.status}`);
+  const data = (await res.json()) as { downloads?: number };
+  const downloads = typeof data.downloads === 'number' ? data.downloads : 0;
+  return { jetbrains_downloads: downloads };
+}
+
 /** npm：当前版本（dist-tags.latest）+ 发布时间（time[version]） */
 async function collectNpmVersion(pkg: string): Promise<{
   version: string | null;
@@ -383,6 +397,7 @@ export async function collectAgent(
   const npmSources = agent.sources.filter((s) => s.kind === 'npm');
   const pypiSources = agent.sources.filter((s) => s.kind === 'pypi');
   const vscodeSources = agent.sources.filter((s) => s.kind === 'vscode');
+  const jetbrainsSources = agent.sources.filter((s) => s.kind === 'jetbrains');
 
   // npm：主渠道优先，否则第一个（不叠加，避免重复计数 PRD §4.5）
   const npmSrc: Source | undefined = npmSources.find((s) => s.is_primary) ?? npmSources[0];
@@ -431,6 +446,15 @@ export async function collectAgent(
         metrics.version_at = vv.version_at;
         metrics.version_source = 'vscode';
       }
+    } catch (e) {
+      errors.push(String(e instanceof Error ? e.message : e));
+    }
+  }
+
+  const jbSrc = jetbrainsSources.find((s) => s.is_primary) ?? jetbrainsSources[0];
+  if (jbSrc) {
+    try {
+      Object.assign(metrics, await collectJetbrains(jbSrc.identifier));
     } catch (e) {
       errors.push(String(e instanceof Error ? e.message : e));
     }

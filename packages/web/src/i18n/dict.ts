@@ -99,6 +99,8 @@ const zh: Dict = {
   'flag.small_group': '样本少',
   'flag.newcomer': '新秀',
   'flag.suspicious': '可疑增长',
+  'flag.dormant': '已停更',
+  'flag.store_installs': '商店累计安装',
 
   // ── 事件 ──
   'event.release': '发版',
@@ -510,6 +512,8 @@ const en: Dict = {
   'flag.small_group': 'Small sample',
   'flag.newcomer': 'Newcomer',
   'flag.suspicious': 'Suspicious',
+  'flag.dormant': 'Dormant',
+  'flag.store_installs': 'Store installs',
 
   'event.release': 'Release',
   'event.version': 'Version',

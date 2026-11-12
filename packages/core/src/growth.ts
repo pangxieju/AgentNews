@@ -55,6 +55,25 @@ export function activityScore(
   return Number((0.6 * commitPart + 0.4 * releasePart).toFixed(3));
 }
 
+/**
+ * 休眠门槛：近 180 天既无提交也无发版 → 视为停更（PRD §4.4 活跃必要条件）。
+ * 停更项目移出主榜（不排名），详情页保留并标记 dormant。
+ */
+export const DORMANT_DAYS = 180;
+
+export function isDormant(
+  lastCommit: string | null | undefined,
+  lastRelease: string | null | undefined,
+  now: Date = new Date(),
+  days = DORMANT_DAYS,
+): boolean {
+  const times = [lastCommit, lastRelease].filter((v): v is string => typeof v === 'string');
+  if (times.length === 0) return false; // 无任何时间戳 = 未知，不臆测
+  const newest = Math.max(...times.map((t) => new Date(t).getTime()));
+  if (!Number.isFinite(newest)) return false;
+  return now.getTime() - newest > days * 86_400_000;
+}
+
 /** 数据完整度等级（PRD §5.7）：有 star + 任一安装/商店指标 → L1，只有部分 → L2，几乎全缺 → L3 */
 export function dataLevel(
   stars: number | null | undefined,

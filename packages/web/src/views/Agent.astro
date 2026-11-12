@@ -547,6 +547,13 @@ const citeUrl = row ? new URL(H(`/agent/${row.slug}/`), SITE).href : '';
       )}
 
       {row.flags.includes('partial_data') && <div class="warn" style="margin-top:16px">{t(lang, 'agent.partial')}</div>}
+      {row.flags.includes('dormant') && (
+        <div class="warn" style="margin-top:16px">
+          {lang === 'en'
+            ? 'Dormant: no commit or release in the last 180 days. Excluded from ranking; the page is kept for reference.'
+            : '已停更：近 180 天无提交或发版，不参与排名，仅保留参考。'}
+        </div>
+      )}
       {row.data_level === 'L3' && <div class="warn" style="margin-top:16px">{t(lang, 'agent.l3')}</div>}
 
       {siblings.length > 0 && (

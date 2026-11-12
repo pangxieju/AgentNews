@@ -13,6 +13,17 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
         reason: '核心形态数据完整度优先，范围由用户价值而非数据可得性定义',
       },
       {
+        date: '2026-11-12',
+        change:
+          '接入 VS Code / JetBrains 商店口径，闭源 IDE 插件从 L3 进入排名（闭源在榜 7 → 17），行内标注 <code>store_installs</code>',
+        reason: '闭源产品没有 GitHub star，商店安装是唯一公开且可核验的采用度信号；累计安装与周下载必须分开标注，不能混算',
+      },
+      {
+        date: '2026-11-12',
+        change: '新增停更闸门：近 180 天无提交/发版 → <code>dormant</code>，移出排名',
+        reason: 'gpt-engineer 停更 888 天仍在自主榜第 2、Plandex 停更 483 天仍在 CLI 榜，违反 PRD §4.4 的活跃必要条件',
+      },
+      {
         date: '2026-11-09',
         change: '分位数改为秩中点平滑',
         reason:
@@ -115,6 +126,17 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
         change:
           'Focus scope: boards only list <code>cli</code> / <code>ide-plugin</code> / <code>ide-app</code>; other forms are frozen with detail pages kept',
         reason: 'Data completeness in the core forms comes first — scope follows user value, not data availability',
+      },
+      {
+        date: '2026-11-12',
+        change:
+          'Added VS Code / JetBrains store data; closed IDE plugins move from L3 into the ranking (closed ranked 7 → 17), flagged as <code>store_installs</code>',
+        reason: 'Closed products have no GitHub stars; store installs are the only public, verifiable adoption signal — and cumulative installs must be labelled apart from weekly downloads',
+      },
+      {
+        date: '2026-11-12',
+        change: 'Dormant gate: no commit or release in 180 days → <code>dormant</code>, removed from ranking',
+        reason: 'gpt-engineer sat at #2 in autonomous 888 days after its last release, Plandex at CLI #16 after 483 days — both violate the PRD §4.4 activity requirement',
       },
       {
         date: '2026-11-09',

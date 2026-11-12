@@ -24,6 +24,7 @@ export const SourceKind = z.enum([
   'crates',
   'brew',
   'vscode',
+  'jetbrains',
   'chrome',
   'appstore',
   'releases',
@@ -94,6 +95,7 @@ type MetricKey =
   | 'npm_monthly_dl'
   | 'pypi_monthly_dl'
   | 'vscode_installs'
+  | 'jetbrains_downloads'
   | 'discord_members'
   | 'repo_created'
   /** 当前分发版本（npm / PyPI / 商店 / GitHub release tag） */

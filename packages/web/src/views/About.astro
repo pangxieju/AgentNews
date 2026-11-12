@@ -104,6 +104,16 @@ const weights: Array<[string, string]> = [
       </div>
       <div class="box-body">
         <div class="notice">{t(lang, 'changelog.normalize')}</div>
+        <div class="notice" style="margin-top:8px">
+          {lang === 'en'
+            ? 'Install basis: npm / PyPI weekly downloads and store cumulative installs (VS Code / JetBrains) are different units. Rows measured by store installs carry a “Store installs” badge; cross-basis score comparisons are order-of-magnitude only.'
+            : '安装量口径：npm / PyPI 周下载与商店累计安装（VS Code / JetBrains）不是同一单位。商店口径的条目带「商店累计安装」标记，跨口径的分数比较仅供量级参考。'}
+        </div>
+        <div class="notice" style="margin-top:8px">
+          {lang === 'en'
+            ? 'Dormant: an entry with no commit or release in 180 days is removed from the ranking and kept as a reference page.'
+            : '停更闸门：近 180 天既无提交也无发版的条目移出排名，仅保留详情页。'}
+        </div>
       </div>
     </div>
   </section>

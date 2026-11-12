@@ -82,6 +82,21 @@ export function effectiveInstalls(m: Metrics): number | null {
   if (num(m.npm_monthly_dl) != null) return Math.round((num(m.npm_monthly_dl)! / 30) * 7);
   if (num(m.pypi_monthly_dl) != null) return Math.round((num(m.pypi_monthly_dl)! / 30) * 7);
   if (num(m.vscode_installs) != null) return num(m.vscode_installs);
+  if (num(m.jetbrains_downloads) != null) return num(m.jetbrains_downloads);
+  return null;
+}
+
+/**
+ * 安装量口径：周下载流（npm/PyPI）与商店累计安装（VS Code / JetBrains）
+ * 不是同一个单位，图表与分母都不能直接相加 —— 行内必须带上 basis。
+ */
+export type InstallsBasis = 'weekly_dl' | 'store_total' | null;
+
+export function installsBasis(m: Metrics): InstallsBasis {
+  if (num(m.npm_weekly_dl) != null || num(m.npm_monthly_dl) != null || num(m.pypi_monthly_dl) != null) {
+    return 'weekly_dl';
+  }
+  if (num(m.vscode_installs) != null || num(m.jetbrains_downloads) != null) return 'store_total';
   return null;
 }
 

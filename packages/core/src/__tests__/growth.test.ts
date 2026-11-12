@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  DORMANT_DAYS,
   absoluteDelta,
   activityScore,
   dataLevel,
   growthPct,
+  isDormant,
 } from '../growth.js';
 
 describe('absoluteDelta', () => {
@@ -16,8 +18,7 @@ describe('absoluteDelta', () => {
   });
 });
 
-describe('growthPct', () => {
-  it('相对增速', () => {
+describe('growthPct', () => {  it('相对增速', () => {
     expect(growthPct(200, 100, 50)).toBe(1);
   });
   it('基准低于 FLOOR → null（防小基数抖动）', () => {
@@ -56,5 +57,25 @@ describe('dataLevel', () => {
   });
   it('全缺 → L3', () => {
     expect(dataLevel(null, null)).toBe('L3');
+  });
+});
+
+describe('isDormant（PRD §4.4 活跃闸门）', () => {
+  const now = new Date('2026-11-12T00:00:00Z');
+  it('近 180 天有提交 → 清醒', () => {
+    expect(isDormant('2026-11-01T00:00:00Z', null, now)).toBe(false);
+  });
+  it('提交和发版都超过 180 天 → 停更', () => {
+    expect(isDormant('2026-01-01T00:00:00Z', '2026-02-01T00:00:00Z', now)).toBe(true);
+  });
+  it('发版新、提交旧 → 以最新时间为准，不算停更', () => {
+    expect(isDormant('2025-01-01T00:00:00Z', '2026-10-01T00:00:00Z', now)).toBe(false);
+  });
+  it('两个时间戳都缺失 → 无法判定，不标记', () => {
+    expect(isDormant(null, null, now)).toBe(false);
+  });
+  it('边界：恰好 180 天内仍算清醒', () => {
+    const exactly = new Date(now.getTime() - (DORMANT_DAYS - 1) * 86_400_000).toISOString();
+    expect(isDormant(exactly, null, now)).toBe(false);
   });
 });

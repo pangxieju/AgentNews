@@ -37,7 +37,9 @@ const warnings: string[] = [];
 for (const a of agents) {
   if (!a.homepage) warnings.push(`${a.slug}: 缺少 homepage`);
   const kinds = new Set(a.sources.map((s) => s.kind));
-  if (kinds.has('manual')) warnings.push(`${a.slug}: 仅 manual 渠道，无可用指标（L3 收录区）`);
+  if (kinds.size === 1 && kinds.has('manual')) {
+    warnings.push(`${a.slug}: 仅 manual 渠道，无可用指标（L3 收录区）`);
+  }
   if (a.oss_bucket === 'open' && !kinds.has('github')) warnings.push(`${a.slug}: 开源但无 GitHub 渠道`);
   if (a.oss_bucket === 'open' && a.license_id === 'unknown') warnings.push(`${a.slug}: License 未确认`);
 }

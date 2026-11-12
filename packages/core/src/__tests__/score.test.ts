@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   compress,
+  effectiveInstalls,
+  installsBasis,
   normalizeGroup,
   percentileRank,
   scoreGroup,
@@ -119,5 +121,20 @@ describe('scoreGroup', () => {
     expect(order(after, ['super'])).toEqual(order(before));
     // 且 super 必须排第一
     expect(order(after)).toEqual(['super', 'top', 'mid', 'low']);
+  });
+});
+
+describe('effectiveInstalls / installsBasis', () => {
+  it('npm 周下载优先于商店累计安装', () => {
+    expect(effectiveInstalls({ npm_weekly_dl: 1000, vscode_installs: 9_000_000 } as never)).toBe(1000);
+  });
+  it('只有 JetBrains downloads 时可用作安装量', () => {
+    expect(effectiveInstalls({ jetbrains_downloads: 37_000_000 } as never)).toBe(37_000_000);
+    expect(installsBasis({ jetbrains_downloads: 37_000_000 } as never)).toBe('store_total');
+  });
+  it('npm/PyPI → weekly_dl；VS Code → store_total', () => {
+    expect(installsBasis({ pypi_monthly_dl: 3000 } as never)).toBe('weekly_dl');
+    expect(installsBasis({ vscode_installs: 5_000_000 } as never)).toBe('store_total');
+    expect(installsBasis({} as never)).toBeNull();
   });
 });

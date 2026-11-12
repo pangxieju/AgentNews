@@ -9,6 +9,8 @@ import {
   activityScore,
   dataLevel,
   effectiveInstalls,
+  installsBasis,
+  isDormant,
   scoreGroup,
   type Agent,
   type Metrics,
@@ -22,6 +24,9 @@ import { loadState, mergeState, newcomerAgeDays, saveState } from './state.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const YAML_PATH = join(ROOT, 'agents.yaml');
+
+/** 指标里的时间戳可能是 number/unknown，统一收敛成 string | null 再交给 isDormant */
+const isoStr = (v: unknown): string | null => (typeof v === 'string' ? v : null);
 
 // 加载环境变量（Node 24 内置 loadEnvFile，无需 dotenv）
 // 优先级：系统环境变量 > .env.local > .env
@@ -209,7 +214,15 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   for (const form of FORMS) {
     const group = scorables.filter((s) => s.form === form);
     if (group.length === 0) continue;
-    const scores = scoreGroup(group, undefined, new Date());
+    // 停更条目既不排名，也不参与组内分位数（避免僵尸项目的高 star 扭曲活跃项目的分数）
+    const dormancy = new Map(
+      scorables.map((s) => [
+        s.slug,
+        isDormant(isoStr(s.metrics.last_commit), isoStr(s.metrics.last_release), new Date()),
+      ]),
+    );
+    const activeGroup = group.filter((s) => !dormancy.get(s.slug));
+    const scores = scoreGroup(activeGroup, undefined, new Date());
     const scoreMap = new Map(scores.map((s) => [s.slug, s.score]));
 
     const enriched = group.map((item) => {
@@ -217,7 +230,17 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       const stars = typeof m.stars === 'number' ? m.stars : null;
       const installs = effectiveInstalls(m);
       const level = dataLevel(stars, installs);
-      return { item, m, stars, installs, level, score: level === 'L3' ? null : (scoreMap.get(item.slug) ?? null) };
+      // 停更闸门（PRD §4.4）：近 180 天无提交/发版 → 不排名，只保留详情页
+      const dormant = dormancy.get(item.slug) ?? false;
+      return {
+        item,
+        m,
+        stars,
+        installs,
+        level,
+        dormant,
+        score: level === 'L3' || dormant ? null : (scoreMap.get(item.slug) ?? null),
+      };
     });
 
     // 仅 L1/L2 且组内 ≥2 项才有资格排名
@@ -231,7 +254,8 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
     ];
 
     for (const e of ordered) {
-      const { item, m, stars, installs, level, score } = e;
+      const { item, m, stars, installs, level, score, dormant } = e;
+      const basis = installsBasis(m);
       const weekAgo = typeof item.ref?.weekAgo?.stars === 'number' ? item.ref.weekAgo.stars : null;
       const monthAgo = typeof item.ref?.monthAgo?.stars === 'number' ? item.ref.monthAgo.stars : null;
       const prevStars = typeof item.ref?.prev?.stars === 'number' ? item.ref.prev.stars : null;
@@ -243,7 +267,10 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       const flags: string[] = [];
       if (errors.some((err) => err.startsWith(item.slug))) flags.push('partial_data');
       if (level === 'L3') flags.push('no_data');
-      if (installs != null && installs >= 1_000_000) flags.push('installs_may_include_ci');
+      if (dormant) flags.push('dormant');
+      // 口径分离：商店累计安装不是周下载流，CI 噪声 flag 只适用于 npm/PyPI 周下载
+      if (basis === 'store_total') flags.push('store_installs');
+      if (basis === 'weekly_dl' && installs != null && installs >= 1_000_000) flags.push('installs_may_include_ci');
       if (group.length <= 2 && level !== 'L3') flags.push('small_group');
 
       // 出道天数（PRD §5.6）：min(repo 创建至今, 首次收录至今)

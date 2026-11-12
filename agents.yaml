@@ -650,6 +650,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: github-copilot, is_primary: true }
+    - { kind: vscode, identifier: GitHub.copilot }
 
 - slug: amazon-q
   name: Amazon Q Developer
@@ -661,6 +662,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: amazon-q, is_primary: true }
+    - { kind: vscode, identifier: AmazonWebServices.amazon-q-vscode }
 
 - slug: tabnine
   name: Tabnine
@@ -673,6 +675,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: tabnine, is_primary: true }
+    - { kind: vscode, identifier: TabNine.tabnine-vscode }
 
 - slug: kiro
   name: Kiro
@@ -769,6 +772,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: lingma, is_primary: true }
+    - { kind: vscode, identifier: Alibaba-Cloud.tongyi-lingma }
 
 - slug: comate
   name: 文心快码 Comate
@@ -780,6 +784,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: comate, is_primary: true }
+    - { kind: vscode, identifier: BaiduComate.comate }
 
 - slug: codegeex
   name: CodeGeeX
@@ -791,6 +796,7 @@
   note: 模型权重开源（codegeex4-all），插件本体闭源；无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: codegeex, is_primary: true }
+    - { kind: vscode, identifier: aminer.codegeex }
 
 - slug: junie
   name: Junie
@@ -802,6 +808,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: junie, is_primary: true }
+    - { kind: jetbrains, identifier: "26104" }
 
 - slug: qodo
   name: Qodo
@@ -813,6 +820,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: qodo, is_primary: true }
+    - { kind: vscode, identifier: Codium.codium }
 
 - slug: gemini-code-assist
   name: Gemini Code Assist
@@ -826,6 +834,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: gemini-code-assist, is_primary: true }
+    - { kind: vscode, identifier: Google.geminicodeassist }
 
 # ---------- IDE 应用 ----------
 - slug: antigravity
@@ -860,6 +869,7 @@
   note: 无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: codebuddy, is_primary: true }
+    - { kind: vscode, identifier: Tencent-Cloud.coding-copilot }
 
 - slug: firebase-studio
   name: Firebase Studio
