@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { pathFor, t, type Lang } from '../i18n/dict';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<Base lang={lang} pageTitle={`${t(lang, 'data.title')} · AgentNews`}>
+  <div class="page-head">
+    <div class="crumbs"><a href={pathFor(lang, '/')}>AgentNews</a><span>/</span><span>{t(lang, 'data.crumb')}</span></div>
+    <span class="eyebrow">{t(lang, 'data.eyebrow')}</span>
+    <h1>{t(lang, 'data.title')}</h1>
+    <p class="lede">{t(lang, 'data.lede')}</p>
+  </div>
+  <div class="notice">Data exports land here soon: snapshot CSV / JSON, an API endpoint and a citation format.</div>
+</Base>

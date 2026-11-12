@@ -16,6 +16,39 @@ export const FORM_ORDER = [
 
 export type FormKey = (typeof FORM_ORDER)[number];
 
+/**
+ * 聚焦范围（列表产品只展示这些形态），其余形态冻结不投入。
+ * 定义在 shared 而不是数据层：island（Preact）与服务端共用，
+ * 保证榜单、首页、对比、搜索在 SSR 与 hydrate 后结果一致。
+ */
+export const FOCUS_FORMS = ['cli', 'ide-plugin', 'ide-app'] as const;
+
+export type FocusFormKey = (typeof FOCUS_FORMS)[number];
+
+/** 冻结形态：不展示、不投入，但详情页保留（noindex） */
+export const FROZEN_FORMS = ['desktop', 'browser', 'framework', 'autonomous'] as const;
+
+/** 误分类条目：从主榜剔除，详情页保留（noindex） */
+export const EXCLUDED_SLUGS = new Set(['theia', 'vercel-ai-sdk', 'open-interpreter']);
+
+/**
+ * 是否在公开列表（榜单 / 首页 / 搜索 / 对比）中展示。
+ * 冻结形态与误分类条目只保留直达详情页，不参与任何列表。
+ */
+export const isListed = (r: { slug: string; form: string; score?: number | null } | null | undefined): boolean => {
+  if (!r) return false;
+  if (EXCLUDED_SLUGS.has(r.slug)) return false;
+  if (FROZEN_FORMS.includes(r.form as (typeof FROZEN_FORMS)[number])) return false;
+  return true;
+};
+
+/** 详情页不再展示的 slug（noindex，页面保留） */
+export const NOINDEX_SLUGS = (r: { slug: string; form: string } | null | undefined): boolean =>
+  r ? !isListed(r) : false;
+
+/** 榜单粒度：选型用不到日榜；周榜待历史回填（delta_7d 有数据）后加回 */
+export const GRANS_UI = ['month'] as const;
+
 /** 格式化数字（T/B/k 缩写，小于 1k 保留原值） */
 export function fmt(n: number | null | undefined): string {
   if (n == null) return '—';
@@ -41,7 +74,7 @@ export function fmtSigned(n: number | null | undefined): string {
 }
 
 export const GRANS = ['day', 'week', 'month'] as const;
-/** 粒度 → 默认排序键（PRD §5.5：粒度切换即排序口径切换） */
+/** 粒度 → 默认排序键（PRD §5.5） */
 export const defaultSortFor = (g: string): string =>
   g === 'day' ? 'delta_1d' : g === 'week' ? 'delta_7d' : 'score';
 

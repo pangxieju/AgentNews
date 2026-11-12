@@ -26,7 +26,17 @@ const zh: Dict = {
   'app.copy': '复制',
   'app.copied': '已复制',
   'app.notRanked': '未上榜',
+  'app.notFound': '页面不存在',
+  'app.home': '回到首页',
 
+  // ── 404 ──
+  'notfound.lede': '这个地址不存在或已被合并。试试从首页或榜单进入。',
+
+  // ── 数据下载 ──
+  'data.crumb': '数据',
+  'data.eyebrow': '下载与引用',
+  'data.title': '数据下载',
+  'data.lede': '快照、指标与引用格式。榜单数据可下载、可复现、可追溯。',
   // ── 导航 ──
   'nav.index': '总览',
   'nav.board': '榜单',
@@ -49,9 +59,8 @@ const zh: Dict = {
   'footer.line': '{name} · {tagline} · 快照 {date} · 开源 {open} / 闭源 {closed}',
   'footer.principles': '可比的才排名 · 综合分是观点，非客观事实',
   'footer.method': '方法与口径',
-  'footer.changelog': '变更记录',
-  'footer.archive': '数据归档',
-  'footer.security': '安全公告',
+  'footer.data': '数据下载',
+  'footer.rss': 'RSS',
 
   // ── 形态 ──
   'form.cli': 'CLI',
@@ -449,7 +458,17 @@ const en: Dict = {
   'app.copy': 'Copy',
   'app.copied': 'Copied',
   'app.notRanked': 'Not ranked',
+  'app.notFound': 'Not found',
+  'app.home': 'Back to home',
 
+  // ── 404 ──
+  'notfound.lede': 'This page does not exist or was merged. Start from the home page or a board.',
+
+  // ── Data ──
+  'data.crumb': 'Data',
+  'data.eyebrow': 'Download & Cite',
+  'data.title': 'Data',
+  'data.lede': 'Snapshots, metrics and citation formats. Ranked data is downloadable, reproducible and auditable.',
   'nav.index': 'Index',
   'nav.board': 'Board',
   'nav.compare': 'Compare',
@@ -470,9 +489,8 @@ const en: Dict = {
   'footer.line': '{name} · {tagline} · Snapshot {date} · {open} open / {closed} closed',
   'footer.principles': 'Only comparable things get ranked · Score is an opinion, not a fact',
   'footer.method': 'Method',
-  'footer.changelog': 'Changelog',
-  'footer.archive': 'Archive',
-  'footer.security': 'Security',
+  'footer.data': 'Data',
+  'footer.rss': 'RSS',
 
   'form.cli': 'CLI',
   'form.ide-plugin': 'IDE Extension',

@@ -1,5 +1,6 @@
 ---
 import { loadLatestScores, loadAgentsMeta } from '../lib/data';
+import { isListed } from '../lib/shared';
 import PinTray from '../components/PinTray';
 import {
   HTML_LANG,
@@ -18,7 +19,7 @@ const date = data?.date ?? '—';
 const agentsMeta = loadAgentsMeta();
 
 const path = Astro.url.pathname;
-const props = Astro.props as { lang?: Lang; pageTitle?: string; description?: string };
+const props = Astro.props as { lang?: Lang; pageTitle?: string; description?: string; noindex?: boolean };
 const lang: Lang = props.lang ?? langOf(path);
 const base = stripLang(path);
 const SITE = Astro.site ?? new URL('https://agentnews.example.com');
@@ -38,10 +39,6 @@ const NAV = [
   { key: 'index', href: '/' },
   { key: 'board', href: '/top/open/all/month/' },
   { key: 'compare', href: '/compare/' },
-  { key: 'new', href: '/rising/' },
-  { key: 'log', href: '/activity/' },
-  { key: 'osv', href: '/security/' },
-  { key: 'archive', href: '/archive/' },
   { key: 'method', href: '/about/' },
 ];
 const isActive = (href: string) =>
@@ -58,7 +55,7 @@ for (const r of rows) {
     iconFallback: agentsMeta[r.slug]?.iconFallback ?? null,
   };
 }
-const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
+const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').length;
 ---
 
 <!doctype html>
@@ -68,6 +65,7 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle} · AgentNews</title>
     <meta name="description" content={description} />
+    {props.noindex && <meta name="robots" content="noindex,follow" />}
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
@@ -1640,9 +1638,8 @@ const openCount = rows.filter((r) => r.oss_bucket !== 'closed').length;
         </div>
         <nav aria-label={t(lang, 'footer.method')}>
           <a href={pathFor(lang, '/about/')}>{t(lang, 'footer.method')}</a>
-          <a href={pathFor(lang, '/changelog/')}>{t(lang, 'footer.changelog')}</a>
-          <a href={pathFor(lang, '/archive/')}>{t(lang, 'footer.archive')}</a>
-          <a href={pathFor(lang, '/security/')}>{t(lang, 'footer.security')}</a>
+          <a href={pathFor(lang, '/data/')}>{t(lang, 'footer.data')}</a>
+          <a href="/feed.xml">{t(lang, 'footer.rss')}</a>
         </nav>
       </div>
     </footer>
