@@ -31,7 +31,7 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
       },
       {
         date: '2026-11-12',
-        change: '分数命名空间分离：同一形态内开源（open+semi）与闭源分开做组内分位与排名',
+        change: '分数命名空间分离（score_version → v2）：同一形态内开源（open+semi）与闭源分开做组内分位与排名',
         reason:
           '开源有 star/contributors，闭源只有安装/用量；混在一个分位里会让闭源系统性吃亏，也让「同形态内可比」不成立。榜单的开/闭源 tab 现在各自对应一套分位',
       },
@@ -158,7 +158,7 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
       },
       {
         date: '2026-11-12',
-        change: 'Score namespaces split: open (open+semi) and closed now get separate in-form percentiles and ranks',
+        change: 'Score namespaces split (score_version → v2): open (open+semi) and closed now get separate in-form percentiles and ranks',
         reason:
           'Open-source entries have stars and contributors; closed ones only have installs and usage. Mixing them in one percentile systematically penalised closed products and broke “comparable within a form”. The open/closed board tabs now map to their own distribution',
       },

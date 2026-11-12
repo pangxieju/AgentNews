@@ -117,7 +117,7 @@ type MetricKey =
   
 export type Metrics = Partial<Record<MetricKey, number | string | null>>;
 
-export const SCORE_VERSION = 'v1';
+export const SCORE_VERSION = 'v2';
 
 /** 打分输出（score_daily / score_periodic 的 TS 形态） */
 export type ScoreRow = {
