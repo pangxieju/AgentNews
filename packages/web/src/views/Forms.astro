@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import { loadLatestScores, loadAgentsMeta, fmt, fmtPct } from '../lib/data';
-import { FORM_ORDER } from '../lib/shared';
+import { FOCUS_FORMS, isListed } from '../lib/shared';
 import { FORM_GUIDES } from '../i18n/guides';
 import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
 
@@ -12,27 +12,25 @@ interface Props {
 }
 const { lang, form } = Astro.props;
 const H = (p: string) => pathFor(lang, p);
-const guide = FORM_GUIDES[lang][form];
+const isFocusForm = (FOCUS_FORMS as readonly string[]).includes(form);
+const guide = isFocusForm ? FORM_GUIDES[lang][form] : undefined;
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
 const meta = loadAgentsMeta();
 
-const list = rows.filter((r) => r.form === form).sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+const list = rows
+  .filter((r) => isListed(r) && r.form === form)
+  .sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
 const openCount = list.filter((r) => r.oss_bucket !== 'closed').length;
 const hasGrowth = list.some((r) => r.growth_30d_pct != null);
 const top2 = list.filter((r) => r.score != null).slice(0, 2);
-const others = FORM_ORDER.filter((f) => f !== form).map((f) => ({
-  form: f,
-  label: formLabel(lang, f),
-  en: FORM_GUIDES[lang][f]?.en ?? '',
-}));
 
 const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
 ---
 
-<Base lang={lang} pageTitle={`${formLabel(lang, form)} · AgentNews`}>
+<Base lang={lang} noindex={!guide} pageTitle={`${formLabel(lang, form)} · AgentNews`}>
   {!guide ? (
     <div class="page-head"><h1>{t(lang, 'agent.notFound')}</h1></div>
   ) : (
@@ -129,23 +127,6 @@ const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-
           </div>
         </section>
       )}
-
-      <section class="section">
-        <div class="section-title">
-          <h2>{t(lang, 'forms.others')}</h2>
-          <span class="muted">{t(lang, 'forms.othersHint')}</span>
-        </div>
-        <div class="row" style="gap:10px">
-          {others.map((o) => (
-            <a class="btn btn-sm" href={H(`/forms/${o.form}/`)}>
-              {o.label}
-              {o.en && o.en.toLowerCase() !== o.label.toLowerCase() && (
-                <span class="mono" style="opacity:.55">{o.en}</span>
-              )}
-            </a>
-          ))}
-        </div>
-      </section>
     </>
   )}
 </Base>

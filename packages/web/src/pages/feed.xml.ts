@@ -1,35 +1,74 @@
 import type { APIRoute } from 'astro';
 import { loadLatestScores } from '../lib/data';
+import { isListed } from '../lib/shared';
+
+/** XML 文本转义：先 & 再其余，顺序不能换 */
+const esc = (v: unknown): string =>
+  String(v ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+
+/** 任意日期串 → RFC 822；无法解析时返回 null */
+const toStamp = (v: string | null | undefined): string | null => {
+  if (!v) return null;
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? null : d.toUTCString();
+};
 
 export const GET: APIRoute = ({ site }) => {
-  const data = loadLatestScores();
   const base = site?.toString().replace(/\/$/, '') ?? 'https://agentnews-c5h.pages.dev';
+  const data = loadLatestScores();
   const date = data?.date ?? '';
-  const rows = data?.rows ?? [];
-  const items = rows
+  /* 列表口径统一：冻结形态与误分类条目不进 feed */
+  const rows = (data?.rows ?? [])
+    .filter(isListed)
     .filter((r) => r.score != null)
-    .slice(0, 30)
-    .map((r) => {
-      const pub = r.metrics?.last_release ?? r.metrics?.last_commit ?? date;
-      const stamp = pub ? new Date(pub).toUTCString() : new Date().toUTCString();
-      return `    <item>
-      <title>${r.name ?? r.slug}: score ${r.score} · rank #${r.rank_in_form ?? '—'}</title>
-      <link>${base}/agent/${r.slug}/</link>
-      <guid>${base}/agent/${r.slug}/#${date}</guid>
+    /* 快照文件按形态分组排列，直接切前 30 会全是 cli —— 按综合分取全局前 30 */
+    .sort(
+      (a, b) =>
+        (b.score ?? 0) - (a.score ?? 0) ||
+        (a.rank_in_form ?? 999) - (b.rank_in_form ?? 999) ||
+        a.slug.localeCompare(b.slug),
+    );
+
+  const buildStamp = toStamp(date) ?? new Date().toUTCString();
+
+  const items = rows.slice(0, 30).map((r) => {
+    const link = `${base}/agent/${r.slug}/`;
+    /* pubDate 取最近一次发布，退回到最近提交，再退回到快照日 */
+    const stamp = toStamp(r.metrics?.last_release) ?? toStamp(r.metrics?.last_commit) ?? buildStamp;
+    const rank = r.rank_in_form ?? '—';
+    const title = `${r.name ?? r.slug} · score ${r.score} · rank #${rank} (${r.form})`;
+    const desc = `AgentNews snapshot ${date}. form ${r.form}, ${r.oss_bucket === 'open' ? 'open source' : 'closed source'}, data level ${r.data_level}.`;
+    return `    <item>
+      <title>${esc(title)}</title>
+      <link>${esc(link)}</link>
+      <guid isPermaLink="false">${esc(`${r.slug}@${date}`)}</guid>
       <pubDate>${stamp}</pubDate>
-      <description>AgentNews snapshot ${date} — form ${r.form}, data level ${r.data_level}.</description>
+      <description>${esc(desc)}</description>
     </item>`;
-    });
+  });
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>AgentNews · AI Agent Index</title>
-    <link>${base}/</link>
-    <description>Rankings and releases across AI coding agents.</description>
-    <atom:link href="${base}/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <link>${esc(`${base}/`)}</link>
+    <description>Rankings across AI coding agents: CLI, IDE plugins and IDE apps. One snapshot per day, top 30 listed agents.</description>
+    <language>en</language>
+    <atom:link href="${esc(`${base}/feed.xml`)}" rel="self" type="application/rss+xml" />
+    <lastBuildDate>${buildStamp}</lastBuildDate>
 ${items.join('\n')}
   </channel>
 </rss>`;
-  return new Response(xml, { headers: { 'content-type': 'application/rss+xml; charset=utf-8' } });
+
+  return new Response(xml, {
+    headers: {
+      'content-type': 'application/rss+xml; charset=utf-8',
+      'cache-control': 'public, max-age=3600',
+    },
+  });
 };

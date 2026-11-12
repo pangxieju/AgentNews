@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { CHANGELOG } from '../i18n/content';
 import { type Lang, pathFor, t } from '../i18n/dict';
 
 interface Props {
@@ -73,6 +74,137 @@ const weights: Array<[string, string]> = [
     <div class="section-title"><h2>{t(lang, 'about.disclaimer')}</h2></div>
     <div class="box">
       <div class="box-body muted">{t(lang, 'about.disclaimerText')}</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>{t(lang, 'changelog.algo')}</h2>
+      <span class="muted">score_version v1 · {t(lang, 'changelog.current')}</span>
+    </div>
+    <div class="box">
+      <div class="box-header">{lang === 'en' ? 'Weights (v1)' : '权重（v1）'}</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{lang === 'en' ? 'Metric' : '指标'}</th>
+              <th class="num">{lang === 'en' ? 'Weight' : '权重'}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {weights.map(([label, pct]) => (
+              <tr>
+                <td>{label}</td>
+                <td class="num">{pct}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="box-body">
+        <div class="notice">{t(lang, 'changelog.normalize')}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>{t(lang, 'changelog.title')}</h2>
+      <span class="muted">score_version v1</span>
+    </div>
+    <p class="muted" style="margin:0 0 14px;font-size:13px">{t(lang, 'changelog.lede')}</p>
+    {[
+      { title: t(lang, 'changelog.spec'), rows: CHANGELOG[lang].spec },
+      { title: t(lang, 'changelog.product'), rows: CHANGELOG[lang].product },
+      { title: t(lang, 'changelog.entries'), rows: CHANGELOG[lang].entries },
+    ].map((block) => (
+      <div class="box" style="margin-bottom:14px">
+        <div class="box-header">{block.title}</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{t(lang, 'changelog.date')}</th>
+                <th>{t(lang, 'changelog.change')}</th>
+                <th>{t(lang, 'changelog.reason')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {block.rows.map((r) => (
+                <tr>
+                  <td class="mono" style="white-space:nowrap">{r.date}</td>
+                  <td set:html={r.change}></td>
+                  <td set:html={r.reason}></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="section">
+    <div class="section-title"><h2>{t(lang, 'security.warnTitle')}</h2></div>
+    <div class="box">
+      <div class="box-body muted">
+        <p style="margin:0 0 10px">
+          {lang === 'en'
+            ? 'We do not endorse any project and we do not issue security ratings. The “Security advisories” block on a detail page only aggregates public OSV.dev advisories and links to the original reports; it cannot tell you whether a flaw is actually fixed, or whether your usage is affected.'
+            : '我们不背书任何项目，也不做安全评级。详情页的「安全公告」只聚合 OSV.dev 的公开公告并附原文链接；公告本身不能说明漏洞是否已修复，也不能说明你的使用方式是否受影响。'}
+        </p>
+        <p style="margin:0;font-size:12.5px">
+          {lang === 'en'
+            ? 'No package channel means no OSV lookup — “nothing found” is not a clean bill of health. Follow the source link and verify yourself.'
+            : '没有包管理渠道就没有 OSV 查询 —— 「查不到」不等于安全。请点原文链接自行核实。'}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <a id="corrections"></a>
+    <div class="section-title"><h2>{lang === 'en' ? 'Corrections & claims' : '纠错与认领'}</h2></div>
+    <div class="box">
+      <div class="box-body muted">
+        <p style="margin:0 0 10px">{t(lang, 'changelog.fixNoteBody')}</p>
+        <p style="margin:0 0 10px">
+          {lang === 'en'
+            ? 'Open a GitHub issue with the slug, the wrong field and the evidence (repo, package page, release notes). We triage within 3 business days; confirmed errors are fixed in the next snapshot.'
+            : '在 GitHub 提 issue，写清 slug、出错的字段与证据（仓库、包主页、发布记录）。3 个工作日内给出处理结论，确认有误的条目在下一个快照修正。'}
+        </p>
+        <p style="margin:0 0 10px">
+          {lang === 'en'
+            ? 'Maintainers: claim a listing from the project’s official account. A claim affects contact and copy only — never scores or ranks.'
+            : '项目方认领：请用项目官方账号提 issue。认领只影响联系信息与文案，不影响分数与排名。'}
+        </p>
+        <p style="margin:0">
+          <a href={h('/data/')}>{t(lang, 'data.title')}</a>
+          <span>· {lang === 'en' ? 'raw snapshots and citation formats' : '原始快照与引用格式'}</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><h2>{lang === 'en' ? 'Citation & reuse' : '引用与转载'}</h2></div>
+    <div class="box">
+      <div class="box-body muted">
+        <p style="margin:0 0 10px">
+          {lang === 'en'
+            ? 'Reuse the numbers freely, but keep the source link and the snapshot date — a rank without a date is a different claim. Do not alter the numbers; quote the snapshot instead.'
+            : '数字可自由转载，但请保留来源链接与快照日期 —— 没有日期的名次是另一句话。请不要改动数字，直接引用快照。'}
+        </p>
+        <div class="notice mono" style="font-size:12px;line-height:1.7">
+          AgentNews. (YYYY-MM-DD). “AI Agent Leaderboard — CLI · open · 30 days”. /top/cli/open/all/month/.
+          {' '}{lang === 'en' ? 'Accessed' : '访问于'} YYYY-MM-DD.
+        </div>
+        <p style="margin:10px 0 0;font-size:12.5px">
+          <a href={h('/data/')}>{t(lang, 'data.title')}</a>
+          <span>· {lang === 'en' ? 'per-snapshot exports and the machine-readable citation' : '按快照导出与机器可读引用'}</span>
+        </p>
+      </div>
     </div>
   </section>
 </Base>

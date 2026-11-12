@@ -3,10 +3,10 @@ import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import GroupPos from '../components/GroupPos.astro';
 import LineChart from '../components/charts/LineChart.astro';
-import { backlogPer1kStars, elapsedHours, forkStarPct, medianReleaseGapDays } from '@agentnews/core';
+import { elapsedHours, medianReleaseGapDays } from '@agentnews/core';
 import { loadLatestScores, loadSecurity, loadAgentsMeta, loadHistory, loadVersionHistory, fmt, fmtPct, fmtSigned } from '../lib/data';
 import { buildGroupBoard, type HealthKey } from '../lib/group';
-import { installInfo } from '../lib/shared';
+import { installInfo, isListed } from '../lib/shared';
 import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
 
 interface Props {
@@ -21,17 +21,20 @@ const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
 
 const row = rows.find((r) => r.slug === slug);
+/** 冻结形态或误分类：页面保留（不再出现在任何列表），但整页 noindex */
+const frozen = !!row && !isListed(row);
 const sec = loadSecurity()?.subjects?.[slug];
 const agentsMeta = loadAgentsMeta();
 const meta = agentsMeta[slug];
 const history = loadHistory(slug);
 const starPts = history.filter((h) => h.stars != null).map((h) => ({ x: h.date, y: h.stars! }));
 const scorePts = history.filter((h) => h.score != null).map((h) => ({ x: h.date, y: h.score! }));
-const trendReady = starPts.length >= 2;
+/** 折线要 ≥7 天才算趋势；2-6 天只是噪声，仍给「数据积累」提示 */
+const trendReady = starPts.length >= 7;
 const versions = loadVersionHistory(slug);
 const info = installInfo(meta?.sources ?? [], meta?.homepage ?? null);
 const siblings = rows
-  .filter((r) => r.form === row?.form && r.slug !== slug && r.score != null)
+  .filter((r) => isListed(r) && r.form === row?.form && r.slug !== slug && r.score != null)
   .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
   .slice(0, 4);
 
@@ -69,10 +72,21 @@ const posTitle = (k: HealthKey): string => {
 const medText = (k: HealthKey, format: (v: number | null) => string): string =>
   t(lang, 'agent.healthMedian', { v: format(med(k)) });
 
-const backlog = row ? backlogPer1kStars(row.metrics?.open_issues, row.metrics?.stars) : null;
-const forkPct = row ? forkStarPct(row.metrics?.forks, row.metrics?.stars) : null;
 /** 活跃度分只有在存在提交/发版证据时才可信（否则是「未知」而不是 0） */
 const activityEvidence = !!(row?.metrics?.last_commit || row?.metrics?.last_release);
+/** 一个指标都没有：只有收录信息，页面上没什么可算的 */
+const noMetrics = ![
+  row?.metrics?.stars,
+  row?.metrics?.forks,
+  row?.metrics?.contributors,
+  row?.metrics?.installs,
+  row?.metrics?.activity,
+  row?.metrics?.last_release,
+  row?.metrics?.last_commit,
+  row?.metrics?.open_issues,
+].some((v) => v != null);
+/** L3 或整行无指标 → 退化成「事实页」：不排名、不画趋势、不做维护健康 */
+const factsOnly = !!row && (row.data_level === 'L3' || noMetrics);
 /** 发版节奏：只认版本的发布时刻（version_at），不认快照日期 */
 const cadence = medianReleaseGapDays(versions.map((v) => v.version_at ?? v.date));
 
@@ -94,9 +108,13 @@ const versionLink = (() => {
   if (pypi) return `https://pypi.org/project/${pypi.identifier}/${v}/`;
   return null;
 })();
+
+/** 引用格式：快照日期 + 本页 URL（域名优先取 Astro.site）*/
+const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
+const citeUrl = row ? new URL(H(`/agent/${row.slug}/`), SITE).href : '';
 ---
 
-<Base lang={lang} pageTitle={row ? `${row.name ?? row.slug} · AgentNews` : t(lang, 'agent.notFound')}>
+<Base lang={lang} noindex={frozen} pageTitle={row ? `${row.name ?? row.slug} · AgentNews` : t(lang, 'agent.notFound')}>
   {!row ? (
     <div class="page-head"><h1>{t(lang, 'agent.notFound')}</h1></div>
   ) : (
@@ -141,10 +159,18 @@ const versionLink = (() => {
                 {fmtPct(row.growth_30d_pct)}
               </b>
             </div>
-            <div><span data-k>{t(lang, 'agent.statLevel')}</span><b>{row.data_level}</b></div>
+            <div><span data-k>{t(lang, 'agent.statLevel')}</span><b>{factsOnly ? '—' : row.data_level}</b></div>
           </div>
         </aside>
       </section>
+
+      {frozen && (
+        <div class="warn" style="margin-top:16px">
+          {lang === 'en'
+            ? 'Frozen · experimental section, data no longer tracked'
+            : '实验区 · 已冻结，数据不再更新'}
+        </div>
+      )}
 
       <section class="section">
         <div class="section-title">
@@ -185,8 +211,38 @@ const versionLink = (() => {
           <div>
             <h3>{t(lang, 'agent.facts')}</h3>
             <div class="stat-rail" style="border-top:0">
+              {factsOnly && (
+                <>
+                  <div>
+                    <span data-k>{lang === 'en' ? 'Form' : '形态'}</span>
+                    <b style="font-size:12.5px">{formLabel(lang, row.form)}</b>
+                  </div>
+                  <div>
+                    <span data-k>{t(lang, 'metric.bucket')}</span>
+                    <b style="font-size:12.5px">{bucketText(lang, row.oss_bucket)}</b>
+                  </div>
+                  <div>
+                    <span data-k>{lang === 'en' ? 'Vendor' : '厂商'}</span>
+                    <b style="font-size:12.5px">{meta?.vendor ?? '—'}</b>
+                  </div>
+                </>
+              )}
               <div><span data-k>{t(lang, 'agent.channel')}</span><b style="font-size:12.5px">{info.channel}</b></div>
               <div><span data-k>{t(lang, 'agent.license')}</span><b style="font-size:12.5px">{meta?.license ?? '—'}</b></div>
+              {factsOnly && (
+                <div>
+                  <span data-k>{lang === 'en' ? 'Website' : '官网'}</span>
+                  <b style="font-size:12.5px">
+                    {meta?.homepage ? (
+                      <a href={meta.homepage} target="_blank" rel="noopener">
+                        {lang === 'en' ? 'visit ↗' : '访问 ↗'}
+                      </a>
+                    ) : (
+                      '—'
+                    )}
+                  </b>
+                </div>
+              )}
               <div>
                 <span data-k>{t(lang, 'agent.lastRelease')}</span>
                 <b style="font-size:12.5px">
@@ -219,6 +275,21 @@ const versionLink = (() => {
         </div>
       </section>
 
+      {factsOnly ? (
+        <section class="section">
+          <div class="section-title">
+            <h2>{t(lang, 'agent.versions')}</h2>
+            <span class="muted">{row.metrics?.version ?? t(lang, 'app.none')}</span>
+          </div>
+          <div class="notice">
+            {row.metrics?.version
+              ? [row.metrics.version, row.metrics.version_source, row.metrics.version_at?.slice(0, 10)]
+                  .filter((s) => !!s)
+                  .join(' · ')
+              : t(lang, 'agent.versionMissing')}
+          </div>
+        </section>
+      ) : (
       <section class="section">
         <div class="section-title">
           <h2>{t(lang, 'agent.versions')}</h2>
@@ -293,22 +364,15 @@ const versionLink = (() => {
           <div class="notice">{t(lang, 'agent.versionMissing')}</div>
         )}
       </section>
+      )}
 
+      {!factsOnly && (
       <section class="section">
         <div class="section-title">
           <h2>{t(lang, 'agent.health')}</h2>
           <span class="muted">{t(lang, 'agent.healthHint', { n: board?.n ?? 0 })}</span>
         </div>
-        <div class="grid grid-4">
-          <div class="card health-card">
-            <h2>{t(lang, 'agent.healthCommit')}</h2>
-            <div class="num">{rel(row.metrics?.last_commit)}</div>
-            <div class="detail">{t(lang, 'agent.healthCommitHint')}</div>
-            <div class="health-pos">
-              <GroupPos p={pos('commit')?.p ?? null} n={pos('commit')?.n} title={posTitle('commit')} />
-              <span>{medText('commit', (v) => daysText(v))}</span>
-            </div>
-          </div>
+        <div class="grid grid-4" style="grid-template-columns:repeat(2,minmax(0,1fr))">
           <div class="card health-card">
             <h2>{t(lang, 'agent.healthRelease')}</h2>
             <div class="num">{rel(row.metrics?.last_release)}</div>
@@ -323,31 +387,20 @@ const versionLink = (() => {
             </div>
           </div>
           <div class="card health-card">
-            <h2>{t(lang, 'agent.healthBacklog')}</h2>
-            <div class="num">{fmt(row.metrics?.open_issues)}</div>
-            <div class="detail">
-              {backlog != null
-                ? t(lang, 'agent.healthBacklogHint', { v: backlog })
-                : t(lang, 'agent.healthBacklogNoData')}
-            </div>
+            <h2>{t(lang, 'agent.healthCommit')}</h2>
+            <div class="num">{rel(row.metrics?.last_commit)}</div>
+            <div class="detail">{t(lang, 'agent.healthCommitHint')}</div>
             <div class="health-pos">
-              <GroupPos p={pos('backlog')?.p ?? null} n={pos('backlog')?.n} title={posTitle('backlog')} />
-              <span>{medText('backlog', (v) => (v == null ? '—' : String(Math.round(v * 10) / 10)))}</span>
-            </div>
-          </div>
-          <div class="card health-card">
-            <h2>{t(lang, 'agent.healthFork')}</h2>
-            <div class="num">{forkPct != null ? `${forkPct}%` : '—'}</div>
-            <div class="detail">{t(lang, 'agent.healthForkHint')}</div>
-            <div class="health-pos">
-              <GroupPos p={pos('forkStar')?.p ?? null} n={pos('forkStar')?.n} title={posTitle('forkStar')} />
-              <span>{medText('forkStar', (v) => (v == null ? '—' : `${Math.round(v * 10) / 10}%`))}</span>
+              <GroupPos p={pos('commit')?.p ?? null} n={pos('commit')?.n} title={posTitle('commit')} />
+              <span>{medText('commit', (v) => daysText(v))}</span>
             </div>
           </div>
         </div>
         <p class="muted" style="font-size:11.5px;margin-top:10px">{t(lang, 'agent.healthNote')}</p>
       </section>
+      )}
 
+      {!factsOnly && (
       <section class="section">
         <div class="section-title">
           <h2>{t(lang, 'agent.trend')}</h2>
@@ -372,15 +425,17 @@ const versionLink = (() => {
           <div class="notice">{t(lang, 'agent.trendEmpty', { date: history[0]?.date ?? date })}</div>
         )}
       </section>
+      )}
 
+      {!factsOnly && (
       <section class="section">
-        <div class="box">
-          <div class="box-header">
-            <span>{t(lang, 'agent.metrics')}</span>
+        <details class="box">
+          <summary class="box-header" style="cursor:pointer;list-style:none">
+            <span>{lang === 'en' ? 'All metrics' : '全部指标'}</span>
             <span class="muted" style="font-size:10px;letter-spacing:0.06em">
               {t(lang, 'agent.groupPosLegend')}
             </span>
-          </div>
+          </summary>
           <div class="table-wrap">
             <table>
               <thead>
@@ -458,8 +513,9 @@ const versionLink = (() => {
               </tbody>
             </table>
           </div>
-        </div>
+        </details>
       </section>
+      )}
 
       {row.metrics?.openrouter_tokens_month != null && (
         <section class="section">
@@ -552,6 +608,27 @@ const versionLink = (() => {
           </div>
         </section>
       )}
+
+      <section class="section">
+        <div class="box">
+          <div class="box-body" style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+            <span class="muted" style="font-size:12.5px">
+              {lang === 'en' ? 'Found an error, or want to claim this entry?' : '发现错误，或者想认领这个条目？'}
+            </span>
+            <a class="btn btn-sm" href={H('/about/#corrections')}>
+              {lang === 'en' ? 'Corrections & claims ↗' : '纠错 / 认领 ↗'}
+            </a>
+          </div>
+        </div>
+        <div class="box" style="margin-top:10px">
+          <div class="box-header"><span>{lang === 'en' ? 'Cite this page' : '引用此页'}</span></div>
+          <div class="box-body">
+            <p class="mono" style="font-size:12px;word-break:break-all;color:var(--ink-3)">
+              {`AgentNews (${date}). "${row.name ?? row.slug}". AI Agent Index. ${citeUrl}`}
+            </p>
+          </div>
+        </div>
+      </section>
 
       <section class="section">
         <div class="section-title"><h2>{t(lang, 'agent.security')}</h2></div>

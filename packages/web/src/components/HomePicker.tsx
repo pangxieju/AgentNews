@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'preact/hooks';
 import AgentIcon from './AgentIcon';
 import { type Lang, pathFor, t, formLabel, bucketText } from '../i18n/dict';
-import { fmt } from '../lib/shared';
+import { FOCUS_FORMS, fmt } from '../lib/shared';
 import type { IconMeta } from './RankBoard';
 
 export type PickRow = {
@@ -42,12 +42,13 @@ export default function HomePicker({ items, meta, lang }: Props) {
       .sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
   }, [items, q, bucket, form]);
 
-  const shown = list.slice(0, 8);
+  const shown = list.slice(0, 10);
   const go = (slug: string) => {
     window.location.href = H(`/agent/${slug}/`);
   };
 
-  const forms = ['all', ...new Set(items.map((i) => i.form))];
+  /** 只提供聚焦形态的筛选（items 已由 Home 过滤 isListed，这里再按契约收窄形态） */
+  const forms: string[] = ['all', ...FOCUS_FORMS];
 
   return (
     <div class="picker">

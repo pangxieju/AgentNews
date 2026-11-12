@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import AgentIcon from './AgentIcon';
 import { PIN_EVENT, readPins, togglePin } from '../lib/pins';
-import { fmt, fmtPct, fmtSigned, rankUrl, defaultSortFor, GRANS, FORM_ORDER } from '../lib/shared';
+import { fmt, rankUrl, defaultSortFor, GRANS_UI, FOCUS_FORMS, isListed } from '../lib/shared';
 import { type Lang, bucketText, flagLabel, formLabel, granLabel, pathFor, t } from '../i18n/dict';
 
 export type RankRow = {
@@ -23,6 +23,10 @@ export type RankRow = {
   };
   flags: string[];
   data_level: string;
+  /** 最近发版时间（ISO 字符串，展示时截前 10 位） */
+  last_release?: string | null;
+  /** 许可证 id（来自 agents.yaml，缺失为 null） */
+  license?: string | null;
 };
 
 export type IconMeta = { icon: string | null; iconFallback: string | null };
@@ -36,41 +40,101 @@ interface Props {
   lang: Lang;
 }
 
-type SortKey = 'score' | 'stars' | 'delta_1d' | 'delta_7d' | 'growth_30d_pct' | 'installs' | 'activity' | 'openrouter_tokens_month';
+type SortKey =
+  | 'score'
+  | 'installs'
+  | 'activity'
+  | 'openrouter_tokens_month'
+  | 'last_release'
+  | 'license'
+  | 'data_level'
+  | 'delta_1d'
+  | 'delta_7d';
 
 type Col = {
   key: SortKey;
   label: string;
+  /** 排序值（数值列同时用于条形宽度）；纯文本列返回 null */
   get: (r: RankRow) => number | null;
   show: (rows: RankRow[]) => boolean;
   format: (r: RankRow) => string;
   bar?: boolean;
+  /** 默认 true；纯文本列设为 false，表头不渲染排序按钮 */
+  sortable?: boolean;
 };
 
-function columns(lang: Lang): Col[] {
-  return [
-    { key: 'score', label: t(lang, 'metric.score'), get: (r) => r.score, show: () => true, format: (r) => (r.score != null ? String(r.score) : '—'), bar: true },
-    { key: 'stars', label: t(lang, 'metric.stars'), get: (r) => r.metrics.stars, show: (rs) => rs.some((r) => r.metrics.stars != null), format: (r) => fmt(r.metrics.stars), bar: true },
-    { key: 'installs', label: t(lang, 'metric.installs'), get: (r) => r.metrics.installs, show: (rs) => rs.some((r) => r.metrics.installs != null), format: (r) => fmt(r.metrics.installs), bar: true },
-    { key: 'activity', label: t(lang, 'metric.activityShort'), get: (r) => r.metrics.activity, show: (rs) => rs.some((r) => r.metrics.activity != null), format: (r) => (r.metrics.activity != null ? r.metrics.activity.toFixed(2) : '—') },
-    {
-      key: 'openrouter_tokens_month',
-      label: t(lang, 'metric.openrouterTokens'),
-      get: (r) => r.metrics.openrouter_tokens_month ?? null,
-      show: (rs) => rs.some((r) => r.metrics.openrouter_tokens_month != null),
-      format: (r) => fmt(r.metrics.openrouter_tokens_month),
-      bar: true,
-    },
-    { key: 'delta_1d', label: t(lang, 'metric.delta1d'), get: (r) => r.delta_1d, show: (rs) => rs.some((r) => r.delta_1d != null), format: (r) => fmtSigned(r.delta_1d) },
-    { key: 'delta_7d', label: t(lang, 'metric.delta7d'), get: (r) => r.delta_7d, show: (rs) => rs.some((r) => r.delta_7d != null), format: (r) => fmtSigned(r.delta_7d) },
-    { key: 'growth_30d_pct', label: t(lang, 'metric.growth30d'), get: (r) => r.growth_30d_pct, show: (rs) => rs.some((r) => r.growth_30d_pct != null), format: (r) => fmtPct(r.growth_30d_pct) },
-  ];
+/** 发版时间 → 可比较的时间戳（缺失或非法为 null，排序时排最后） */
+function releaseTs(v: string | null | undefined): number | null {
+  if (!v) return null;
+  const ts = Date.parse(v);
+  return Number.isNaN(ts) ? null : ts;
+}
+
+function columns(lang: Lang, bucket: string): Col[] {
+  const score: Col = {
+    key: 'score',
+    label: t(lang, 'metric.score'),
+    get: (r) => r.score,
+    show: () => true,
+    format: (r) => (r.score != null ? String(r.score) : '—'),
+    bar: true,
+  };
+  const installs: Col = {
+    key: 'installs',
+    label: t(lang, 'metric.installs'),
+    get: (r) => r.metrics.installs,
+    show: (rs) => rs.some((r) => r.metrics.installs != null),
+    format: (r) => fmt(r.metrics.installs),
+    bar: true,
+  };
+  const activity: Col = {
+    key: 'activity',
+    label: t(lang, 'metric.activityShort'),
+    get: (r) => r.metrics.activity,
+    show: (rs) => rs.some((r) => r.metrics.activity != null),
+    format: (r) => (r.metrics.activity != null ? r.metrics.activity.toFixed(2) : '—'),
+  };
+  const tokens: Col = {
+    key: 'openrouter_tokens_month',
+    label: t(lang, 'metric.openrouterTokens'),
+    get: (r) => r.metrics.openrouter_tokens_month ?? null,
+    show: (rs) => rs.some((r) => r.metrics.openrouter_tokens_month != null),
+    format: (r) => fmt(r.metrics.openrouter_tokens_month),
+    bar: true,
+  };
+  const release: Col = {
+    key: 'last_release',
+    label: t(lang, 'metric.release'),
+    get: (r) => releaseTs(r.last_release),
+    show: (rs) => rs.some((r) => r.last_release != null),
+    format: (r) => (r.last_release ? String(r.last_release).slice(0, 10) : '—'),
+  };
+  const license: Col = {
+    key: 'license',
+    label: t(lang, 'metric.license'),
+    get: () => null,
+    show: (rs) => rs.some((r) => r.license != null),
+    format: (r) => r.license ?? '—',
+    sortable: false,
+  };
+  const level: Col = {
+    key: 'data_level',
+    label: t(lang, 'metric.level'),
+    get: () => null,
+    show: (rs) => rs.some((r) => !!r.data_level),
+    format: (r) => (r.data_level ? String(r.data_level) : '—'),
+    sortable: false,
+  };
+
+  // 开闭源看不同指标：闭源看 OpenRouter 用量与数据置信度，开源看活跃度与许可证
+  return bucket === 'closed'
+    ? [score, installs, tokens, release, level]
+    : [score, installs, activity, release, license];
 }
 
 export default function RankBoard(props: Props) {
   const { lang } = props;
   const allRows = props.rows;
-  const COLS = useMemo(() => columns(lang), [lang]);
   const H = (p: string) => pathFor(lang, p);
 
   const [bucket, setBucket] = useState(props.bucket);
@@ -79,6 +143,9 @@ export default function RankBoard(props: Props) {
   const [sortKey, setSortKey] = useState<SortKey>(defaultSortFor(props.g) as SortKey);
   const [sortDir, setSortDir] = useState<'desc' | 'asc'>('desc');
   const [pins, setPins] = useState<string[]>([]);
+
+  // 列随 bucket 变化（开源/闭源指标不同）
+  const COLS = useMemo(() => columns(lang, bucket), [lang, bucket]);
 
   useEffect(() => {
     setPins(readPins());
@@ -99,7 +166,7 @@ export default function RankBoard(props: Props) {
   }, [COLS, allRows]);
 
   const filtered = useMemo(() => {
-    let list = allRows;
+    let list = allRows.filter(isListed);
     if (bucket === 'open') list = list.filter((r) => r.oss_bucket !== 'closed');
     if (bucket === 'closed') list = list.filter((r) => r.oss_bucket === 'closed');
     if (form !== 'all') list = list.filter((r) => r.form === form);
@@ -107,11 +174,12 @@ export default function RankBoard(props: Props) {
   }, [allRows, bucket, form]);
 
   const groups = useMemo(() => {
-    const col = COLS.find((c) => c.key === sortKey)!;
-    return FORM_ORDER.map((f) => {
+    const col = COLS.find((c) => c.key === sortKey);
+    return FOCUS_FORMS.map((f) => {
       const rows = filtered
         .filter((r) => r.form === f)
         .sort((a, b) => {
+          if (!col) return 0;
           const av = col.get(a);
           const bv = col.get(b);
           if (av == null && bv == null) return 0;
@@ -139,6 +207,15 @@ export default function RankBoard(props: Props) {
     setSortDir('desc');
   };
 
+  const changeBucket = (next: string) => {
+    setBucket(next);
+    // 新 bucket 没有当前排序列时回到默认排序
+    if (!columns(lang, next).some((c) => c.key === sortKey && c.sortable !== false)) {
+      setSortKey(defaultSortFor(gran) as SortKey);
+      setSortDir('desc');
+    }
+  };
+
   const clickHeader = (key: SortKey) => {
     if (key === sortKey) setSortDir((d) => (d === 'desc' ? 'asc' : 'desc'));
     else {
@@ -149,7 +226,7 @@ export default function RankBoard(props: Props) {
 
   const rankedCount = groups.reduce((n, g) => n + g.rows.filter((r) => r._displayRank != null).length, 0);
   const hasDeltas = allRows.some((r) => r.delta_1d != null || r.delta_7d != null);
-  const sortLabel = COLS.find((c) => c.key === sortKey)?.label ?? '';
+  const sortLabel = COLS.find((c) => c.key === sortKey)?.label ?? t(lang, 'metric.score');
 
   return (
     <div>
@@ -158,7 +235,7 @@ export default function RankBoard(props: Props) {
           <span class="eyebrow" style="font-size:10px">{t(lang, 'rank.owner')}</span>
           <div class="segmented" role="group" aria-label={t(lang, 'rank.owner')}>
             {['open', 'closed'].map((b) => (
-              <button type="button" aria-current={bucket === b ? 'page' : undefined} onClick={() => setBucket(b)}>
+              <button type="button" aria-current={bucket === b ? 'page' : undefined} onClick={() => changeBucket(b)}>
                 {bucketText(lang, b)}
               </button>
             ))}
@@ -167,7 +244,7 @@ export default function RankBoard(props: Props) {
         <div class="row" style="gap:6px">
           <span class="eyebrow" style="font-size:10px">{t(lang, 'rank.gran')}</span>
           <div class="segmented" role="group" aria-label={t(lang, 'rank.gran')}>
-            {GRANS.map((gg) => (
+            {GRANS_UI.map((gg) => (
               <button type="button" aria-current={gran === gg ? 'page' : undefined} onClick={() => changeGran(gg)}>
                 {granLabel(lang, gg)}
               </button>
@@ -180,7 +257,7 @@ export default function RankBoard(props: Props) {
       </div>
 
       <nav class="tabs" aria-label={t(lang, 'picker.form')}>
-        {(['all', ...FORM_ORDER] as string[]).map((f) => (
+        {(['all', ...FOCUS_FORMS] as string[]).map((f) => (
           <a
             class="tab"
             href={H(rankUrl(bucket, f, gran))}
@@ -235,19 +312,23 @@ export default function RankBoard(props: Props) {
                   <tr>
                     <th class="pos">#</th>
                     <th>Agent</th>
-                    {cols.map((c) => (
-                      <th
-                        class="num sortable"
-                        aria-sort={sortKey === c.key ? (sortDir === 'desc' ? 'descending' : 'ascending') : 'none'}
-                      >
-                        <button type="button" onClick={() => clickHeader(c.key)}>
-                          {c.label}
-                          <span class="sort-caret" aria-hidden="true">
-                            {sortKey === c.key ? (sortDir === 'desc' ? '▼' : '▲') : ''}
-                          </span>
-                        </button>
-                      </th>
-                    ))}
+                    {cols.map((c) =>
+                      c.sortable === false ? (
+                        <th class="num">{c.label}</th>
+                      ) : (
+                        <th
+                          class="num sortable"
+                          aria-sort={sortKey === c.key ? (sortDir === 'desc' ? 'descending' : 'ascending') : 'none'}
+                        >
+                          <button type="button" onClick={() => clickHeader(c.key)}>
+                            {c.label}
+                            <span class="sort-caret" aria-hidden="true">
+                              {sortKey === c.key ? (sortDir === 'desc' ? '▼' : '▲') : ''}
+                            </span>
+                          </button>
+                        </th>
+                      ),
+                    )}
                     <th style="width:2rem" aria-label="pin"></th>
                   </tr>
                 </thead>

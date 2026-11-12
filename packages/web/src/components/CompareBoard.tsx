@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import AgentIcon from './AgentIcon';
 import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
-import { fmt, fmtPct } from '../lib/shared';
+import { fmt, fmtPct, FOCUS_FORMS } from '../lib/shared';
 
 export type CompareItem = {
   slug: string;
@@ -69,20 +69,42 @@ function rows(lang: Lang): Row[] {
   ];
 }
 
+/** 三个对比位：URL query 用 a/b/c，槽位数量与 key 一一对应 */
+const SLOT_KEYS = ['a', 'b', 'c'] as const;
+
+/** 单元格是否为空（空值统一渲染为 —，用于隐藏全空指标行） */
+function blank(row: Row, item: CompareItem): boolean {
+  if (row.kind === 'num') {
+    const v = row.get(item);
+    return v == null || (typeof v === 'number' && Number.isNaN(v));
+  }
+  const s = (row.get(item) ?? '').trim();
+  return s === '' || s === '—';
+}
+
 export default function CompareBoard({ items, lang }: Props) {
-  const [slots, setSlots] = useState<string[]>(['', '', '']);
+  const [slots, setSlots] = useState<string[]>(() => SLOT_KEYS.map(() => ''));
   const H = (p: string) => pathFor(lang, p);
   const table = rows(lang);
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
-    setSlots([p.get('a') ?? '', p.get('b') ?? '', p.get('c') ?? '']);
+    const seen = new Set<string>();
+    setSlots(
+      SLOT_KEYS.map((k) => {
+        const v = p.get(k) ?? '';
+        if (!v || seen.has(v)) return '';
+        seen.add(v);
+        return v;
+      }),
+    );
   }, []);
 
   useEffect(() => {
     const p = new URLSearchParams();
     slots.forEach((s, i) => {
-      if (s) p.set(['a', 'b', 'c'][i]!, s);
+      const key = SLOT_KEYS[i];
+      if (s && key) p.set(key, s);
     });
     const qs = p.toString();
     const url = `${window.location.pathname}${qs ? `?${qs}` : ''}`;
@@ -111,14 +133,18 @@ export default function CompareBoard({ items, lang }: Props) {
   const setSlot = (idx: number, slug: string) =>
     setSlots((prev) => prev.map((v, i) => (i === idx ? slug : v)));
 
+  /** 快速开始：预填该形态前二（第三位留空，最多可再加 1 个） */
   const preset = (form: string) => {
     const top = items
       .filter((i) => i.form === form && i.score != null)
       .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
       .slice(0, 2)
       .map((i) => i.slug);
-    setSlots([top[0] ?? '', top[1] ?? '', '']);
+    setSlots(SLOT_KEYS.map((_, i) => top[i] ?? ''));
   };
+
+  /** 除最优点亮外，全空指标行（含 growth_30d、排名等无数据项）整行隐藏 */
+  const visibleRows = table.filter((row) => active.some((i) => !blank(row, i)));
 
   /** 最佳值：只在有 ≥2 个不同数值时标注 */
   const best = (row: NumRow): Set<string> => {
@@ -139,7 +165,7 @@ export default function CompareBoard({ items, lang }: Props) {
         {slots.map((slug, idx) => (
           <label class="cmp-pick">
             <span class="cmp-pick-label">
-              {['A', 'B', 'C'][idx]}
+              {String.fromCharCode(65 + idx)}
               <i>{idx === 0 ? t(lang, 'compare.required') : t(lang, 'compare.optional')}</i>
             </span>
             <select
@@ -165,7 +191,7 @@ export default function CompareBoard({ items, lang }: Props) {
       {active.length < 2 && (
         <div class="cmp-presets">
           <span>{t(lang, 'compare.quick')}</span>
-          {['cli', 'ide-plugin', 'framework', 'browser'].map((f) => (
+          {FOCUS_FORMS.map((f) => (
             <button type="button" class="chip" onClick={() => preset(f)}>
               {t(lang, 'compare.preset', { form: formLabel(lang, f) })}
             </button>
@@ -206,10 +232,10 @@ export default function CompareBoard({ items, lang }: Props) {
               </tr>
             </thead>
             <tbody>
-              {table.map((row) => {
+              {visibleRows.map((row) => {
                 const winners = row.kind === 'num' ? best(row) : new Set<string>();
                 return (
-                  <tr>
+                  <tr key={row.key}>
                     <th class="cmp-metric" scope="row">{row.label}</th>
                     {active.map((i) => {
                       const win = winners.has(i.slug);

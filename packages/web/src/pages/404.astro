@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { langOf, pathFor, t } from '../i18n/dict';
+const path = Astro.url.pathname;
+const lang = langOf(path);
+---
+<Base lang={lang} noindex>
+  <div class="page-head">
+    <span class="eyebrow">404</span>
+    <h1>{t(lang, 'app.notFound')}</h1>
+    <p class="lede">{t(lang, 'notfound.lede')}</p>
+    <p style="margin-top:18px"><a class="btn" href={pathFor(lang, '/')}>← {t(lang, 'app.home')}</a></p>
+  </div>
+</Base>

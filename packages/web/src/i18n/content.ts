@@ -7,6 +7,12 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
   zh: {
     spec: [
       {
+        date: '2026-11-12',
+        change:
+          '聚焦范围：榜单仅展示 <code>cli</code> / <code>ide-plugin</code> / <code>ide-app</code> 三个形态，其余形态冻结保留详情页',
+        reason: '核心形态数据完整度优先，范围由用户价值而非数据可得性定义',
+      },
+      {
         date: '2026-11-09',
         change: '分位数改为秩中点平滑',
         reason:
@@ -104,6 +110,12 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
   },
   en: {
     spec: [
+      {
+        date: '2026-11-12',
+        change:
+          'Focus scope: boards only list <code>cli</code> / <code>ide-plugin</code> / <code>ide-app</code>; other forms are frozen with detail pages kept',
+        reason: 'Data completeness in the core forms comes first — scope follows user value, not data availability',
+      },
       {
         date: '2026-11-09',
         change: 'Percentiles switched to mid-rank smoothing',

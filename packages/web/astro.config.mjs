@@ -15,7 +15,7 @@ const site = process.env.SITE_URL || 'https://agentnews-c5h.pages.dev';
 /** 冻结 / 误分类条目：详情页保留（noindex），但不进 sitemap */
 function frozenSlugs() {
   try {
-    const txt = readFileSync(new URL('../agents.yaml', import.meta.url), 'utf8');
+    const txt = readFileSync(new URL('../../agents.yaml', import.meta.url), 'utf8');
     const list = YAML.parse(txt) ?? [];
     const FROZEN = ['desktop', 'browser', 'framework', 'autonomous'];
     const EXCLUDED = new Set(['theia', 'vercel-ai-sdk', 'open-interpreter']);
@@ -25,7 +25,7 @@ function frozenSlugs() {
   }
 }
 
-const noindex = (page: string) => {
+const noindex = (page) => {
   const path = new URL(page).pathname.replace(/\/+$/, '') || '/';
   if (path.endsWith('/404') || path === '/feed') return true;
   const m = path.match(/\/agent\/([^/]+)$/);

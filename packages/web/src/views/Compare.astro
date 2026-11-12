@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import CompareBoard, { type CompareItem } from '../components/CompareBoard';
 import { loadLatestScores, loadAgentsMeta } from '../lib/data';
+import { isListed } from '../lib/shared';
 import { type Lang, pathFor, t } from '../i18n/dict';
 
 interface Props {
@@ -12,7 +13,7 @@ const H = (p: string) => pathFor(lang, p);
 
 const data = loadLatestScores();
 const meta = loadAgentsMeta();
-const items: CompareItem[] = (data?.rows ?? []).map((r) => ({
+const items: CompareItem[] = (data?.rows ?? []).filter(isListed).map((r) => ({
   slug: r.slug,
   name: r.name ?? r.slug,
   form: r.form,

@@ -5,7 +5,7 @@
 import Base from '../layouts/Base.astro';
 import RankBoard, { type RankRow, type IconMeta } from './RankBoard';
 import { loadLatestScores, loadAgentsMeta } from '../lib/data';
-import { rankUrl } from '../lib/shared';
+import { isListed, rankUrl } from '../lib/shared';
 import { type Lang, bucketText, pathFor, t } from '../i18n/dict';
 
 interface Props {
@@ -19,9 +19,10 @@ const { bucket, form, g, lang } = Astro.props;
 const H = (p: string) => pathFor(lang, p);
 
 const data = loadLatestScores();
-const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
 const metaAll = loadAgentsMeta();
+/** 只保留聚焦形态且非误分类的条目（冻结形态只在详情页可见） */
+const rows = (data?.rows ?? []).filter(isListed);
 
 /** 只把榜单需要的字段送进 island —— 减小 HTML 体积 */
 const slim: RankRow[] = rows.map((r) => ({
@@ -42,6 +43,8 @@ const slim: RankRow[] = rows.map((r) => ({
   },
   flags: r.flags ?? [],
   data_level: r.data_level,
+  last_release: r.metrics?.last_release ? String(r.metrics.last_release).slice(0, 10) : null,
+  license: metaAll[r.slug]?.license ?? null,
 }));
 
 const meta: Record<string, IconMeta> = {};
@@ -79,7 +82,7 @@ const bucketLabel = bucketText(lang, bucket);
     {t(lang, 'rank.noscript')}
     <a href={H(rankUrl(bucket, 'all', g))}>{bucketLabel} {lang === 'en' ? 'board' : '榜'}</a>
     {lang === 'en' ? ' or ' : ' 或 '}
-    <a href={H('/archive/')}>{t(lang, 'footer.archive')}</a>.
+    <a href={H('/data/')}>{t(lang, 'footer.data')}</a>.
   </div>
 </noscript>
 </Base>

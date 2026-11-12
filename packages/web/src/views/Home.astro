@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import HomePicker, { type PickRow } from '../components/HomePicker';
 import { loadLatestScores, loadAgentsMeta, fmtPct } from '../lib/data';
-import { FORM_ORDER } from '../lib/shared';
+import { FOCUS_FORMS, isListed } from '../lib/shared';
 import { FORM_GUIDES } from '../i18n/guides';
 import { type Lang, formLabel, pathFor, t } from '../i18n/dict';
 
@@ -15,25 +15,35 @@ const H = (p: string) => pathFor(lang, p);
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
+/** 聚焦范围：首页所有统计都只基于公开列表内的条目 */
+const listedRows = rows.filter(isListed);
 const date = data?.date ?? '—';
 const metaAll = loadAgentsMeta();
 
 const meta: Record<string, { icon: string | null; iconFallback: string | null }> = {};
-for (const r of rows) {
+for (const r of listedRows) {
   const m = metaAll[r.slug];
   if (m) meta[r.slug] = { icon: m.icon, iconFallback: m.iconFallback };
 }
 
-const open = rows.filter((r) => r.oss_bucket !== 'closed');
-const closed = rows.filter((r) => r.oss_bucket === 'closed');
-const topOpen = [...open].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 6);
-const topClosed = [...closed].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 6);
-const hasGrowth = rows.some((r) => r.growth_30d_pct != null);
+/** 只保留有分的条目，按综合分降序 */
+function byScore<T extends { score: number | null }>(list: T[]): T[] {
+  return list.filter((r) => r.score != null).sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+}
+
+const open = listedRows.filter((r) => r.oss_bucket !== 'closed');
+const closed = listedRows.filter((r) => r.oss_bucket === 'closed');
+const topOpen = byScore(open).slice(0, 5);
+const topClosed = byScore(closed).slice(0, 5);
+/** 闭源条目里暂无综合分（数据未接入）的数量 */
+const closedPending = closed.filter((r) => r.score == null).length;
+const hasGrowth = listedRows.some((r) => r.growth_30d_pct != null);
+
+const rankedCount = listedRows.filter((r) => r.rank_in_form != null).length;
 
 const guides = FORM_GUIDES[lang];
-const formCards = FORM_ORDER.map((f, i) => {
-  const list = rows.filter((r) => r.form === f);
-  const ranked = [...list].filter((r) => r.score != null).sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+const formCards = FOCUS_FORMS.map((f, i) => {
+  const list = listedRows.filter((r) => r.form === f);
   return {
     form: f,
     idx: String(i + 1).padStart(2, '0'),
@@ -41,11 +51,13 @@ const formCards = FORM_ORDER.map((f, i) => {
     en: guides[f]?.en ?? '',
     fit: guides[f]?.tagline ?? '',
     count: list.length,
-    top: ranked.slice(0, 2).map((r) => ({ name: r.name ?? r.slug, score: r.score })),
+    top: byScore(list).slice(0, 3).map((r) => ({ name: r.name ?? r.slug, score: r.score })),
   };
-}).filter((c) => c.count > 0);
+});
 
-const pick: PickRow[] = rows.map((r) => ({
+const MARKERS = ['①', '②', '③'];
+
+const pick: PickRow[] = listedRows.map((r) => ({
   slug: r.slug,
   name: r.name ?? r.slug,
   vendor: metaAll[r.slug]?.vendor ?? null,
@@ -67,14 +79,12 @@ const titleLines = t(lang, 'home.title').split('\n');
           <>{i > 0 && <br />}{line}</>
         ))}
       </h1>
-      <p class="lede">{t(lang, 'home.lede', { n: rows.length })}</p>
+      <p class="lede">{t(lang, 'home.lede', { n: listedRows.length })}</p>
     </div>
     <div class="readout">
-      <div><span data-k>{t(lang, 'home.readout.listed')}</span><b>{rows.length}</b></div>
-      <div><span data-k>{t(lang, 'home.readout.open')}</span><b>{open.length}</b></div>
-      <div><span data-k>{t(lang, 'home.readout.closed')}</span><b>{closed.length}</b></div>
-      <div><span data-k>{t(lang, 'home.readout.forms')}</span><b>{formCards.length}</b></div>
-      <div><span data-k>{t(lang, 'home.readout.ranked')}</span><b>{rows.filter((r) => r.rank_in_form != null).length}</b></div>
+      <div><span data-k>{t(lang, 'home.readout.listed')}</span><b>{listedRows.length}</b></div>
+      <div><span data-k>{t(lang, 'home.readout.ranked')}</span><b>{rankedCount}</b></div>
+      <div><span data-k>{t(lang, 'app.snapshot')}</span><b>{date}</b></div>
     </div>
   </div>
   <div class="ruler" aria-hidden="true"></div>
@@ -93,7 +103,7 @@ const titleLines = t(lang, 'home.title').split('\n');
           <div class="mini">
             {c.top.length === 0 && <span>{t(lang, 'home.noData')}</span>}
             {c.top.map((x, i) => (
-              <span>{i === 0 ? '①' : '②'} <b>{x.name}</b> {x.score}</span>
+              <span>{MARKERS[i] ?? `${i + 1}.`} <b>{x.name}</b> {x.score}</span>
             ))}
           </div>
           <span class="go">{t(lang, 'home.guide')}</span>
@@ -108,19 +118,7 @@ const titleLines = t(lang, 'home.title').split('\n');
       <span class="muted">{t(lang, 'home.step2Hint')}</span>
     </div>
     <HomePicker client:load items={pick} meta={meta} lang={lang} />
-  </section>
-
-  <section class="section">
-    <div class="section-title">
-      <h2>{t(lang, 'home.step3')}</h2>
-      <span class="muted">{t(lang, 'home.step3Hint')}</span>
-    </div>
-    <div class="cta-band">
-      <div>
-        <span class="eyebrow">{t(lang, 'home.compareEyebrow')}</span>
-        <h2>{t(lang, 'home.compareTitle')}</h2>
-        <p>{t(lang, 'home.compareDesc')}</p>
-      </div>
+    <div class="row" style="margin-top:14px">
       <a class="btn btn-primary" href={H('/compare/')}>{t(lang, 'home.compareCta')}</a>
     </div>
   </section>
@@ -186,14 +184,19 @@ const titleLines = t(lang, 'home.title').split('\n');
             </span>
           </div>
         ))}
-        <div class="board-foot">{t(lang, 'home.boardClosedFoot')}</div>
+        <div class="board-foot">
+          {t(lang, 'home.boardClosedFoot')}
+          {closedPending > 0 && <> · {t(lang, 'home.closedPending', { n: closedPending })}</>}
+        </div>
       </div>
-    </div>
-    <div class="scale-strip">
-      <span>{t(lang, 'home.scale')}</span>
-      <span class="scale-ramp" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-      <span>{t(lang, 'home.scaleRange')}</span>
-      <span style="margin-left:auto">{t(lang, 'home.scaleNote')}</span>
     </div>
   </section>
 </Base>
+
+<style>
+  /* 首页只映射 3 个聚焦形态：把 Base 全局的 4 列栅格收成 3 列（全局样式不在本次改动范围） */
+  .form-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 768px) {
+    .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
