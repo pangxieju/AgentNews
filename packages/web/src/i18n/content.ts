@@ -24,6 +24,12 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
         reason: 'gpt-engineer 停更 888 天仍在自主榜第 2、Plandex 停更 483 天仍在 CLI 榜，违反 PRD §4.4 的活跃必要条件',
       },
       {
+        date: '2026-11-12',
+        change: '周榜口径：按「近 7 天安装量增量」排名（npm / PyPI range 回填）',
+        reason:
+          'GitHub star 没有公开历史接口，无法合法回填（拉 stargazers 在上万 star 时不可行）；安装量可以，且更能反映采用变化。回填条目带 <code>backfilled_installs</code> 标记',
+      },
+      {
         date: '2026-11-09',
         change: '分位数改为秩中点平滑',
         reason:
@@ -137,6 +143,12 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
         date: '2026-11-12',
         change: 'Dormant gate: no commit or release in 180 days → <code>dormant</code>, removed from ranking',
         reason: 'gpt-engineer sat at #2 in autonomous 888 days after its last release, Plandex at CLI #16 after 483 days — both violate the PRD §4.4 activity requirement',
+      },
+      {
+        date: '2026-11-12',
+        change: 'Weekly board ranks by 7-day install delta (npm / PyPI range backfill)',
+        reason:
+          'GitHub stars have no public historical API — backfilling stargazers is infeasible at 10k+ scale. Installs can be backfilled and reflect adoption change more directly. Backfilled rows carry <code>backfilled_installs</code>',
       },
       {
         date: '2026-11-09',

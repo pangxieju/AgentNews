@@ -47,7 +47,7 @@ export const NOINDEX_SLUGS = (r: { slug: string; form: string } | null | undefin
   r ? !isListed(r) : false;
 
 /** 榜单粒度：选型用不到日榜；周榜待历史回填（delta_7d 有数据）后加回 */
-export const GRANS_UI = ['month'] as const;
+export const GRANS_UI = ['week', 'month'] as const;
 
 /** 格式化数字（T/B/k 缩写，小于 1k 保留原值） */
 export function fmt(n: number | null | undefined): string {
@@ -76,7 +76,7 @@ export function fmtSigned(n: number | null | undefined): string {
 export const GRANS = ['day', 'week', 'month'] as const;
 /** 粒度 → 默认排序键（PRD §5.5） */
 export const defaultSortFor = (g: string): string =>
-  g === 'day' ? 'delta_1d' : g === 'week' ? 'delta_7d' : 'score';
+  g === 'day' ? 'delta_1d' : g === 'week' ? 'delta_7d_installs' : 'score';
 
 export const rankUrl = (bucket: string, form: string, g: string): string =>
   `/top/${bucket}/${form}/${g}/`;

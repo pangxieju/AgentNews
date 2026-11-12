@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import AgentIcon from './AgentIcon';
 import { PIN_EVENT, readPins, togglePin } from '../lib/pins';
-import { fmt, rankUrl, defaultSortFor, GRANS_UI, FOCUS_FORMS, isListed } from '../lib/shared';
+import { fmt, fmtSigned, rankUrl, defaultSortFor, GRANS_UI, FOCUS_FORMS, isListed } from '../lib/shared';
 import { type Lang, bucketText, flagLabel, formLabel, granLabel, pathFor, t } from '../i18n/dict';
 
 export type RankRow = {
@@ -13,6 +13,8 @@ export type RankRow = {
   rank_in_form: number | null;
   delta_1d: number | null;
   delta_7d: number | null;
+  /** 近 7 天安装量增量（快照不足时由 npm/PyPI 历史回填） */
+  delta_7d_installs?: number | null;
   growth_30d_pct: number | null;
   metrics: {
     stars: number | null;
@@ -49,7 +51,8 @@ type SortKey =
   | 'license'
   | 'data_level'
   | 'delta_1d'
-  | 'delta_7d';
+  | 'delta_7d'
+  | 'delta_7d_installs';
 
 type Col = {
   key: SortKey;
@@ -102,6 +105,13 @@ function columns(lang: Lang, bucket: string): Col[] {
     format: (r) => fmt(r.metrics.openrouter_tokens_month),
     bar: true,
   };
+  const deltaInstalls: Col = {
+    key: 'delta_7d_installs',
+    label: t(lang, 'metric.delta7dInstalls'),
+    get: (r) => r.delta_7d_installs ?? null,
+    show: (rs) => rs.some((r) => r.delta_7d_installs != null),
+    format: (r) => fmtSigned(r.delta_7d_installs),
+  };
   const release: Col = {
     key: 'last_release',
     label: t(lang, 'metric.release'),
@@ -128,8 +138,8 @@ function columns(lang: Lang, bucket: string): Col[] {
 
   // 开闭源看不同指标：闭源看 OpenRouter 用量与数据置信度，开源看活跃度与许可证
   return bucket === 'closed'
-    ? [score, installs, tokens, release, level]
-    : [score, installs, activity, release, license];
+    ? [score, installs, deltaInstalls, tokens, release, level]
+    : [score, installs, deltaInstalls, activity, release, license];
 }
 
 export default function RankBoard(props: Props) {

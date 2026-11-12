@@ -84,6 +84,7 @@ const zh: Dict = {
   'metric.openrouterTokens': 'OpenRouter 月 token',
   'metric.delta1d': '日增',
   'metric.delta7d': '7d 增',
+  'metric.delta7dInstalls': '7d 安装增',
   'metric.growth30d': '30d 增速',
   'metric.level': '数据完整度',
   'metric.license': 'License',
@@ -101,6 +102,7 @@ const zh: Dict = {
   'flag.suspicious': '可疑增长',
   'flag.dormant': '已停更',
   'flag.store_installs': '商店累计安装',
+  'flag.backfilled_installs': '历史回填',
 
   // ── 事件 ──
   'event.release': '发版',
@@ -498,6 +500,7 @@ const en: Dict = {
   'metric.openrouterTokens': 'OpenRouter tokens/mo',
   'metric.delta1d': '1d Δ',
   'metric.delta7d': '7d Δ',
+  'metric.delta7dInstalls': '7d install Δ',
   'metric.growth30d': '30d growth',
   'metric.level': 'Data level',
   'metric.license': 'License',
@@ -514,6 +517,7 @@ const en: Dict = {
   'flag.suspicious': 'Suspicious',
   'flag.dormant': 'Dormant',
   'flag.store_installs': 'Store installs',
+  'flag.backfilled_installs': 'Backfilled',
 
   'event.release': 'Release',
   'event.version': 'Version',

@@ -129,6 +129,10 @@ export type ScoreRow = {
   rank_in_form: number | null;
   delta_1d: number | null;
   delta_7d: number | null;
+  /** 近 7 天安装量增量（口径：每周下载量；快照不足时由 npm/PyPI 历史回填） */
+  delta_7d_installs?: number | null;
+  /** 安装量 7 日增速（小数，0.12 = +12%）；基准 < 1000 时为 null */
+  growth_7d_installs_pct?: number | null;
   delta_30d: number | null;
   growth_7d_pct: number | null;
   growth_30d_pct: number | null;

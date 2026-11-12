@@ -10,4 +10,5 @@
 {"slug":"langchain","name":"LangChain","kind":"version","date":"2026-11-12","title":"LangChain 更新到 1.5.0","detail":"1.4.10 → 1.5.0"}
 {"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-12","title":"Vercel AI SDK 更新到 7.0.170","detail":"7.0.169 → 7.0.170"}
 {"slug":"crewai","name":"CrewAI","kind":"version","date":"2026-11-12","title":"CrewAI 更新到 1.15.40","detail":"1.15.39 → 1.15.40"}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"release","date":"2026-11-12","title":"Pydantic AI 发布新版本","detail":"2026-11-12"}
 {"slug":"autogpt","name":"AutoGPT","kind":"version","date":"2026-11-12","title":"AutoGPT 更新到 autogpt-platform-beta-v0.11.2","detail":"autogpt-platform-beta-v0.11.1 → autogpt-platform-beta-v0.11.2"}

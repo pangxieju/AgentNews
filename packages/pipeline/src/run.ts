@@ -17,6 +17,7 @@ import {
   type ScoreRow,
 } from '@agentnews/core';
 import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/index.js';
+import { collectInstallHistory, writeInstallHistory, type InstallHistory } from './history.js';
 import { diffEvents, readSnapshotMetrics, writeEvents } from './events.js';
 import { collectSecurity, pickSecurityTargets, writeSecurity } from './security.js';
 import { syncIcons } from './icons.js';
@@ -206,6 +207,19 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   await writeFile(snapshotPath, lines.join('\n') + '\n');
   console.log(`[snapshot] ${lines.length} rows → ${snapshotPath}`);
 
+  // 2.5 安装量历史（npm / PyPI 公开 API）—— 周榜用安装增量（star 历史无法合法回填）
+  let installHistory: InstallHistory | null = null;
+  try {
+    installHistory = await collectInstallHistory(agents, today);
+    const historyPath = join(DATA_DIR, 'history', `${today}.json`);
+    await writeInstallHistory(historyPath, installHistory);
+    console.log(
+      `[history] ${Object.keys(installHistory.agents).length}/${agents.length} agents → data/history/${today}.json`,
+    );
+  } catch (e) {
+    console.warn(`[history] 回填失败，继续（周榜会缺数据）：${e instanceof Error ? e.message : e}`);
+  }
+
   // 3. 打分（按 form 分组）—— L3（无数据）不参与排名（PRD §5.7）
   const scorables = await buildScorables(agents, metricsMap);
   const agentName = new Map(agents.map((a) => [a.slug, a.name]));
@@ -263,6 +277,16 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       const installsPrev = item.ref?.prev ? effectiveInstalls(item.ref.prev) : null;
       const installsWeekAgo = item.ref?.weekAgo ? effectiveInstalls(item.ref.weekAgo) : null;
       const installsMonthAgo = item.ref?.monthAgo ? effectiveInstalls(item.ref.monthAgo) : null;
+      // 快照不足 7/30 天时，用历史回填补齐（口径：以 t-7 / t-30 为结束的 7 日窗口）
+      const hist = installHistory?.agents[item.slug];
+      const installsPrevEff = installsPrev ?? hist?.installs_1d_ago ?? null;
+      const installsWeekAgoEff = installsWeekAgo ?? hist?.installs_7d_ago ?? null;
+      const installsMonthAgoEff = installsMonthAgo ?? hist?.installs_30d_ago ?? null;
+      const backfilled =
+        hist != null && (installsWeekAgo == null || installsMonthAgo == null) && (hist.installs_7d_ago != null || hist.installs_30d_ago != null);
+      const delta7dInstalls =
+        installs != null && installsWeekAgoEff != null ? installs - installsWeekAgoEff : null;
+      const growth7dInstalls = growthPctSafe(installs, installsWeekAgoEff, 1000);
 
       const flags: string[] = [];
       if (errors.some((err) => err.startsWith(item.slug))) flags.push('partial_data');
@@ -271,6 +295,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       // 口径分离：商店累计安装不是周下载流，CI 噪声 flag 只适用于 npm/PyPI 周下载
       if (basis === 'store_total') flags.push('store_installs');
       if (basis === 'weekly_dl' && installs != null && installs >= 1_000_000) flags.push('installs_may_include_ci');
+      if (backfilled) flags.push('backfilled_installs');
       if (group.length <= 2 && level !== 'L3') flags.push('small_group');
 
       // 出道天数（PRD §5.6）：min(repo 创建至今, 首次收录至今)
@@ -288,6 +313,8 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         rank_in_form: rankMap.get(item.slug) ?? null,
         delta_1d: stars != null && prevStars != null ? stars - prevStars : null,
         delta_7d: stars != null && weekAgo != null ? stars - weekAgo : null,
+        delta_7d_installs: delta7dInstalls,
+        growth_7d_installs_pct: growth7dInstalls,
         delta_30d: stars != null && monthAgo != null ? stars - monthAgo : null,
         growth_7d_pct: growthPctSafe(stars, weekAgo, 50),
         growth_30d_pct: growthPctSafe(stars, monthAgo, 200),
@@ -305,9 +332,9 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
           last_commit: typeof m.last_commit === 'string' ? m.last_commit : null,
           open_issues: typeof m.open_issues === 'number' ? m.open_issues : null,
           repo_created: typeof m.repo_created === 'string' ? m.repo_created : null,
-          installs_1d_ago: installsPrev,
-          installs_7d_ago: installsWeekAgo,
-          installs_30d_ago: installsMonthAgo,
+          installs_1d_ago: installsPrevEff,
+          installs_7d_ago: installsWeekAgoEff,
+          installs_30d_ago: installsMonthAgoEff,
           version: typeof m.version === 'string' ? m.version : null,
           version_at: typeof m.version_at === 'string' ? m.version_at : null,
           version_source: typeof m.version_source === 'string' ? m.version_source : null,
@@ -412,7 +439,8 @@ function growthPctSafe(
 ): number | null {
   if (now == null || then == null || typeof then !== 'number') return null;
   if (then < floor || then <= 0) return null;
-  return Math.round(((now - then) / then) * 1000) / 10;
+  // 存储为小数（0.123 = +12.3%），前端 fmtPct 再乘 100 展示
+  return Math.round(((now - then) / then) * 10000) / 10000;
 }
 
 // 直接运行时执行
