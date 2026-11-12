@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import AgentIcon from './AgentIcon';
 import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
 import { fmt, fmtPct, FOCUS_FORMS } from '../lib/shared';
@@ -118,6 +118,17 @@ export default function CompareBoard({ items, lang }: Props) {
   const active = picked.filter((x): x is CompareItem => x != null);
   const forms = new Set(active.map((x) => x.form));
   const mixedForms = forms.size > 1;
+
+  /* 决策事件：选满 ≥2 个候选计一次 compare（同一组只计一次） */
+  const tracked = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (active.length < 2) return;
+    const key = active.map((x) => x.slug).sort().join(',');
+    if (tracked.current.has(key)) return;
+    tracked.current.add(key);
+    (window as unknown as { anTrack?: (e: string, extra?: Record<string, string>) => void })
+      .anTrack?.('compare', { a: key });
+  }, [active]);
 
   const grouped = useMemo(
     () =>

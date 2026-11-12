@@ -101,6 +101,11 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
     <meta name="twitter:title" content={`${pageTitle} · AgentNews`} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token":"5b350508c5574514afc7579cf2e6f896"}'
+    ></script>
     {props.jsonLd && (
       <script
         type="application/ld+json"
@@ -1704,6 +1709,36 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
         };
         if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done).catch(() => {});
       });
+    </script>
+    <script is:inline>
+      /* 第一方事件（/api/e → D1）。无 cookie、不存 IP/UA，session 为 sessionStorage 随机串。 */
+      (function () {
+        try {
+          var sid = sessionStorage.getItem('an-sid');
+          if (!sid) {
+            sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+            sessionStorage.setItem('an-sid', sid);
+          }
+          function track(e, extra) {
+            try {
+              var payload = JSON.stringify(Object.assign({ e: e, p: location.pathname, s: sid }, extra || {}));
+              if (navigator.sendBeacon) {
+                navigator.sendBeacon('/api/e', new Blob([payload], { type: 'application/json' }));
+              }
+            } catch (_) {}
+          }
+          window.anTrack = track;
+          track('view');
+          document.addEventListener(
+            'click',
+            function (ev) {
+              var a = ev.target && ev.target.closest ? ev.target.closest('a[target="_blank"]') : null;
+              if (a) track('out', { a: a.getAttribute('data-out') || '' });
+            },
+            true,
+          );
+        } catch (_) {}
+      })();
     </script>
   </body>
 </html>

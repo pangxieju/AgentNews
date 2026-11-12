@@ -112,6 +112,15 @@ jobs:
             echo "::warning title=未配置 Cloudflare secrets::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID 未配置，本次只采集不部署，线上站点不会更新。"
           fi
 
+      # 事件保留 90 天（隐私口径）：每天部署后清理一次
+      - name: Purge analytics (90d)
+        if: steps.pre.outputs.deployed != 'true'
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node ops/stats.mjs --purge
+
       - name: Deploy to Cloudflare Pages
         if: steps.pre.outputs.deployed != 'true' && env.CF_READY == 'true'
         env:

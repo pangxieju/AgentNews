@@ -11,7 +11,8 @@
     "discover": "pnpm --filter @agentnews/pipeline discover",
     "icons": "pnpm --filter @agentnews/pipeline icons",
     "icons:audit": "pnpm --filter @agentnews/pipeline icons:audit",
-    "backfill": "pnpm --filter @agentnews/pipeline backfill"
+    "backfill": "pnpm --filter @agentnews/pipeline backfill",
+    "stats": "node ops/stats.mjs"
   },
   "devDependencies": {
     "typescript": "^5.7.2"

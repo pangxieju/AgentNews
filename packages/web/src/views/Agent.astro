@@ -184,7 +184,7 @@ const jsonLd = row
           </h1>
           <p class="lede" style="font-size:13.5px">{t(lang, 'agent.lede', { date })}</p>
           {meta?.homepage && (
-            <a class="btn" style="margin-top:14px" href={meta.homepage} target="_blank" rel="noopener">
+            <a class="btn" style="margin-top:14px" href={meta.homepage} target="_blank" rel="noopener" data-out={row.slug}>
               {t(lang, 'agent.homepage')}
             </a>
           )}
