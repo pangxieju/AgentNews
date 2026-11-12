@@ -18,9 +18,21 @@ const weights: Array<[string, string]> = [
   [t(lang, 'about.w6'), '5%'],
   [t(lang, 'about.w7'), '5%'],
 ];
+const description = lang === 'en'
+  ? 'Methodology for the AgentNews index: scoring weights, in-form percentiles, open/closed namespaces, data levels, dormant gate, install basis, citations and corrections policy.'
+  : 'AgentNews 榜单口径：权重、组内分位、开源/闭源命名空间、数据完整度、停更闸门、安装量口径、引用与纠错政策。';
+const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: t(lang, 'about.title'),
+  description,
+  url: new URL(pathFor(lang, '/about/'), SITE).href,
+  isPartOf: { '@type': 'WebSite', name: 'AgentNews · AI Agent Index', url: SITE.href },
+};
 ---
 
-<Base lang={lang} pageTitle={`${t(lang, 'about.title')} · AgentNews`}>
+<Base lang={lang} pageTitle={t(lang, 'about.title')} description={description} jsonLd={jsonLd}>
   <div class="page-head">
     <div class="crumbs"><a href={h('/')}>AgentNews</a><span>/</span><span>{t(lang, 'about.crumb')}</span></div>
     <span class="eyebrow">{lang === 'en' ? 'Method · Weights & Rules' : '口径 · 权重与规则'}</span>

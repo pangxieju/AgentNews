@@ -112,9 +112,52 @@ const versionLink = (() => {
 /** 引用格式：快照日期 + 本页 URL（域名优先取 Astro.site）*/
 const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
 const citeUrl = row ? new URL(H(`/agent/${row.slug}/`), SITE).href : '';
+
+/* ── SEO / 结构化数据 ──
+ * 详情页是长尾入口：每页必须有独立 description、og:image 和 JSON-LD，
+ * 否则 40+ 个详情页在搜索结果里共用一句模板，等于没有索引价值。 */
+const agentName = row?.name ?? slug;
+const agentForm = row ? formLabel(lang, row.form) : '';
+const agentBucket = row ? bucketText(lang, row.oss_bucket) : '';
+const description = row
+  ? `${agentName}${meta?.vendor ? ' by ' + meta.vendor : ''} — ${agentForm} AI agent (${agentBucket}). Score ${row.score ?? '—'}, rank ${row.rank_in_form != null ? '#' + row.rank_in_form : 'not ranked'}, ${fmt(row.metrics?.installs)} installs, ${fmt(row.metrics?.stars)} stars, ${meta?.license ?? 'license unknown'}. Snapshot ${date}.`
+  : `${agentName} · AgentNews`;
+const ogIcon = meta?.icon
+  ? /^https?:/i.test(meta.icon)
+    ? meta.icon
+    : new URL(meta.icon, SITE).href
+  : undefined;
+const jsonLd = row
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: agentName,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      url: meta?.homepage,
+      image: ogIcon,
+      description,
+      additionalProperty: [
+        { '@type': 'PropertyValue', name: 'AgentNews score', value: row.score ?? 'unranked' },
+        { '@type': 'PropertyValue', name: 'Rank in form', value: row.rank_in_form != null ? `#${row.rank_in_form}` : 'unranked' },
+        { '@type': 'PropertyValue', name: 'GitHub stars', value: row.metrics?.stars ?? 'unknown' },
+        { '@type': 'PropertyValue', name: 'Installs (weekly or store)', value: row.metrics?.installs ?? 'unknown' },
+        { '@type': 'PropertyValue', name: 'License', value: meta?.license ?? 'unknown' },
+      ],
+      dateModified: row.metrics?.last_release ? String(row.metrics.last_release).slice(0, 10) : undefined,
+      isPartOf: { '@type': 'WebSite', name: 'AgentNews · AI Agent Index', url: SITE.href },
+    }
+  : undefined;
 ---
 
-<Base lang={lang} noindex={frozen} pageTitle={row ? `${row.name ?? row.slug} · AgentNews` : t(lang, 'agent.notFound')}>
+<Base
+  lang={lang}
+  noindex={frozen}
+  pageTitle={row ? `${agentName}` : t(lang, 'agent.notFound')}
+  description={description}
+  ogImage={ogIcon}
+  jsonLd={jsonLd}
+>
   {!row ? (
     <div class="page-head"><h1>{t(lang, 'agent.notFound')}</h1></div>
   ) : (

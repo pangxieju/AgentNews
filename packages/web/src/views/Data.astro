@@ -59,9 +59,28 @@ const preStyle =
   'margin:0; padding:14px; background:var(--paper-3); border:1px solid var(--rule); overflow:auto; max-height:520px; font-size:11.5px; line-height:1.55; color:var(--ink-2);';
 const citeStyle =
   'display:block; padding:12px 14px; background:var(--paper-3); border:1px solid var(--rule); font-size:13px; line-height:1.6; color:var(--ink); overflow-wrap:anywhere; white-space:pre-wrap;';
+/* ── SEO / 结构化数据：数据页是 Dataset，可直接被语义化检索 ── */
+const description = en
+  ? `Download AgentNews snapshots (JSON, CSV), read the read-only API, cite the index or embed a live rank badge. Snapshot ${date}, score_version ${data?.version ?? '—'}, ${rows.length} listed agents.`
+  : `下载 AgentNews 快照（JSON / CSV）、调用只读 API、引用榜单或嵌入实时徽章。快照 ${date}，score_version ${data?.version ?? '—'}，${rows.length} 个上榜条目。`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: 'AgentNews · AI Agent Index snapshots',
+  description,
+  url: `${SITE}/data/`,
+  temporalCoverage: date,
+  license: 'https://creativecommons.org/licenses/by/4.0/',
+  creator: { '@type': 'Organization', name: 'AgentNews', url: SITE },
+  distribution: [
+    { '@type': 'DataDownload', name: 'Latest scores (JSON)', contentUrl: `${SITE}/data/scores.json`, encodingFormat: 'application/json' },
+    { '@type': 'DataDownload', name: 'Latest scores (CSV)', contentUrl: `${SITE}/data/scores.csv`, encodingFormat: 'text/csv' },
+    { '@type': 'DataDownload', name: 'Snapshot dates (JSON)', contentUrl: `${SITE}/data/dates.json`, encodingFormat: 'application/json' },
+  ],
+};
 ---
 
-<Base lang={lang} pageTitle={`${t(lang, 'data.title')} · AgentNews`}>
+<Base lang={lang} pageTitle={t(lang, 'data.title')} description={description} jsonLd={jsonLd}>
   <div class="page-head">
     <div class="crumbs"><a href={h('/')}>AgentNews</a><span>/</span><span>{t(lang, 'data.crumb')}</span></div>
     <span class="eyebrow">{t(lang, 'data.eyebrow')}</span>

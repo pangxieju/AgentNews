@@ -28,9 +28,42 @@ const hasGrowth = list.some((r) => r.growth_30d_pct != null);
 const top2 = list.filter((r) => r.score != null).slice(0, 2);
 
 const bucketBadge = (b: string) => (b === 'open' ? 'b-open' : b === 'semi' ? 'b-semi' : 'b-closed');
+
+/* ── SEO / 结构化数据 ── */
+const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
+const formText = formLabel(lang, form);
+const ranked = list.filter((r) => r.score != null).slice(0, 10);
+const description = guide
+  ? `${formText} guide — who it fits, trade-offs, what to watch, and ${ranked.length} ranked agents (of ${list.length} listed). Open and closed are separate namespaces. Snapshot ${date}.`
+  : `${formText} · AgentNews`;
+const jsonLd = guide
+  ? [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: `${formText} board`,
+        numberOfItems: ranked.length,
+        url: new URL(H(`/forms/${form}/`), SITE).href,
+        itemListElement: ranked.map((r, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: new URL(H(`/agent/${r.slug}/`), SITE).href,
+          name: r.name ?? r.slug,
+        })),
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'AgentNews', item: SITE.href },
+          { '@type': 'ListItem', position: 2, name: formText, item: new URL(H(`/forms/${form}/`), SITE).href },
+        ],
+      },
+    ]
+  : undefined;
 ---
 
-<Base lang={lang} noindex={!guide} pageTitle={`${formLabel(lang, form)} · AgentNews`}>
+<Base lang={lang} noindex={!guide} pageTitle={formLabel(lang, form)} description={description} jsonLd={jsonLd}>
   {!guide ? (
     <div class="page-head"><h1>{t(lang, 'agent.notFound')}</h1></div>
   ) : (

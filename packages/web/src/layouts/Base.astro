@@ -19,7 +19,16 @@ const date = data?.date ?? '—';
 const agentsMeta = loadAgentsMeta();
 
 const path = Astro.url.pathname;
-const props = Astro.props as { lang?: Lang; pageTitle?: string; description?: string; noindex?: boolean };
+const props = Astro.props as {
+  lang?: Lang;
+  pageTitle?: string;
+  description?: string;
+  noindex?: boolean;
+  /** 分享图：相对路径或绝对 URL；缺省用站点方图 */
+  ogImage?: string;
+  /** 结构化数据（schema.org JSON-LD），对象或数组 */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+};
 const lang: Lang = props.lang ?? langOf(path);
 const base = stripLang(path);
 const SITE = Astro.site ?? new URL('https://agentnews.example.com');
@@ -32,6 +41,11 @@ const description =
     : `AI Agent 排行榜：${rows.length} 个 agent 的开源/闭源双榜，按 star、安装量、活跃度跨生态归一化排名。数据截至 ${date}。`);
 
 const canonical = new URL(path, SITE).href;
+const ogImage = props.ogImage
+  ? /^https?:/i.test(props.ogImage)
+    ? props.ogImage
+    : new URL(props.ogImage, SITE).href
+  : new URL('/icon-512.png', SITE).href;
 const zhHref = new URL(pathFor('zh', base), SITE).href;
 const enHref = new URL(pathFor('en', base), SITE).href;
 
@@ -81,7 +95,19 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
     <meta property="og:title" content={`${pageTitle} · AgentNews`} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={`${pageTitle} · AgentNews`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${pageTitle} · AgentNews`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {props.jsonLd && (
+      <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify(props.jsonLd)}
+      />
+    )}
     <script is:inline>
       try {
         const saved = localStorage.getItem('an-theme');

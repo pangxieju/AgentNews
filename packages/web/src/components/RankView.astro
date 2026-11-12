@@ -6,7 +6,7 @@ import Base from '../layouts/Base.astro';
 import RankBoard, { type RankRow, type IconMeta } from './RankBoard';
 import { loadLatestScores, loadAgentsMeta } from '../lib/data';
 import { isListed, rankUrl } from '../lib/shared';
-import { type Lang, bucketText, pathFor, t } from '../i18n/dict';
+import { type Lang, bucketText, formLabel, granLabel, pathFor, t } from '../i18n/dict';
 
 interface Props {
   bucket: string;
@@ -57,9 +57,43 @@ for (const r of rows) {
 
 const titleKey = bucket === 'open' ? 'rank.titleOpen' : 'rank.titleClosed';
 const bucketLabel = bucketText(lang, bucket);
+const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
+/** /top/ 是 /top/open/all/month/ 的别名页：重复内容不进索引 */
+const isAlias = /^(?:\/zh)?\/top\/?$/.test(Astro.url.pathname);
+
+/* ── SEO / 结构化数据：榜单是主入口，每张榜必须有自己的描述与 ItemList ── */
+const formText = form === 'all' ? (lang === 'en' ? 'all forms' : '全部形态') : formLabel(lang, form);
+const top = rows
+  .filter((r) => r.score != null)
+  .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+  .slice(0, 10);
+const description = `${bucketLabel} · ${formText} · ${granLabel(lang, g)} — ${rows.filter((r) => r.score != null).length} ranked of ${rows.length} listed. Scores are in-form percentiles (${data?.version ?? '—'}); open and closed are separate namespaces. Snapshot ${date}.`;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${bucketLabel} · ${formText} · ${granLabel(lang, g)}`,
+    numberOfItems: top.length,
+    url: new URL(H(rankUrl(bucket, form, g)), SITE).href,
+    itemListElement: top.map((r, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: new URL(H(`/agent/${r.slug}/`), SITE).href,
+      name: r.name ?? r.slug,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'AgentNews', item: SITE.href },
+      { '@type': 'ListItem', position: 2, name: bucketLabel, item: new URL(H(rankUrl(bucket, 'all', g)), SITE).href },
+    ],
+  },
+];
 ---
 
-<Base lang={lang} pageTitle={`${t(lang, titleKey)} · AgentNews`}>
+<Base lang={lang} pageTitle={t(lang, titleKey)} description={description} jsonLd={jsonLd} noindex={isAlias}>
 <div class="page-head">
   <div class="crumbs">
     <a href={H('/')}>AgentNews</a><span>/</span><span>{t(lang, 'rank.crumb')}</span>

@@ -5,7 +5,7 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const H = (p: string) => pathFor(lang, p);
 ---
-<Base lang={lang} pageTitle={`${t(lang, 'app.notFound')}`} noindex>
+<Base lang={lang} pageTitle={t(lang, 'app.notFound')} description={t(lang, 'notfound.lede')} noindex>
   <div class="page-head">
     <span class="eyebrow">404</span>
     <h1>{t(lang, 'app.notFound')}</h1>

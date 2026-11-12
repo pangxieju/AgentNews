@@ -68,9 +68,33 @@ const pick: PickRow[] = listedRows.map((r) => ({
 }));
 
 const titleLines = t(lang, 'home.title').split('\n');
+
+/* ── SEO / 结构化数据 ── */
+const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
+const description =
+  lang === 'en'
+    ? `AI coding agent index: ${listedRows.length} agents in terminal, IDE plugin and AI IDE forms — with open/closed adoption data, percentile scores and weekly install deltas. Snapshot ${date}.`
+    : `AI 编码 agent 索引：${listedRows.length} 个终端 / IDE 插件 / AI IDE 产品的开源与闭源采用度、组内分位分数与周安装增量。快照 ${date}。`;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'AgentNews · AI Agent Index',
+    url: SITE.href,
+    inLanguage: lang === 'en' ? 'en' : 'zh-CN',
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'AgentNews',
+    url: SITE.href,
+    logo: new URL('/icon-512.png', SITE).href,
+  },
+];
 ---
 
-<Base lang={lang} pageTitle={t(lang, 'app.tagline')}>
+<Base lang={lang} pageTitle={t(lang, 'app.tagline')} description={description} jsonLd={jsonLd}>
   <div class="measure-head">
     <div>
       <span class="eyebrow">{t(lang, 'home.eyebrow', { date })}</span>

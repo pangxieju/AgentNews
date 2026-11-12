@@ -34,9 +34,21 @@ const items: CompareItem[] = (data?.rows ?? []).filter(isListed).map((r) => ({
   icon: meta[r.slug]?.icon ?? null,
   iconFallback: meta[r.slug]?.iconFallback ?? null,
 }));
+const description = lang === 'en'
+  ? 'Compare AI coding agents side by side within the same form: score, stars, installs, install deltas, activity, license and last release. Up to three at a time.'
+  : '同形态内并排对比 AI 编码 agent：综合分、Star、安装量、安装增量、活跃度、License 与最近发版，最多三个。';
+const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: t(lang, 'compare.title'),
+  description,
+  url: new URL(pathFor(lang, '/compare/'), SITE).href,
+  isPartOf: { '@type': 'WebSite', name: 'AgentNews · AI Agent Index', url: SITE.href },
+};
 ---
 
-<Base lang={lang} pageTitle={`${t(lang, 'compare.title')} · AgentNews`}>
+<Base lang={lang} pageTitle={t(lang, 'compare.title')} description={description} jsonLd={jsonLd}>
   <div class="page-head">
     <div class="crumbs"><a href={H('/')}>AgentNews</a><span>/</span><span>{t(lang, 'compare.crumb')}</span></div>
     <span class="eyebrow">{t(lang, 'compare.eyebrow')}</span>
