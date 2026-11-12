@@ -2,15 +2,16 @@ name: daily
 
 on:
   schedule:
-    # GitHub 的 schedule 实测会迟到 7 小时以上甚至不触发，主力触发已交给
-    # ops/dispatch-worker（Cloudflare Cron，北京 08:05）。这两个 cron 只作兜底。
+    # 正常情况下**每天只跑一次**：由 ops/dispatch-worker（Cloudflare Cron，北京 08:05）
+    # 调 workflow_dispatch 触发，采集 → 构建 → 部署在同一次运行里连着做完（约 2~3 分钟），
+    # 不存在「先采集、过一阵再更新」的间隔。
     #
-    # 为什么最早只能排到 00:05Z（北京 08:05）：快照文件名和「今天是否已采过」的守卫
-    # 都用 UTC 日期，排在 00:00Z 之前会算成前一天，守卫会误判为「已采过」而不采集。
-    - cron: "20 0 * * *" # UTC 00:20 = 北京时间 08:20
-    # 兜底：上面那轮被丢弃时补跑。当天已有快照就跳过采集，只构建+部署
-    # （部署失败也能靠这一轮自愈，不会因为「今天采过了」而放弃发布）。
-    - cron: "40 0 * * *" # UTC 00:40 = 北京时间 08:40
+    # 下面这个 cron 只是兜底：08:05 那次没成时才补跑一次，同样采集+发布一起做。
+    # 当天已发布过就直接退出（见 Preflight 的 deployed 标记），不会重复部署。
+    #
+    # 为什么最早只能排到 00:05Z（北京 08:05）：快照文件名、deployed 标记都用 UTC 日期，
+    # 排在 00:00Z 之前会被算成前一天，守卫会误判成「今天已处理」而不采集。
+    - cron: "45 0 * * *" # UTC 00:45 = 北京时间 08:45（仅兜底）
   workflow_dispatch:
 
 # 需要写权限来回写 data/ 快照
@@ -44,10 +45,23 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # 今天的快照是否已经采过 —— 兜底那轮不重复采集，只负责构建+部署
-      - name: Check today's snapshot
-        id: snap
+      # 今天是否已经「采集 + 发布」完成过：兜底那轮直接退出，不重复采、不重复部署
+      - name: Preflight
+        id: pre
         run: |
+          TODAY=$(date -u +%F)
+          if [ -f "data/deploy/$TODAY.json" ]; then
+            echo "deployed=true" >> "$GITHUB_OUTPUT"
+            echo "今天（$TODAY）已经发布过：$(cat "data/deploy/$TODAY.json")"
+            echo "本轮不再采集、不再部署，直接结束"
+          else
+            echo "deployed=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -f "data/snapshots/$TODAY.jsonl" ]; then
+            echo "collected=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "collected=false" >> "$GITHUB_OUTPUT"
+          fi
           if [ -f "data/snapshots/$(date -u +%F).jsonl" ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
             echo "今天已有快照（$(date -u +%F)），跳过采集，只构建+部署"
@@ -57,10 +71,12 @@ jobs:
 
       # 数据契约先校验；算法回归先跑（校验失败绝不出榜）
       - run: pnpm validate
+        if: steps.pre.outputs.deployed != 'true'
       - run: pnpm test
+        if: steps.pre.outputs.deployed != 'true'
 
       - name: Collect & score
-        if: steps.snap.outputs.exists == 'false'
+        if: steps.pre.outputs.deployed != 'true' && steps.pre.outputs.collected != 'true'
         run: pnpm collect
         env:
           # Actions 自动注入：5000 次/小时，足够覆盖当前 77 个 agent 的请求量
@@ -68,10 +84,12 @@ jobs:
 
       # 图标体检：只出报告，不阻断（缺图/低清时在 Summary 里提醒人工加 icon: 覆盖）
       - name: Icon audit
+        if: steps.pre.outputs.deployed != 'true'
         continue-on-error: true
         run: pnpm icons:audit
 
       - name: Commit snapshots
+        if: steps.pre.outputs.deployed != 'true'
         run: |
           git config user.name  'agentnews-bot'
           git config user.email 'bot@agentnews.dev'
@@ -85,22 +103,37 @@ jobs:
 
       # 构建 + 直接部署到 Cloudflare Pages（不依赖 CF↔GitHub 集成）
       - name: Build site
+        if: steps.pre.outputs.deployed != 'true'
         run: pnpm build
 
       # secrets 没配时不要静默跳过：线上不会更新，必须在 Summary 里说清楚
       - name: Deploy preflight
+        if: steps.pre.outputs.deployed != 'true'
         run: |
           if [ "$CF_READY" != "true" ]; then
             echo "::warning title=未配置 Cloudflare secrets::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID 未配置，本次只采集不部署，线上站点不会更新。"
           fi
 
       - name: Deploy to Cloudflare Pages
-        if: env.CF_READY == 'true'
+        if: steps.pre.outputs.deployed != 'true' && env.CF_READY == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         # --force：wrangler 4 默认会委托给新版 Workers-Pages，CI 非交互环境需强制走 Pages
         run: pnpm --filter @agentnews/web exec wrangler pages deploy dist --project-name agentnews --force
+
+      # 部署成功才写标记：兜底那轮看到标记就直接退出，不会再有第二次部署
+      - name: Record deploy
+        if: steps.pre.outputs.deployed != 'true' && env.CF_READY == 'true'
+        run: |
+          TODAY=$(date -u +%F)
+          mkdir -p data/deploy
+          TODAY=$TODAY node -e "const fs=require('fs');fs.writeFileSync('data/deploy/'+process.env.TODAY+'.json', JSON.stringify({date:process.env.TODAY,deployed_at:new Date().toISOString(),snapshot:fs.readdirSync('data/snapshots').sort().pop()})+String.fromCharCode(10))"
+          git config user.name  'agentnews-bot'
+          git config user.email 'bot@agentnews.dev'
+          git add data/deploy
+          git commit -m "data: deploy 标记 $TODAY"
+          git push
 
       - name: Summary
         run: |
@@ -108,8 +141,10 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- 数据：$(ls data/scores | tail -1)" >> $GITHUB_STEP_SUMMARY
           echo "- 在榜：$(node -e "const j=require('./data/scores/'+require('fs').readdirSync('data/scores').sort().pop());console.log(j.rows.filter(r=>r.rank_in_form!=null).length)") 个" >> $GITHUB_STEP_SUMMARY
-          if [ "$CF_READY" = "true" ]; then
+          if [ "$CF_READY" = "true" ] && [ "${{ steps.pre.outputs.deployed }}" != "true" ]; then
             echo "- 部署：已发布到 Cloudflare Pages" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.pre.outputs.deployed }}" = "true" ]; then
+            echo "- 部署：今天已发布过，本轮跳过（避免重复部署）" >> $GITHUB_STEP_SUMMARY
           else
             echo "- 部署：**跳过** —— 仓库缺少 CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID secrets，线上站点没有更新" >> $GITHUB_STEP_SUMMARY
           fi
