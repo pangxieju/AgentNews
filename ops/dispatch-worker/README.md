@@ -1,6 +1,6 @@
 # agentnews-dispatch
 
-Cloudflare Cron Trigger Worker：每天定时调 GitHub 的 `workflow_dispatch`，
+Cloudflare Cron Trigger Worker：每天 00:05 UTC（北京 08:05）调 GitHub 的 `workflow_dispatch`，
 触发 `daily.yml`（采集 → 提交 → 构建 → 部署）。
 
 ## 为什么需要它
@@ -9,10 +9,11 @@ GitHub Actions 的 `schedule` 不可靠，实测：
 
 - 11-10 排在 `02:00Z`，实际 `09:19Z` 才跑 —— 迟到 **7 小时 19 分**
 - 11-11 排在 `01:30Z`，**完全没触发**
+- 11-11 的两个 cron（02:17Z / 04:43Z）分别在 `09:25Z` / `12:10Z` 才跑，晚 7 小时以上
 
 根因是 GitHub 的调度器在整点拥堵时会延迟甚至丢弃事件。改成由 Cloudflare 侧触发后，
 链路不再依赖 GitHub 自己的调度。Cloudflare 触发成功后，GitHub 自己的
-`10:17` / `12:43` 两个 cron 仍保留作为兜底 —— `daily.yml` 里有「当天已有快照就跳过采集，
+`08:20` / `08:40` 两个 cron 仍保留作为兜底 —— `daily.yml` 里有「当天已有快照就跳过采集，
 只构建+部署」的守卫，所以重复触发不会重复采集，反而能把「采集成功但部署失败」的那天自愈回来。
 
 ## 部署
