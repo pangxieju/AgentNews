@@ -14,7 +14,7 @@ export type RankRow = {
   delta_1d: number | null;
   delta_7d: number | null;
   /** 近 7 天安装量增量（快照不足时由 npm/PyPI 历史回填） */
-  delta_7d_installs?: number | null;
+  installs_delta_7d?: number | null;
   /** 近 30 天安装量增量（同样口径） */
   installs_delta_30d?: number | null;
   growth_30d_pct: number | null;
@@ -54,7 +54,7 @@ type SortKey =
   | 'data_level'
   | 'delta_1d'
   | 'delta_7d'
-  | 'delta_7d_installs'
+  | 'installs_delta_7d'
   | 'installs_delta_30d';
 
 type Col = {
@@ -109,11 +109,11 @@ function columns(lang: Lang, bucket: string): Col[] {
     bar: true,
   };
   const deltaInstalls: Col = {
-    key: 'delta_7d_installs',
+    key: 'installs_delta_7d',
     label: t(lang, 'metric.delta7dInstalls'),
-    get: (r) => r.delta_7d_installs ?? null,
-    show: (rs) => rs.some((r) => r.delta_7d_installs != null),
-    format: (r) => fmtSigned(r.delta_7d_installs),
+    get: (r) => r.installs_delta_7d ?? null,
+    show: (rs) => rs.some((r) => r.installs_delta_7d != null),
+    format: (r) => fmtSigned(r.installs_delta_7d),
   };
   const deltaInstalls30: Col = {
     key: 'installs_delta_30d',

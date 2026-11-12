@@ -331,7 +331,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         rank_in_form: rankMap.get(item.slug) ?? null,
         delta_1d: stars != null && prevStars != null ? stars - prevStars : null,
         delta_7d: stars != null && weekAgo != null ? stars - weekAgo : null,
-        delta_7d_installs: delta7dInstalls,
+        installs_delta_7d: delta7dInstalls,
         installs_delta_30d: delta30dInstalls,
         growth_7d_installs_pct: growth7dInstalls,
         growth_30d_installs_pct: growth30dInstalls,

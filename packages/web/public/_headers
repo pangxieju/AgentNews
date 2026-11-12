@@ -28,3 +28,20 @@
 /site.webmanifest
   Cache-Control: public, max-age=86400
   Content-Type: application/manifest+json
+
+# 公开数据导出 / API / 徽章：允许跨域引用
+/data/*.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=600, must-revalidate
+/data/*.csv
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=600, must-revalidate
+/data/*/scores.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600, must-revalidate
+/api/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=600, must-revalidate
+/badge/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600, must-revalidate

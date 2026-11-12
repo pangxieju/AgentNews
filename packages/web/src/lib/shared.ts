@@ -76,7 +76,7 @@ export function fmtSigned(n: number | null | undefined): string {
 export const GRANS = ['day', 'week', 'month'] as const;
 /** 粒度 → 默认排序键（PRD §5.5） */
 export const defaultSortFor = (g: string): string =>
-  g === 'day' ? 'delta_1d' : g === 'week' ? 'delta_7d_installs' : 'score';
+  g === 'day' ? 'delta_1d' : g === 'week' ? 'installs_delta_7d' : 'score';
 
 export const rankUrl = (bucket: string, form: string, g: string): string =>
   `/top/${bucket}/${form}/${g}/`;

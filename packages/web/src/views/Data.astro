@@ -71,6 +71,58 @@ const citeStyle =
 
   <section class="section" style="margin-top:22px">
     <div class="section-title">
+      <h2>{en ? 'Download & API' : '下载与 API'}</h2>
+      <span class="muted">{date} · score_version {data?.version ?? '—'}</span>
+    </div>
+    <div class="box">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{en ? 'Format' : '格式'}</th>
+              <th>URL</th>
+              <th>{en ? 'Use for' : '用途'}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>JSON</td><td><a href="/data/scores.json"><code>/data/scores.json</code></a></td><td>{en ? 'Latest snapshot, public field contract' : '最新快照，公开字段契约'}</td></tr>
+            <tr><td>CSV</td><td><a href="/data/scores.csv"><code>/data/scores.csv</code></a></td><td>{en ? 'Spreadsheets, quick analysis' : '表格工具、快速分析'}</td></tr>
+            <tr><td>API</td><td><a href="/api/v1/scores.json"><code>/api/v1/scores.json</code></a></td><td>{en ? 'Read-only endpoint, CORS enabled' : '只读接口，已开 CORS'}</td></tr>
+            <tr><td>{en ? 'Dates' : '日期清单'}</td><td><a href="/data/dates.json"><code>/data/dates.json</code></a></td><td>{en ? 'Available snapshot dates' : '可用快照日期'}</td></tr>
+            <tr><td>{en ? 'Archive' : '历史快照'}</td><td><code>/data/&#123;date&#125;/scores.json</code></td><td>{en ? 'Any past snapshot (same schema)' : '任意历史快照（同结构）'}</td></tr>
+            <tr><td>RSS</td><td><a href="/feed.xml"><code>/feed.xml</code></a></td><td>{en ? 'Rank / release updates' : '排名与发版更新'}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="box-body">
+        <pre style={preStyle}>curl -s {SITE}/api/v1/scores.json | jq '.rows[] | select(.rank_in_form == 1) | &#123;slug, score&#125;'</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>{en ? 'Embed badge' : '嵌入徽章'}</h2>
+      <span class="muted">{en ? 'Live SVG · updates with each snapshot' : '实时 SVG · 随快照更新'}</span>
+    </div>
+    <div class="box">
+      <div class="box-body">
+        <p style="margin-bottom:10px;font-size:13px;color:var(--ink-2)">
+          {en
+            ? 'Project authors and media can embed the current rank. The badge links back to the agent page.'
+            : '项目作者与媒体可嵌入当前名次，徽章会链接回详情页。'}
+        </p>
+        <pre style={preStyle}>&lt;img src="{SITE}/badge/{rows[0]?.slug ?? 'slug'}.svg" alt="AgentNews rank"&gt;</pre>
+        <pre style={{ ...preStyle, marginTop: '10px' }}>[![AgentNews]({SITE}/badge/{rows[0]?.slug ?? 'slug'}.svg)]({SITE}/agent/{rows[0]?.slug ?? 'slug'}/)</pre>
+        <p style="margin-top:10px;font-size:12px;color:var(--ink-3)">
+          {en ? 'Pattern: ' : '地址规律：'}<code>{SITE}/badge/&#123;slug&#125;.svg</code>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="margin-top:22px">
+    <div class="section-title">
       <h2>{en ? 'Snapshot data' : '快照数据'}</h2>
       <span class="muted">{date}</span>
     </div>
