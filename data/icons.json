@@ -301,11 +301,11 @@
     "url": "https://icon.horse/icon/kilocode.ai"
   },
   "kimi-cli": {
-    "file": "kimi-cli.c7c55ef5.ico",
+    "file": "kimi-cli.e5c7d7be.png",
     "source": "logo",
     "w": 256,
     "h": 256,
-    "url": "https://favicone.com/platform.kimi.com?s=256"
+    "url": "https://icon.horse/icon/kimi.com"
   },
   "kiro": {
     "file": "kiro.fff9f20b.png",
@@ -371,10 +371,10 @@
     "url": "https://raw.githubusercontent.com/nanobrowser/nanobrowser/HEAD/public/icon-128.png"
   },
   "open-interpreter": {
-    "file": "open-interpreter.4f9e0ec6.png",
+    "file": "open-interpreter.6bb28368.png",
     "source": "logo",
-    "w": 180,
-    "h": 180,
+    "w": 256,
+    "h": 256,
     "url": "https://icon.horse/icon/openinterpreter.com"
   },
   "openai-agents": {
@@ -518,10 +518,10 @@
     "url": "https://voideditor.com/icon.png?fe8088bdbfb5a2cf"
   },
   "warp-agent": {
-    "file": "warp-agent.3bedbdd5.png",
+    "file": "warp-agent.071b7cd5.png",
     "source": "logo",
-    "w": 196,
-    "h": 196,
+    "w": 256,
+    "h": 256,
     "url": "https://icon.horse/icon/warp.dev"
   },
   "windsurf": {

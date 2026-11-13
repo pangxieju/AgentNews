@@ -1,0 +1,301 @@
+{
+  "date": "2026-11-14",
+  "subjects": {
+    "aider": {
+      "package": "aider-chat",
+      "ecosystem": "PyPI",
+      "advisories": 4,
+      "malicious": 0,
+      "latest": "2026-07-13T16:43:45.371322Z",
+      "url": "https://osv.dev/list?q=aider-chat&ecosystem=PyPI"
+    },
+    "opencode": {
+      "package": "opencode-ai",
+      "ecosystem": "npm",
+      "advisories": 2,
+      "malicious": 0,
+      "latest": "2026-02-03T03:00:05.488310Z",
+      "url": "https://osv.dev/list?q=opencode-ai&ecosystem=npm"
+    },
+    "pi": {
+      "package": "@earendil-works/pi-coding-agent",
+      "ecosystem": "npm",
+      "advisories": 4,
+      "malicious": 0,
+      "latest": "2026-07-20T21:30:42.044931Z",
+      "url": "https://osv.dev/list?q=%40earendil-works%2Fpi-coding-agent&ecosystem=npm"
+    },
+    "codex-cli": {
+      "package": "@openai/codex",
+      "ecosystem": "npm",
+      "advisories": 2,
+      "malicious": 0,
+      "latest": "2026-04-16T23:11:28.675093Z",
+      "url": "https://osv.dev/list?q=%40openai%2Fcodex&ecosystem=npm"
+    },
+    "gemini-cli": {
+      "package": "@google/gemini-cli",
+      "ecosystem": "npm",
+      "advisories": 1,
+      "malicious": 0,
+      "latest": "2026-09-25T03:55:55.786134Z",
+      "url": "https://osv.dev/list?q=%40google%2Fgemini-cli&ecosystem=npm"
+    },
+    "qwen-code": {
+      "package": "@qwen-code/qwen-code",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40qwen-code%2Fqwen-code&ecosystem=npm"
+    },
+    "claude-code": {
+      "package": "@anthropic-ai/claude-code",
+      "ecosystem": "npm",
+      "advisories": 30,
+      "malicious": 0,
+      "latest": "2026-11-09T23:00:03.851745Z",
+      "url": "https://osv.dev/list?q=%40anthropic-ai%2Fclaude-code&ecosystem=npm"
+    },
+    "kimi-cli": {
+      "package": "@moonshot-ai/kimi-code",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40moonshot-ai%2Fkimi-code&ecosystem=npm"
+    },
+    "kilo-code": {
+      "package": "@kilocode/cli",
+      "ecosystem": "npm",
+      "advisories": 1,
+      "malicious": 0,
+      "latest": "2026-09-10T03:51:07.015389Z",
+      "url": "https://osv.dev/list?q=%40kilocode%2Fcli&ecosystem=npm"
+    },
+    "browser-use": {
+      "package": "browser-use",
+      "ecosystem": "PyPI",
+      "advisories": 2,
+      "malicious": 0,
+      "latest": "2026-10-27T15:30:04.622016Z",
+      "url": "https://osv.dev/list?q=browser-use&ecosystem=PyPI"
+    },
+    "open-interpreter": {
+      "package": "open-interpreter",
+      "ecosystem": "PyPI",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=open-interpreter&ecosystem=PyPI"
+    },
+    "crewai": {
+      "package": "crewai",
+      "ecosystem": "PyPI",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=crewai&ecosystem=PyPI"
+    },
+    "langgraph": {
+      "package": "langgraph",
+      "ecosystem": "PyPI",
+      "advisories": 4,
+      "malicious": 0,
+      "latest": "2026-10-28T21:15:05.147749Z",
+      "url": "https://osv.dev/list?q=langgraph&ecosystem=PyPI"
+    },
+    "autogen": {
+      "package": "autogen-agentchat",
+      "ecosystem": "PyPI",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=autogen-agentchat&ecosystem=PyPI"
+    },
+    "agno": {
+      "package": "agno",
+      "ecosystem": "PyPI",
+      "advisories": 6,
+      "malicious": 0,
+      "latest": "2026-10-27T13:55:51.996885Z",
+      "url": "https://osv.dev/list?q=agno&ecosystem=PyPI"
+    },
+    "pydantic-ai": {
+      "package": "pydantic-ai",
+      "ecosystem": "PyPI",
+      "advisories": 28,
+      "malicious": 0,
+      "latest": "2026-10-15T14:56:22.971904Z",
+      "url": "https://osv.dev/list?q=pydantic-ai&ecosystem=PyPI"
+    },
+    "openai-agents": {
+      "package": "openai-agents",
+      "ecosystem": "PyPI",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=openai-agents&ecosystem=PyPI"
+    },
+    "crush": {
+      "package": "@charmland/crush",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40charmland%2Fcrush&ecosystem=npm"
+    },
+    "iflow-cli": {
+      "package": "@iflow-ai/iflow-cli",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40iflow-ai%2Fiflow-cli&ecosystem=npm"
+    },
+    "skyvern": {
+      "package": "skyvern",
+      "ecosystem": "PyPI",
+      "advisories": 2,
+      "malicious": 0,
+      "latest": "2026-07-07T17:56:29.729959Z",
+      "url": "https://osv.dev/list?q=skyvern&ecosystem=PyPI"
+    },
+    "mastra": {
+      "package": "mastra",
+      "ecosystem": "npm",
+      "advisories": 1,
+      "malicious": 1,
+      "latest": "2026-07-08T20:47:11.809262Z",
+      "url": "https://osv.dev/list?q=mastra&ecosystem=npm"
+    },
+    "vercel-ai-sdk": {
+      "package": "ai",
+      "ecosystem": "npm",
+      "advisories": 1,
+      "malicious": 0,
+      "latest": "2026-09-10T03:50:58.597326Z",
+      "url": "https://osv.dev/list?q=ai&ecosystem=npm"
+    },
+    "semantic-kernel": {
+      "package": "semantic-kernel",
+      "ecosystem": "PyPI",
+      "advisories": 4,
+      "malicious": 0,
+      "latest": "2026-07-01T20:23:04.850413Z",
+      "url": "https://osv.dev/list?q=semantic-kernel&ecosystem=PyPI"
+    },
+    "llamaindex": {
+      "package": "llama-index",
+      "ecosystem": "PyPI",
+      "advisories": 31,
+      "malicious": 0,
+      "latest": "2026-10-15T14:56:11.668398Z",
+      "url": "https://osv.dev/list?q=llama-index&ecosystem=PyPI"
+    },
+    "haystack": {
+      "package": "haystack-ai",
+      "ecosystem": "PyPI",
+      "advisories": 2,
+      "malicious": 0,
+      "latest": "2026-07-07T17:57:27.499478Z",
+      "url": "https://osv.dev/list?q=haystack-ai&ecosystem=PyPI"
+    },
+    "smolagents": {
+      "package": "smolagents",
+      "ecosystem": "PyPI",
+      "advisories": 10,
+      "malicious": 0,
+      "latest": "2026-07-13T16:43:09.315016Z",
+      "url": "https://osv.dev/list?q=smolagents&ecosystem=PyPI"
+    },
+    "google-adk": {
+      "package": "google-adk",
+      "ecosystem": "PyPI",
+      "advisories": 2,
+      "malicious": 0,
+      "latest": "2026-07-02T13:00:07.937170Z",
+      "url": "https://osv.dev/list?q=google-adk&ecosystem=PyPI"
+    },
+    "strands-agents": {
+      "package": "strands-agents",
+      "ecosystem": "PyPI",
+      "advisories": 3,
+      "malicious": 0,
+      "latest": "2026-10-27T15:47:24.152066Z",
+      "url": "https://osv.dev/list?q=strands-agents&ecosystem=PyPI"
+    },
+    "agent-framework": {
+      "package": "agent-framework",
+      "ecosystem": "PyPI",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=agent-framework&ecosystem=PyPI"
+    },
+    "atomic-agents": {
+      "package": "atomic-agents",
+      "ecosystem": "PyPI",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=atomic-agents&ecosystem=PyPI"
+    },
+    "langchain": {
+      "package": "langchain",
+      "ecosystem": "PyPI",
+      "advisories": 45,
+      "malicious": 0,
+      "latest": "2026-10-27T17:45:03.878754Z",
+      "url": "https://osv.dev/list?q=langchain&ecosystem=PyPI"
+    },
+    "gpt-engineer": {
+      "package": "gpt-engineer",
+      "ecosystem": "PyPI",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=gpt-engineer&ecosystem=PyPI"
+    },
+    "amp": {
+      "package": "@ampcode/cli",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40ampcode%2Fcli&ecosystem=npm"
+    },
+    "droid": {
+      "package": "@factory/cli",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40factory%2Fcli&ecosystem=npm"
+    },
+    "copilot-cli": {
+      "package": "@github/copilot",
+      "ecosystem": "npm",
+      "advisories": 2,
+      "malicious": 0,
+      "latest": "2026-09-10T03:51:05.081988Z",
+      "url": "https://osv.dev/list?q=%40github%2Fcopilot&ecosystem=npm"
+    },
+    "auggie": {
+      "package": "@augmentcode/auggie",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40augmentcode%2Fauggie&ecosystem=npm"
+    },
+    "qoder": {
+      "package": "@qoder-ai/qodercli",
+      "ecosystem": "npm",
+      "advisories": 0,
+      "malicious": 0,
+      "latest": null,
+      "url": "https://osv.dev/list?q=%40qoder-ai%2Fqodercli&ecosystem=npm"
+    }
+  }
+}
