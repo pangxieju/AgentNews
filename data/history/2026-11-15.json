@@ -259,12 +259,6 @@
       "installs_30d_ago": 6368,
       "channel": "npm"
     },
-    "claude-agent-sdk": {
-      "installs_1d_ago": 18951075,
-      "installs_7d_ago": 18509507,
-      "installs_30d_ago": 9764198,
-      "channel": "npm"
-    },
     "openmanus": {
       "installs_1d_ago": 20,
       "installs_7d_ago": 18,
@@ -293,6 +287,12 @@
       "installs_1d_ago": 271,
       "installs_7d_ago": 509,
       "installs_30d_ago": 266,
+      "channel": "pypi"
+    },
+    "langflow": {
+      "installs_1d_ago": 8374,
+      "installs_7d_ago": 8521,
+      "installs_30d_ago": 9303,
       "channel": "pypi"
     }
   }

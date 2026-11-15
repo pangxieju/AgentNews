@@ -15,7 +15,7 @@ AI Agent 排行榜 —— 开源 / 闭源双榜，日 / 周 / 月粒度，跨生
 
 AgentNews 的做法：
 
-1. **按形态分组排名**（CLI / IDE 插件 / IDE 应用 / 框架 / 浏览器 / 自主），跨形态不比较
+1. **按形态分组排名**（终端 / IDE 插件 / AI IDE / 桌面 / 浏览器 / 框架 / 平台 / 自主），跨形态不比较
 2. **跨生态归一化**（GitHub star + npm/PyPI 下载 + 商店安装，log 压缩 + 组内分位数）
 3. **开源闭源双榜**，闭源无数据时降级为「收录区」，绝不编造名次
 4. **日 / 周 / 月三条归档时间线**，git 即审计日志
@@ -52,7 +52,7 @@ AgentNews 的做法：
 ```
 packages/web/src/
   i18n/dict.ts        # 全站 UI 文案（服务端 + 客户端 island 共用）
-  i18n/guides.ts      # 7 种形态的指南文案（中/英）
+  i18n/guides.ts      # 8 种形态的指南文案（中/英）
   i18n/content.ts     # 变更记录表格数据（中/英）
   views/*.astro       # 页面视图，接受 lang prop（唯一实现）
   pages/[...path].astro # 路由分发器：枚举 zh + en 全部路径
@@ -122,7 +122,7 @@ packages/
 - slug: my-agent            # 小写字母/数字/连字符，唯一
   name: My Agent
   vendor: Acme
-  form: cli                 # cli | ide-plugin | ide-app | desktop | browser | framework | autonomous
+  form: cli                 # cli | ide-plugin | ide-app | desktop | browser | framework | platform | autonomous
   oss_bucket: open          # open | semi | closed（按 License 判定，不按分发渠道）
   license_id: MIT
   homepage: https://example.com

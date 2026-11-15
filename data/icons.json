@@ -223,6 +223,13 @@
     "h": 0,
     "url": "https://github.githubassets.com/images/modules/site/copilot/copilot-logo.svg"
   },
+  "coze-studio": {
+    "file": "coze-studio.e5f77817.jpg",
+    "source": "github",
+    "w": 192,
+    "h": 192,
+    "url": "https://github.com/coze-dev.png?size=192"
+  },
   "crewai": {
     "file": "crewai.71bc4515.png",
     "source": "readme",
@@ -271,6 +278,13 @@
     "w": 256,
     "h": 256,
     "url": "https://icon.horse/icon/www.diabrowser.com"
+  },
+  "dify": {
+    "file": "dify.e438ef12.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0,
+    "url": "https://dify.ai/favicon.svg"
   },
   "droid": {
     "file": "droid.e4872399.svg",
@@ -418,6 +432,13 @@
     "w": 256,
     "h": 256,
     "url": "https://cdn.prod.website-files.com/65b8cd72835ceeacd4449a53/69a17e4f0c916c644f4de1cd_webclip%20lg.png"
+  },
+  "langflow": {
+    "file": "langflow.52421d2a.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://raw.githubusercontent.com/langflow-ai/langflow/HEAD/docs/static/img/langflow-logo-color-black-solid.svg"
   },
   "langgraph": {
     "file": "langgraph.b9af9e2a.svg",
@@ -579,6 +600,13 @@
     "w": 0,
     "h": 0,
     "url": "https://qwenpaw.agentscope.io/qwenpaw-symbol.svg"
+  },
+  "ragflow": {
+    "file": "ragflow.55be75bb.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0,
+    "url": "https://ragflow.io/img/logo.svg"
   },
   "roo-code": {
     "file": "roo-code.5546840d.png",

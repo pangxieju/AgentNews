@@ -53,6 +53,13 @@ export const FORM_GUIDES: Record<Lang, Record<string, FormGuide>> = {
       tradeoff: ['不是开箱即用的产品', '抽象层会绑定生态'],
       watch: '看贡献者与发版节奏：框架的长期维护比 star 数更重要。',
     },
+    platform: {
+      en: 'Platform',
+      tagline: '可视化搭建、托管并运营 agent 的平台（低代码 / 工作流）。',
+      fit: ['不想写大量代码', '要把 agent 接到业务系统', '需要多人协作与运营后台'],
+      tradeoff: ['闭源或半开源为主，迁移成本高', '平台自身的模型 / 工具选择会限制能力边界'],
+      watch: '看部署方式与 License：平台类项目多带商用限制，先确认能不能自托管、能不能多租户。',
+    },
     autonomous: {
       en: 'Autonomous',
       tagline: '给定目标后自己拆解、自己执行的 agent。',
@@ -103,6 +110,13 @@ export const FORM_GUIDES: Record<Lang, Record<string, FormGuide>> = {
       fit: ['You write code and want control', 'You need multi-model / multi-tool orchestration', 'You are building a product or internal platform'],
       tradeoff: ['Not a ready-made product', 'Abstractions tie you to an ecosystem'],
       watch: 'Watch contributors and release cadence: long-term maintenance matters more than star count.',
+    },
+    platform: {
+      en: 'Platform',
+      tagline: 'Build, host and operate agents visually (low-code / workflow).',
+      fit: ['You do not want to write much code', 'You need to connect agents to business systems', 'You need team collaboration and an ops console'],
+      tradeoff: ['Mostly closed or source-available; migration is costly', 'The platform’s own model / tool choices bound what agents can do'],
+      watch: 'Check deployment and license first: platform projects often carry commercial restrictions — verify self-hosting and multi-tenant terms.',
     },
     autonomous: {
       en: 'Autonomous',

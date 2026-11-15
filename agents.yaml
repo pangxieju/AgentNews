@@ -1208,3 +1208,54 @@
   sources:
     - { kind: github, identifier: ComputerUseAgent/AutoCua, is_primary: true }
     - { kind: pypi, identifier: autocua }
+
+# =============================================================
+# 第七批扩充（M1 · 2026-11-15）：新增 platform 形态
+# 低代码 / 可视化 agent 平台单独成榜，不与 framework SDK 混排。
+# 依据：有公开 repo、star ≥ 500、近 180 天活跃；License 逐个核过
+# =============================================================
+
+- slug: dify
+  name: Dify
+  vendor: LangGenius
+  form: platform
+  oss_bucket: semi
+  license_id: Apache-2.0 modified
+  homepage: https://dify.ai
+  note: 修改版 Apache-2.0：多租户运营与 LOGO 保留有附加限制（非 OSI）
+  sources:
+    - { kind: github, identifier: langgenius/dify, is_primary: true }
+
+- slug: ragflow
+  name: RAGFlow
+  vendor: InfiniFlow
+  form: platform
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://ragflow.io
+  note: RAG + agent 工作流平台
+  sources:
+    - { kind: github, identifier: infiniflow/ragflow, is_primary: true }
+
+- slug: langflow
+  name: Langflow
+  vendor: Langflow
+  form: platform
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://www.langflow.org
+  note: 可视化 agent / 工作流搭建器
+  sources:
+    - { kind: github, identifier: langflow-ai/langflow, is_primary: true }
+    - { kind: pypi, identifier: langflow }
+
+- slug: coze-studio
+  name: Coze Studio
+  vendor: ByteDance
+  form: platform
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://github.com/coze-dev/coze-studio
+  note: 扣子开源版；可视化 agent 开发平台
+  sources:
+    - { kind: github, identifier: coze-dev/coze-studio, is_primary: true }

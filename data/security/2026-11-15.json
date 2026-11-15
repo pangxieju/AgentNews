@@ -400,6 +400,14 @@
       "malicious": 0,
       "latest": null,
       "url": "https://osv.dev/list?q=autocua&ecosystem=PyPI"
+    },
+    "langflow": {
+      "package": "langflow",
+      "ecosystem": "PyPI",
+      "advisories": 84,
+      "malicious": 0,
+      "latest": "2026-10-27T17:45:03.935789Z",
+      "url": "https://osv.dev/list?q=langflow&ecosystem=PyPI"
     }
   }
 }

@@ -57,7 +57,7 @@ export const GET: APIRoute = ({ site }) => {
   <channel>
     <title>AgentNews · AI Agent Index</title>
     <link>${esc(`${base}/`)}</link>
-    <description>AI agent rankings across terminal, IDE plugin, AI IDE, desktop, browser, framework and autonomous forms. One snapshot per day, top 30 listed agents.</description>
+    <description>AI agent rankings across terminal, IDE plugin, AI IDE, desktop, browser, framework, platform and autonomous forms. One snapshot per day, top 30 listed agents.</description>
     <language>en</language>
     <atom:link href="${esc(`${base}/feed.xml`)}" rel="self" type="application/rss+xml" />
     <lastBuildDate>${buildStamp}</lastBuildDate>

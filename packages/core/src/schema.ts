@@ -8,6 +8,7 @@ export const Form = z.enum([
   'desktop',
   'browser',
   'framework',
+  'platform',
   'autonomous',
 ]);
 export type Form = z.infer<typeof Form>;
@@ -189,5 +190,6 @@ export const FORMS: Form[] = [
   'desktop',
   'browser',
   'framework',
+  'platform',
   'autonomous',
 ];

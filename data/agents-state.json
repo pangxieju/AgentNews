@@ -129,6 +129,10 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "coze-studio": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "crewai": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
@@ -154,6 +158,10 @@
       "last_seen": "2026-11-15"
     },
     "dia": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "dify": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
@@ -239,6 +247,10 @@
     },
     "langchain": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "langflow": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "langgraph": {
@@ -330,6 +342,10 @@
       "last_seen": "2026-11-15"
     },
     "qwenpaw": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "ragflow": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },

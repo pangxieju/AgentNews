@@ -1,5 +1,5 @@
 {"slug":"qwen-code","name":"Qwen Code","kind":"version","date":"2026-11-15","title":"Qwen Code 更新到 0.27.4","detail":"0.27.3 → 0.27.4"}
-{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-15","title":"Amp 更新到 0.0.1794715238-g81da65","detail":"0.0.1794657642-gc1e41b → 0.0.1794715238-g81da65"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-15","title":"Amp 更新到 0.0.1794729642-gc6c9b7","detail":"0.0.1794657642-gc1e41b → 0.0.1794729642-gc6c9b7"}
 {"slug":"grok-build","name":"Grok Build","kind":"listed","date":"2026-11-15","title":"新收录 Grok Build"}
 {"slug":"grok-build","name":"Grok Build","kind":"newcomer","date":"2026-11-15","title":"Grok Build 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"freebuff","name":"Freebuff","kind":"listed","date":"2026-11-15","title":"新收录 Freebuff"}
@@ -26,6 +26,14 @@
 {"slug":"self-operating-computer","name":"Self-Operating Computer","kind":"newcomer","date":"2026-11-15","title":"Self-Operating Computer 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"claude-agent-sdk","name":"Claude Agent SDK","kind":"listed","date":"2026-11-15","title":"新收录 Claude Agent SDK"}
 {"slug":"claude-agent-sdk","name":"Claude Agent SDK","kind":"newcomer","date":"2026-11-15","title":"Claude Agent SDK 首次进入新秀榜","detail":"出道 0 天"}
+{"slug":"dify","name":"Dify","kind":"listed","date":"2026-11-15","title":"新收录 Dify"}
+{"slug":"dify","name":"Dify","kind":"newcomer","date":"2026-11-15","title":"Dify 首次进入新秀榜","detail":"出道 0 天"}
+{"slug":"langflow","name":"Langflow","kind":"listed","date":"2026-11-15","title":"新收录 Langflow"}
+{"slug":"langflow","name":"Langflow","kind":"newcomer","date":"2026-11-15","title":"Langflow 首次进入新秀榜","detail":"出道 0 天"}
+{"slug":"ragflow","name":"RAGFlow","kind":"listed","date":"2026-11-15","title":"新收录 RAGFlow"}
+{"slug":"ragflow","name":"RAGFlow","kind":"newcomer","date":"2026-11-15","title":"RAGFlow 首次进入新秀榜","detail":"出道 0 天"}
+{"slug":"coze-studio","name":"Coze Studio","kind":"listed","date":"2026-11-15","title":"新收录 Coze Studio"}
+{"slug":"coze-studio","name":"Coze Studio","kind":"newcomer","date":"2026-11-15","title":"Coze Studio 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"qwenpaw","name":"QwenPaw","kind":"listed","date":"2026-11-15","title":"新收录 QwenPaw"}
 {"slug":"qwenpaw","name":"QwenPaw","kind":"newcomer","date":"2026-11-15","title":"QwenPaw 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"swe-agent","name":"SWE-agent","kind":"listed","date":"2026-11-15","title":"新收录 SWE-agent"}

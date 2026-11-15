@@ -7,6 +7,13 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
   zh: {
     spec: [
       {
+        date: '2026-11-15',
+        change:
+          '新增 <code>platform</code> 形态：低代码 / 可视化 agent 平台单独成榜，不与 <code>framework</code> SDK 混排',
+        reason:
+          'Dify / RAGFlow / Langflow / Coze Studio 这类平台有独立的使用方式和商用限制，和 CrewAI / LangGraph 这类代码优先的框架不可比',
+      },
+      {
         date: '2026-11-14',
         change:
           '取消形态冻结：<code>desktop</code> / <code>browser</code> / <code>framework</code> / <code>autonomous</code> 恢复进入榜单、首页、对比与形态指南',
@@ -146,6 +153,13 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
   },
   en: {
     spec: [
+      {
+        date: '2026-11-15',
+        change:
+          'Added the <code>platform</code> form: low-code / visual agent platforms get their own board instead of mixing with <code>framework</code> SDKs',
+        reason:
+          'Dify / RAGFlow / Langflow / Coze Studio are used very differently and carry commercial restrictions — not comparable with code-first frameworks like CrewAI / LangGraph',
+      },
       {
         date: '2026-11-14',
         change:
