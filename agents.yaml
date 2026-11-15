@@ -1518,3 +1518,141 @@
   note: Super Agents；无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: skywork, is_primary: true }
+
+# =============================================================
+# 第九批扩充（M1 · 2026-11-15）：中国通用 AI 助手（assistant 形态）
+# 均为闭源对话式产品，用 manual 渠道；无公开采用度指标 → L3 收录区不排名。
+# 收录依据：官方产品页可达 + 有 agent / 工具调用能力
+# =============================================================
+
+- slug: doubao
+  name: 豆包 Doubao
+  vendor: ByteDance
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.doubao.com
+  note: 通用对话助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: doubao, is_primary: true }
+
+- slug: yuanbao
+  name: 腾讯元宝
+  vendor: Tencent
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://yuanbao.tencent.com
+  note: 通用对话助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: yuanbao, is_primary: true }
+
+- slug: tongyi
+  name: 通义
+  vendor: Alibaba
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://tongyi.aliyun.com
+  note: 通用对话助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: tongyi, is_primary: true }
+
+- slug: ernie-bot
+  name: 文心一言 ERNIE Bot
+  vendor: Baidu
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://yiyan.baidu.com
+  note: 通用对话助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: ernie-bot, is_primary: true }
+
+- slug: kimi
+  name: Kimi
+  vendor: Moonshot AI (月之暗面)
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.kimi.com
+  note: 通用对话 / 研究助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: kimi, is_primary: true }
+
+- slug: chatglm
+  name: 智谱清言 ChatGLM
+  vendor: Zhipu AI (智谱)
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://chatglm.cn
+  note: 通用对话助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: chatglm, is_primary: true }
+
+- slug: spark
+  name: 讯飞星火
+  vendor: iFlytek (科大讯飞)
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://xinghuo.xfyun.cn
+  note: 通用对话助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: spark, is_primary: true }
+
+- slug: nami-ai
+  name: 纳米AI
+  vendor: "360"
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://n.cn
+  note: 搜索 + 多 agent 助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: nami-ai, is_primary: true }
+
+- slug: metaso
+  name: 秘塔 AI 搜索
+  vendor: Metaso (秘塔)
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.metaso.cn
+  note: 研究型搜索助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: metaso, is_primary: true }
+
+- slug: ima
+  name: ima
+  vendor: Tencent
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://ima.qq.com
+  note: 知识库 + 对话助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: ima, is_primary: true }
+
+- slug: baixiaoying
+  name: 百小应
+  vendor: Baichuan (百川智能)
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://ying.baichuan-ai.com
+  note: 通用对话助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: baixiaoying, is_primary: true }
+
+- slug: quark
+  name: 夸克
+  vendor: Alibaba
+  form: browser
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.quark.cn
+  note: AI 浏览器 / 搜索助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: quark, is_primary: true }

@@ -67,6 +67,13 @@ export const FORM_GUIDES: Record<Lang, Record<string, FormGuide>> = {
       tradeoff: ['过程可观测性差', '失败成本与 token 成本都更高'],
       watch: '看活跃度与安全公告：自主执行的权限面更大。',
     },
+    assistant: {
+      en: 'Assistant',
+      tagline: '对话式通用 AI 助手：搜索、写作、代码与工具调用。',
+      fit: ['日常问答与资料整理', '不想自己搭工作流', '一个入口解决多类任务'],
+      tradeoff: ['闭源为主，能力会随平台策略变化', '数据与权限边界不透明，难以审计'],
+      watch: '先确认是否有 agent 模式与工具调用；没有公开采用度数据的只看收录，不看名次。',
+    },
   },
   en: {
     cli: {
@@ -124,6 +131,13 @@ export const FORM_GUIDES: Record<Lang, Record<string, FormGuide>> = {
       fit: ['Tasks are verifiable and reversible', 'Research / reporting / ops work', 'You can accept asynchronous delivery'],
       tradeoff: ['Poor process observability', 'Both failure and token costs are higher'],
       watch: 'Watch activity and advisories: autonomous execution has a larger permission surface.',
+    },
+    assistant: {
+      en: 'Assistant',
+      tagline: 'Conversational general AI assistant: search, writing, code and tool use.',
+      fit: ['Everyday Q&A and research', 'You do not want to build workflows yourself', 'One entry point for many task types'],
+      tradeoff: ['Mostly closed; capabilities shift with platform policy', 'Data and permission boundaries are opaque and hard to audit'],
+      watch: 'Check for an agent mode and tool use first; entries with no public adoption data are listed, not ranked.',
     },
   },
 };

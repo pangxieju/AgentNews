@@ -21,7 +21,7 @@ const H = (p: string) => pathFor(lang, p);
 const data = loadLatestScores();
 const date = data?.date ?? '—';
 const metaAll = loadAgentsMeta();
-/** 只保留非误分类的条目（全部 8 种形态都进榜单） */
+/** 只保留非误分类的条目（全部 9 种形态都进榜单） */
 const rows = (data?.rows ?? []).filter(isListed);
 
 /** 只把榜单需要的字段送进 island —— 减小 HTML 体积 */

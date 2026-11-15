@@ -9,6 +9,13 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
       {
         date: '2026-11-15',
         change:
+          '新增 <code>assistant</code> 形态：豆包 / 元宝 / 通义 / 文心一言 / Kimi / 智谱清言 / 讯飞星火等对话式通用助手单独成榜',
+        reason:
+          '这类产品是大多数用户接触 AI agent 的入口，但它们是对话式助手，与自主任务托管产品（Manus 类）可比性不同',
+      },
+      {
+        date: '2026-11-15',
+        change:
           '新增 <code>platform</code> 形态：低代码 / 可视化 agent 平台单独成榜，不与 <code>framework</code> SDK 混排',
         reason:
           'Dify / RAGFlow / Langflow / Coze Studio 这类平台有独立的使用方式和商用限制，和 CrewAI / LangGraph 这类代码优先的框架不可比',
@@ -153,6 +160,13 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
   },
   en: {
     spec: [
+      {
+        date: '2026-11-15',
+        change:
+          'Added the <code>assistant</code> form: conversational general assistants (Doubao / Yuanbao / Tongyi / ERNIE Bot / Kimi / ChatGLM / Spark and more) get their own board',
+        reason:
+          'These are how most users first meet an AI agent, but they are conversational assistants and not comparable with task-hosting autonomous products like Manus',
+      },
       {
         date: '2026-11-15',
         change:

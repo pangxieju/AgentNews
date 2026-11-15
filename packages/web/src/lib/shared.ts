@@ -13,12 +13,13 @@ export const FORM_ORDER = [
   'framework',
   'platform',
   'autonomous',
+  'assistant',
 ] as const;
 
 export type FormKey = (typeof FORM_ORDER)[number];
 
 /**
- * 列表展示的形态范围 = 全部 8 种形态。
+ * 列表展示的形态范围 = 全部 9 种形态。
  * 定义在 shared 而不是数据层：island（Preact）与服务端共用，
  * 保证榜单、首页、对比、搜索在 SSR 与 hydrate 后结果一致。
  */

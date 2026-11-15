@@ -64,6 +64,7 @@ const zh: Dict = {
   'form.framework': '框架',
   'form.platform': '平台',
   'form.autonomous': '自主',
+  'form.assistant': '助手',
 
   // ── 归属 / 粒度 ──
   'bucket.open': '开源',
@@ -119,7 +120,7 @@ const zh: Dict = {
   'home.eyebrow': 'AI Agent Index · 快照 {date}',
   'home.title': '把不同的生态\n放到同一把尺子上',
   'home.lede':
-    'GitHub star、npm / PyPI 下载、商店安装量先压缩到组内分位数，再按形态分组排名。{n} 个 AI agent、8 种形态（终端 / 插件 / AI IDE / 桌面 / 浏览器 / 框架 / 平台 / 自主），跨形态不比总量 —— 先看你在哪儿用它，再比数据。',
+    'GitHub star、npm / PyPI 下载、商店安装量先压缩到组内分位数，再按形态分组排名。{n} 个 AI agent、9 种形态（终端 / 插件 / AI IDE / 桌面 / 浏览器 / 框架 / 平台 / 自主 / 助手），跨形态不比总量 —— 先看你在哪儿用它，再比数据。',
   'home.readout.listed': '收录',
   'home.readout.ranked': '在榜',
   'home.step1': 'Step 01 · 选形态',
@@ -484,6 +485,7 @@ const en: Dict = {
   'form.framework': 'Framework',
   'form.platform': 'Platform',
   'form.autonomous': 'Autonomous',
+  'form.assistant': 'Assistant',
 
   'bucket.open': 'Open',
   'bucket.semi': 'Source-available',
@@ -534,7 +536,7 @@ const en: Dict = {
   'home.eyebrow': 'AI Agent Index · Snapshot {date}',
   'home.title': 'Put every ecosystem\non one ruler',
   'home.lede':
-    'GitHub stars, npm / PyPI downloads and store installs are compressed to in-form percentiles before ranking. {n} AI agents, 8 forms (terminal / plugin / AI IDE / desktop / browser / framework / platform / autonomous), never compared across forms — pick where you use it, then compare numbers.',
+    'GitHub stars, npm / PyPI downloads and store installs are compressed to in-form percentiles before ranking. {n} AI agents, 9 forms (terminal / plugin / AI IDE / desktop / browser / framework / platform / autonomous / assistant), never compared across forms — pick where you use it, then compare numbers.',
   'home.readout.listed': 'Listed',
   'home.readout.open': 'Open',
   'home.readout.closed': 'Closed',
@@ -889,6 +891,7 @@ export const FORM_KEYS = [
   'framework',
   'platform',
   'autonomous',
+  'assistant',
 ] as const;
 
 export function formLabel(lang: Lang, form: string): string {

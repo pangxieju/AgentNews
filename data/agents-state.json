@@ -73,6 +73,10 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "baixiaoying": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "beeai-framework": {
       "first_listed": "2026-11-14",
       "last_seen": "2026-11-15"
@@ -90,6 +94,10 @@
       "last_seen": "2026-11-15"
     },
     "chatdev": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "chatglm": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
@@ -193,11 +201,19 @@
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
+    "doubao": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "droid": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
     "eino": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "ernie-bot": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
@@ -265,6 +281,10 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "ima": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "jules": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
@@ -275,6 +295,10 @@
     },
     "kilo-code": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "kimi": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "kimi-cli": {
@@ -329,6 +353,10 @@
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
+    "metaso": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "minimax-agent": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
@@ -342,6 +370,10 @@
       "last_seen": "2026-11-15"
     },
     "ms-agent": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "nami-ai": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
@@ -401,6 +433,10 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "quark": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "qwen-code": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
@@ -441,6 +477,10 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "spark": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "spring-ai-alibaba": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
@@ -463,6 +503,10 @@
     },
     "theia": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "tongyi": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "trae": {
@@ -494,6 +538,10 @@
       "last_seen": "2026-11-15"
     },
     "youtu-agent": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "yuanbao": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
