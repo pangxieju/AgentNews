@@ -1,0 +1,17 @@
+{"slug":"codex-cli","name":"Codex CLI","kind":"version","date":"2026-11-14","title":"Codex CLI 更新到 0.169.0","detail":"0.167.2 → 0.169.0"}
+{"slug":"claude-code","name":"Claude Code","kind":"version","date":"2026-11-14","title":"Claude Code 更新到 2.1.323","detail":"2.1.322 → 2.1.323"}
+{"slug":"qwen-code","name":"Qwen Code","kind":"version","date":"2026-11-14","title":"Qwen Code 更新到 0.27.3","detail":"0.27.2 → 0.27.3"}
+{"slug":"copilot-cli","name":"Copilot CLI","kind":"version","date":"2026-11-14","title":"Copilot CLI 更新到 1.0.111","detail":"1.0.109 → 1.0.111"}
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"version","date":"2026-11-14","title":"Kimi CLI 更新到 2.6.1","detail":"2.6.0 → 2.6.1"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-14","title":"Amp 更新到 0.0.1794585642-g3af916","detail":"0.0.1794499251-g8dc9ce → 0.0.1794585642-g3af916"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-14","title":"Factory Droid 更新到 1.10.0","detail":"1.9.0 → 1.10.0"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-14","title":"Qoder 更新到 1.1.89","detail":"1.1.88 → 1.1.89"}
+{"slug":"browser-use","name":"Browser-use","kind":"version","date":"2026-11-14","title":"Browser-use 更新到 1.0.3","detail":"1.0.2 → 1.0.3"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-14","title":"Vercel AI SDK 更新到 7.0.172","detail":"7.0.170 → 7.0.172"}
+{"slug":"agno","name":"Agno","kind":"version","date":"2026-11-14","title":"Agno 更新到 3.2.0","detail":"3.1.12 → 3.2.0"}
+{"slug":"mastra","name":"Mastra","kind":"version","date":"2026-11-14","title":"Mastra 更新到 1.39.0","detail":"1.38.0 → 1.39.0"}
+{"slug":"langgraph","name":"LangGraph","kind":"version","date":"2026-11-14","title":"LangGraph 更新到 1.2.21","detail":"1.2.20 → 1.2.21"}
+{"slug":"google-adk","name":"Google ADK","kind":"version","date":"2026-11-14","title":"Google ADK 更新到 2.14.1","detail":"2.14.0 → 2.14.1"}
+{"slug":"crewai","name":"CrewAI","kind":"version","date":"2026-11-14","title":"CrewAI 更新到 1.15.41","detail":"1.15.40 → 1.15.41"}
+{"slug":"strands-agents","name":"Strands Agents","kind":"release","date":"2026-11-14","title":"Strands Agents 发布新版本","detail":"2026-11-13"}
+{"slug":"agent-framework","name":"Agent Framework","kind":"version","date":"2026-11-14","title":"Agent Framework 更新到 1.26.0","detail":"1.25.0 → 1.26.0"}
