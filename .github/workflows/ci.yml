@@ -30,5 +30,8 @@ jobs:
       - run: pnpm validate
 
       - run: pnpm typecheck
+      # .astro 模板不在 tsc 的 include 里，用 astro check 补（schema/JSON-LD/模板类型）
+      - run: pnpm check
+      - run: pnpm lint
       - run: pnpm test
       - run: pnpm build

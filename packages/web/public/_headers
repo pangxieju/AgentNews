@@ -30,14 +30,15 @@
   Content-Type: application/manifest+json
 
 # 公开数据导出 / API / 徽章：允许跨域引用
-/data/*.json
+# 注：Cloudflare Pages `_headers` 只支持尾部 `*`，所以用 `/data/*` 覆盖按日期快照等嵌套路径。
+/data/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=600, must-revalidate
-/data/*.csv
-  Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=600, must-revalidate
-/data/*/scores.json
-  Access-Control-Allow-Origin: *
+/data/scores.json
+  Cache-Control: public, max-age=3600, must-revalidate
+/data/scores.csv
+  Cache-Control: public, max-age=3600, must-revalidate
+/data/dates.json
   Cache-Control: public, max-age=3600, must-revalidate
 /api/*
   Access-Control-Allow-Origin: *

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'preact/hooks';
-import AgentIcon from './AgentIcon';
-import { type Lang, pathFor, t, formLabel, bucketText } from '../i18n/dict';
+import { bucketText, formLabel, type Lang, pathFor, t } from '../i18n/dict';
 import { FOCUS_FORMS, fmt } from '../lib/shared';
+import AgentIcon from './AgentIcon';
 import type { IconMeta } from './RankBoard';
 
 export type PickRow = {
@@ -79,6 +79,7 @@ export default function HomePicker({ items, meta, lang }: Props) {
         <div class="segmented" role="group" aria-label={t(lang, 'picker.owner')}>
           {(['open', 'closed'] as const).map((b) => (
             <button
+              key={b}
               type="button"
               aria-current={bucket === b ? 'page' : undefined}
               onClick={() => setBucket(b)}
@@ -89,7 +90,7 @@ export default function HomePicker({ items, meta, lang }: Props) {
         </div>
         <div class="chips" role="group" aria-label={t(lang, 'picker.form')}>
           {forms.map((f) => (
-            <button type="button" class="chip" aria-pressed={form === f} onClick={() => setForm(f)}>
+            <button key={f} type="button" class="chip" aria-pressed={form === f} onClick={() => setForm(f)}>
               {f === 'all' ? t(lang, 'app.all') : formLabel(lang, f)}
             </button>
           ))}
@@ -116,7 +117,7 @@ export default function HomePicker({ items, meta, lang }: Props) {
       ) : (
         <ul class="picker-list">
           {shown.map((r) => (
-            <li>
+            <li key={r.slug}>
               <a class="picker-item" href={H(`/agent/${r.slug}/`)}>
                 <AgentIcon
                   slug={r.slug}

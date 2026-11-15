@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "files": {
+    "includes": [
+      "packages/**/src/**/*.ts",
+      "packages/**/src/**/*.tsx",
+      "packages/**/scripts/**/*.mjs",
+      "ops/**/*.mjs",
+      "ops/**/*.js"
+    ]
+  },
+  "formatter": {
+    "enabled": false
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "style": {
+        "noNonNullAssertion": "off"
+      },
+      "a11y": {
+        "useSemanticElements": "off"
+      }
+    }
+  }
+}

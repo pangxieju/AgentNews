@@ -1,6 +1,6 @@
 # AgentNews
 
-AI Agent 排行榜 —— 开源 / 闭源双榜，日 / 周 / 月粒度，跨生态归一化。
+AI Agent 排行榜 —— 开源 / 闭源双榜，周 / 月粒度，跨生态归一化。
 
 ---
 
@@ -18,7 +18,7 @@ AgentNews 的做法：
 1. **按形态分组排名**（终端 / IDE 插件 / AI IDE / 桌面 / 浏览器 / 框架 / 平台 / 自主 / 助手），跨形态不比较
 2. **跨生态归一化**（GitHub star + npm/PyPI 下载 + 商店安装，log 压缩 + 组内分位数）
 3. **开源闭源双榜**，闭源无数据时降级为「收录区」，绝不编造名次
-4. **日 / 周 / 月三条归档时间线**，git 即审计日志
+4. **周 / 月两条榜单时间线**（日增量仍在数据里），git 即审计日志
 
 ---
 
@@ -29,11 +29,12 @@ AgentNews 的做法：
 | 页面 | 回答的问题 |
 |---|---|
 | `/forms/{form}/` 形态指南 | 这个形态适合谁、要付出什么代价、看榜该看哪几个指标 |
-| `/` 选型入口 | 先按形态缩小到 3–5 个，或直接搜索 60 个 agent |
-| `/compare/?a=&b=&c=` 并排对比 | 同形态内逐行比 Star / 安装量 / 活跃度 / License，自动标出每行最优 |
-| `/top/{bucket}/{form}/{g}/` 榜单 | 证据层：归一化综合分与日 / 周 / 月增量，列可排序 |
+| `/` 选型入口 | 先按形态缩小到 3–5 个，或直接搜索全部已收录 agent |
+| `/compare/?a=&b=&c=` 并排对比 | 同形态内逐行比 Star / 安装量 / 活跃度 / License / 定价，自动标出每行最优 |
+| `/top/{bucket}/{form}/{g}/` 榜单 | 证据层：归一化综合分与周 / 月增量，列可排序 |
 | `/agent/{slug}/` 详情 | 安装命令、分发渠道、License、最近发版、安全公告、同形态替代 |
-| `/rising/` `/activity/` `/security/` `/archive/` | 新秀、事件流、OSV 公告、历史归档 |
+
+> 早期的新秀 / 活动 / 安全 / 归档频道页已下线，旧链接由 `public/_redirects` 301 到对应榜单或方法页。
 
 设计原则：**可比的才排名**。形态之间不比总量，跨形态对比会明确标注「仅供参数参考」。
 
@@ -69,6 +70,9 @@ pnpm install          # 安装依赖
 export GITHUB_TOKEN=ghp_xxx  # 配置环境变量（见下文）
 pnpm validate         # 校验 agents.yaml（不联网）
 pnpm test             # 打分算法单测
+pnpm typecheck        # tsc（含 Pages Functions）
+pnpm check            # astro check（.astro 模板 / JSON-LD 类型）
+pnpm lint             # Biome
 pnpm collect          # 采集 + 打分 → data/
 pnpm build            # 构建静态站点 → packages/web/dist
 ```
@@ -81,7 +85,7 @@ pnpm --filter @agentnews/web dev
 
 ### 关于 GITHUB_TOKEN（必须配置）
 
-未认证 GitHub API 只有 **60 次/小时**，而每个 repo 需 3 次请求（repo + contributors + release）。60 个 agent 需要 180 次 —— 不配 token 会必然降级到 ungh 通道，**contributors 和 last_release 永远拿不到**，综合分里 25% 的权重（活跃度 15% + 贡献者 10%）会退化。
+未认证 GitHub API 只有 **60 次/小时**，而每个 repo 需 3 次请求（repo + contributors + releases/latest）。当前 84 个 GitHub repo 需要 252 次 —— 不配 token 会必然降级到 ungh 通道，**contributors 和 release 永远拿不到**，综合分里 25% 的权重（活跃度 15% + 贡献者 10%）会退化。
 
 ```bash
 # 1. 在仓库根目录新建 .env
@@ -103,13 +107,20 @@ pnpm collect
 
 ```
 agents.yaml                  ⭐ 唯一人工维护入口（欢迎 PR 纠错）
+watchlist.yaml               未收录候选（discover --write 会剪掉已收录）
 data/
   snapshots/YYYY-MM-DD.jsonl 原始指标（每日）
   scores/YYYY-MM-DD.json     评分结果（每日）
+  history/YYYY-MM-DD.json    npm/PyPI 安装历史回填（审计）
+  events/YYYY-MM-DD.jsonl    事件流（release / version / listed / rank_jump / newcomer）
+  security/YYYY-MM-DD.json   OSV 公告汇总（不评级）
+  archive/2026-W46.json      周/月冻结归档（审计，经 /data/archive/{label}.json 暴露）
+  plans.yml                  定价与约束（人工核验）
 packages/
   core/                      打分引擎（纯函数，无 I/O，100% 可测）
   pipeline/                  采集器（GitHub / npm / PyPI / VS Code / JetBrains / OpenRouter / OSV）
   web/                       Astro 静态站
+docs/                        PRD / TECH / DEPLOY（随仓库走）
 ```
 
 ---
@@ -144,11 +155,12 @@ packages/
 1. `agents.yaml` 的 `icon:` 覆盖（人工校准，最高优先级）
 2. 官网 web app manifest 里的大图标（192/512 PNG）
 3. 官网 `<link rel=icon>` / `apple-touch-icon`（取最大的那个）
-4. 官网 `og:image`（只接受近正方形）
-5. GitHub README 里明确写着 logo 的图（开源项目的产品 logo，通常还是 SVG）
-6. 第三方 logo API（icon.horse → favicone → unavatar → clearbit）
-7. 官网 favicon 服务 / `/favicon.ico`
-8. GitHub owner 头像（最后兜底：个人仓库会拿到维护者头像，不是产品 logo）
+4. 官网 `og:image` / `twitter:image`（只接受近正方形）
+5. 官网约定路径 `/apple-touch-icon.png`
+6. GitHub README 里明确写着 logo 的图（开源项目的产品 logo，通常还是 SVG）
+7. 第三方 logo API（icon.horse → favicone → unavatar → clearbit）
+8. 官网 favicon 服务（Google s2 → DuckDuckGo）→ `/favicon.ico`
+9. GitHub owner 头像（最后兜底：个人仓库会拿到维护者头像，不是产品 logo）
 
 两条约束：**只升不降**（某天官网抽风抓到低优先级的图，不会覆盖昨天的高清图）；**来源更可信优先**（README 里的产品 logo 优于母公司 favicon）。
 
@@ -164,6 +176,7 @@ packages/
 pnpm icons                            # 重抓全部
 pnpm icons -- --only=pi,langgraph      # 只重抓指定几个（合并进清单，不动其他图标）
 pnpm icons:audit                       # 体检：缺图 / 低清 / .ico / 组织头像兜底 / 多产品共用一张图
+pnpm --filter @agentnews/web brand:gen # 重新生成站点自身图标（favicon / apple-touch / 192 / 512）
 ```
 
 `pnpm icons:audit` 里被标 ⚠️ 的，就是在提示该加 `icon:` 覆盖了。
@@ -177,15 +190,16 @@ pnpm discover                    # 三路扫一遍：GitHub 搜索 + 权威清�
 pnpm discover --only-watchlist   # 只核 watchlist（快，约 30 次请求）
 pnpm discover --min-stars 500    # 放宽门槛
 pnpm discover --top 80           # 报告表里只出前 80 条
+pnpm discover --only-watchlist --write   # 核 watchlist 并把已收录条目从文件里剪掉
 ```
 
-两路来源：
+三路来源：
 
 1. **GitHub 搜索 API**，14 组 topic / 关键词（`topic:ai-agent`、`"coding agent" in:name,description` 等），按 star 排序
 2. **权威清单**（e2b/awesome-ai-agents、kaushikb11/awesome-llm-agents、jamesmurdza/awesome-ai-devtools、sourcegraph/awesome-code-ai）—— 补搜索 API 的盲区：很多项目既不打 topic，描述也不含关键词
 3. **`watchlist.yaml`**（人手维护的种子）—— 闭源产品没有公开 repo，前两路永远看不见；这里记「知道它存在但还没收录」的条目，每次核对状态：`listed` / `pending` / `unreachable` / `archived`
 
-两路都要过 PRD §4.4 门槛（star ≥ 1000、近 180 天有推送、未归档、非 fork），再和 `agents.yaml` 做差集（按 repo / slug / name / 包名比对），最后粗筛掉 skill 包、prompt 集、教程、RAG / 网关等非 agent 产品。
+三路都要过 PRD §4.4 门槛（star ≥ 1000、近 180 天有推送、未归档、非 fork），再和 `agents.yaml` 做差集（按 repo / slug / name / 包名比对），最后粗筛掉 skill 包、prompt 集、教程、RAG / 网关等非 agent 产品。
 
 产出 `data/candidates/YYYY-MM-DD.md`（人工审核表）+ `.json`（全量，含自动排除原因）。这个目录不入库 —— 它是工作队列，不是数据。
 
@@ -211,12 +225,13 @@ log 压缩 → 同形态组内分位数归一 → 缺失权重重分配 → 加�
 | 活跃度 | 15% | 近 90 天提交周数 + 发版频率 |
 | 安装量 | 20% | npm 周下载 / PyPI 月下载 / 商店 install |
 | 贡献者 | 10% | 生态健康度 |
-| 生态 | 5% | Discord / Reddit |
 | Fork | 5% | 噪声大，低权重 |
+
+> 权重按「可得指标」归一：缺失的指标（如无 GitHub 的闭源条目）会把权重重分配到其余指标，所以上表比例不是硬性 100%。
 
 **增量与增速分离**（PRD §5.5）：
 
-- 日 / 周 / 月榜用**绝对增量**（谁在变大）
+- 周 / 月榜用**绝对增量**（谁在变大）
 - 综合分 / 趋势榜用**相对增速 %**（谁在变快）
 
 ### 外部用量信号：OpenRouter 应用榜

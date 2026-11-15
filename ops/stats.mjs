@@ -15,8 +15,8 @@ import { existsSync, readFileSync } from 'node:fs';
 const D1_ID = '7993bc4f-bb1b-4791-8c47-1086ccc96006';
 const DAY = 86_400_000;
 
-// 与 wrangler/pipeline 一致：系统环境变量 > .env.local > .env
-for (const f of ['.env', '.env.local']) {
+// 与 pipeline 一致：系统环境变量 > .env.local > .env（先加载的优先，不覆盖已有值）
+for (const f of ['.env.local', '.env']) {
   if (!existsSync(f)) continue;
   for (const line of readFileSync(f, 'utf8').split('\n')) {
     const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);

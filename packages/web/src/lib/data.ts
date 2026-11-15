@@ -1,8 +1,8 @@
-import { readdirSync, readFileSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parse } from 'yaml';
 import type { ScoreRow } from '@agentnews/core';
+import { parse } from 'yaml';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const DATA_DIR = join(ROOT, 'data');
@@ -41,6 +41,25 @@ function readJsonDir<T>(dir: string, desc = false): T[] {
 }
 
 type ScoreFile = { date: string; version: string; rows: ScoreRow[] };
+
+/** 读最新评分快照（构建时） */
+export function loadLatestScores(): ScoreFile | null {
+  const f = latestFile(SCORES_DIR);
+  return f ? readJson<ScoreFile>(join(SCORES_DIR, f)) : null;
+}
+
+/** 读所有历史评分快照（按日期倒序）。构建期内只读盘一次：583 页都会调它 */
+let _allScores: ScoreFile[] | null = null;
+let _allScoresKey = '';
+export function loadAllScores(): ScoreFile[] {
+  // 按目录里最新的文件名做失效：dev 下新增快照时自动重读
+  const key = latestFile(SCORES_DIR) ?? '';
+  if (_allScores && key === _allScoresKey) return _allScores;
+  _allScores = readJsonDir<ScoreFile>(SCORES_DIR, true);
+  _allScoresKey = key;
+  return _allScores;
+}
+
 type ArchiveFile = {
   period: 'week' | 'month';
   label: string;
@@ -49,15 +68,14 @@ type ArchiveFile = {
   rows: ScoreRow[];
 };
 
-/** 读最新评分快照（构建时） */
-export function loadLatestScores(): ScoreFile | null {
-  const f = latestFile(SCORES_DIR);
-  return f ? readJson<ScoreFile>(join(SCORES_DIR, f)) : null;
+/** 读所有归档（周档 / 月档，按结束日倒序） */
+export function loadArchives(): ArchiveFile[] {
+  return readJsonDir<ArchiveFile>(ARCHIVE_DIR, true);
 }
 
-/** 读所有历史评分快照（按日期倒序） */
-export function loadAllScores(): ScoreFile[] {
-  return readJsonDir<ScoreFile>(SCORES_DIR, true);
+/** 读单个归档（label 如 2026-W46 / 2026-11） */
+export function loadArchive(label: string): ArchiveFile | null {
+  return readJson<ArchiveFile>(join(ARCHIVE_DIR, `${label}.json`));
 }
 
 type HistoryPoint = {
@@ -81,28 +99,6 @@ export function loadHistory(slug: string): HistoryPoint[] {
         rank_in_form: r?.rank_in_form ?? null,
       };
     });
-}
-
-/** 每日快照的在榜数 / 收录数（按日期升序）—— 归档页折线图用 */
-export function loadDailyCounts(): Array<{ date: string; ranked: number; listed: number }> {
-  return loadAllScores()
-    .slice()
-    .reverse()
-    .map((f) => ({
-      date: f.date,
-      ranked: f.rows.filter((r) => r.rank_in_form != null).length,
-      listed: f.rows.length,
-    }));
-}
-
-/** 读所有归档（周档 + 月档，按结束日倒序） */
-export function loadArchives(): ArchiveFile[] {
-  return readJsonDir<ArchiveFile>(ARCHIVE_DIR, true);
-}
-
-/** 读单个归档 */
-export function loadArchive(label: string): ArchiveFile | null {
-  return readJson<ArchiveFile>(join(ARCHIVE_DIR, `${label}.json`));
 }
 
 /* ───────────────── 版本历史 ───────────────── */
@@ -142,7 +138,11 @@ export function loadVersionHistory(slug: string): VersionEntry[] {
           }
           const v = row.metrics?.version;
           if (typeof v !== 'string' || !v || !row.slug) continue;
-          const list = (out[row.slug] ??= []);
+          let list = out[row.slug];
+          if (!list) {
+            list = [];
+            out[row.slug] = list;
+          }
           if (list.length && list[list.length - 1]!.version === v) continue;
           list.push({
             date,
@@ -194,7 +194,10 @@ let _agentsMeta: Record<string, AgentMeta> | null = null;
 export function loadAgentsMeta(): Record<string, AgentMeta> {
   if (_agentsMeta) return _agentsMeta;
   const out: Record<string, AgentMeta> = {};
-  if (!existsSync(AGENTS_YAML)) return (_agentsMeta = out);
+  if (!existsSync(AGENTS_YAML)) {
+    _agentsMeta = out;
+    return out;
+  }
   try {
     const list = parse(readFileSync(AGENTS_YAML, 'utf8')) as Array<{
       slug?: string;
@@ -244,11 +247,11 @@ export function loadAgentsMeta(): Record<string, AgentMeta> {
   } catch {
     // 解析失败 → 全部走字母色块兜底
   }
-  return (_agentsMeta = out);
+  _agentsMeta = out;
+  return out;
 }
 
-// 纯展示工具统一在 shared.ts（客户端 island 也要用，不能带 node 依赖）
-export { fmt, fmtPct, fmtSigned, FORM_ORDER, GRANS, defaultSortFor, rankUrl } from './shared';
+export { fmt, fmtPct, fmtSigned } from './shared';
 
 /* ───────────────── 活动事件流（PRD F-24） ───────────────── */
 
@@ -279,13 +282,6 @@ export function loadEvents(): AgentEvent[] {
   return out;
 }
 
-type AgentState = { started_at: string; agents: Record<string, { first_listed: string; last_seen: string }> };
-
-/** 读首次收录状态 */
-export function loadAgentState(): AgentState | null {
-  return readJson<AgentState>(join(DATA_DIR, 'agents-state.json'));
-}
-
 /* ───────────────── 安全公告（PRD F-26） ───────────────── */
 
 export type SecurityInfo = {
@@ -302,9 +298,3 @@ export function loadSecurity(): { date: string; subjects: Record<string, Securit
   return f ? readJson(join(SECURITY_DIR, f)) : null;
 }
 
-/** 安全等级：仅用于视觉提示，不构成安全评级 */
-export function securityLevel(s: SecurityInfo | undefined): 'none' | 'low' | 'high' {
-  if (!s || s.advisories === 0) return 'none';
-  if (s.malicious > 0) return 'high';
-  return 'low';
-}

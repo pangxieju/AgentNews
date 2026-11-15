@@ -14,10 +14,11 @@
  * 几何与顶栏 .brand-mark 一致：ink 方块 + paper 色的等宽 "A"。
  * 渲染方式：4x 超采样后盒式降采样，避免小尺寸下锯齿。
  */
-import { deflateSync } from 'node:zlib';
+
 import { writeFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { deflateSync } from 'node:zlib';
 
 const PUBLIC = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
 

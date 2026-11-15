@@ -37,8 +37,8 @@ const items: CompareItem[] = (data?.rows ?? []).filter(isListed).map((r) => ({
   iconFallback: meta[r.slug]?.iconFallback ?? null,
 }));
 const description = lang === 'en'
-  ? 'Compare AI agents side by side within the same form: score, stars, installs, install deltas, activity, license and last release. Up to three at a time.'
-  : '同形态内并排对比 AI agent：综合分、Star、安装量、安装增量、活跃度、License 与最近发版，最多三个。';
+  ? 'Compare AI agents side by side within the same form: score, stars, installs, activity, license, pricing and last release. Up to three at a time.'
+  : '同形态内并排对比 AI agent：综合分、Star、安装量、活跃度、License、定价与最近发版，最多三个。';
 const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
 const jsonLd = {
   '@context': 'https://schema.org',

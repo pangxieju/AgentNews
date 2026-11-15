@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.functions.json",
     "brand:gen": "node scripts/gen-icons.mjs",
     "preview": "astro preview",
     "cf:deploy": "wrangler pages deploy dist --project-name agentnews --commit-dirty=true",
-    "cf:deploy:preview": "wrangler pages deploy dist --project-name agentnews-preview --commit-dirty=true"
+    "cf:deploy:preview": "wrangler pages deploy dist --project-name agentnews-preview --commit-dirty=true",
+    "check": "astro check"
   },
   "dependencies": {
     "@agentnews/core": "workspace:*",
@@ -21,6 +22,8 @@
     "yaml": "^2.7.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@cloudflare/workers-types": "^5.20261115.1",
     "typescript": "^5.7.2",
     "wrangler": "^4.158.0"
   }

@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
+import excludedSlugs from './src/lib/excluded-slugs.json';
 
 /**
  * 站点地址优先级：
@@ -10,12 +11,14 @@ import sitemap from '@astrojs/sitemap';
  */
 const site = process.env.SITE_URL || 'https://agentnews-c5h.pages.dev';
 
-/** 误分类条目：详情页保留（noindex），不进 sitemap */
-const EXCLUDED_SLUGS = new Set(['theia', 'vercel-ai-sdk', 'open-interpreter']);
+/** 误分类条目：详情页保留（noindex），不进 sitemap。与 src/lib/shared.ts 共用同一份清单 */
+const EXCLUDED_SLUGS = new Set(excludedSlugs);
 
 const noindex = (page) => {
   const path = new URL(page).pathname.replace(/\/+$/, '') || '/';
-  if (path.endsWith('/404') || path === '/feed') return true;
+  // 404 / 别名页（/top/ 的 canonical 是 /top/open/all/month/）不进 sitemap
+  if (path === '/404' || path === '/feed.xml') return true;
+  if (path === '/top' || path === '/zh/top') return true;
   const m = path.match(/\/agent\/([^/]+)$/);
   return !!m && EXCLUDED_SLUGS.has(m[1]);
 };

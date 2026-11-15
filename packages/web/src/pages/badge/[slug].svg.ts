@@ -10,7 +10,7 @@ import { isListed } from '../../lib/shared';
 const esc = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const truncate = (s: string, n: number): string => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+const truncate = (s: string, n: number): string => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
 
 export function getStaticPaths() {
   const rows = (loadLatestScores()?.rows ?? []).filter(isListed);

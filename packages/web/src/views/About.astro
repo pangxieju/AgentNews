@@ -130,7 +130,7 @@ const jsonLd = {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="changelog">
     <div class="section-title">
       <h2>{t(lang, 'changelog.title')}</h2>
       <span class="muted">score_version v2</span>
@@ -167,7 +167,7 @@ const jsonLd = {
     ))}
   </section>
 
-  <section class="section">
+  <section class="section" id="security">
     <div class="section-title"><h2>{t(lang, 'security.warnTitle')}</h2></div>
     <div class="box">
       <div class="box-body muted">
@@ -219,7 +219,7 @@ const jsonLd = {
             : '数字可自由转载，但请保留来源链接与快照日期 —— 没有日期的名次是另一句话。请不要改动数字，直接引用快照。'}
         </p>
         <div class="notice mono" style="font-size:12px;line-height:1.7">
-          AgentNews. (YYYY-MM-DD). “AI Agent Leaderboard — CLI · open · 30 days”. /top/cli/open/all/month/.
+          AgentNews. (YYYY-MM-DD). “AI Agent Leaderboard — CLI · open · 30 days”. /top/open/cli/month/.
           {' '}{lang === 'en' ? 'Accessed' : '访问于'} YYYY-MM-DD.
         </div>
         <p style="margin:10px 0 0;font-size:12.5px">
@@ -250,7 +250,6 @@ const jsonLd = {
             <tr><td>installs_may_include_ci</td><td>{lang === 'en' ? 'npm/PyPI downloads ≥ 1M/week — CI and dependency installs inflate the number' : 'npm/PyPI 周下载 ≥ 100 万 —— 含 CI 与依赖安装'}</td></tr>
             <tr><td>small_group</td><td>{lang === 'en' ? 'Fewer than 3 comparable entries in the form × namespace group' : '该形态 × 命名空间组内可比样本不足 3 个'}</td></tr>
             <tr><td>newcomer</td><td>{lang === 'en' ? 'Listed within the last 180 days' : '近 180 天内首次收录'}</td></tr>
-            <tr><td>suspicious</td><td>{lang === 'en' ? 'Growth spike with no release or coverage to back it' : '增量异常且无发版/报道佐证'}</td></tr>
             <tr><td>dormant</td><td>{lang === 'en' ? 'No commit or release in 180 days — excluded from ranking' : '近 180 天无提交/发版 —— 移出排名'}</td></tr>
             <tr><td>store_installs</td><td>{lang === 'en' ? 'Installs are store cumulative totals (VS Code / JetBrains), not weekly downloads' : '安装量为商店累计（VS Code / JetBrains），非周下载'}</td></tr>
             <tr><td>backfilled_installs</td><td>{lang === 'en' ? 'Install deltas derived from a backfilled npm/PyPI history window' : '安装增量来自 npm/PyPI 历史回填窗口'}</td></tr>

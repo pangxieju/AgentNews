@@ -12,9 +12,14 @@
     "icons": "pnpm --filter @agentnews/pipeline icons",
     "icons:audit": "pnpm --filter @agentnews/pipeline icons:audit",
     "backfill": "pnpm --filter @agentnews/pipeline backfill",
-    "stats": "node ops/stats.mjs"
+    "stats": "node ops/stats.mjs",
+    "check": "pnpm --filter @agentnews/web check",
+    "lint": "biome check",
+    "lint:fix": "biome check --write"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.6.7",
+    "@emnapi/runtime": "^1.11.3",
     "typescript": "^5.7.2"
   }
 }

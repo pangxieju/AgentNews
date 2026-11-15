@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { bucketText, formLabel, type Lang, pathFor, t } from '../i18n/dict';
+import { FOCUS_FORMS, fmt, fmtPct } from '../lib/shared';
 import AgentIcon from './AgentIcon';
-import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
-import { fmt, fmtPct, FOCUS_FORMS } from '../lib/shared';
 
 export type CompareItem = {
   slug: string;
@@ -157,17 +157,25 @@ export default function CompareBoard({ items, lang }: Props) {
   const active = picked.filter((x): x is CompareItem => x != null);
   const forms = new Set(active.map((x) => x.form));
   const mixedForms = forms.size > 1;
+  /** 开源 / 闭源是两套分位命名空间：混比时 score / rank 不可比，不标「最优」 */
+  const nsOf = (i: CompareItem) => (i.oss_bucket === 'closed' ? 'closed' : 'open');
+  const mixedNamespaces = new Set(active.map(nsOf)).size > 1;
 
   /* 决策事件：选满 ≥2 个候选计一次 compare（同一组只计一次） */
   const tracked = useRef<Set<string>>(new Set());
+  // 用「排序后的 slug 串」当依赖：active 每次渲染都是新数组，直接依赖会每帧都跑 effect
+  const activeKey = active
+    .map((x) => x.slug)
+    .sort()
+    .join(',');
   useEffect(() => {
-    if (active.length < 2) return;
-    const key = active.map((x) => x.slug).sort().join(',');
-    if (tracked.current.has(key)) return;
-    tracked.current.add(key);
+    if (active.length < 2 || tracked.current.has(activeKey)) return;
+    tracked.current.add(activeKey);
     (window as unknown as { anTrack?: (e: string, extra?: Record<string, string>) => void })
-      .anTrack?.('compare', { a: key });
-  }, [active]);
+      .anTrack?.('compare', { a: activeKey });
+    // active 由 slots 派生，activeKey 变化时 active 必然同步变化
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeKey]);
 
   const grouped = useMemo(
     () =>
@@ -198,6 +206,7 @@ export default function CompareBoard({ items, lang }: Props) {
 
   /** 最佳值：只在有 ≥2 个不同数值时标注 */
   const best = (row: NumRow): Set<string> => {
+    if (mixedNamespaces && (row.key === 'score' || row.key === 'rank')) return new Set();
     const vals = active
       .map((i) => ({ slug: i.slug, v: row.get(i) }))
       .filter((x): x is { slug: string; v: number } => x.v != null);
@@ -213,7 +222,7 @@ export default function CompareBoard({ items, lang }: Props) {
     <div>
       <div class="cmp-pickers">
         {slots.map((slug, idx) => (
-          <label class="cmp-pick">
+          <label key={SLOT_KEYS[idx]} class="cmp-pick">
             <span class="cmp-pick-label">
               {String.fromCharCode(65 + idx)}
               <i>{idx === 0 ? t(lang, 'compare.required') : t(lang, 'compare.optional')}</i>
@@ -224,9 +233,9 @@ export default function CompareBoard({ items, lang }: Props) {
             >
               <option value="">{t(lang, 'compare.pickPlaceholder')}</option>
               {grouped.map((g) => (
-                <optgroup label={formLabel(lang, g.form)}>
+                <optgroup key={g.form} label={formLabel(lang, g.form)}>
                   {g.list.map((i) => (
-                    <option value={i.slug} disabled={slots.includes(i.slug) && i.slug !== slug}>
+                    <option key={i.slug} value={i.slug} disabled={slots.includes(i.slug) && i.slug !== slug}>
                       {i.name}
                       {i.score != null ? ` · ${i.score}` : ` · ${t(lang, 'app.notRanked')}`}
                     </option>
@@ -242,7 +251,7 @@ export default function CompareBoard({ items, lang }: Props) {
         <div class="cmp-presets">
           <span>{t(lang, 'compare.quick')}</span>
           {FOCUS_FORMS.map((f) => (
-            <button type="button" class="chip" onClick={() => preset(f)}>
+            <button key={f} type="button" class="chip" onClick={() => preset(f)}>
               {t(lang, 'compare.preset', { form: formLabel(lang, f) })}
             </button>
           ))}
@@ -256,6 +265,13 @@ export default function CompareBoard({ items, lang }: Props) {
         </div>
       )}
 
+      {mixedNamespaces && (
+        <div class="notice" style="margin:16px 0">
+          <strong>{t(lang, 'compare.mixedNsTitle')}</strong>
+          {t(lang, 'compare.mixedNs')}
+        </div>
+      )}
+
       {active.length >= 2 ? (
         <div class="table-wrap cmp-wrap">
           <table class="cmp-table">
@@ -263,7 +279,7 @@ export default function CompareBoard({ items, lang }: Props) {
               <tr>
                 <th class="cmp-metric">{t(lang, 'agent.metric')}</th>
                 {active.map((i) => (
-                  <th class="cmp-col">
+                  <th key={i.slug} class="cmp-col">
                     <a class="cmp-head" href={H(`/agent/${i.slug}/`)}>
                       <AgentIcon
                         slug={i.slug}
@@ -292,13 +308,13 @@ export default function CompareBoard({ items, lang }: Props) {
                       if (row.kind === 'num') {
                         const v = row.get(i);
                         return (
-                          <td class={`cmp-cell num${win ? ' is-best' : ''}`}>
+                          <td key={i.slug} class={`cmp-cell num${win ? ' is-best' : ''}`}>
                             {v == null ? '—' : row.fmt(v)}
-                            {win && <i class="cmp-dot" aria-label="best in row" />}
+                            {win && <i class="cmp-dot" role="img" aria-label="best in row" />}
                           </td>
                         );
                       }
-                      return <td class="cmp-cell">{row.get(i)}</td>;
+                      return <td key={i.slug} class="cmp-cell">{row.get(i)}</td>;
                     })}
                   </tr>
                 );

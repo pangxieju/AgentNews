@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import AgentIcon from './AgentIcon';
+import { bucketText, flagLabel, formLabel, granLabel, type Lang, pathFor, t } from '../i18n/dict';
 import { PIN_EVENT, readPins, togglePin } from '../lib/pins';
-import { fmt, fmtSigned, rankUrl, defaultSortFor, GRANS_UI, FOCUS_FORMS, isListed } from '../lib/shared';
-import { type Lang, bucketText, flagLabel, formLabel, granLabel, pathFor, t } from '../i18n/dict';
+import { defaultSortFor, FOCUS_FORMS, fmt, fmtSigned, GRANS_UI, isListed, rankUrl } from '../lib/shared';
+import AgentIcon from './AgentIcon';
 
 export type RankRow = {
   slug: string;
@@ -207,8 +207,7 @@ export default function RankBoard(props: Props) {
           if (bv == null) return -1;
           return sortDir === 'desc' ? bv - av : av - bv;
         });
-      let n = 0;
-      return { form: f, rows: rows.map((r) => ({ ...r, _displayRank: r.score != null ? ++n : null })) };
+      return { form: f, rows };
     }).filter((g) => g.rows.length > 0);
   }, [COLS, filtered, sortKey, sortDir]);
 
@@ -244,7 +243,7 @@ export default function RankBoard(props: Props) {
     }
   };
 
-  const rankedCount = groups.reduce((n, g) => n + g.rows.filter((r) => r._displayRank != null).length, 0);
+  const rankedCount = groups.reduce((n, g) => n + g.rows.filter((r) => r.rank_in_form != null).length, 0);
   const hasDeltas = allRows.some((r) => r.delta_1d != null || r.delta_7d != null);
   const sortLabel = COLS.find((c) => c.key === sortKey)?.label ?? t(lang, 'metric.score');
 
@@ -255,7 +254,7 @@ export default function RankBoard(props: Props) {
           <span class="eyebrow" style="font-size:10px">{t(lang, 'rank.owner')}</span>
           <div class="segmented" role="group" aria-label={t(lang, 'rank.owner')}>
             {['open', 'closed'].map((b) => (
-              <button type="button" aria-current={bucket === b ? 'page' : undefined} onClick={() => changeBucket(b)}>
+              <button key={b} type="button" aria-current={bucket === b ? 'page' : undefined} onClick={() => changeBucket(b)}>
                 {bucketText(lang, b)}
               </button>
             ))}
@@ -265,7 +264,7 @@ export default function RankBoard(props: Props) {
           <span class="eyebrow" style="font-size:10px">{t(lang, 'rank.gran')}</span>
           <div class="segmented" role="group" aria-label={t(lang, 'rank.gran')}>
             {GRANS_UI.map((gg) => (
-              <button type="button" aria-current={gran === gg ? 'page' : undefined} onClick={() => changeGran(gg)}>
+              <button key={gg} type="button" aria-current={gran === gg ? 'page' : undefined} onClick={() => changeGran(gg)}>
                 {granLabel(lang, gg)}
               </button>
             ))}
@@ -279,6 +278,7 @@ export default function RankBoard(props: Props) {
       <nav class="tabs" aria-label={t(lang, 'picker.form')}>
         {(['all', ...FOCUS_FORMS] as string[]).map((f) => (
           <a
+            key={f}
             class="tab"
             href={H(rankUrl(bucket, f, gran))}
             aria-current={form === f ? 'page' : undefined}
@@ -306,7 +306,7 @@ export default function RankBoard(props: Props) {
                   })
                 : t(lang, 'rank.emptyBucket')}
             </p>
-            <button class="btn" style="margin-top:10px" onClick={() => { setForm('all'); setBucket('open'); }}>
+            <button type="button" class="btn" style="margin-top:10px" onClick={() => { setForm('all'); setBucket('open'); }}>
               {t(lang, 'rank.emptyCta')}
             </button>
           </div>
@@ -319,7 +319,7 @@ export default function RankBoard(props: Props) {
             <div class="box-header">
               <span class="row" style="gap:7px">
                 {formLabel(lang, grp.form)}
-                <span class="counter">{grp.rows.filter((r) => r._displayRank != null).length}</span>
+                <span class="counter">{grp.rows.filter((r) => r.rank_in_form != null).length}</span>
               </span>
               <span style="font-weight:400;letter-spacing:0.04em">
                 {t(lang, 'rank.sortBy', { label: sortLabel })} {sortDir === 'desc' ? '↓' : '↑'} · {t(lang, 'rank.sameForm')}
@@ -330,13 +330,14 @@ export default function RankBoard(props: Props) {
               <table class="rank-table">
                 <thead>
                   <tr>
-                    <th class="pos">#</th>
+                    <th class="pos" title={t(lang, 'rank.officialRank')}>#</th>
                     <th>Agent</th>
                     {cols.map((c) =>
                       c.sortable === false ? (
-                        <th class="num">{c.label}</th>
+                        <th key={c.key} class="num">{c.label}</th>
                       ) : (
                         <th
+                          key={c.key}
                           class="num sortable"
                           aria-sort={sortKey === c.key ? (sortDir === 'desc' ? 'descending' : 'ascending') : 'none'}
                         >
@@ -354,8 +355,8 @@ export default function RankBoard(props: Props) {
                 </thead>
                 <tbody>
                   {grp.rows.map((r) => (
-                    <tr class="rank-row">
-                      <td class="pos">{r._displayRank ?? '—'}</td>
+                    <tr key={r.slug} class="rank-row">
+                      <td class="pos">{r.rank_in_form ?? '—'}</td>
                       <td>
                         <div class="agent-cell">
                           <AgentIcon
@@ -371,7 +372,7 @@ export default function RankBoard(props: Props) {
                               {bucketText(lang, r.oss_bucket)}
                             </span>
                             {r.flags.map((f) => (
-                              <span class="badge b-semi">{flagLabel(lang, f)}</span>
+                              <span key={f} class="badge b-semi">{flagLabel(lang, f)}</span>
                             ))}
                           </span>
                         </div>
@@ -380,7 +381,7 @@ export default function RankBoard(props: Props) {
                         const v = c.get(r);
                         const max = maxOf[c.key] ?? 0;
                         return (
-                          <td class="num">
+                          <td key={c.key} class="num">
                             {c.bar && v != null && max > 0 ? (
                               <span class="micro">
                                 <span class="micro-track">
@@ -421,9 +422,9 @@ export default function RankBoard(props: Props) {
 
             <ul class="rank-cards">
               {grp.rows.map((r) => (
-                <li class="rank-card">
+                <li key={r.slug} class="rank-card">
                   <a class="rank-card-main" href={H(`/agent/${r.slug}/`)}>
-                    <span class="pos">{r._displayRank ?? '—'}</span>
+                    <span class="pos">{r.rank_in_form ?? '—'}</span>
                     <AgentIcon
                       slug={r.slug}
                       name={r.name}
@@ -438,7 +439,7 @@ export default function RankBoard(props: Props) {
                           {bucketText(lang, r.oss_bucket)}
                         </span>
                         {r.flags.slice(0, 1).map((f) => (
-                          <span class="badge b-semi">{flagLabel(lang, f)}</span>
+                          <span key={f} class="badge b-semi">{flagLabel(lang, f)}</span>
                         ))}
                       </span>
                     </span>
@@ -460,7 +461,7 @@ export default function RankBoard(props: Props) {
                     {cols
                       .filter((c) => c.key !== 'score')
                       .map((c) => (
-                        <span>
+                        <span key={c.key}>
                           <em>{c.label}</em>
                           {c.format(r)}
                         </span>

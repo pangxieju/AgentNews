@@ -67,14 +67,14 @@ export default {
         return new Response('unauthorized\n', { status: 401 });
       }
       const r = await dispatch(env, 'manual');
-      return new Response(JSON.stringify(r) + '\n', {
+      return new Response(`${JSON.stringify(r)}\n`, {
         status: r.ok ? 200 : 502,
         headers: { 'Content-Type': 'application/json' },
       });
     }
     return new Response(
       `agentnews-dispatch ok\nrepo=${env.REPO}\nworkflow=${env.WORKFLOW}\nref=${env.REF}\n` +
-        `cron=每天 02:05 UTC（北京 10:05）\n手动触发：GET /?run=1&key=<TRIGGER_KEY>\n`,
+        `cron=每天 17:00 UTC（北京次日 01:00）\n手动触发：GET /?run=1&key=<TRIGGER_KEY>\n`,
       { headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
     );
   },

@@ -91,6 +91,7 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
     <link rel="alternate" hreflang="zh-CN" href={zhHref} />
     <link rel="alternate" hreflang="en" href={enHref} />
     <link rel="alternate" hreflang="x-default" href={enHref} />
+    <link rel="alternate" type="application/rss+xml" title="AgentNews" href="/feed.xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={`${pageTitle} · AgentNews`} />
     <meta property="og:description" content={description} />
@@ -183,28 +184,8 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
         --mono: 'Cascadia Mono', Consolas, ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
           'DejaVu Sans Mono', monospace;
 
-        /* 兼容页面里遗留的旧变量名 */
-        --gh-canvas: var(--paper-2);
-        --gh-canvas-subtle: var(--paper-3);
-        --gh-border: var(--rule);
-        --gh-border-muted: var(--rule);
-        --gh-fg: var(--ink);
-        --gh-fg-muted: var(--ink-2);
-        --gh-fg-subtle: var(--ink-3);
-        --gh-accent: var(--ink);
-        --gh-accent-subtle: var(--paper-3);
-        --gh-success: var(--ok);
+        /* 仅保留仍在使用的一个日系变量（徽标 / 提示条的 attention 色） */
         --gh-attention: #9a6b00;
-        --gh-danger: var(--bad);
-        --gh-neutral-subtle: var(--paper-3);
-        --bg: var(--paper);
-        --card: var(--paper-2);
-        --border: var(--rule);
-        --text: var(--ink);
-        --muted: var(--ink-2);
-        --accent: var(--ink);
-        --green: var(--ok);
-        --red: var(--bad);
       }
       :root[data-theme='dark'] {
         color-scheme: dark;
@@ -865,40 +846,6 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
         margin-top: 2px;
       }
 
-      /* 指标切换条：本站的主交互 */
-      .metric-bar {
-        display: flex;
-        align-items: stretch;
-        border: 1px solid var(--rule);
-        background: var(--paper-2);
-        margin-top: 16px;
-      }
-      .metric-bar > button {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        align-items: flex-start;
-        padding: 10px 14px;
-        border: 0;
-        border-right: 1px solid var(--rule);
-        background: transparent;
-        color: var(--ink-2);
-        cursor: pointer;
-        text-align: left;
-      }
-      .metric-bar > button:last-child { border-right: 0; }
-      .metric-bar > button:hover { background: var(--paper-3); color: var(--ink); }
-      .metric-bar > button[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
-      .metric-bar .m-label {
-        font-family: var(--mono);
-        font-size: 10.5px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-      }
-      .metric-bar .m-hint { font-size: 11.5px; opacity: 0.7; }
-      .metric-bar > button[aria-pressed='true'] .m-hint { opacity: 0.85; }
-
       /* 双榜并列：两列账簿 */
       .board-2 {
         display: grid;
@@ -953,34 +900,6 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
         color: var(--ink-3);
         border-top: 1px solid var(--rule);
       }
-
-      /* 尺度说明条：把「归一化」讲清楚 */
-      .scale-strip {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 14px;
-        border: 1px solid var(--rule);
-        border-top: 0;
-        background: var(--paper-2);
-        font-family: var(--mono);
-        font-size: 10.5px;
-        letter-spacing: 0.05em;
-        color: var(--ink-3);
-        flex-wrap: wrap;
-      }
-      .scale-ramp {
-        display: inline-flex;
-        height: 6px;
-        width: 120px;
-        flex: none;
-      }
-      .scale-ramp i { flex: 1; }
-      .scale-ramp i:nth-child(1) { background: var(--heat-1); }
-      .scale-ramp i:nth-child(2) { background: var(--heat-2); }
-      .scale-ramp i:nth-child(3) { background: var(--heat-3); }
-      .scale-ramp i:nth-child(4) { background: var(--heat-4); }
-      .scale-ramp i:nth-child(5) { background: var(--heat-5); }
 
       /* ── 首页选型 ─────────────────────────────────────────── */
       .picker-search {
@@ -1345,23 +1264,6 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
       .ver-history .d { font-size: 10.5px; color: var(--ink-3); }
 
       /* ── 图表 ─────────────────────────────────────────────── */
-      .bar-chart { list-style: none; display: grid; gap: 8px; }
-      .bar-row {
-        display: grid;
-        grid-template-columns: minmax(0, 8em) 1fr 4em;
-        align-items: center;
-        gap: 12px;
-        font-size: 12.5px;
-      }
-      .bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .bar-track { height: 5px; background: var(--paper-3); overflow: hidden; }
-      .bar-fill { display: block; height: 100%; background: var(--ink-4); }
-      .bar-fill.tone-default,
-      .bar-fill.tone-accent { background: var(--heat-1); }
-      .bar-fill.tone-success { background: var(--heat-2); }
-      .bar-fill.tone-attention { background: var(--heat-3); }
-      .bar-fill.tone-danger { background: var(--heat-5); }
-      .bar-value { text-align: right; font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
 
       /* ── 组内位置条（详情页维护健康 / 指标明细）────────────── */
       .pos-bar {
@@ -1458,7 +1360,6 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
       .swatch.tone-danger { background: var(--heat-5); }
       .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
       .chart-grid > * { background: var(--paper-2); }
-      .pkg { overflow-wrap: anywhere; word-break: break-word; }
 
       /* ── 对比托盘 ─────────────────────────────────────────── */
       .pin-tray {
@@ -1560,11 +1461,8 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
         .topnav a i { display: none; }
         .snap-chip { display: none; }
         .hide-sm { display: none; }
-        .pkg { max-width: 8.5em; }
         .grid { grid-template-columns: 1fr; }
-        .grid.grid-4, .grid.grid-tight { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .grid.grid-tight .card { padding: 12px; }
-        .grid.grid-tight .card .num { font-size: 20px; }
+        .grid.grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .card { padding: 13px; }
         .box-body { padding: 13px; }
         .rank-table { display: none; }
@@ -1574,11 +1472,8 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
         .tabs { gap: 0; }
         .board-2 { grid-template-columns: 1fr; }
         .board-col + .board-col { border-left: 0; border-top: 1px solid var(--rule); }
-        .metric-bar { flex-wrap: wrap; }
-        .metric-bar > button { flex: 1 1 40%; border-bottom: 1px solid var(--rule); }
         .readout { grid-template-columns: repeat(3, 1fr); }
         .readout div { border-bottom: 1px solid var(--rule); }
-        .bar-row { grid-template-columns: minmax(0, 5.4em) 1fr 3em; gap: 9px; font-size: 11.5px; }
         .lc-grid-wrap { height: 160px; }
         .picker-input { font-size: 14px; }
         .cmp-pickers { grid-template-columns: 1fr; }

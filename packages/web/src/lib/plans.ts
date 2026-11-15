@@ -28,6 +28,8 @@ export type PlanInfo = {
   source_url: string | null;
   checked_at: string | null;
   confidence: Confidence;
+  /** true = 由 License 推导（不是官方页面核验） */
+  derived: boolean;
 };
 
 type RawPlan = Partial<PlanInfo> & { slug: string };
@@ -44,6 +46,7 @@ function normalize(raw: RawPlan): PlanInfo {
     source_url: raw.source_url ?? null,
     checked_at: raw.checked_at ?? null,
     confidence: raw.confidence === 'verified' ? 'verified' : 'candidate',
+    derived: false,
   };
 }
 
@@ -75,11 +78,13 @@ export function derivedPlan(
     slug,
     free: open ? 'yes' : 'unknown',
     price_monthly: open ? 0 : null,
-    price_note: open ? 'Open source — self-host at no license cost' : null,
+    // 文案由页面按语言渲染；这里只给事实
+    price_note: null,
     self_host: open ? 'yes' : 'unknown',
     source_url: homepage ?? null,
     checked_at: null,
     confidence: open ? 'verified' : 'candidate',
+    derived: true,
   };
 }
 

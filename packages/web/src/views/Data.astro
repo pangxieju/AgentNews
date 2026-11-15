@@ -91,7 +91,7 @@ const jsonLd = {
   <section class="section" style="margin-top:22px">
     <div class="section-title">
       <h2>{en ? 'Download & API' : '下载与 API'}</h2>
-      <span class="muted">{date} · score_version {data?.version ?? '—'}</span>
+      <span class="muted">{date} · score_version {data?.version ?? '—'} · schema_version 1</span>
     </div>
     <div class="box">
       <div class="table-wrap">
@@ -109,6 +109,8 @@ const jsonLd = {
             <tr><td>API</td><td><a href="/api/v1/scores.json"><code>/api/v1/scores.json</code></a></td><td>{en ? 'Read-only endpoint, CORS enabled' : '只读接口，已开 CORS'}</td></tr>
             <tr><td>{en ? 'Dates' : '日期清单'}</td><td><a href="/data/dates.json"><code>/data/dates.json</code></a></td><td>{en ? 'Available snapshot dates' : '可用快照日期'}</td></tr>
             <tr><td>{en ? 'Archive' : '历史快照'}</td><td><code>/data/&#123;date&#125;/scores.json</code></td><td>{en ? 'Any past snapshot (same schema)' : '任意历史快照（同结构）'}</td></tr>
+            <tr><td>{en ? 'Frozen archives' : '周档 / 月档'}</td><td><a href="/data/archives.json"><code>/data/archives.json</code></a></td><td>{en ? 'Weekly / monthly frozen snapshots (label, rows, ranked)' : '每周日 / 每月末冻结的归档清单（label、行数、在榜数）'}</td></tr>
+            <tr><td>{en ? 'One archive' : '单个归档'}</td><td><code>/data/archive/&#123;label&#125;.json</code></td><td>{en ? 'e.g. 2026-W46.json — same row schema' : '如 2026-W46.json —— 与快照同结构'}</td></tr>
             <tr><td>RSS</td><td><a href="/feed.xml"><code>/feed.xml</code></a></td><td>{en ? 'Rank / release updates' : '排名与发版更新'}</td></tr>
           </tbody>
         </table>
@@ -159,8 +161,8 @@ const jsonLd = {
         <pre class="mono" style={preStyle}>{sampleJson}</pre>
         <div class="notice" style="margin-top:14px">
           {en
-            ? 'There is no download button: full snapshots are JSON files in the repository under data/scores/YYYY-MM-DD.json, not separate files served from this site. The repository is not public yet — once it is, this page will link straight to it.'
-            : '这里没有下载按钮：完整快照就是仓库里的 data/scores/YYYY-MM-DD.json 文件，而不是本站单独发布的文件。仓库暂未公开，公开后本页会改成直达链接。'}
+            ? 'Full snapshots are served per date at /data/{date}/scores.json (same schema as the table above); the same files live in the repository under data/scores/YYYY-MM-DD.json. Install deltas need 1/7/30 days of history — entries listed recently show — instead of a fake 0. Snapshots dated 2026-11-09..11 use the older v1 scoring; the export marks score_version per date.'
+            : '完整快照按日期提供：/data/{date}/scores.json（与上表同结构）；仓库里对应文件为 data/scores/YYYY-MM-DD.json。安装增量需要 1/7/30 天历史 —— 新收录条目显示「—」，而不是伪造 0。2026-11-09～11 的快照是 v1 口径（旧算法），导出里按日期标 score_version。'}
         </div>
       </div>
     </div>

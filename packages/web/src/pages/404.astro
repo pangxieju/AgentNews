@@ -1,14 +1,9 @@
 ---
-import Base from '../layouts/Base.astro';
-import { langOf, pathFor, t } from '../i18n/dict';
-const path = Astro.url.pathname;
-const lang = langOf(path);
+import NotFound from '../views/NotFound.astro';
+import { langOf } from '../i18n/dict';
+
+/** Cloudflare Pages 的 404 兜底页：与站内未知路径共用同一个视图 */
+const lang = langOf(Astro.url.pathname);
 ---
-<Base lang={lang} noindex>
-  <div class="page-head">
-    <span class="eyebrow">404</span>
-    <h1>{t(lang, 'app.notFound')}</h1>
-    <p class="lede">{t(lang, 'notfound.lede')}</p>
-    <p style="margin-top:18px"><a class="btn" href={pathFor(lang, '/')}>← {t(lang, 'app.home')}</a></p>
-  </div>
-</Base>
+
+<NotFound lang={lang} />

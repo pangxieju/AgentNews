@@ -29,10 +29,8 @@ export function buildPairs(rows: Row[], perForm = 6): Pair[] {
       .slice(0, perForm);
     for (let i = 0; i < ranked.length; i++) {
       for (let j = i + 1; j < ranked.length; j++) {
-        const x = ranked[i]!.slug;
-        const y = ranked[j]!.slug;
-        const a = x < y ? x : y;
-        const b = x < y ? y : x;
+        // 字典序保证正反向只生成一页（slug 是字符串，不能用 Math.min/max）
+        const [a, b] = [ranked[i]!.slug, ranked[j]!.slug].sort() as [string, string];
         out.push({ a, b, form });
       }
     }

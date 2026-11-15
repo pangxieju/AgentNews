@@ -1,11 +1,5 @@
 import type { ScoreRow } from '@agentnews/core';
-import {
-  backlogPer1kStars,
-  elapsedDays,
-  forkStarPct,
-  median,
-  percentileRank,
-} from '@agentnews/core';
+import { elapsedDays, median, percentileRank } from '@agentnews/core';
 
 /**
  * 组内位置（详情页「维护健康」+ 指标明细的分位列）
@@ -23,8 +17,6 @@ export type HealthKey =
   | 'activity'
   | 'commit'
   | 'release'
-  | 'backlog'
-  | 'forkStar'
   | 'growth30';
 
 type Def = {
@@ -49,11 +41,6 @@ const DEFS: Record<HealthKey, Def> = {
   /** 最近提交 / 发版：天数越小越新 */
   commit: { raw: (r, now) => elapsedDays(r.metrics.last_commit, now), higherBetter: false },
   release: { raw: (r, now) => elapsedDays(r.metrics.last_release, now), higherBetter: false },
-  backlog: {
-    raw: (r) => backlogPer1kStars(r.metrics.open_issues, r.metrics.stars),
-    higherBetter: false,
-  },
-  forkStar: { raw: (r) => forkStarPct(r.metrics.forks, r.metrics.stars), higherBetter: true },
 };
 
 export type Position = {

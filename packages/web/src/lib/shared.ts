@@ -3,6 +3,7 @@
  * 客户端 island（Preact）与服务端 Astro 页面共用这一份，
  * 保证榜单在 SSR 与 hydrate 后渲染结果一致（否则会闪烁）。
  */
+import excludedSlugs from './excluded-slugs.json';
 
 export const FORM_ORDER = [
   'cli',
@@ -16,8 +17,6 @@ export const FORM_ORDER = [
   'assistant',
 ] as const;
 
-export type FormKey = (typeof FORM_ORDER)[number];
-
 /**
  * 列表展示的形态范围 = 全部 9 种形态。
  * 定义在 shared 而不是数据层：island（Preact）与服务端共用，
@@ -25,36 +24,26 @@ export type FormKey = (typeof FORM_ORDER)[number];
  */
 export const FOCUS_FORMS = FORM_ORDER;
 
-export type FocusFormKey = (typeof FOCUS_FORMS)[number];
-
-/** 误分类条目：从主榜剔除，详情页保留（noindex） */
-export const EXCLUDED_SLUGS = new Set(['theia', 'vercel-ai-sdk', 'open-interpreter']);
+/** 误分类条目：从主榜剔除，详情页保留（noindex）。与 astro.config 共用同一份清单 */
+export const EXCLUDED_SLUGS = new Set<string>(excludedSlugs);
 
 /**
  * 是否在公开列表（榜单 / 首页 / 搜索 / 对比）中展示。
  * 只有误分类条目被剔除，其余已收录条目全部参与列表。
  */
-export const isListed = (r: { slug: string; form: string; score?: number | null } | null | undefined): boolean => {
-  if (!r) return false;
-  if (EXCLUDED_SLUGS.has(r.slug)) return false;
-  return true;
-};
+export const isListed = (r: { slug: string } | null | undefined): boolean =>
+  !!r && !EXCLUDED_SLUGS.has(r.slug);
 
-/** 详情页不再展示的 slug（noindex，页面保留） */
-export const NOINDEX_SLUGS = (r: { slug: string; form: string } | null | undefined): boolean =>
-  r ? !isListed(r) : false;
-
-/** 榜单粒度：选型用不到日榜；周榜待历史回填（delta_7d 有数据）后加回 */
 export const GRANS_UI = ['week', 'month'] as const;
 
 /** 格式化数字（T/B/k 缩写，小于 1k 保留原值） */
 export function fmt(n: number | null | undefined): string {
   if (n == null) return '—';
-  if (Math.abs(n) >= 1_000_000_000_000) return (n / 1_000_000_000_000).toFixed(1) + 'T';
-  if (Math.abs(n) >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1) + 'B';
-  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
-  if (Math.abs(n) >= 10_000) return Math.round(n / 1_000) + 'k';
-  if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(1) + 'k';
+  if (Math.abs(n) >= 1_000_000_000_000) return `${(n / 1_000_000_000_000).toFixed(1)}T`;
+  if (Math.abs(n) >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(1)}B`;
+  if (Math.abs(n) >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (Math.abs(n) >= 10_000) return `${Math.round(n / 1_000)}k`;
+  if (Math.abs(n) >= 1_000) return `${(n / 1_000).toFixed(1)}k`;
   return String(Math.round(n));
 }
 
@@ -62,7 +51,7 @@ export function fmt(n: number | null | undefined): string {
 export function fmtPct(n: number | null | undefined): string {
   if (n == null) return '—';
   const v = n * 100;
-  return (v > 0 ? '+' : '') + v.toFixed(1) + '%';
+  return `${(v > 0 ? '+' : '') + v.toFixed(1)}%`;
 }
 
 /** 带符号的增量（+1.2k / -34） */
@@ -71,10 +60,8 @@ export function fmtSigned(n: number | null | undefined): string {
   return (n > 0 ? '+' : '') + fmt(n);
 }
 
-export const GRANS = ['day', 'week', 'month'] as const;
-/** 粒度 → 默认排序键（PRD §5.5） */
 export const defaultSortFor = (g: string): string =>
-  g === 'day' ? 'delta_1d' : g === 'week' ? 'installs_delta_7d' : 'score';
+  g === 'week' ? 'installs_delta_7d' : 'score';
 
 export const rankUrl = (bucket: string, form: string, g: string): string =>
   `/top/${bucket}/${form}/${g}/`;
@@ -83,11 +70,21 @@ export const rankUrl = (bucket: string, form: string, g: string): string =>
 /* ───────────── 安装渠道 / 入口链接 ───────────── */
 
 export type SourceLite = { kind: string; identifier: string; is_primary?: boolean };
+/** 安装渠道 key：展示时用 dict 的 channel.* 本地化，不在数据层拼中文 */
+export type InstallChannel =
+  | 'npm'
+  | 'pypi'
+  | 'brew'
+  | 'crates'
+  | 'vscode'
+  | 'chrome'
+  | 'github'
+  | 'site';
 export type InstallInfo = {
   /** 可直接复制执行的安装命令；没有包管理渠道时为 null */
   command: string | null;
-  /** 渠道说明，例如 npm / PyPI / VS Code 市场 */
-  channel: string;
+  /** 渠道 key（npm / pypi / vscode / …） */
+  channel: InstallChannel;
   /** 外链（GitHub / 包页 / 官网） */
   links: Array<{ label: string; href: string }>;
 };
@@ -112,18 +109,18 @@ export function installInfo(sources: SourceLite[], homepage?: string | null): In
   if (pypi) links.push({ label: 'PyPI', href: `https://pypi.org/project/${pypi.identifier}/` });
   if (vscode)
     links.push({
-      label: 'VS Code 市场',
+      label: 'VS Code Marketplace',
       href: `https://marketplace.visualstudio.com/items?itemName=${vscode.identifier}`,
     });
-  if (chrome) links.push({ label: 'Chrome 商店', href: `https://chromewebstore.google.com/detail/${chrome.identifier}` });
-  if (homepage) links.push({ label: '官网', href: homepage });
+  if (chrome) links.push({ label: 'Chrome Web Store', href: `https://chromewebstore.google.com/detail/${chrome.identifier}` });
+  if (homepage) links.push({ label: 'Homepage', href: homepage });
 
   if (npm) return { command: `npm i -g ${npm.identifier}`, channel: 'npm', links };
-  if (pypi) return { command: `pip install ${pypi.identifier}`, channel: 'PyPI', links };
-  if (brew) return { command: `brew install ${brew.identifier}`, channel: 'Homebrew', links };
-  if (crates) return { command: `cargo install ${crates.identifier}`, channel: 'crates.io', links };
-  if (vscode) return { command: null, channel: 'VS Code 市场', links };
-  if (chrome) return { command: null, channel: 'Chrome 商店', links };
-  if (github) return { command: `git clone https://github.com/${github.identifier}.git`, channel: 'GitHub 源码', links };
-  return { command: null, channel: '官网分发', links };
+  if (pypi) return { command: `pip install ${pypi.identifier}`, channel: 'pypi', links };
+  if (brew) return { command: `brew install ${brew.identifier}`, channel: 'brew', links };
+  if (crates) return { command: `cargo install ${crates.identifier}`, channel: 'crates', links };
+  if (vscode) return { command: null, channel: 'vscode', links };
+  if (chrome) return { command: null, channel: 'chrome', links };
+  if (github) return { command: `git clone https://github.com/${github.identifier}.git`, channel: 'github', links };
+  return { command: null, channel: 'site', links };
 }

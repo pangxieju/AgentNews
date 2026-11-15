@@ -25,6 +25,11 @@ const CORS = {
 
 const ALLOWED = new Set(['view', 'compare', 'out']);
 
+/** 单次请求体上限：正常事件 < 400B，超过直接丢弃（防刷） */
+const MAX_BODY_BYTES = 2048;
+/** 同一 session 每分钟最多写入的事件数（view 也会被限，避免刷新刷量） */
+const MAX_EVENTS_PER_MINUTE = 60;
+
 const clip = (v: unknown, n: number): string =>
   typeof v === 'string' ? v.slice(0, n) : '';
 
@@ -33,6 +38,9 @@ export const onRequestOptions = async (): Promise<Response> =>
 
 export const onRequestPost = async (ctx: { request: Request; env: Env }): Promise<Response> => {
   try {
+    const len = Number(ctx.request.headers.get('content-length') ?? 0);
+    if (len > MAX_BODY_BYTES) return new Response(null, { status: 413, headers: CORS });
+
     const body = (await ctx.request.json()) as {
       e?: string;
       p?: string;
@@ -44,20 +52,37 @@ export const onRequestPost = async (ctx: { request: Request; env: Env }): Promis
       return new Response(null, { status: 400, headers: CORS });
     }
     const country = (ctx.request.headers.get('cf-ipcountry') || '').slice(0, 2);
+    const now = Date.now();
+    const session = clip(body.s, 40);
+    const path = clip(body.p, 160);
+    const agent = clip(body.a, 60);
+
+    if (!session) {
+      // 没有 session 就不写（无法去重、也无法限流）
+      return new Response(null, { status: 204, headers: CORS });
+    }
+
+    // 单条 SQL 完成限流 + 写入：窗口内超过上限时 SELECT 不产出行，INSERT 自然跳过
     await ctx.env.DB.prepare(
-      'INSERT INTO events (ts, event, path, agent, session, country) VALUES (?, ?, ?, ?, ?, ?)',
+      `INSERT INTO events (ts, event, path, agent, session, country)
+       SELECT ?1, ?2, ?3, ?4, ?5, ?6
+       WHERE (SELECT COUNT(*) FROM events WHERE session = ?5 AND ts >= ?7) < ?8`,
     )
       .bind(
-        Date.now(),
+        now,
         event,
-        clip(body.p, 160),
-        clip(body.a, 60),
-        clip(body.s, 40),
+        path,
+        agent,
+        session,
         country,
+        now - 60_000,
+        MAX_EVENTS_PER_MINUTE,
       )
       .run();
+
     return new Response(null, { status: 204, headers: CORS });
   } catch {
+    // 采集失败不影响页面：永远 204
     return new Response(null, { status: 204, headers: CORS });
   }
 };

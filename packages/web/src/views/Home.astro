@@ -91,7 +91,8 @@ const eventText = (e: AgentEvent): string => {
     case 'release': return lang === 'en' ? `${e.name} released ${tail ?? ''}` : `${e.name} 发布 ${tail ?? ''}`;
     case 'rank_jump': {
       const d = Math.abs((e.from ?? 0) - (e.to ?? 0));
-      const dir = (e.from ?? 0) > (e.to ?? 0);
+      // 名次数字变大 = 排名下降（from 8 → to 3 是上升）
+      const dir = (e.to ?? 0) > (e.from ?? 0);
       return lang === 'en'
         ? `${e.name} moved ${dir ? 'down' : 'up'} ${d} ${d === 1 ? 'spot' : 'spots'}`
         : `${e.name} 排名${dir ? '下降' : '上升'} ${d} 位`;
@@ -259,7 +260,7 @@ const jsonLd = [
           <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--rule);font-size:13.5px">
             <AgentIcon
               slug={e.slug}
-              name={meta[e.slug]?.name ?? e.name}
+              name={e.name}
               icon={meta[e.slug]?.icon}
               iconFallback={meta[e.slug]?.iconFallback}
               size={20}

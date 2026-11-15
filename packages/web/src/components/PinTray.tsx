@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
-import { PIN_EVENT, clearPins, readPins, removePin } from '../lib/pins';
 import { type Lang, pathFor, t } from '../i18n/dict';
+import { clearPins, PIN_EVENT, readPins, removePin } from '../lib/pins';
 import AgentIcon from './AgentIcon';
 
 export type PinMeta = Record<
@@ -42,7 +42,7 @@ export default function PinTray({ meta, lang }: Props) {
         </span>
         <ul class="pin-tray-list">
           {items.map((i) => (
-            <li>
+            <li key={i.slug}>
               <AgentIcon slug={i.slug} name={i.name} icon={i.icon} iconFallback={i.iconFallback} size={20} />
               <span class="pin-name">{i.name}</span>
               <button

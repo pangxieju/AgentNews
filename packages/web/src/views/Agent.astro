@@ -9,7 +9,7 @@ import { buildGroupBoard, type HealthKey } from '../lib/group';
 import { installInfo, isListed } from '../lib/shared';
 import { buildPairs, pairSlug } from '../lib/pairs';
 import { planFor } from '../lib/plans';
-import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
+import { type Lang, bucketText, channelLabel, formLabel, pathFor, t } from '../i18n/dict';
 
 interface Props {
   lang: Lang;
@@ -49,7 +49,8 @@ const nameBySlug = new Map(rows.map((r) => [r.slug, r.name ?? r.slug]));
 /* ── 维护健康（PRD §7.2）──
  * 「现在」用数据快照日，不用构建时刻：同一份数据每次部署说法一致，
  * 否则「3 小时前」第二天会变成「27 小时前」，看着像数据在动。 */
-const asOf = new Date(`${date}T23:59:59Z`);
+/** 「现在」= 快照日的北京时间结束（业务日期是 UTC+8，不能用 UTC 23:59，否则「N 小时前」差 8h） */
+const asOf = new Date(`${date}T23:59:59+08:00`);
 const board = row ? buildGroupBoard(rows, row.form, asOf) : null;
 const pos = (k: HealthKey) => (row && board ? board.position(k, row.slug) : null);
 const med = (k: HealthKey) => (board ? board.medianOf(k) : null);
@@ -88,7 +89,7 @@ const noMetrics = ![
   row?.metrics?.forks,
   row?.metrics?.contributors,
   row?.metrics?.installs,
-  row?.metrics?.activity,
+  // activity 是派生值（无证据时为 0），不能用来判断「有没有指标」
   row?.metrics?.last_release,
   row?.metrics?.last_commit,
   row?.metrics?.open_issues,
@@ -115,8 +116,8 @@ const planText = (() => {
         : '未核验';
   return { free, self, price };
 })();
-/** 发版节奏：只认版本的发布时刻（version_at），不认快照日期 */
-const cadence = medianReleaseGapDays(versions.map((v) => v.version_at ?? v.date));
+/** 发版节奏：只认版本的发布时刻（version_at）；快照日期只是我们哪一天看到的，不是发版日 */
+const cadence = medianReleaseGapDays(versions.map((v) => v.version_at));
 
 /** 下载增量：t-1 / t-7 / t-30 快照对比；参考值缺失 → — */
 const dlDelta = (then: number | null | undefined): string =>
@@ -265,7 +266,7 @@ const jsonLd = row
               </div>
             ) : (
               <p class="muted" style="font-size:13.5px">
-                {t(lang, 'agent.noCommand', { channel: info.channel })}
+                {t(lang, 'agent.noCommand', { channel: channelLabel(lang, info.channel) })}
               </p>
             )}
             <div class="link-row">
@@ -298,7 +299,7 @@ const jsonLd = row
                   </div>
                 </>
               )}
-              <div><span data-k>{t(lang, 'agent.channel')}</span><b style="font-size:12.5px">{info.channel}</b></div>
+              <div><span data-k>{t(lang, 'agent.channel')}</span><b style="font-size:12.5px">{channelLabel(lang, info.channel)}</b></div>
               <div><span data-k>{t(lang, 'agent.license')}</span><b style="font-size:12.5px">{meta?.license ?? '—'}</b></div>
               {factsOnly && (
                 <div>
@@ -351,13 +352,17 @@ const jsonLd = row
           <div class="section-title">
             <h2>{lang === 'en' ? 'Pricing & constraints' : '定价与约束'}</h2>
             <span class="muted">
-              {plan.confidence === 'verified'
+              {plan.confidence !== 'verified'
                 ? lang === 'en'
-                  ? 'Checked against the vendor page'
-                  : '已对照官方页面核验'
-                : lang === 'en'
                   ? 'Not verified — no price shown'
-                  : '未核验 —— 不显示价格'}
+                  : '未核验 —— 不显示价格'
+                : plan.derived
+                  ? lang === 'en'
+                    ? 'Derived from the license — not a vendor price check'
+                    : '由 License 推导 —— 非官方页面核验'
+                  : lang === 'en'
+                    ? 'Checked against the vendor page'
+                    : '已对照官方页面核验'}
             </span>
           </div>
           <div class="box">
@@ -378,6 +383,13 @@ const jsonLd = row
               </div>
               {plan.confidence === 'verified' && plan.price_note && (
                 <p style="margin:10px 0 0;font-size:12.5px;color:var(--ink-2)">{plan.price_note}</p>
+              )}
+              {plan.derived && plan.free === 'yes' && (
+                <p style="margin:10px 0 0;font-size:12.5px;color:var(--ink-3)">
+                  {lang === 'en'
+                    ? 'Open source — self-hosting carries no license fee. No vendor price was checked.'
+                    : '开源项目 —— 自托管无许可费用；未核对厂商定价。'}
+                </p>
               )}
               {plan.confidence === 'candidate' && (
                 <p style="margin:10px 0 0;font-size:12.5px;color:var(--ink-3)">

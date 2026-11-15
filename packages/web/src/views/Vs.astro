@@ -1,10 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
-import { loadLatestScores, loadAgentsMeta, fmt, fmtPct } from '../lib/data';
+import { loadLatestScores, loadAgentsMeta, fmt } from '../lib/data';
 import { planFor } from '../lib/plans';
 import { isListed } from '../lib/shared';
-import { buildGroupBoard } from '../lib/group';
 import { type Lang, bucketText, formLabel, pathFor, t } from '../i18n/dict';
 
 interface Props {
@@ -29,6 +28,8 @@ const planA = a ? planFor(a.slug, meta[a.slug]?.license, meta[a.slug]?.homepage)
 const planB = b ? planFor(b.slug, meta[b.slug]?.license, meta[b.slug]?.homepage) : null;
 
 const sameForm = !!a && !!b && a.form === b.form;
+/** 开源 / 闭源是两套分位命名空间：score / rank 跨命名空间不可比 */
+const sameNamespace = !!a && !!b && (a.oss_bucket === 'closed') === (b.oss_bucket === 'closed');
 const form = a?.form ?? b?.form ?? '';
 
 type Row = { key: string; label: string; a: string; b: string; better?: 'a' | 'b' | null };
@@ -51,14 +52,14 @@ if (a && b) {
     label: t(lang, 'metric.score'),
     a: a.score != null ? String(a.score) : '—',
     b: b.score != null ? String(b.score) : '—',
-    better: betterHigh(a.score, b.score),
+    better: sameNamespace ? betterHigh(a.score, b.score) : null,
   });
   rowsTable.push({
     key: 'rank',
     label: t(lang, 'metric.rank'),
     a: a.rank_in_form != null ? `#${a.rank_in_form}` : '—',
     b: b.rank_in_form != null ? `#${b.rank_in_form}` : '—',
-    better: betterLow(a.rank_in_form, b.rank_in_form),
+    better: sameNamespace ? betterLow(a.rank_in_form, b.rank_in_form) : null,
   });
   rowsTable.push({
     key: 'stars',
@@ -94,7 +95,13 @@ if (a && b) {
     a: meta[a.slug]?.license ?? '—',
     b: meta[b.slug]?.license ?? '—',
   });
-  rowsTable.push({ key: 'free', label: en ? 'Free tier' : '免费版', a: planA?.free ?? '—', b: planB?.free ?? '—' });
+  type FreeTier = 'yes' | 'limited' | 'no' | 'unknown';
+  type SelfHost = 'yes' | 'partial' | 'no' | 'unknown';
+  const freeText = (v: string | undefined) =>
+    ({ yes: en ? 'Yes' : '有', limited: en ? 'Limited' : '有限', no: en ? 'No' : '无', unknown: '—' } as Record<FreeTier, string>)[(v as FreeTier) ?? 'unknown'] ?? '—';
+  const selfHostText = (v: string | undefined) =>
+    ({ yes: en ? 'Yes' : '可', partial: en ? 'Partial' : '部分', no: en ? 'No' : '不可', unknown: '—' } as Record<SelfHost, string>)[(v as SelfHost) ?? 'unknown'] ?? '—';
+  rowsTable.push({ key: 'free', label: en ? 'Free tier' : '免费版', a: freeText(planA?.free), b: freeText(planB?.free) });
   const priceText = (p: typeof planA) =>
     !p
       ? '—'
@@ -120,7 +127,7 @@ if (a && b) {
         ? betterLow(planA.price_monthly, planB.price_monthly)
         : null,
   });
-  rowsTable.push({ key: 'selfhost', label: en ? 'Self-host' : '自托管', a: planA?.self_host ?? '—', b: planB?.self_host ?? '—' });
+  rowsTable.push({ key: 'selfhost', label: en ? 'Self-host' : '自托管', a: selfHostText(planA?.self_host), b: selfHostText(planB?.self_host) });
   rowsTable.push({
     key: 'release',
     label: t(lang, 'metric.release'),
@@ -132,7 +139,7 @@ if (a && b) {
 /* 事实型结论：只陈述数据，不给能力评价 */
 const facts: string[] = [];
 if (a && b) {
-  if (a.score != null && b.score != null && a.score !== b.score) {
+  if (a.score != null && b.score != null && a.score !== b.score && sameNamespace) {
     const lead = a.score > b.score ? a : b;
     const other = lead === a ? b : a;
     facts.push(

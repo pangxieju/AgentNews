@@ -70,9 +70,8 @@ const zh: Dict = {
   'bucket.open': '开源',
   'bucket.semi': '半开源',
   'bucket.closed': '闭源',
-  'gran.day': '日榜',
-  'gran.week': '周榜',
-  'gran.month': '月榜',
+  'gran.week': '按周增量',
+  'gran.month': '按综合分',
 
   // ── 指标 ──
   'metric.score': '综合分',
@@ -84,8 +83,6 @@ const zh: Dict = {
   'metric.activity': '活跃度',
   'metric.activityShort': '活跃',
   'metric.openrouterTokens': 'OpenRouter 月 token',
-  'metric.delta1d': '日增',
-  'metric.delta7d': '7d 增',
   'metric.delta7dInstalls': '7d 安装增',
   'metric.delta30dInstalls': '30d 安装增',
   'metric.growth30d': '30d 增速',
@@ -102,19 +99,11 @@ const zh: Dict = {
   'flag.installs_may_include_ci': '含 CI 安装',
   'flag.small_group': '样本少',
   'flag.newcomer': '新秀',
-  'flag.suspicious': '可疑增长',
   'flag.dormant': '已停更',
   'flag.store_installs': '商店累计安装',
   'flag.backfilled_installs': '历史回填',
 
   // ── 事件 ──
-  'event.release': '发版',
-  'event.version': '版本',
-  'event.listed': '新收录',
-  'event.rank_jump': '排名变化',
-  'event.newcomer': '新秀',
-  'event.license_change': 'License',
-  'event.archived': '归档',
 
   // ── 首页 ──
   'home.eyebrow': 'AI Agent Index · 快照 {date}',
@@ -163,9 +152,10 @@ const zh: Dict = {
   'rank.lede': '同形态内比较，跨形态不排名。列头可排序，行尾 + 加入对比 ——',
   'rank.method': '口径说明',
   'rank.owner': '归属',
-  'rank.gran': '粒度',
+  'rank.gran': '排序口径',
   'rank.count': '{n} agent · {forms} 形态 · {ranked} 在榜',
-  'rank.hint': '增量数据积累中：日 / 周榜需 ≥1 天历史快照，当前按综合分排序。',
+  'rank.hint': '周增量需要历史快照；缺失时按综合分排序。',
+  'rank.officialRank': '同形态 × 开/闭源命名空间内的官方名次',
   'rank.emptyTitle': '当前筛选下没有 agent',
   'rank.emptyForm': '{form} 在{bucket}榜暂无收录。',
   'rank.emptyBucket': '该归属下暂无收录条目。',
@@ -191,6 +181,16 @@ const zh: Dict = {
   'agent.noCommand': '通过 {channel} 分发，没有可复制的命令行安装方式。',
   'agent.facts': '关键事实',
   'agent.channel': '分发渠道',
+
+  // ── 安装渠道 ──
+  'channel.npm': 'npm',
+  'channel.pypi': 'PyPI',
+  'channel.brew': 'Homebrew',
+  'channel.crates': 'crates.io',
+  'channel.vscode': 'VS Code 市场',
+  'channel.chrome': 'Chrome 商店',
+  'channel.github': 'GitHub 源码',
+  'channel.site': '官网分发',
   'agent.license': 'License',
   'agent.lastRelease': '最近发版',
   'agent.level': '数据完整度',
@@ -211,7 +211,6 @@ const zh: Dict = {
   'agent.trendEmpty': '趋势图需要至少 2 天快照。当前首份快照为 {date}，下一次采集后即可看到折线。',
   'agent.starTrend': 'Star 走势',
   'agent.scoreTrend': '综合分走势',
-  'agent.metrics': '指标明细',
   'agent.metric': '指标',
   'agent.delta1d': '1d 增量',
   'agent.delta7d': '7d 增量',
@@ -242,11 +241,6 @@ const zh: Dict = {
   'agent.healthRelease': '最近发版',
   'agent.healthCadence': '发版节奏：中位 {n} 天一次',
   'agent.healthCadenceEmpty': '发版节奏需要至少 2 次版本记录（自 {date} 起累积）',
-  'agent.healthBacklog': 'Open issues',
-  'agent.healthBacklogHint': '每千 star {v} 件积压',
-  'agent.healthBacklogNoData': 'star 或 issue 数据不足，不做比较',
-  'agent.healthFork': 'Fork / Star',
-  'agent.healthForkHint': '高于组内中位 = 更多人在基于它自建工作流',
   'agent.healthMedian': '组内中位 {v}',
   'agent.healthNote': '本区块不参与综合分：只做事实呈现，用于判断维护投入与长期可用性。',
   'agent.groupPos': '组内位置',
@@ -273,82 +267,11 @@ const zh: Dict = {
   'forms.compareTitle': '拿不准？并排比一下',
   'forms.compareDesc': '{a} 和 {b} 是这个形态的前两名，逐行看差异比看总分有用。',
   'forms.compareCta': '对比前两名 →',
-  'forms.others': '其他形态',
-  'forms.othersHint': '跨形态不排名',
   'forms.release': '最近发版',
   'forms.version': '当前版本',
 
-  // ── 新秀 ──
-  'rising.crumb': '新秀榜',
-  'rising.title': '新秀榜',
-  'rising.lede': '出道 ≤ {days} 天且已上榜的 agent · 数据截至 {date}',
-  'rising.explain':
-    '口径：出道天数 = min（repo 创建至今, 首次收录至今）。「首次收录」只在该项目晚于系统上线日（{started}）被收录时计入 —— 上线当天收录的条目无法区分「本来就存在」与「刚出现」。',
-  'rising.list': '新秀',
-  'rising.empty':
-    '当前无符合条件的 agent（收录名单里最年轻的也已超过 {days} 天）。这说明当前样本偏向成熟项目 —— 新秀榜需要持续收录新项目才有内容。',
-  'rising.youngest': '最年轻的 10 个',
-  'rising.youngestHint': '按 repo 创建时间排序，帮助发现接近新秀资格的项目',
-  'rising.age': '出道',
-  'rising.firstListed': '首次收录',
-  'rising.days': '{n} 天',
-
-  // ── 动态 ──
-  'activity.crumb': '动态',
-  'activity.title': '动态',
-  'activity.lede': '发版 / 版本 / 新收录 / 排名跃迁 / 新秀 · 数据截至 {date}',
-  'activity.all': '全部',
-  'activity.empty':
-    '尚无事件。事件由「与上一个快照的差异」生成 —— 上线首日没有基线，从第二天起才会产生动态。',
-  'activity.rankJump': '#{from} → #{to}',
-
   // ── 安全 ──
-  'security.crumb': '安全情报',
-  'security.title': '安全情报',
-  'security.lede': '公开安全公告聚合（来源 OSV.dev）· 数据截至 {date}',
   'security.warnTitle': '这不是安全评级。',
-  'security.warn':
-    '下表只是「该包在 OSV 上的历史公告数」，不区分是否已修复、也不判断你的使用方式是否受影响。我们不做安全背书，也不给红黄绿总分 —— 请点原文链接自行核实。',
-  'security.coverage': '查询覆盖',
-  'security.coverageHint': '个有包管理渠道的 agent',
-  'security.withAny': '有历史公告',
-  'security.withAnyHint': '个 agent 的包存在公开公告',
-  'security.total': '公告总数',
-  'security.totalHint': '含历史版本，不代表当前版本受影响',
-  'security.malicious': '恶意包告警',
-  'security.maliciousHint': 'OSV 的 MAL-* 条目',
-  'security.top': '公告数 Top 10',
-  'security.topHint': '红色 = 存在恶意包（MAL-*）条目',
-  'security.table': '按公告数排序',
-  'security.colPackage': '包',
-  'security.colEcosystem': '生态',
-  'security.colAdvisories': '历史公告',
-  'security.colMalicious': '恶意包',
-  'security.colUpdated': '最近更新',
-  'security.empty': '尚无安全数据：运行 pnpm collect 生成。',
-
-  // ── 归档 ──
-  'archive.crumb': '归档',
-  'archive.title': '历史归档',
-  'archive.lede': '每周日冻结周档，每月末冻结月档 · 归档口径为结算日当天的滚动值',
-  'archive.periods': '周档 / 月档',
-  'archive.period': '周期',
-  'archive.type': '类型',
-  'archive.end': '结算日',
-  'archive.ranked': '在榜数',
-  'archive.week': '周档',
-  'archive.month': '月档',
-  'archive.emptyPeriods': '尚无归档。周档在每周日采集后生成，月档在每月最后一天生成。',
-  'archive.daily': '每日快照',
-  'archive.dailyHint': '每日采集结果，用于趋势计算与历史回溯',
-  'archive.listed': '收录数',
-  'archive.emptyDaily': '尚无每日快照。',
-  'archive.chartNotice': '折线图需要至少 2 天快照（当前 {n} 天：{date}）。每日采集后自动补全。',
-  'archive.download':
-    '数据可下载：所有快照均为纯 JSON 文件，位于仓库 data/ 目录，可通过 git 历史完整回溯。',
-  'archive.labelTitle': '{label} 归档',
-  'archive.back': '← 归档列表',
-  'archive.endAt': '结算日 {date} · 归档为冻结快照，不随新数据变化',
 
   // ── 对比 ──
   'compare.crumb': 'Compare',
@@ -364,6 +287,9 @@ const zh: Dict = {
   'compare.mixedTitle': '跨形态对比：',
   'compare.mixed':
     '不同形态的 Star / 安装量不可直接比较，综合分也来自不同分组。这里只做参数参考。',
+  'compare.mixedNsTitle': '跨命名空间对比：',
+  'compare.mixedNs':
+    '开源与闭源是两套分位命名空间，综合分与名次互不可比 —— 这一组不标「最优」。',
   'compare.emptyTitle': '选两个 agent，并排看差异',
   'compare.empty':
     '同一形态内的指标才有可比性。上面选 A / B，或用「快速开始」直接对比某形态的前两名。',
@@ -393,18 +319,16 @@ const zh: Dict = {
   'about.sourcesText':
     'GitHub API · npm registry · PyPI (pypistats) · VS Code Marketplace（低频）。每日 UTC 02:00 采集，快照归档。',
   'about.anti': '反作弊',
-  'about.anti1': '单日 star 增幅 > 5% 且无 release/报道佐证 → 打 suspicious，趋势榜剔除',
-  'about.anti2': '增速基准低于 FLOOR（7d=50，30d=200）→ 不参与增速榜（防小基数暴涨）',
+  'about.anti1': '单日 star 增幅异常且没有 release / 报道佐证 → 只进入人工复核队列（不做自动降权，也不给红黄绿评级）',
+  'about.anti2': '增速基准低于 FLOOR（7d=50，30d=200）→ 不计算增速（防小基数暴涨）',
   'about.disclaimer': '免责',
   'about.disclaimerText': '榜单为独立整理，与任何厂商无利益关联。数据可能有延迟或错误，欢迎提交 Issue 纠错。',
 
   // ── 变更 ──
-  'changelog.crumb': '变更记录',
   'changelog.title': '变更记录',
   'changelog.lede': '榜单条目增删、算法版本、口径调整。每次算法变更都会升 score_version。',
   'changelog.algo': '算法版本',
   'changelog.current': '当前',
-  'changelog.weights': '权重：Star 20% / 30日增速 25% / 活跃度 15% / 安装量 20% / 贡献者 10% / 生态 5% / Fork 5%',
   'changelog.normalize':
     '归一化：log 压缩 → 同形态组内秩中点平滑分位 (midRank+0.5)/n → 缺失权重重分配 → 加权求和',
   'changelog.spec': '口径变更',
@@ -413,9 +337,6 @@ const zh: Dict = {
   'changelog.reason': '原因',
   'changelog.product': '产品结构',
   'changelog.entries': '条目变更',
-  'changelog.action': '动作',
-  'changelog.note': '说明',
-  'changelog.fixNote': '纠错入口：',
   'changelog.fixNoteBody': '发现数据错误？欢迎提 Issue 或直接修改 agents.yaml 提 PR —— CI 会自动校验格式。',
 
   // ── 托盘 ──
@@ -429,8 +350,6 @@ const zh: Dict = {
   // ── 图表 ──
   'chart.series.star': 'Star',
   'chart.series.score': '综合分',
-  'chart.series.listed': '收录数',
-  'chart.series.ranked': '在榜数',
 };
 
 const en: Dict = {
@@ -465,10 +384,6 @@ const en: Dict = {
   'nav.indexEn': 'Index',
   'nav.boardEn': 'Board',
   'nav.compareEn': 'Diff',
-  'nav.newEn': 'New',
-  'nav.logEn': 'Log',
-  'nav.osvEn': 'OSV',
-  'nav.archiveEn': 'Archive',
   'nav.methodEn': 'Method',
 
   'footer.line': '{name} · {tagline} · Snapshot {date} · {open} open / {closed} closed',
@@ -490,9 +405,8 @@ const en: Dict = {
   'bucket.open': 'Open',
   'bucket.semi': 'Source-available',
   'bucket.closed': 'Closed',
-  'gran.day': 'Daily',
-  'gran.week': 'Weekly',
-  'gran.month': 'Monthly',
+  'gran.week': '7-day installs',
+  'gran.month': 'Score',
 
   'metric.score': 'Score',
   'metric.rank': 'Rank in form',
@@ -503,8 +417,6 @@ const en: Dict = {
   'metric.activity': 'Activity',
   'metric.activityShort': 'Active',
   'metric.openrouterTokens': 'OpenRouter tokens/mo',
-  'metric.delta1d': '1d Δ',
-  'metric.delta7d': '7d Δ',
   'metric.delta7dInstalls': '7d install Δ',
   'metric.delta30dInstalls': '30d install Δ',
   'metric.growth30d': '30d growth',
@@ -520,34 +432,21 @@ const en: Dict = {
   'flag.installs_may_include_ci': 'Incl. CI',
   'flag.small_group': 'Small sample',
   'flag.newcomer': 'Newcomer',
-  'flag.suspicious': 'Suspicious',
   'flag.dormant': 'Dormant',
   'flag.store_installs': 'Store installs',
   'flag.backfilled_installs': 'Backfilled',
 
-  'event.release': 'Release',
-  'event.version': 'Version',
-  'event.listed': 'Listed',
-  'event.rank_jump': 'Rank move',
-  'event.newcomer': 'Newcomer',
-  'event.license_change': 'License',
-  'event.archived': 'Archived',
 
   'home.eyebrow': 'AI Agent Index · Snapshot {date}',
   'home.title': 'Put every ecosystem\non one ruler',
   'home.lede':
     'GitHub stars, npm / PyPI downloads and store installs are compressed to in-form percentiles before ranking. {n} AI agents, 9 forms (terminal / plugin / AI IDE / desktop / browser / framework / platform / autonomous / assistant), never compared across forms — pick where you use it, then compare numbers.',
   'home.readout.listed': 'Listed',
-  'home.readout.open': 'Open',
-  'home.readout.closed': 'Closed',
-  'home.readout.forms': 'Forms',
   'home.readout.ranked': 'Ranked',
   'home.step1': 'Step 01 · Pick a form',
   'home.step1Hint': 'Where you use it → never compared across forms',
   'home.step2': 'Step 02 · Shortlist',
   'home.step2Hint': 'Search / form / license · hit + in the board to compare',
-  'home.step3': 'Step 03 · Compare',
-  'home.step3Hint': '12 rows, side by side, same form only',
   'home.formMeta': 'Form {idx} · {n}',
   'home.guide': 'Form guide →',
   'home.noData': 'No comparable data yet',
@@ -582,9 +481,10 @@ const en: Dict = {
   'rank.lede': 'Compared within a form, never across forms. Sort by any column, hit + to compare —',
   'rank.method': 'method',
   'rank.owner': 'License',
-  'rank.gran': 'Period',
+  'rank.gran': 'Ranked by',
   'rank.count': '{n} agents · {forms} forms · {ranked} ranked',
-  'rank.hint': 'Delta data still accumulating: daily / weekly need ≥1 day of history. Currently sorted by score.',
+  'rank.hint': '7-day install deltas need snapshot history; falls back to score when missing.',
+  'rank.officialRank': 'Official rank within form × open/closed namespace',
   'rank.emptyTitle': 'No agents under this filter',
   'rank.emptyForm': 'No {form} entries on the {bucket} board yet.',
   'rank.emptyBucket': 'No entries under this filter yet.',
@@ -609,6 +509,15 @@ const en: Dict = {
   'agent.noCommand': 'Distributed via {channel}; there is no copyable CLI install command.',
   'agent.facts': 'Key facts',
   'agent.channel': 'Channel',
+
+  'channel.npm': 'npm',
+  'channel.pypi': 'PyPI',
+  'channel.brew': 'Homebrew',
+  'channel.crates': 'crates.io',
+  'channel.vscode': 'VS Code Marketplace',
+  'channel.chrome': 'Chrome Web Store',
+  'channel.github': 'GitHub source',
+  'channel.site': 'Vendor site',
   'agent.license': 'License',
   'agent.lastRelease': 'Last release',
   'agent.level': 'Data level',
@@ -630,7 +539,6 @@ const en: Dict = {
     'A trend needs at least 2 days of snapshots. First snapshot is {date}; the line appears after the next collection.',
   'agent.starTrend': 'Stars trend',
   'agent.scoreTrend': 'Score trend',
-  'agent.metrics': 'Metrics',
   'agent.metric': 'Metric',
   'agent.delta1d': '1d Δ',
   'agent.delta7d': '7d Δ',
@@ -665,11 +573,6 @@ const en: Dict = {
   'agent.healthCadence': 'Cadence: a release every {n} days (median)',
   'agent.healthCadenceEmpty':
     'Cadence needs at least 2 version records (collecting since {date})',
-  'agent.healthBacklog': 'Open issues',
-  'agent.healthBacklogHint': '{v} per 1k stars',
-  'agent.healthBacklogNoData': 'Not enough star / issue data to compare',
-  'agent.healthFork': 'Fork / Star',
-  'agent.healthForkHint': 'Above the group median = more people building on it',
   'agent.healthMedian': 'Group median {v}',
   'agent.healthNote':
     'Not part of the composite score — facts only, to judge maintenance and long-term availability.',
@@ -696,78 +599,10 @@ const en: Dict = {
   'forms.compareTitle': 'Not sure? Compare them',
   'forms.compareDesc': '{a} and {b} lead this form. Row-by-row differences beat a single score.',
   'forms.compareCta': 'Compare top two →',
-  'forms.others': 'Other forms',
-  'forms.othersHint': 'Never ranked across forms',
   'forms.release': 'Last release',
   'forms.version': 'Version',
 
-  'rising.crumb': 'Rising',
-  'rising.title': 'Rising',
-  'rising.lede': 'Listed agents ≤ {days} days old · data as of {date}',
-  'rising.explain':
-    'Age = min(days since repo creation, days since first listed). “First listed” only counts when a project is listed after launch day ({started}); items listed on day one cannot be distinguished from projects that already existed.',
-  'rising.list': 'Rising',
-  'rising.empty':
-    'No agents qualify right now (the youngest listed project is older than {days} days). The current sample skews mature — this board needs fresh entries to stay useful.',
-  'rising.youngest': 'Youngest 10',
-  'rising.youngestHint': 'Sorted by repo creation date, to spot near-qualifiers',
-  'rising.age': 'Age',
-  'rising.firstListed': 'First listed',
-  'rising.days': '{n} days',
-
-  'activity.crumb': 'Activity',
-  'activity.title': 'Activity',
-  'activity.lede': 'Releases / versions / listings / rank moves / newcomers · as of {date}',
-  'activity.all': 'All',
-  'activity.empty':
-    'No events yet. Events are generated by diffing against the previous snapshot — there is no baseline on day one, so they start on day two.',
-  'activity.rankJump': '#{from} → #{to}',
-
-  'security.crumb': 'Security',
-  'security.title': 'Security advisories',
-  'security.lede': 'Aggregated public advisories (OSV.dev) · as of {date}',
   'security.warnTitle': 'This is not a security rating.',
-  'security.warn':
-    'The table only counts historical advisories per package. It does not say whether they are fixed, nor whether your usage is affected. No endorsement, no red/amber/green score — follow the links and verify yourself.',
-  'security.coverage': 'Packages checked',
-  'security.coverageHint': 'agents with a package channel',
-  'security.withAny': 'With advisories',
-  'security.withAnyHint': 'agents whose package has public advisories',
-  'security.total': 'Total advisories',
-  'security.totalHint': 'includes old versions; current version may be unaffected',
-  'security.malicious': 'Malicious packages',
-  'security.maliciousHint': 'OSV MAL-* entries',
-  'security.top': 'Advisories · top 10',
-  'security.topHint': 'red = has malicious (MAL-*) entries',
-  'security.table': 'Sorted by advisory count',
-  'security.colPackage': 'Package',
-  'security.colEcosystem': 'Ecosystem',
-  'security.colAdvisories': 'Advisories',
-  'security.colMalicious': 'Malicious',
-  'security.colUpdated': 'Updated',
-  'security.empty': 'No security data yet: run pnpm collect.',
-
-  'archive.crumb': 'Archive',
-  'archive.title': 'Archive',
-  'archive.lede': 'Weekly snapshots freeze on Sunday, monthly on the last day · archive values are the rolling values on the settlement date',
-  'archive.periods': 'Weekly / monthly',
-  'archive.period': 'Period',
-  'archive.type': 'Type',
-  'archive.end': 'Settled',
-  'archive.ranked': 'Ranked',
-  'archive.week': 'Weekly',
-  'archive.month': 'Monthly',
-  'archive.emptyPeriods': 'No archives yet. Weekly archives are created after Sunday collection; monthly on the last day of the month.',
-  'archive.daily': 'Daily snapshots',
-  'archive.dailyHint': 'Daily collection results, used for trends and history',
-  'archive.listed': 'Listed',
-  'archive.emptyDaily': 'No daily snapshots yet.',
-  'archive.chartNotice': 'The line chart needs at least 2 days (currently {n}: {date}). It fills in after each daily collection.',
-  'archive.download':
-    'Data is downloadable: every snapshot is a plain JSON file in the repo data/ directory and fully recoverable from git history.',
-  'archive.labelTitle': 'Archive {label}',
-  'archive.back': '← All archives',
-  'archive.endAt': 'Settled {date} · archived as a frozen snapshot',
 
   'compare.crumb': 'Compare',
   'compare.eyebrow': 'Compare · Side by side',
@@ -782,6 +617,9 @@ const en: Dict = {
   'compare.mixedTitle': 'Cross-form comparison:',
   'compare.mixed':
     'Stars and installs are not directly comparable across forms, and scores come from different groups. Use this as parameter reference only.',
+  'compare.mixedNsTitle': 'Cross-namespace comparison:',
+  'compare.mixedNs':
+    'Open and closed are separate percentile namespaces — scores and ranks are not comparable across them, so no “best” marker is shown here.',
   'compare.emptyTitle': 'Pick two agents to see the diff',
   'compare.empty':
     'Metrics are only comparable within a form. Choose A / B above, or use “Quick start” to compare the top two of any form.',
@@ -811,18 +649,16 @@ const en: Dict = {
   'about.sourcesText':
     'GitHub API · npm registry · PyPI (pypistats) · VS Code Marketplace (low frequency). Collected daily at 02:00 UTC and archived.',
   'about.anti': 'Anti-gaming',
-  'about.anti1': 'Single-day star growth > 5% without a release or press coverage → flagged suspicious and dropped from trend boards',
-  'about.anti2': 'Growth baselines below FLOOR (7d=50, 30d=200) → excluded from growth boards (prevents small-base spikes)',
+  'about.anti1': 'A single-day star spike without a release or press coverage only goes to a human review queue — no automatic penalty and no red/amber/green rating',
+  'about.anti2': 'Growth baselines below FLOOR (7d=50, 30d=200) → growth is not computed (prevents small-base spikes)',
   'about.disclaimer': 'Disclaimer',
   'about.disclaimerText':
     'Compiled independently, with no commercial ties to any vendor. Data may be delayed or wrong — issues and corrections are welcome.',
 
-  'changelog.crumb': 'Changelog',
   'changelog.title': 'Changelog',
   'changelog.lede': 'Entry changes, algorithm versions and methodology updates. Every algorithm change bumps score_version.',
   'changelog.algo': 'Algorithm version',
   'changelog.current': 'current',
-  'changelog.weights': 'Weights: stars 20% / 30-day growth 25% / activity 15% / installs 20% / contributors 10% / ecosystem 5% / forks 5%',
   'changelog.normalize':
     'Normalization: log-compress → in-form mid-rank percentile (midRank+0.5)/n → redistribute missing weights → weighted sum',
   'changelog.spec': 'Methodology changes',
@@ -831,9 +667,6 @@ const en: Dict = {
   'changelog.reason': 'Reason',
   'changelog.product': 'Product structure',
   'changelog.entries': 'Entry changes',
-  'changelog.action': 'Action',
-  'changelog.note': 'Note',
-  'changelog.fixNote': 'Corrections:',
   'changelog.fixNoteBody': 'Found an error? Open an issue or edit agents.yaml and send a PR — CI validates the format.',
 
   'tray.label': 'Candidates',
@@ -845,8 +678,6 @@ const en: Dict = {
 
   'chart.series.star': 'Stars',
   'chart.series.score': 'Score',
-  'chart.series.listed': 'Listed',
-  'chart.series.ranked': 'Ranked',
 };
 
 const DICT: Record<Lang, Dict> = { zh, en };
@@ -871,9 +702,9 @@ export function stripLang(pathname: string): string {
 
 /** 把站内路径转成目标语言的路径（英语无前缀，中文在 /zh/） */
 export function pathFor(lang: Lang, path: string): string {
-  const p = path.startsWith('/') ? path : '/' + path;
+  const p = path.startsWith('/') ? path : `/${path}`;
   if (lang === 'en') return p;
-  return p === '/' ? '/zh/' : '/zh' + p;
+  return p === '/' ? '/zh/' : `/zh${p}`;
 }
 
 export function swapLangPath(pathname: string, target: Lang): string {
@@ -881,18 +712,6 @@ export function swapLangPath(pathname: string, target: Lang): string {
 }
 
 /* ───────────── 标签 ───────────── */
-
-export const FORM_KEYS = [
-  'cli',
-  'ide-plugin',
-  'ide-app',
-  'desktop',
-  'browser',
-  'framework',
-  'platform',
-  'autonomous',
-  'assistant',
-] as const;
 
 export function formLabel(lang: Lang, form: string): string {
   return t(lang, `form.${form}`);
@@ -910,6 +729,7 @@ export function flagLabel(lang: Lang, flag: string): string {
   return t(lang, `flag.${flag}`);
 }
 
-export function eventLabel(lang: Lang, kind: string): string {
-  return t(lang, `event.${kind}`);
+/** 安装渠道名称（数据层只存 key，展示时才本地化） */
+export function channelLabel(lang: Lang, channel: string): string {
+  return t(lang, `channel.${channel}`);
 }
