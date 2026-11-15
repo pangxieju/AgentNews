@@ -1656,3 +1656,74 @@
   note: AI 浏览器 / 搜索助手；无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: quark, is_primary: true }
+
+# =============================================================
+# 第十批扩充（M1 · 2026-11-15）：企业侧 + 手机厂商助手
+# 均为闭源对话式助手，manual 渠道；无公开采用度指标 → L3 收录区不排名
+# =============================================================
+
+- slug: dingtalk-ai
+  name: 钉钉 AI 助理
+  vendor: Alibaba (DingTalk)
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://ai.dingtalk.com
+  note: 企业协同场景的对话式助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: dingtalk-ai, is_primary: true }
+
+- slug: feishu-ai
+  name: 飞书智能伙伴
+  vendor: ByteDance (Feishu)
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.feishu.cn/product/ai
+  note: 企业协同 + 知识库助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: feishu-ai, is_primary: true }
+
+- slug: wecom-ai
+  name: 企业微信 AI 助理
+  vendor: Tencent (WeCom)
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://work.weixin.qq.com/
+  note: 企业 IM 场景的对话式助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: wecom-ai, is_primary: true }
+
+- slug: xiaoai
+  name: 小爱同学
+  vendor: Xiaomi
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://xiaoai.mi.com/
+  note: 手机 / 车机 / 家居多端语音助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: xiaoai, is_primary: true }
+
+- slug: celia
+  name: 小艺 Celia
+  vendor: Huawei
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://consumer.huawei.com/cn/
+  note: 华为设备内置语音 / 系统级助手；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: celia, is_primary: true }
+
+- slug: blueheart
+  name: 蓝心小V
+  vendor: vivo
+  form: assistant
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.vivo.com.cn/
+  note: vivo 系统级助手（蓝心大模型）；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: blueheart, is_primary: true }

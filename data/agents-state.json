@@ -85,12 +85,20 @@
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
+    "blueheart": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "browser-use": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
     "camel": {
       "first_listed": "2026-11-14",
+      "last_seen": "2026-11-15"
+    },
+    "celia": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "chatdev": {
@@ -201,6 +209,10 @@
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
+    "dingtalk-ai": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "doubao": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
@@ -218,6 +230,10 @@
       "last_seen": "2026-11-15"
     },
     "fastgpt": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "feishu-ai": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
@@ -529,11 +545,19 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "wecom-ai": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "windsurf": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
     "xagent": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "xiaoai": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
