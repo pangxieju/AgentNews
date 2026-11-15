@@ -7,6 +7,13 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
   zh: {
     spec: [
       {
+        date: '2026-11-14',
+        change:
+          '取消形态冻结：<code>desktop</code> / <code>browser</code> / <code>framework</code> / <code>autonomous</code> 恢复进入榜单、首页、对比与形态指南',
+        reason:
+          '只展示 3 种形态让 30+ 已收录条目在所有列表消失（站内可见 77 → 44，开源榜只剩 20 个）—— 收录了却看不到，与「AI Agent 索引」的定位不符',
+      },
+      {
         date: '2026-11-12',
         change:
           '聚焦范围：榜单仅展示 <code>cli</code> / <code>ide-plugin</code> / <code>ide-app</code> 三个形态，其余形态冻结保留详情页',
@@ -139,6 +146,13 @@ export const CHANGELOG: Record<Lang, { spec: ChangeRow[]; product: ChangeRow[]; 
   },
   en: {
     spec: [
+      {
+        date: '2026-11-14',
+        change:
+          'Unfroze forms: <code>desktop</code> / <code>browser</code> / <code>framework</code> / <code>autonomous</code> are back in boards, home, compare and form guides',
+        reason:
+          'Listing only 3 forms hid 30+ collected entries from every list (visible 77 → 44, open board down to 20) — collected but invisible contradicts the “AI agent index” positioning',
+      },
       {
         date: '2026-11-12',
         change:

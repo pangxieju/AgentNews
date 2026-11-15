@@ -23,7 +23,7 @@ const rows = data?.rows ?? [];
 const date = data?.date ?? '—';
 
 const row = rows.find((r) => r.slug === slug);
-/** 冻结形态或误分类：页面保留（不再出现在任何列表），但整页 noindex */
+/** 误分类条目：页面保留（不再出现在任何列表），但整页 noindex */
 const frozen = !!row && !isListed(row);
 const sec = loadSecurity()?.subjects?.[slug];
 const agentsMeta = loadAgentsMeta();
@@ -238,8 +238,8 @@ const jsonLd = row
       {frozen && (
         <div class="warn" style="margin-top:16px">
           {lang === 'en'
-            ? 'Frozen · experimental section, data no longer tracked'
-            : '实验区 · 已冻结，数据不再更新'}
+            ? 'Excluded · classification under review, not in any board'
+            : '已移出主榜 · 形态归类待核，暂不进入任何列表'}
         </div>
       )}
 

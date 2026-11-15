@@ -15,7 +15,7 @@ const H = (p: string) => pathFor(lang, p);
 
 const data = loadLatestScores();
 const rows = data?.rows ?? [];
-/** 聚焦范围：首页所有统计都只基于公开列表内的条目 */
+/** 列表范围：首页所有统计都只基于公开列表内的条目 */
 const listedRows = rows.filter(isListed);
 const date = data?.date ?? '—';
 const metaAll = loadAgentsMeta();
@@ -105,8 +105,8 @@ const eventText = (e: AgentEvent): string => {
 const SITE = Astro.site ?? new URL('https://agentnews-c5h.pages.dev');
 const description =
   lang === 'en'
-    ? `AI coding agent index: ${listedRows.length} agents in terminal, IDE plugin and AI IDE forms — with open/closed adoption data, percentile scores and weekly install deltas. Snapshot ${date}.`
-    : `AI 编码 agent 索引：${listedRows.length} 个终端 / IDE 插件 / AI IDE 产品的开源与闭源采用度、组内分位分数与周安装增量。快照 ${date}。`;
+    ? `AI agent index: ${listedRows.length} agents across terminal, IDE plugin, AI IDE, desktop, browser, framework and autonomous forms — with open/closed adoption data, percentile scores and weekly install deltas. Snapshot ${date}.`
+    : `AI agent 索引：${listedRows.length} 个终端 / IDE 插件 / AI IDE / 桌面 / 浏览器 / 框架 / 自主形态产品的开源与闭源采用度、组内分位分数与周安装增量。快照 ${date}。`;
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -277,7 +277,7 @@ const jsonLd = [
 </Base>
 
 <style>
-  /* 首页只映射 3 个聚焦形态：把 Base 全局的 4 列栅格收成 3 列（全局样式不在本次改动范围） */
+  /* 首页形态卡片：7 种形态按 3 列排布（全局样式不在本次改动范围） */
   .form-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   @media (max-width: 768px) {
     .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

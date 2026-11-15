@@ -711,6 +711,117 @@
     - { kind: manual, identifier: devin, is_primary: true }
 
 # =============================================================
+# 第四批扩充（M1 · 2026-11-14 人工核验）
+# 来源：watchlist pending + discover 候选；经 GitHub API 核过 star/pushed/license，
+# 包名经 registry.npmjs.org / pypi.org 核过归属，仅收有公开 repo 的活跃项目
+# =============================================================
+
+# ---------- 多智能体框架 ----------
+- slug: camel
+  name: CAMEL
+  vendor: CAMEL-AI
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://www.camel-ai.org
+  sources:
+    - { kind: github, identifier: camel-ai/camel, is_primary: true }
+    - { kind: pypi, identifier: camel-ai }
+
+- slug: agentscope
+  name: AgentScope
+  vendor: Alibaba
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://agentscope.io
+  sources:
+    - { kind: github, identifier: agentscope-ai/agentscope, is_primary: true }
+    - { kind: pypi, identifier: agentscope }
+
+- slug: letta
+  name: Letta
+  vendor: Letta
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://www.letta.com
+  note: 有状态 agent 运行时（MemGPT 后继）
+  sources:
+    - { kind: github, identifier: letta-ai/letta, is_primary: true }
+    - { kind: pypi, identifier: letta }
+
+- slug: beeai-framework
+  name: BeeAI Framework
+  vendor: IBM
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://framework.beeai.dev
+  note: Python + TypeScript 双包
+  sources:
+    - { kind: github, identifier: i-am-bee/beeai-framework, is_primary: true }
+    - { kind: pypi, identifier: beeai-framework }
+    - { kind: npm, identifier: beeai-framework }
+
+- slug: voltagent
+  name: VoltAgent
+  vendor: VoltAgent
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://voltagent.dev
+  sources:
+    - { kind: github, identifier: VoltAgent/voltagent, is_primary: true }
+    - { kind: npm, identifier: "@voltagent/core" }
+
+- slug: cloudflare-agents
+  name: Cloudflare Agents
+  vendor: Cloudflare
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://developers.cloudflare.com/agents/
+  sources:
+    - { kind: github, identifier: cloudflare/agents, is_primary: true }
+    - { kind: npm, identifier: agents }
+
+# ---------- 自主 agent ----------
+- slug: deerflow
+  name: DeerFlow
+  vendor: ByteDance
+  form: autonomous
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://deerflow.tech
+  note: 长任务 SuperAgent harness（研究 / 编码 / 报告）
+  sources:
+    - { kind: github, identifier: bytedance/deer-flow, is_primary: true }
+
+- slug: hermes-agent
+  name: Hermes Agent
+  vendor: Nous Research
+  form: autonomous
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://hermes-agent.nousresearch.com
+  note: 无官方 npm/PyPI 包，目前仅 GitHub 渠道
+  sources:
+    - { kind: github, identifier: NousResearch/hermes-agent, is_primary: true }
+
+# ---------- 桌面 ----------
+- slug: orca
+  name: Orca
+  vendor: Stably AI
+  form: desktop
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://orca.dev
+  note: 多 coding agent 调度桌面客户端（Claude Code / Codex 等）
+  sources:
+    - { kind: github, identifier: stablyai/orca, is_primary: true }
+
+# =============================================================
 # 第三批扩充：闭源产品补齐
 # discover 抓不到这些（没有公开 repo），靠人补（PRD §4.4 闭源门槛）
 # 2026-11 核对：homepage 可达 / npm 包经 registry.npmjs.org 验过
@@ -916,3 +1027,184 @@
   note: 异步任务托管；无公开安装数据（L3）
   sources:
     - { kind: manual, identifier: jules, is_primary: true }
+
+# =============================================================
+# 第五批扩充（M1 · 2026-11-14）：闭源补录 + 新开源 CLI
+# 闭源项按 PRD §4.4：有公开产品页 + 可查安装指标（VS Code 市场）
+# 扩展 id 均经 marketplace extensionquery API 核过，install 数为采集当日值
+# =============================================================
+
+# ---------- 开源 CLI ----------
+- slug: grok-build
+  name: Grok Build
+  vendor: xAI
+  form: cli
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://github.com/xai-org/grok-build
+  note: xAI 官方编码 agent harness（TUI）；无 npm/PyPI 包
+  sources:
+    - { kind: github, identifier: xai-org/grok-build, is_primary: true }
+
+# ---------- 闭源 IDE 插件 ----------
+- slug: augment
+  name: Augment Code
+  vendor: Augment Code
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.augmentcode.com
+  note: IDE 插件；终端形态为已收录的 Auggie CLI
+  sources:
+    - { kind: manual, identifier: augment-code, is_primary: true }
+    - { kind: vscode, identifier: augment.vscode-augment }
+
+- slug: blackbox
+  name: Blackbox AI
+  vendor: Blackbox AI
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.blackbox.ai
+  note: 插件安装量来自 VS Code 市场
+  sources:
+    - { kind: manual, identifier: blackbox-ai, is_primary: true }
+    - { kind: vscode, identifier: Blackboxapp.blackbox }
+
+# ---------- 闭源框架 ----------
+- slug: claude-agent-sdk
+  name: Claude Agent SDK
+  vendor: Anthropic
+  form: framework
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://docs.anthropic.com/en/api/agent-sdk/overview
+  note: Anthropic 官方 agent SDK；无独立开源 repo
+  sources:
+    - { kind: npm, identifier: "@anthropic-ai/claude-agent-sdk", is_primary: true }
+
+# ---------- 闭源浏览器 agent ----------
+- slug: dia
+  name: Dia
+  vendor: The Browser Company
+  form: browser
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.diabrowser.com
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: dia-browser, is_primary: true }
+
+# =============================================================
+# 第六批扩充（M1 · 2026-11-15）：从 discover 待审队列人工复核
+# 门槛：star ≥ 500 / 近 180 天有推送 / 未归档 / 有明确产品形态
+# 包名均经 pypi.org / registry.npmjs.org 核过归属（避免同名抢注包）
+# =============================================================
+
+# ---------- 自主 agent ----------
+- slug: openmanus
+  name: OpenManus
+  vendor: Foundation Agents
+  form: autonomous
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://openmanus.github.io/
+  sources:
+    - { kind: github, identifier: FoundationAgents/OpenManus, is_primary: true }
+    - { kind: pypi, identifier: openmanus }
+
+- slug: swe-agent
+  name: SWE-agent
+  vendor: Princeton NLP
+  form: autonomous
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://swe-agent.com
+  note: GitHub issue → 自动修复 PR
+  sources:
+    - { kind: github, identifier: SWE-agent/SWE-agent, is_primary: true }
+    - { kind: pypi, identifier: sweagent }
+
+- slug: feynman
+  name: Feynman
+  vendor: Companion Inc
+  form: autonomous
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://feynman.is
+  note: 开源研究型 agent
+  sources:
+    - { kind: github, identifier: Companion-Inc/feynman, is_primary: true }
+
+- slug: qwenpaw
+  name: QwenPaw
+  vendor: Alibaba (AgentScope)
+  form: autonomous
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://qwenpaw.agentscope.io/
+  note: 本地运行的个人助理，多 IM 渠道 + 定时任务
+  sources:
+    - { kind: github, identifier: agentscope-ai/QwenPaw, is_primary: true }
+    - { kind: pypi, identifier: qwenpaw }
+
+# ---------- 开源 CLI ----------
+- slug: freebuff
+  name: Freebuff
+  vendor: Codebuff
+  form: cli
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://freebuff.com
+  note: 免费编码 agent（npm 全局安装）
+  sources:
+    - { kind: github, identifier: CodebuffAI/freebuff, is_primary: true }
+    - { kind: npm, identifier: freebuff }
+
+# ---------- 框架 / harness ----------
+- slug: openharness
+  name: OpenHarness
+  vendor: Autonomous AI
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://www.autonomous.ai/harness
+  note: 多 coding agent 调度 harness
+  sources:
+    - { kind: github, identifier: autonomous-ai/openharness, is_primary: true }
+
+- slug: omnigent
+  name: Omnigent
+  vendor: Databricks
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://omnigent.ai
+  note: 声明式 agent 编排框架
+  sources:
+    - { kind: github, identifier: omnigent-ai/omnigent, is_primary: true }
+    - { kind: pypi, identifier: omnigent }
+
+- slug: self-operating-computer
+  name: Self-Operating Computer
+  vendor: OthersideAI
+  form: framework
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://www.hyperwriteai.com/self-operating-computer
+  note: computer-use 多模态框架
+  sources:
+    - { kind: github, identifier: OthersideAI/self-operating-computer, is_primary: true }
+
+# ---------- 桌面 ----------
+- slug: autocua
+  name: AutoCua
+  vendor: ComputerUseAgent
+  form: desktop
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://computeruse.uk
+  note: Computer-use agent（macOS / Windows / Linux / Android / iOS）
+  sources:
+    - { kind: github, identifier: ComputerUseAgent/AutoCua, is_primary: true }
+    - { kind: pypi, identifier: autocua }

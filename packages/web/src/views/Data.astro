@@ -14,7 +14,7 @@ const SITE = Astro.site?.toString().replace(/\/$/, '') ?? 'https://agentnews-c5h
 
 const data = loadLatestScores();
 const date = data?.date ?? 'YYYY-MM-DD';
-/* 列表口径统一：冻结形态与误分类条目不进任何导出/引用 */
+/* 列表口径统一：误分类条目不进任何导出/引用 */
 const listed = (data?.rows ?? []).filter(isListed);
 /* 快照文件按形态分组排列，直接切前 20 会全是 cli —— 按综合分取前 20 更有代表性 */
 const rows = listed

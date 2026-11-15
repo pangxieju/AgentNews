@@ -47,7 +47,7 @@ export default function HomePicker({ items, meta, lang }: Props) {
     window.location.href = H(`/agent/${slug}/`);
   };
 
-  /** 只提供聚焦形态的筛选（items 已由 Home 过滤 isListed，这里再按契约收窄形态） */
+  /** 形态筛选：items 已由 Home 过滤 isListed，这里按同一份形态契约收窄 */
   const forms: string[] = ['all', ...FOCUS_FORMS];
 
   return (

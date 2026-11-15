@@ -21,7 +21,7 @@ const H = (p: string) => pathFor(lang, p);
 const data = loadLatestScores();
 const date = data?.date ?? '—';
 const metaAll = loadAgentsMeta();
-/** 只保留聚焦形态且非误分类的条目（冻结形态只在详情页可见） */
+/** 只保留非误分类的条目（全部 7 种形态都进榜单） */
 const rows = (data?.rows ?? []).filter(isListed);
 
 /** 只把榜单需要的字段送进 island —— 减小 HTML 体积 */
@@ -63,11 +63,17 @@ const isAlias = /^(?:\/zh)?\/top\/?$/.test(Astro.url.pathname);
 
 /* ── SEO / 结构化数据：榜单是主入口，每张榜必须有自己的描述与 ItemList ── */
 const formText = form === 'all' ? (lang === 'en' ? 'all forms' : '全部形态') : formLabel(lang, form);
-const top = rows
+/** 当前榜单的条目范围：先按开/闭源与形态收窄，再做排名与描述 */
+const boardRows = rows.filter(
+  (r) =>
+    (bucket === 'open' ? r.oss_bucket !== 'closed' : r.oss_bucket === 'closed') &&
+    (form === 'all' || r.form === form),
+);
+const top = boardRows
   .filter((r) => r.score != null)
   .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
   .slice(0, 10);
-const description = `${bucketLabel} · ${formText} · ${granLabel(lang, g)} — ${rows.filter((r) => r.score != null).length} ranked of ${rows.length} listed. Scores are in-form percentiles (${data?.version ?? '—'}); open and closed are separate namespaces. Snapshot ${date}.`;
+const description = `${bucketLabel} · ${formText} · ${granLabel(lang, g)} — ${boardRows.filter((r) => r.score != null).length} ranked of ${boardRows.length} listed. Scores are in-form percentiles (${data?.version ?? '—'}); open and closed are separate namespaces. Snapshot ${date}.`;
 const jsonLd = [
   {
     '@context': 'https://schema.org',

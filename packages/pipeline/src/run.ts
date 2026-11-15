@@ -245,7 +245,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         (s) => bucketOf(s) === bucket && !dormancy.get(s.slug),
       );
       bucketActiveSize.set(bucket, activeBucketGroup.length);
-      const scores = scoreGroup(activeBucketGroup, undefined, new Date());
+      const scores = activeBucketGroup.length >= 2 ? scoreGroup(activeBucketGroup, undefined, new Date()) : [];
       for (const s of scores) scoreMap.set(s.slug, s.score);
     }
 

@@ -13,6 +13,13 @@
     "h": 0,
     "url": "https://raw.githubusercontent.com/frdel/agent-zero/HEAD/docs/res/a0-vector-graphics/horizontal_banner.svg"
   },
+  "agentscope": {
+    "file": "agentscope.0c080187.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0,
+    "url": "https://agentscope.io/logo.svg"
+  },
   "agno": {
     "file": "agno.7a7a00e7.svg",
     "source": "readme",
@@ -69,6 +76,20 @@
     "h": 0,
     "url": "https://www.augmentcode.com/favicon.svg"
   },
+  "augment": {
+    "file": "augment.cf9472e9.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0,
+    "url": "https://www.augmentcode.com/favicon.svg"
+  },
+  "autocua": {
+    "file": "autocua.87385a74.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/computeruse.uk"
+  },
   "autogen": {
     "file": "autogen.9ff6571b.svg",
     "source": "readme",
@@ -90,12 +111,40 @@
     "h": 192,
     "url": "https://github.com/yoheinakajima.png?size=192"
   },
+  "beeai-framework": {
+    "file": "beeai-framework.79e43675.png",
+    "source": "html",
+    "w": 192,
+    "h": 192,
+    "url": "https://framework.beeai.dev/mintlify-assets/_mintlify/favicons/beeai-framework/PFK2IvHWMJJ_XaVU/_generated/favicon/android-chrome-192x192.png"
+  },
+  "blackbox": {
+    "file": "blackbox.ced0c231.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/www.blackbox.ai"
+  },
   "browser-use": {
     "file": "browser-use.48189ad5.png",
     "source": "html",
     "w": 180,
     "h": 180,
     "url": "https://browser-use.com/apple-touch-icon.png"
+  },
+  "camel": {
+    "file": "camel.dea78d82.png",
+    "source": "manifest",
+    "w": 512,
+    "h": 512,
+    "url": "https://www.camel-ai.org/android-chrome-512x512.png"
+  },
+  "claude-agent-sdk": {
+    "file": "claude-agent-sdk.d1dd68bb.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/docs.anthropic.com"
   },
   "claude-code": {
     "file": "claude-code.76a62758.png",
@@ -110,6 +159,13 @@
     "w": 256,
     "h": 256,
     "url": "https://cline.bot/assets/branding/favicons/favicon-256x256.png"
+  },
+  "cloudflare-agents": {
+    "file": "cloudflare-agents.a2fccc97.png",
+    "source": "html",
+    "w": 96,
+    "h": 96,
+    "url": "https://developers.cloudflare.com/favicon.png"
   },
   "codebuddy": {
     "file": "codebuddy.b4a24794.svg",
@@ -195,6 +251,13 @@
     "h": 512,
     "url": "https://cursor.com/marketing-static/icon-512x512.png"
   },
+  "deerflow": {
+    "file": "deerflow.dd7971ec.ico",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://favicone.com/deerflow.tech?s=256"
+  },
   "devin": {
     "file": "devin.2b69ec0d.png",
     "source": "html",
@@ -202,12 +265,26 @@
     "h": 568,
     "url": "https://devin.ai/icon.png"
   },
+  "dia": {
+    "file": "dia.5e5777e4.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/www.diabrowser.com"
+  },
   "droid": {
     "file": "droid.e4872399.svg",
     "source": "html",
     "w": 0,
     "h": 0,
     "url": "https://factory.com/favicon.svg"
+  },
+  "feynman": {
+    "file": "feynman.523cb9f8.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0,
+    "url": "https://feynman.is/favicon.svg"
   },
   "firebase-studio": {
     "file": "firebase-studio.327ff168.png",
@@ -222,6 +299,13 @@
     "w": 0,
     "h": 0,
     "url": "https://forgecode.dev/shared/brand/favicon.svg"
+  },
+  "freebuff": {
+    "file": "freebuff.4020e3dd.png",
+    "source": "html",
+    "w": 180,
+    "h": 180,
+    "url": "https://freebuff.com/favicon/apple-touch-icon.png?v=2026-09-21"
   },
   "gemini-cli": {
     "file": "gemini-cli.e5b83203.svg",
@@ -265,12 +349,26 @@
     "h": 0,
     "url": "https://github.com/codespaces/badge.svg"
   },
+  "grok-build": {
+    "file": "grok-build.7941fde9.png",
+    "source": "github",
+    "w": 192,
+    "h": 192,
+    "url": "https://github.com/xai-org.png?size=192"
+  },
   "haystack": {
     "file": "haystack.7df54b8b.svg",
     "source": "readme",
     "w": 0,
     "h": 0,
     "url": "https://github.com/deepset-ai/haystack/actions/workflows/tests.yml/badge.svg"
+  },
+  "hermes-agent": {
+    "file": "hermes-agent.03c8d250.png",
+    "source": "html",
+    "w": 48,
+    "h": 48,
+    "url": "https://web-assets.nousresearch.com/marketing/efcd9b62d7bee4c15c650dc727c43b285b382213/assets/hermes-agent/icon.png"
   },
   "iflow-cli": {
     "file": "iflow-cli.5985eb8d.svg",
@@ -301,11 +399,11 @@
     "url": "https://icon.horse/icon/kilocode.ai"
   },
   "kimi-cli": {
-    "file": "kimi-cli.c7c55ef5.ico",
+    "file": "kimi-cli.e5c7d7be.png",
     "source": "logo",
     "w": 256,
     "h": 256,
-    "url": "https://favicone.com/platform.kimi.com?s=256"
+    "url": "https://icon.horse/icon/kimi.com"
   },
   "kiro": {
     "file": "kiro.fff9f20b.png",
@@ -328,6 +426,13 @@
     "h": 0,
     "url": "https://raw.githubusercontent.com/langchain-ai/langgraph/HEAD/.github/images/logo-light.svg"
   },
+  "letta": {
+    "file": "letta.0598b736.png",
+    "source": "html",
+    "w": 256,
+    "h": 256,
+    "url": "https://www.letta.com/assets/images/webclip.png"
+  },
   "lingma": {
     "file": "lingma.a258aaa1.png",
     "source": "html",
@@ -336,10 +441,10 @@
     "url": "https://img.alicdn.com/imgextra/i1/O1CN01BN6Jtc1lCfJNviV7H_!!6000000004783-2-tps-134-133.png"
   },
   "llamaindex": {
-    "file": "llamaindex.4711cab8.png",
+    "file": "llamaindex.a2609ce2.png",
     "source": "logo",
-    "w": 180,
-    "h": 180,
+    "w": 256,
+    "h": 256,
     "url": "https://icon.horse/icon/llamaindex.ai"
   },
   "manus": {
@@ -370,11 +475,18 @@
     "h": 128,
     "url": "https://raw.githubusercontent.com/nanobrowser/nanobrowser/HEAD/public/icon-128.png"
   },
+  "omnigent": {
+    "file": "omnigent.c1ccacdd.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0,
+    "url": "https://omnigent.ai/images/favicon.svg"
+  },
   "open-interpreter": {
-    "file": "open-interpreter.4f9e0ec6.png",
+    "file": "open-interpreter.6bb28368.png",
     "source": "logo",
-    "w": 180,
-    "h": 180,
+    "w": 256,
+    "h": 256,
     "url": "https://icon.horse/icon/openinterpreter.com"
   },
   "openai-agents": {
@@ -397,6 +509,27 @@
     "w": 256,
     "h": 256,
     "url": "https://icon.horse/icon/openhands.ai"
+  },
+  "openharness": {
+    "file": "openharness.0796342b.png",
+    "source": "manifest",
+    "w": 144,
+    "h": 144,
+    "url": "https://cdn.autonomous.ai/assets/icons/icon-512x512.png"
+  },
+  "openmanus": {
+    "file": "openmanus.18ab5ebf.png",
+    "source": "github",
+    "w": 192,
+    "h": 192,
+    "url": "https://github.com/FoundationAgents.png?size=192"
+  },
+  "orca": {
+    "file": "orca.e38b8433.png",
+    "source": "html",
+    "w": 512,
+    "h": 512,
+    "url": "https://orca.dev/icon.png?icon.1e_4jw24bwnvz.png"
   },
   "pi": {
     "file": "pi.1bb847e0.svg",
@@ -440,12 +573,26 @@
     "h": 0,
     "url": "https://raw.githubusercontent.com/QwenLM/qwen-code/HEAD/.github/assets/qwen-code-avg-score-trend.svg"
   },
+  "qwenpaw": {
+    "file": "qwenpaw.f418bd03.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0,
+    "url": "https://qwenpaw.agentscope.io/qwenpaw-symbol.svg"
+  },
   "roo-code": {
     "file": "roo-code.5546840d.png",
     "source": "logo",
     "w": 256,
     "h": 256,
     "url": "https://icon.horse/icon/roocode.com"
+  },
+  "self-operating-computer": {
+    "file": "self-operating-computer.151be572.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/www.hyperwriteai.com"
   },
   "semantic-kernel": {
     "file": "semantic-kernel.6bb00c38.png",
@@ -482,6 +629,13 @@
     "h": 0,
     "url": "https://strandsagents.com/favicon.svg"
   },
+  "swe-agent": {
+    "file": "swe-agent.2d08681f.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://github.com/SWE-agent/SWE-agent/actions/workflows/check-links-periodic.yaml/badge.svg"
+  },
   "tabnine": {
     "file": "tabnine.efd50868.png",
     "source": "override",
@@ -517,11 +671,18 @@
     "h": 1200,
     "url": "https://voideditor.com/icon.png?fe8088bdbfb5a2cf"
   },
-  "warp-agent": {
-    "file": "warp-agent.3bedbdd5.png",
+  "voltagent": {
+    "file": "voltagent.a2530a97.ico",
     "source": "logo",
-    "w": 196,
-    "h": 196,
+    "w": 256,
+    "h": 256,
+    "url": "https://favicone.com/voltagent.dev?s=256"
+  },
+  "warp-agent": {
+    "file": "warp-agent.071b7cd5.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
     "url": "https://icon.horse/icon/warp.dev"
   },
   "windsurf": {

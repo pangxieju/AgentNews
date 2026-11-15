@@ -22,7 +22,7 @@ export const GET: APIRoute = ({ site }) => {
   const base = site?.toString().replace(/\/$/, '') ?? 'https://agentnews-c5h.pages.dev';
   const data = loadLatestScores();
   const date = data?.date ?? '';
-  /* 列表口径统一：冻结形态与误分类条目不进 feed */
+  /* 列表口径统一：误分类条目不进 feed */
   const rows = (data?.rows ?? [])
     .filter(isListed)
     .filter((r) => r.score != null)
@@ -57,7 +57,7 @@ export const GET: APIRoute = ({ site }) => {
   <channel>
     <title>AgentNews · AI Agent Index</title>
     <link>${esc(`${base}/`)}</link>
-    <description>Rankings across AI coding agents: CLI, IDE plugins and IDE apps. One snapshot per day, top 30 listed agents.</description>
+    <description>AI agent rankings across terminal, IDE plugin, AI IDE, desktop, browser, framework and autonomous forms. One snapshot per day, top 30 listed agents.</description>
     <language>en</language>
     <atom:link href="${esc(`${base}/feed.xml`)}" rel="self" type="application/rss+xml" />
     <lastBuildDate>${buildStamp}</lastBuildDate>

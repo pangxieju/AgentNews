@@ -118,7 +118,7 @@ const zh: Dict = {
   'home.eyebrow': 'AI Agent Index · 快照 {date}',
   'home.title': '把不同的生态\n放到同一把尺子上',
   'home.lede':
-    'GitHub star、npm / PyPI 下载、商店安装量先压缩到组内分位数，再按形态分组排名。{n} 个 AI 编码 agent、3 种形态（终端 / 插件 / IDE），跨形态不比总量 —— 先看你在哪儿写代码，再比数据。',
+    'GitHub star、npm / PyPI 下载、商店安装量先压缩到组内分位数，再按形态分组排名。{n} 个 AI agent、7 种形态（终端 / 插件 / AI IDE / 桌面 / 浏览器 / 框架 / 自主），跨形态不比总量 —— 先看你在哪儿用它，再比数据。',
   'home.readout.listed': '收录',
   'home.readout.ranked': '在榜',
   'home.step1': 'Step 01 · 选形态',
@@ -532,7 +532,7 @@ const en: Dict = {
   'home.eyebrow': 'AI Agent Index · Snapshot {date}',
   'home.title': 'Put every ecosystem\non one ruler',
   'home.lede':
-    'GitHub stars, npm / PyPI downloads and store installs are compressed to in-form percentiles before ranking. {n} AI coding agents, 3 forms (terminal / plugin / IDE), never compared across forms — pick where you code, then compare numbers.',
+    'GitHub stars, npm / PyPI downloads and store installs are compressed to in-form percentiles before ranking. {n} AI agents, 7 forms (terminal / plugin / AI IDE / desktop / browser / framework / autonomous), never compared across forms — pick where you use it, then compare numbers.',
   'home.readout.listed': 'Listed',
   'home.readout.open': 'Open',
   'home.readout.closed': 'Closed',
