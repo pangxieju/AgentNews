@@ -11,7 +11,7 @@
  *
  * 落盘位置：data/agents-state.json（随 git 提交，可审计）
  */
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
 export type AgentState = {
@@ -48,7 +48,7 @@ export async function saveState(path: string, state: AgentState): Promise<void> 
   const agents = Object.fromEntries(
     Object.entries(state.agents).sort(([a], [b]) => a.localeCompare(b)),
   );
-  await writeFile(path, JSON.stringify({ started_at: state.started_at, agents }, null, 2) + '\n');
+  await writeFile(path, `${JSON.stringify({ started_at: state.started_at, agents }, null, 2)}\n`);
 }
 
 /**
@@ -70,8 +70,8 @@ export function mergeState(prev: AgentState | null, slugs: string[], today: stri
 
 /** 两个日期之间相差的天数（b - a） */
 export function daysBetween(a: string, b: string): number {
-  const ta = new Date(a + 'T00:00:00Z').getTime();
-  const tb = new Date(b + 'T00:00:00Z').getTime();
+  const ta = new Date(`${a}T00:00:00Z`).getTime();
+  const tb = new Date(`${b}T00:00:00Z`).getTime();
   return Math.floor((tb - ta) / 86_400_000);
 }
 
@@ -90,7 +90,7 @@ export function newcomerAgeDays(
   const ages: number[] = [];
   if (repoCreated) {
     const d = Math.floor(
-      (new Date(today + 'T00:00:00Z').getTime() - new Date(repoCreated).getTime()) / 86_400_000,
+      (new Date(`${today}T00:00:00Z`).getTime() - new Date(repoCreated).getTime()) / 86_400_000,
     );
     if (Number.isFinite(d) && d >= 0) ages.push(d);
   }

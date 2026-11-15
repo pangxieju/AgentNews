@@ -12,9 +12,10 @@
  *   ⚠️ 重复    —— 多个 agent 共用同一张图，多半都是同一个组织 logo
  *   ❌ 缺图    —— 完全没有，站点会退化成首字母块
  */
-import { join, dirname } from 'node:path';
+
+import { readdir, readFile, stat } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readFile, readdir, stat } from 'node:fs/promises';
 import { parse as parseYaml } from 'yaml';
 import type { IconManifest } from './icons.js';
 
@@ -64,7 +65,7 @@ for (const a of doc) {
   const dim = rec.w ? `${rec.w}x${rec.h}` : '矢量';
   const from = rec.url ? `  ← ${rec.url.replace(/^https?:\/\//, '').slice(0, 60)}` : '';
   rows.push(
-    `${flags.length ? '⚠️' : '✅'} ${a.slug.padEnd(22)} ${rec.source.padEnd(10)} ${dim.padEnd(10)} ${String(Math.round(size / 1024)).padStart(4)}KB  ${rec.file}${flags.length ? '  ← ' + flags.join(', ') : ''}`,
+    `${flags.length ? '⚠️' : '✅'} ${a.slug.padEnd(22)} ${rec.source.padEnd(10)} ${dim.padEnd(10)} ${String(Math.round(size / 1024)).padStart(4)}KB  ${rec.file}${flags.length ? `  ← ${flags.join(', ')}` : ''}`,
   );
   if (flags.length) suspicious.push({ slug: a.slug, why: flags.join(',') + (from ? `  ${from.trim()}` : '') });
 }
@@ -75,7 +76,7 @@ const dupGroups = [...byHash.entries()].filter(([, slugs]) => slugs.length > 1);
 console.log('\n── 汇总 ─────────────────────────────');
 console.log(`agent 总数      ${doc.length}`);
 console.log(`有图            ${Object.keys(manifest).length}`);
-console.log(`缺图            ${missing.length}${missing.length ? ' → ' + missing.join(', ') : ''}`);
+console.log(`缺图            ${missing.length}${missing.length ? ` → ${missing.join(', ')}` : ''}`);
 console.log(`需人工核对      ${suspicious.length}`);
 if (dupGroups.length) {
   console.log('\n共用同一张图（同一个组织 logo 的可能性高）：');

@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import type { Agent } from '@agentnews/core';
+import { describe, expect, it } from 'vitest';
 import { pickSecurityTargets } from '../security.js';
 
 function agent(slug: string, sources: Agent['sources']): Agent {

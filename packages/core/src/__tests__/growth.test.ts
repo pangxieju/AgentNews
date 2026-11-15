@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
-  DORMANT_DAYS,
   absoluteDelta,
   activityScore,
+  DORMANT_DAYS,
   dataLevel,
   growthPct,
   isDormant,

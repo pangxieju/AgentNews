@@ -9,14 +9,10 @@
 #   unreachable 主页打不开 / repo 404 → 可能下线或改版，需人工确认
 #   archived   repo 已归档（PRD §4.1：归档超 12 个月移出主榜）
 #
-# 字段：name 必填；form / homepage / github / note 可选
-# github 填 owner/repo，脚本会拉 star / pushed_at / archived
+# 字段：name 必填；form / homepage / github / note 可选；github 填 owner/repo，脚本会拉 star / pushed_at / archived。
+# `pnpm discover --only-watchlist --write` 会把 status=listed 的条目直接剪掉。
 
 # ───────────── 闭源：有产品、没公开 repo ─────────────
-- name: Augment Code
-  form: ide-plugin
-  homepage: https://www.augmentcode.com
-  note: IDE 插件本体闭源；终端形态已收录为 auggie
 
 - name: Supermaven
   form: ide-plugin
@@ -28,11 +24,6 @@
   homepage: https://refact.ai
   note: 插件闭源、引擎部分开源（smallcloudai/refact），需先定 oss_bucket
 
-- name: Blackbox AI
-  form: ide-plugin
-  homepage: https://www.blackbox.ai
-  note: 安装量可查（VS Code 商店），但社区口碑两极化，收录前人工判断
-
 - name: Sweep
   form: autonomous
   homepage: https://sweep.dev
@@ -42,11 +33,6 @@
   form: autonomous
   homepage: https://codegen.com
   note: 同上，PR 自动化
-
-- name: Dia
-  form: browser
-  homepage: https://diabrowser.com
-  note: The Browser Company 被 Atlassian 收购后官网已改版，收录前先确认是否下线
 
 - name: Cline CLI
   form: cli
@@ -58,30 +44,6 @@
   homepage: https://x.ai
   note: 分发渠道与是否开源未确认
 
-# ───────────── 开源：候选清单里已确认属于收录范围，待核 license / 渠道 ─────────────
-- name: Dify
-  form: framework
-  homepage: https://dify.ai
-  github: langgenius/dify
-  note: agentic workflow 平台，star 极高但属「平台」不属「终端产品」，收录需先定口径
-
-- name: RAGFlow
-  form: framework
-  homepage: https://ragflow.io
-  github: infiniflow/ragflow
-  note: RAG + agent 编排，同上，需先定 framework 口径
-
-- name: Letta
-  form: framework
-  homepage: https://letta.com
-  github: letta-ai/letta
-  note: 有状态 agent 运行时（MemGPT 后继）
-
-- name: CAMEL
-  form: framework
-  homepage: https://camel-ai.org
-  github: camel-ai/camel
-
 - name: MetaGPT
   form: framework
   homepage: https://mgx.dev
@@ -92,25 +54,10 @@
   homepage: https://copilotkit.ai
   github: CopilotKit/CopilotKit
 
-- name: VoltAgent
-  form: framework
-  homepage: https://voltagent.dev
-  github: VoltAgent/voltagent
-
 - name: Inngest AgentKit
   form: framework
   homepage: https://agentkit.inngest.com
   github: inngest/agent-kit
-
-- name: Cloudflare Agents
-  form: framework
-  homepage: https://agents.cloudflare.com
-  github: cloudflare/agents
-
-- name: Claude Agent SDK
-  form: framework
-  homepage: https://docs.claude.com/en/api/agent-sdk/overview
-  note: Anthropic 官方 agent SDK，无独立 repo
 
 - name: DSPy
   form: framework
@@ -123,53 +70,10 @@
   github: ag2ai/ag2
   note: AutoGen 社区分叉；收录前先确认与 agent-framework 的关系
 
-- name: AgentScope
-  form: framework
-  homepage: https://agentscope.io
-  github: agentscope-ai/agentscope
-
-- name: BeeAI
-  form: framework
-  homepage: https://beeai.dev
-  github: i-am-bee/beeai-framework
-
-- name: Langflow
-  form: framework
-  homepage: https://langflow.org
-  github: langflow-ai/langflow
-
-- name: Coze Studio
-  form: framework
-  homepage: https://www.coze.com
-  github: coze-dev/coze-studio
-
-- name: DeerFlow
-  form: autonomous
-  homepage: https://deerflow.tech
-  github: bytedance/deer-flow
-  note: 长任务 SuperAgent harness
-
-- name: Hermes Agent
-  form: autonomous
-  homepage: https://hermes.nousresearch.com
-  github: NousResearch/hermes-agent
-
 - name: OpenClaw
   form: autonomous
   homepage: https://openclaw.ai
   github: openclaw/openclaw
-
-- name: Cherry Studio
-  form: desktop
-  homepage: https://cherry-ai.com
-  github: CherryHQ/cherry-studio
-  note: 桌面客户端 + agent，需确认是否满足 §4.1「自主调用工具闭环」
-
-- name: Orca
-  form: desktop
-  homepage: https://orca.dev
-  github: stablyai/orca
-  note: 多 agent 调度客户端
 
 - name: DeepSeek Harness
   form: cli

@@ -5,17 +5,16 @@
  * 在上万 star 规模下不可行），所以「周增量」用安装量口径，星标增量只能等快照自然积累。
  *
  * 输出与语义：
- * - weekly_1d_ago  = 以 t-1  为结束的 7 日窗口下载总和
- * - weekly_7d_ago  = 以 t-7  为结束的 7 日窗口下载总和
- * - weekly_30d_ago = 以 t-30 为结束的 7 日窗口下载总和
+ * - installs_1d_ago  = 以 t-1  为结束的 7 日窗口下载总和
+ * - installs_7d_ago  = 以 t-7  为结束的 7 日窗口下载总和
+ * - installs_30d_ago = 以 t-30 为结束的 7 日窗口下载总和
  * 三者都是「每周下载量」口径，与 effectiveInstalls 的 npm_weekly_dl 同单位。
  */
-import { writeFile, mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
 const DAY = 86_400_000;
 const iso = (t: number): string => new Date(t).toISOString().slice(0, 10);
-const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 
 type SourceLite = { kind: string; identifier: string; is_primary?: boolean };
 type AgentLite = { slug: string; sources: SourceLite[] };
@@ -142,7 +141,5 @@ export async function collectInstallHistory(agents: AgentLite[], date: string): 
 
 export async function writeInstallHistory(path: string, history: InstallHistory): Promise<void> {
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, JSON.stringify(history, null, 2) + '\n');
+  await writeFile(path, `${JSON.stringify(history, null, 2)}\n`);
 }
-
-export { num };

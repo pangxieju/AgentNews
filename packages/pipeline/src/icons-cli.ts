@@ -5,12 +5,13 @@
  *
  * 日常由 runDaily 自动调用，这里用于调试、加 icon: 覆盖后立即验证。
  */
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { readFile, writeFile, unlink, readdir } from 'node:fs/promises';
+
 import { createHash } from 'node:crypto';
+import { readdir, readFile, unlink, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { type IconManifest, resolveIcon, syncIcons } from './icons.js';
 import { loadAgents } from './run.js';
-import { resolveIcon, syncIcons, type IconManifest } from './icons.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const DIR = join(ROOT, 'packages', 'web', 'public', 'icons');
@@ -60,6 +61,6 @@ if (!only.length) {
 
   const sorted: IconManifest = {};
   for (const k of Object.keys(manifest).sort()) sorted[k] = manifest[k]!;
-  await writeFile(MANIFEST, JSON.stringify(sorted, null, 2) + '\n');
+  await writeFile(MANIFEST, `${JSON.stringify(sorted, null, 2)}\n`);
   console.log(`[icons] 已更新 ${agents.length} 个（其余保持不变）`);
 }

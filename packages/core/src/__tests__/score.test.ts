@@ -66,8 +66,8 @@ describe('scoreGroup', () => {
   it('最小项目不会尴尬地拿 0 分（平滑分位）', () => {
     const r = scoreGroup([base('a', 1_000), base('b', 10_000), base('c', 100_000)]);
     const bySlug = Object.fromEntries(r.map((x) => [x.slug, x.score]));
-    expect(bySlug['a']!).toBeGreaterThan(0);
-    expect(bySlug['c']!).toBeGreaterThan(bySlug['b']!);
+    expect(bySlug.a!).toBeGreaterThan(0);
+    expect(bySlug.c!).toBeGreaterThan(bySlug.b!);
   });
 
   it('star 高者分高（单指标）', () => {
@@ -76,7 +76,7 @@ describe('scoreGroup', () => {
       base('big', 200_000),
     ]);
     const bySlug = Object.fromEntries(r.map((x) => [x.slug, x.score]));
-    expect(bySlug['big']!).toBeGreaterThan(bySlug['small']!);
+    expect(bySlug.big!).toBeGreaterThan(bySlug.small!);
   });
 
   it('缺失指标 → 权重重分配后仍可比（不全为 0）', () => {
@@ -87,7 +87,7 @@ describe('scoreGroup', () => {
       base('full2', 60_000, { npm_weekly_dl: 300_000 }),
     ]);
     const bySlug = Object.fromEntries(r.map((x) => [x.slug, x.score]));
-    expect(bySlug['onlyStars']!).toBeGreaterThan(0);
+    expect(bySlug.onlyStars!).toBeGreaterThan(0);
   });
 
   it('分数范围 ∈[0,100]', () => {

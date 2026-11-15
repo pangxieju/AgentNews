@@ -34,7 +34,9 @@ export const SourceKind = z.enum([
   'openrouter',
   'manual',
 ]);
-type SourceKind = z.infer<typeof SourceKind>;
+
+/** 与同名 zod enum 并存的类型（值/类型同名，TS 允许） */
+export type SourceKind = z.infer<typeof SourceKind>;
 
 export const SourceSchema = z.object({
   kind: SourceKind,
@@ -116,7 +118,7 @@ type MetricKey =
   | 'openrouter_tokens_week'
   | 'openrouter_requests_month'
   | 'openrouter_rank_month';
-  
+
 export type Metrics = Partial<Record<MetricKey, number | string | null>>;
 
 export const SCORE_VERSION = 'v2';

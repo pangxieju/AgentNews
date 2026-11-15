@@ -12,8 +12,8 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parse } from 'yaml';
 import { AgentsFileSchema } from '@agentnews/core';
+import { parse, stringify } from 'yaml';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 for (const file of ['.env.local', '.env']) {
@@ -320,6 +320,8 @@ async function main() {
   const minStars = Number(arg('min-stars', '1000'));
   const perPage = Number(arg('limit', '60'));
   const onlyWatchlist = process.argv.includes('--only-watchlist');
+  /** --write：把 watchlist 里已收录的条目剪掉（状态是每次现算的派生值，不写回文件） */
+  const write = process.argv.includes('--write');
   const top = Number(arg('top', '150'));
   const today = new Date().toISOString().slice(0, 10);
 
@@ -409,6 +411,20 @@ async function main() {
     console.log(
       `  listed ${count('listed')} / pending ${count('pending')} / unreachable ${count('unreachable')} / archived ${count('archived')}`,
     );
+
+    if (write) {
+      const kept = watch.filter((w) => w.status !== 'listed');
+      const removed = watch.length - kept.length;
+      if (removed > 0) {
+        const original = await readFile(join(ROOT, 'watchlist.yaml'), 'utf8');
+        const header = original.slice(0, original.search(/^- name:/m));
+        const entries = kept.map(({ status: _status, stars: _stars, pushed: _pushed, ...e }) => e);
+        await writeFile(join(ROOT, 'watchlist.yaml'), header + stringify(entries));
+        console.log(`  watchlist 已精简：移除 ${removed} 个已收录条目`);
+      } else {
+        console.log('  watchlist 无需精简');
+      }
+    }
   }
 
   const candidates = [...byRepo.values()].sort((a, b) => b.stars - a.stars);
@@ -421,7 +437,7 @@ async function main() {
   await mkdir(dir, { recursive: true });
   await writeFile(
     join(dir, `${today}.json`),
-    JSON.stringify(
+    `${JSON.stringify(
       {
         review,
         dropped: dropped.map((d) => ({ ...d.c, reason: d.verdict.reason })),
@@ -429,7 +445,7 @@ async function main() {
       },
       null,
       2,
-    ) + '\n',
+    )}\n`,
   );
 
   const watchSection = watch.length
@@ -470,7 +486,7 @@ async function main() {
     '',
     ...dropped.map((d) => `- ${d.c.stars} [${d.c.repo}](${d.c.url}) — ${d.verdict.reason}`),
   ];
-  await writeFile(join(dir, `${today}.md`), lines.join('\n') + '\n');
+  await writeFile(join(dir, `${today}.md`), `${lines.join('\n')}\n`);
 
   console.log(
     `\n✓ ${candidates.length} 个候选 → 建议过目 ${review.length} / 自动排除 ${dropped.length}`,

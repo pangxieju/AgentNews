@@ -112,6 +112,7 @@
     - { kind: npm, identifier: "@anthropic-ai/claude-code", is_primary: true }
     - { kind: openrouter, identifier: claude-code }
 
+# 与 cursor 共用官网 / 图标（同一厂商的终端形态，不是两条独立产品）
 - slug: cursor-cli
   name: Cursor CLI
   vendor: Anysphere
@@ -861,6 +862,7 @@
   sources:
     - { kind: npm, identifier: "@github/copilot", is_primary: true }
 
+# 与 augment 共用官网 / 图标（同一厂商的终端形态，不是两条独立产品）
 - slug: auggie
   name: Auggie CLI
   vendor: Augment Code
@@ -868,7 +870,7 @@
   oss_bucket: closed
   license_id: proprietary
   homepage: https://www.augmentcode.com
-  note: Augment 的终端形态；IDE 插件见 watchlist
+  note: Augment 的终端形态；IDE 插件形态见 augment
   sources:
     - { kind: npm, identifier: "@augmentcode/auggie", is_primary: true }
 

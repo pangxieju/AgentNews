@@ -2,9 +2,10 @@
  * 事件流（PRD F-24 活动模块）
  *
  * 通过与上一个快照 diff 生成高价值事件，落盘 data/events/YYYY-MM-DD.jsonl。
- * 只收录 6 类信号，不收录 commit / issue / PR（噪声过大）。
+ * 只收录 5 类信号（release / version / listed / rank_jump / newcomer），
+ * 不收录 commit / issue / PR（噪声过大）。
  */
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Metrics, ScoreRow } from '@agentnews/core';
 
@@ -13,9 +14,7 @@ export type EventKind =
   | 'version'        // 版本号变化
   | 'listed'         // 首次收录
   | 'rank_jump'      // 排名跃迁 ≥5 位
-  | 'newcomer'       // 出道 ≤180 天
-  | 'license_change' // License 变更
-  | 'archived';      // 仓库归档
+  | 'newcomer';      // 出道 ≤180 天
 
 export type AgentEvent = {
   slug: string;
@@ -110,6 +109,7 @@ export function diffEvents(
         typeof prevRel === 'string' &&
         prevRel.length > 0 &&
         typeof currRel === 'string' &&
+        currRel.length > 0 &&
         currRel !== prevRel
       ) {
         events.push({
@@ -139,8 +139,8 @@ export function diffEvents(
       }
     }
 
-    // 4. 新秀
-    if (row.flags.includes('newcomer') && !prev?.flags.includes('newcomer')) {
+    // 4. 新秀：只在上期已存在、本期才跨过阈值时发（新收录本身已经有 listed 事件）
+    if (prev && row.flags.includes('newcomer') && !prev.flags?.includes('newcomer')) {
       events.push({
         slug: row.slug,
         name: row.name,

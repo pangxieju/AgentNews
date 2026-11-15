@@ -1,127 +1,69 @@
 {"slug":"qwen-code","name":"Qwen Code","kind":"version","date":"2026-11-15","title":"Qwen Code 更新到 0.27.4","detail":"0.27.3 → 0.27.4"}
 {"slug":"amp","name":"Amp","kind":"version","date":"2026-11-15","title":"Amp 更新到 0.0.1794729642-gc6c9b7","detail":"0.0.1794657642-gc1e41b → 0.0.1794729642-gc6c9b7"}
 {"slug":"grok-build","name":"Grok Build","kind":"listed","date":"2026-11-15","title":"新收录 Grok Build"}
-{"slug":"grok-build","name":"Grok Build","kind":"newcomer","date":"2026-11-15","title":"Grok Build 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"freebuff","name":"Freebuff","kind":"listed","date":"2026-11-15","title":"新收录 Freebuff"}
-{"slug":"freebuff","name":"Freebuff","kind":"newcomer","date":"2026-11-15","title":"Freebuff 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"blackbox","name":"Blackbox AI","kind":"listed","date":"2026-11-15","title":"新收录 Blackbox AI"}
-{"slug":"blackbox","name":"Blackbox AI","kind":"newcomer","date":"2026-11-15","title":"Blackbox AI 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"augment","name":"Augment Code","kind":"listed","date":"2026-11-15","title":"新收录 Augment Code"}
-{"slug":"augment","name":"Augment Code","kind":"newcomer","date":"2026-11-15","title":"Augment Code 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"codearts-agent","name":"CodeArts Agent","kind":"listed","date":"2026-11-15","title":"新收录 CodeArts Agent"}
-{"slug":"codearts-agent","name":"CodeArts Agent","kind":"newcomer","date":"2026-11-15","title":"CodeArts Agent 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"raccoon","name":"Raccoon (小浣熊)","kind":"listed","date":"2026-11-15","title":"新收录 Raccoon (小浣熊)"}
-{"slug":"raccoon","name":"Raccoon (小浣熊)","kind":"newcomer","date":"2026-11-15","title":"Raccoon (小浣熊) 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"orca","name":"Orca","kind":"version","date":"2026-11-15","title":"Orca 更新到 v1.4.259","detail":"v1.4.258 → v1.4.259"}
 {"slug":"cherry-studio","name":"Cherry Studio","kind":"listed","date":"2026-11-15","title":"新收录 Cherry Studio"}
-{"slug":"cherry-studio","name":"Cherry Studio","kind":"newcomer","date":"2026-11-15","title":"Cherry Studio 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"mobileagent","name":"Mobile-Agent","kind":"listed","date":"2026-11-15","title":"新收录 Mobile-Agent"}
-{"slug":"mobileagent","name":"Mobile-Agent","kind":"newcomer","date":"2026-11-15","title":"Mobile-Agent 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"autocua","name":"AutoCua","kind":"listed","date":"2026-11-15","title":"新收录 AutoCua"}
-{"slug":"autocua","name":"AutoCua","kind":"newcomer","date":"2026-11-15","title":"AutoCua 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"browser-use","name":"Browser-use","kind":"version","date":"2026-11-15","title":"Browser-use 更新到 1.0.5","detail":"1.0.4 → 1.0.5"}
 {"slug":"skyvern","name":"Skyvern","kind":"version","date":"2026-11-15","title":"Skyvern 更新到 1.0.58","detail":"1.0.57 → 1.0.58"}
 {"slug":"dia","name":"Dia","kind":"listed","date":"2026-11-15","title":"新收录 Dia"}
-{"slug":"dia","name":"Dia","kind":"newcomer","date":"2026-11-15","title":"Dia 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"quark","name":"夸克","kind":"listed","date":"2026-11-15","title":"新收录 夸克"}
-{"slug":"quark","name":"夸克","kind":"newcomer","date":"2026-11-15","title":"夸克 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"crewai","name":"CrewAI","kind":"rank_jump","date":"2026-11-15","title":"CrewAI 排名 上升 5 位","from":8,"to":3}
 {"slug":"agno","name":"Agno","kind":"rank_jump","date":"2026-11-15","title":"Agno 排名 下降 5 位","from":3,"to":8}
 {"slug":"astrbot","name":"AstrBot","kind":"listed","date":"2026-11-15","title":"新收录 AstrBot"}
-{"slug":"astrbot","name":"AstrBot","kind":"newcomer","date":"2026-11-15","title":"AstrBot 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"omnigent","name":"Omnigent","kind":"listed","date":"2026-11-15","title":"新收录 Omnigent"}
-{"slug":"omnigent","name":"Omnigent","kind":"newcomer","date":"2026-11-15","title":"Omnigent 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"chatdev","name":"ChatDev","kind":"listed","date":"2026-11-15","title":"新收录 ChatDev"}
-{"slug":"chatdev","name":"ChatDev","kind":"newcomer","date":"2026-11-15","title":"ChatDev 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"openharness","name":"OpenHarness","kind":"listed","date":"2026-11-15","title":"新收录 OpenHarness"}
-{"slug":"openharness","name":"OpenHarness","kind":"newcomer","date":"2026-11-15","title":"OpenHarness 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"eino","name":"Eino","kind":"listed","date":"2026-11-15","title":"新收录 Eino"}
-{"slug":"eino","name":"Eino","kind":"newcomer","date":"2026-11-15","title":"Eino 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"atomic-agents","name":"Atomic Agents","kind":"version","date":"2026-11-15","title":"Atomic Agents 更新到 2.16.0","detail":"2.15.0 → 2.16.0"}
 {"slug":"atomic-agents","name":"Atomic Agents","kind":"rank_jump","date":"2026-11-15","title":"Atomic Agents 排名 下降 8 位","from":19,"to":27}
 {"slug":"spring-ai-alibaba","name":"Spring AI Alibaba","kind":"listed","date":"2026-11-15","title":"新收录 Spring AI Alibaba"}
-{"slug":"spring-ai-alibaba","name":"Spring AI Alibaba","kind":"newcomer","date":"2026-11-15","title":"Spring AI Alibaba 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"beeai-framework","name":"BeeAI Framework","kind":"rank_jump","date":"2026-11-15","title":"BeeAI Framework 排名 下降 6 位","from":23,"to":29}
 {"slug":"self-operating-computer","name":"Self-Operating Computer","kind":"listed","date":"2026-11-15","title":"新收录 Self-Operating Computer"}
-{"slug":"self-operating-computer","name":"Self-Operating Computer","kind":"newcomer","date":"2026-11-15","title":"Self-Operating Computer 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"ms-agent","name":"MS-Agent","kind":"listed","date":"2026-11-15","title":"新收录 MS-Agent"}
-{"slug":"ms-agent","name":"MS-Agent","kind":"newcomer","date":"2026-11-15","title":"MS-Agent 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"youtu-agent","name":"Youtu-Agent","kind":"listed","date":"2026-11-15","title":"新收录 Youtu-Agent"}
-{"slug":"youtu-agent","name":"Youtu-Agent","kind":"newcomer","date":"2026-11-15","title":"Youtu-Agent 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"claude-agent-sdk","name":"Claude Agent SDK","kind":"listed","date":"2026-11-15","title":"新收录 Claude Agent SDK"}
-{"slug":"claude-agent-sdk","name":"Claude Agent SDK","kind":"newcomer","date":"2026-11-15","title":"Claude Agent SDK 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"dify","name":"Dify","kind":"listed","date":"2026-11-15","title":"新收录 Dify"}
-{"slug":"dify","name":"Dify","kind":"newcomer","date":"2026-11-15","title":"Dify 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"langflow","name":"Langflow","kind":"listed","date":"2026-11-15","title":"新收录 Langflow"}
-{"slug":"langflow","name":"Langflow","kind":"newcomer","date":"2026-11-15","title":"Langflow 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"ragflow","name":"RAGFlow","kind":"listed","date":"2026-11-15","title":"新收录 RAGFlow"}
-{"slug":"ragflow","name":"RAGFlow","kind":"newcomer","date":"2026-11-15","title":"RAGFlow 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"fastgpt","name":"FastGPT","kind":"listed","date":"2026-11-15","title":"新收录 FastGPT"}
-{"slug":"fastgpt","name":"FastGPT","kind":"newcomer","date":"2026-11-15","title":"FastGPT 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"langbot","name":"LangBot","kind":"listed","date":"2026-11-15","title":"新收录 LangBot"}
-{"slug":"langbot","name":"LangBot","kind":"newcomer","date":"2026-11-15","title":"LangBot 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"maxkb","name":"MaxKB","kind":"listed","date":"2026-11-15","title":"新收录 MaxKB"}
-{"slug":"maxkb","name":"MaxKB","kind":"newcomer","date":"2026-11-15","title":"MaxKB 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"db-gpt","name":"DB-GPT","kind":"listed","date":"2026-11-15","title":"新收录 DB-GPT"}
-{"slug":"db-gpt","name":"DB-GPT","kind":"newcomer","date":"2026-11-15","title":"DB-GPT 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"coze-studio","name":"Coze Studio","kind":"listed","date":"2026-11-15","title":"新收录 Coze Studio"}
-{"slug":"coze-studio","name":"Coze Studio","kind":"newcomer","date":"2026-11-15","title":"Coze Studio 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"yuxi","name":"Yuxi","kind":"listed","date":"2026-11-15","title":"新收录 Yuxi"}
-{"slug":"yuxi","name":"Yuxi","kind":"newcomer","date":"2026-11-15","title":"Yuxi 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"autogpt","name":"AutoGPT","kind":"version","date":"2026-11-15","title":"AutoGPT 更新到 autogpt-platform-beta-v0.11.3","detail":"autogpt-platform-beta-v0.11.2 → autogpt-platform-beta-v0.11.3"}
 {"slug":"qwenpaw","name":"QwenPaw","kind":"listed","date":"2026-11-15","title":"新收录 QwenPaw"}
-{"slug":"qwenpaw","name":"QwenPaw","kind":"newcomer","date":"2026-11-15","title":"QwenPaw 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"swe-agent","name":"SWE-agent","kind":"listed","date":"2026-11-15","title":"新收录 SWE-agent"}
-{"slug":"swe-agent","name":"SWE-agent","kind":"newcomer","date":"2026-11-15","title":"SWE-agent 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"openmanus","name":"OpenManus","kind":"listed","date":"2026-11-15","title":"新收录 OpenManus"}
-{"slug":"openmanus","name":"OpenManus","kind":"newcomer","date":"2026-11-15","title":"OpenManus 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"feynman","name":"Feynman","kind":"listed","date":"2026-11-15","title":"新收录 Feynman"}
-{"slug":"feynman","name":"Feynman","kind":"newcomer","date":"2026-11-15","title":"Feynman 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"xagent","name":"XAgent","kind":"listed","date":"2026-11-15","title":"新收录 XAgent"}
-{"slug":"xagent","name":"XAgent","kind":"newcomer","date":"2026-11-15","title":"XAgent 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"autoglm","name":"AutoGLM","kind":"listed","date":"2026-11-15","title":"新收录 AutoGLM"}
-{"slug":"autoglm","name":"AutoGLM","kind":"newcomer","date":"2026-11-15","title":"AutoGLM 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"coze-space","name":"Coze Space (扣子空间)","kind":"listed","date":"2026-11-15","title":"新收录 Coze Space (扣子空间)"}
-{"slug":"coze-space","name":"Coze Space (扣子空间)","kind":"newcomer","date":"2026-11-15","title":"Coze Space (扣子空间) 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"genspark","name":"Genspark","kind":"listed","date":"2026-11-15","title":"新收录 Genspark"}
-{"slug":"genspark","name":"Genspark","kind":"newcomer","date":"2026-11-15","title":"Genspark 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"kimi-researcher","name":"Kimi Researcher","kind":"listed","date":"2026-11-15","title":"新收录 Kimi Researcher"}
-{"slug":"kimi-researcher","name":"Kimi Researcher","kind":"newcomer","date":"2026-11-15","title":"Kimi Researcher 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"minimax-agent","name":"MiniMax Agent","kind":"listed","date":"2026-11-15","title":"新收录 MiniMax Agent"}
-{"slug":"minimax-agent","name":"MiniMax Agent","kind":"newcomer","date":"2026-11-15","title":"MiniMax Agent 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"skywork","name":"Skywork (天工)","kind":"listed","date":"2026-11-15","title":"新收录 Skywork (天工)"}
-{"slug":"skywork","name":"Skywork (天工)","kind":"newcomer","date":"2026-11-15","title":"Skywork (天工) 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"baixiaoying","name":"百小应","kind":"listed","date":"2026-11-15","title":"新收录 百小应"}
-{"slug":"baixiaoying","name":"百小应","kind":"newcomer","date":"2026-11-15","title":"百小应 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"blueheart","name":"蓝心小V","kind":"listed","date":"2026-11-15","title":"新收录 蓝心小V"}
-{"slug":"blueheart","name":"蓝心小V","kind":"newcomer","date":"2026-11-15","title":"蓝心小V 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"celia","name":"小艺 Celia","kind":"listed","date":"2026-11-15","title":"新收录 小艺 Celia"}
-{"slug":"celia","name":"小艺 Celia","kind":"newcomer","date":"2026-11-15","title":"小艺 Celia 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"chatglm","name":"智谱清言 ChatGLM","kind":"listed","date":"2026-11-15","title":"新收录 智谱清言 ChatGLM"}
-{"slug":"chatglm","name":"智谱清言 ChatGLM","kind":"newcomer","date":"2026-11-15","title":"智谱清言 ChatGLM 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"dingtalk-ai","name":"钉钉 AI 助理","kind":"listed","date":"2026-11-15","title":"新收录 钉钉 AI 助理"}
-{"slug":"dingtalk-ai","name":"钉钉 AI 助理","kind":"newcomer","date":"2026-11-15","title":"钉钉 AI 助理 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"doubao","name":"豆包 Doubao","kind":"listed","date":"2026-11-15","title":"新收录 豆包 Doubao"}
-{"slug":"doubao","name":"豆包 Doubao","kind":"newcomer","date":"2026-11-15","title":"豆包 Doubao 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"ernie-bot","name":"文心一言 ERNIE Bot","kind":"listed","date":"2026-11-15","title":"新收录 文心一言 ERNIE Bot"}
-{"slug":"ernie-bot","name":"文心一言 ERNIE Bot","kind":"newcomer","date":"2026-11-15","title":"文心一言 ERNIE Bot 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"feishu-ai","name":"飞书智能伙伴","kind":"listed","date":"2026-11-15","title":"新收录 飞书智能伙伴"}
-{"slug":"feishu-ai","name":"飞书智能伙伴","kind":"newcomer","date":"2026-11-15","title":"飞书智能伙伴 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"ima","name":"ima","kind":"listed","date":"2026-11-15","title":"新收录 ima"}
-{"slug":"ima","name":"ima","kind":"newcomer","date":"2026-11-15","title":"ima 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"kimi","name":"Kimi","kind":"listed","date":"2026-11-15","title":"新收录 Kimi"}
-{"slug":"kimi","name":"Kimi","kind":"newcomer","date":"2026-11-15","title":"Kimi 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"metaso","name":"秘塔 AI 搜索","kind":"listed","date":"2026-11-15","title":"新收录 秘塔 AI 搜索"}
-{"slug":"metaso","name":"秘塔 AI 搜索","kind":"newcomer","date":"2026-11-15","title":"秘塔 AI 搜索 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"nami-ai","name":"纳米AI","kind":"listed","date":"2026-11-15","title":"新收录 纳米AI"}
-{"slug":"nami-ai","name":"纳米AI","kind":"newcomer","date":"2026-11-15","title":"纳米AI 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"spark","name":"讯飞星火","kind":"listed","date":"2026-11-15","title":"新收录 讯飞星火"}
-{"slug":"spark","name":"讯飞星火","kind":"newcomer","date":"2026-11-15","title":"讯飞星火 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"tongyi","name":"通义","kind":"listed","date":"2026-11-15","title":"新收录 通义"}
-{"slug":"tongyi","name":"通义","kind":"newcomer","date":"2026-11-15","title":"通义 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"wecom-ai","name":"企业微信 AI 助理","kind":"listed","date":"2026-11-15","title":"新收录 企业微信 AI 助理"}
-{"slug":"wecom-ai","name":"企业微信 AI 助理","kind":"newcomer","date":"2026-11-15","title":"企业微信 AI 助理 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"xiaoai","name":"小爱同学","kind":"listed","date":"2026-11-15","title":"新收录 小爱同学"}
-{"slug":"xiaoai","name":"小爱同学","kind":"newcomer","date":"2026-11-15","title":"小爱同学 首次进入新秀榜","detail":"出道 0 天"}
 {"slug":"yuanbao","name":"腾讯元宝","kind":"listed","date":"2026-11-15","title":"新收录 腾讯元宝"}
-{"slug":"yuanbao","name":"腾讯元宝","kind":"newcomer","date":"2026-11-15","title":"腾讯元宝 首次进入新秀榜","detail":"出道 0 天"}

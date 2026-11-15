@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import {
+  type AgentState,
   daysBetween,
   emptyState,
   mergeState,
   newcomerAgeDays,
-  type AgentState,
 } from '../state.js';
 
 describe('mergeState', () => {
   it('首次运行：写入 started_at 与 first_listed', () => {
     const s = mergeState(null, ['a', 'b'], '2026-11-09');
     expect(s.started_at).toBe('2026-11-09');
-    expect(s.agents['a']).toEqual({ first_listed: '2026-11-09', last_seen: '2026-11-09' });
+    expect(s.agents.a).toEqual({ first_listed: '2026-11-09', last_seen: '2026-11-09' });
   });
 
   it('幂等：同一天重跑不改 first_listed 与 started_at', () => {
@@ -24,9 +24,9 @@ describe('mergeState', () => {
     const s1 = mergeState(null, ['a'], '2026-11-09');
     const s2 = mergeState(s1, ['a', 'b'], '2026-12-01');
     expect(s2.started_at).toBe('2026-11-09'); // 上线日不变
-    expect(s2.agents['a']!.first_listed).toBe('2026-11-09'); // 老条目不变
-    expect(s2.agents['a']!.last_seen).toBe('2026-12-01');
-    expect(s2.agents['b']!.first_listed).toBe('2026-12-01');
+    expect(s2.agents.a!.first_listed).toBe('2026-11-09'); // 老条目不变
+    expect(s2.agents.a!.last_seen).toBe('2026-12-01');
+    expect(s2.agents.b!.first_listed).toBe('2026-12-01');
   });
 });
 

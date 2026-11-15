@@ -5,8 +5,8 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parse } from 'yaml';
 import { AgentsFileSchema } from '@agentnews/core';
+import { parse } from 'yaml';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const raw = readFileSync(join(ROOT, 'agents.yaml'), 'utf8');
@@ -45,7 +45,7 @@ for (const a of agents) {
 }
 if (warnings.length) {
   console.log(`\n⚠ ${warnings.length} 条警告：`);
-  for (const w of warnings) console.log('  - ' + w);
+  for (const w of warnings) console.log(`  - ${w}`);
 }
 
 /* ── data/plans.yml 轻量校验：价格数据不允许“未核验却带数字” ── */
@@ -75,7 +75,7 @@ try {
   }
   if (issues.length) {
     console.error('✗ data/plans.yml 校验失败：');
-    for (const i of issues) console.error('  - ' + i);
+    for (const i of issues) console.error(`  - ${i}`);
     process.exit(1);
   }
   console.log(`✓ data/plans.yml 校验通过：${plans.length} 条（核验 ${plans.filter((p) => p.confidence === 'verified').length}）`);

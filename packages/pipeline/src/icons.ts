@@ -25,7 +25,7 @@
  * 等）不算真实官网——它们的 favicon 是平台自己的，不是产品的。
  */
 import { createHash } from 'node:crypto';
-import { mkdir, readdir, readFile, unlink, writeFile, access } from 'node:fs/promises';
+import { access, mkdir, readdir, readFile, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Agent } from '@agentnews/core';
 
@@ -393,7 +393,7 @@ function readmeImageCandidates(readmeText: string, rawBase: string): Candidate[]
     if (BADGE_RE.test(src) || BADGE_RE.test(alt)) return;
     if (/\.gif(\?|$)/i.test(src)) return;
     const isSvg = /\.svg(\?|$)/i.test(src);
-    const looksLogo = /logo|icon|brand|avatar|wordmark|mark/i.test(src + ' ' + alt);
+    const looksLogo = /logo|icon|brand|avatar|wordmark|mark/i.test(`${src} ${alt}`);
     // 位图只信「明确写着 logo」的，否则很容易抓到 demo 截图
     if (!isSvg && !looksLogo) return;
     let url: string;
@@ -748,7 +748,8 @@ export async function syncIcons(
     keep.add(file);
     manifest[agent.slug] = record;
 
-    const target = join(opts.dir, file);    try {
+    const target = join(opts.dir, file);
+    try {
       await readFile(target);
     } catch {
       await writeFile(target, r.image.buf);
@@ -767,7 +768,7 @@ export async function syncIcons(
 
   const sorted: IconManifest = {};
   for (const k of Object.keys(manifest).sort()) sorted[k] = manifest[k]!;
-  await writeFile(opts.manifestPath, JSON.stringify(sorted, null, 2) + '\n');
+  await writeFile(opts.manifestPath, `${JSON.stringify(sorted, null, 2)}\n`);
 
   return { ok: Object.keys(manifest).length, failed, manifest: sorted };
 }

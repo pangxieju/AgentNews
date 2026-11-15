@@ -80,7 +80,7 @@ async function main(): Promise<void> {
       if (JSON.stringify(row.metrics) !== before) patched++;
     }
 
-    await writeFile(path, JSON.stringify(score, null, 2));
+    await writeFile(path, `${JSON.stringify(score, null, 2)}\n`);
     console.log(
       `[backfill] ${date}: ${patched}/${score.rows.length} 行补字段` +
         `（参考快照 t-1 ${snaps[1] ? '有' : '无'} · t-7 ${snaps[7] ? '有' : '无'} · t-30 ${snaps[30] ? '有' : '无'}）`,

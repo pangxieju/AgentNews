@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { shouldReplace, type IconRecord } from '../icons.js';
+import { type IconRecord, shouldReplace } from '../icons.js';
 
 const rec = (r: Partial<IconRecord> & { file: string; source: IconRecord['source'] }): IconRecord => ({
   w: 192,

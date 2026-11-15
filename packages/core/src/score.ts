@@ -1,5 +1,5 @@
-import type { Form, Metrics, OssBucket } from './schema.js';
 import { activityScore, FLOOR, growthPct } from './growth.js';
+import type { Form, Metrics, OssBucket } from './schema.js';
 
 /**
  * 综合分算法（PRD §5.3 / §5.2）
@@ -27,9 +27,10 @@ const DEFAULT_WEIGHTS: Weights = {
   activity: 0.15,
   installs: 0.2,
   contributors: 0.1,
-  ecosystem: 0.05,
   forks: 0.05,
 };
+// 注：`ecosystem`（Discord 成员数）尚无采集器写入，不参与权重；
+// 缺失指标会自动按可得权重归一（scoreGroup 里的 wsum），所以不写死 100%。
 
 /** 量级跨度大的原始量需要 log 压缩；有界派生量不压缩 */
 const COMPRESS_KEYS = new Set<ScoreMetricKey>([
@@ -37,7 +38,6 @@ const COMPRESS_KEYS = new Set<ScoreMetricKey>([
   'forks',
   'contributors',
   'installs',
-  'ecosystem',
 ]);
 
 /** log 压缩：抑制数量级差距（800 star 与 200k star 不可线性比较） */
@@ -68,7 +68,9 @@ export function normalizeGroup(items: { slug: string; value: number }[]): Map<st
   const out = new Map<string, number>();
   if (items.length === 0) return out;
   const ranks = percentileRank(items.map((i) => i.value));
-  items.forEach((item, i) => out.set(item.slug, ranks[i] ?? 0));
+  items.forEach((item, i) => {
+    out.set(item.slug, ranks[i] ?? 0);
+  });
   return out;
 }
 

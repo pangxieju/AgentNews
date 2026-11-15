@@ -1,26 +1,28 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parse } from 'yaml';
 import {
+  type Agent,
   AgentsFileSchema,
-  FORMS,
-  SCORE_VERSION,
   activityScore,
   dataLevel,
   effectiveInstalls,
+  FLOOR,
+  FORMS,
+  growthPct,
   installsBasis,
   isDormant,
-  scoreGroup,
-  type Agent,
   type Metrics,
+  SCORE_VERSION,
   type ScoreRow,
+  scoreGroup,
 } from '@agentnews/core';
-import { collectAgent, githubHasQuota, type GitHubMode } from './collectors/index.js';
-import { collectInstallHistory, writeInstallHistory, type InstallHistory } from './history.js';
+import { parse } from 'yaml';
+import { collectAgent, type GitHubMode, githubHasQuota } from './collectors/index.js';
 import { diffEvents, readSnapshotMetrics, writeEvents } from './events.js';
-import { collectSecurity, pickSecurityTargets, writeSecurity } from './security.js';
+import { collectInstallHistory, type InstallHistory, writeInstallHistory } from './history.js';
 import { syncIcons } from './icons.js';
+import { collectSecurity, pickSecurityTargets, writeSecurity } from './security.js';
 import { loadState, mergeState, newcomerAgeDays, saveState } from './state.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
@@ -63,7 +65,6 @@ export async function loadAgents(): Promise<Agent[]> {
   return result.data;
 }
 
-/** 读取指定日期的历史快照（不存在 → null） */
 /** 读取指定路径的评分快照（不存在 → null） */
 async function readScoreFile(path: string): Promise<ScoreRow[] | null> {
   try {
@@ -75,30 +76,15 @@ async function readScoreFile(path: string): Promise<ScoreRow[] | null> {
   }
 }
 
-async function readSnapshot(date: string): Promise<Record<string, Metrics> | null> {
-  try {
-    const raw = await readFile(join(DATA_DIR, 'snapshots', `${date}.jsonl`), 'utf8');
-    const out: Record<string, Metrics> = {};
-    for (const line of raw.split('\n')) {
-      if (!line.trim()) continue;
-      const row = JSON.parse(line) as { slug: string; metrics: Metrics };
-      out[row.slug] = row.metrics;
-    }
-    return out;
-  } catch {
-    return null;
-  }
-}
-
 /** 聚合为评分输入：合并当日 + 参考历史 */
 async function buildScorables(
   agents: Agent[],
   metricsMap: Map<string, Metrics>,
 ): Promise<Parameters<typeof scoreGroup>[0]> {
   const today = isoDate();
-  const prev = await readSnapshot(prevDate(today));
-  const weekAgo = await readSnapshot(daysAgo(today, 7));
-  const monthAgo = await readSnapshot(daysAgo(today, 30));
+  const prev = await readSnapshotMetrics(join(DATA_DIR, 'snapshots'), prevDate(today));
+  const weekAgo = await readSnapshotMetrics(join(DATA_DIR, 'snapshots'), daysAgo(today, 7));
+  const monthAgo = await readSnapshotMetrics(join(DATA_DIR, 'snapshots'), daysAgo(today, 30));
 
   return agents.map((agent) => {
     const m = metricsMap.get(agent.slug) ?? {};
@@ -117,18 +103,18 @@ async function buildScorables(
 }
 
 function prevDate(today: string): string {
-  const d = new Date(today + 'T00:00:00Z');
+  const d = new Date(`${today}T00:00:00Z`);
   d.setUTCDate(d.getUTCDate() - 1);
   return isoDate(d);
 }
 function daysAgo(today: string, n: number): string {
-  const d = new Date(today + 'T00:00:00Z');
+  const d = new Date(`${today}T00:00:00Z`);
   d.setUTCDate(d.getUTCDate() - n);
   return isoDate(d);
 }
 
 /** 每日主入口 */
-export async function runDaily(opts: { token?: string; concurrency?: number } = {}): Promise<{
+export async function runDaily(opts: { token?: string } = {}): Promise<{
   snapshotPath: string;
   scorePath: string;
   rows: ScoreRow[];
@@ -204,7 +190,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   const lines = agents.map((a) =>
     JSON.stringify({ slug: a.slug, form: a.form, oss_bucket: a.oss_bucket, metrics: metricsMap.get(a.slug) ?? {} }),
   );
-  await writeFile(snapshotPath, lines.join('\n') + '\n');
+  await writeFile(snapshotPath, `${lines.join('\n')}\n`);
   console.log(`[snapshot] ${lines.length} rows → ${snapshotPath}`);
 
   // 2.5 安装量历史（npm / PyPI 公开 API）—— 周榜用安装增量（star 历史无法合法回填）
@@ -225,19 +211,21 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
   const agentName = new Map(agents.map((a) => [a.slug, a.name]));
   const rows: ScoreRow[] = [];
 
+  // 一次算清所有 agent 的停更状态（之前在 form 循环里重算 9 遍）
+  const now = new Date();
+  const dormancy = new Map(
+    scorables.map((s) => [
+      s.slug,
+      isDormant(isoStr(s.metrics.last_commit), isoStr(s.metrics.last_release), now),
+    ]),
+  );
+  // 分数命名空间：开源（open+semi）与闭源分开做组内分位（PRD §5.7）。
+  // 开源套件有 star/contributors，闭源只有安装/用量，混在一个分位里会让闭源系统性吃亏。
+  const bucketOf = (s: { oss_bucket: string }) => (s.oss_bucket === 'closed' ? 'closed' : 'open');
+
   for (const form of FORMS) {
     const group = scorables.filter((s) => s.form === form);
     if (group.length === 0) continue;
-    // 停更条目既不排名，也不参与组内分位数（避免僵尸项目的高 star 扭曲活跃项目的分数）
-    const dormancy = new Map(
-      scorables.map((s) => [
-        s.slug,
-        isDormant(isoStr(s.metrics.last_commit), isoStr(s.metrics.last_release), new Date()),
-      ]),
-    );
-    // 分数命名空间：开源（open+semi）与闭源分开做组内分位（PRD §5.7）。
-    // 开源套件有 star/contributors，闭源只有安装/用量，混在一个分位里会让闭源系统性吃亏。
-    const bucketOf = (s: { oss_bucket: string }) => (s.oss_bucket === 'closed' ? 'closed' : 'open');
     const scoreMap = new Map<string, number>();
     const bucketActiveSize = new Map<string, number>();
     for (const bucket of ['open', 'closed'] as const) {
@@ -245,7 +233,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         (s) => bucketOf(s) === bucket && !dormancy.get(s.slug),
       );
       bucketActiveSize.set(bucket, activeBucketGroup.length);
-      const scores = activeBucketGroup.length >= 2 ? scoreGroup(activeBucketGroup, undefined, new Date()) : [];
+      const scores = activeBucketGroup.length >= 2 ? scoreGroup(activeBucketGroup, undefined, now) : [];
       for (const s of scores) scoreMap.set(s.slug, s.score);
     }
 
@@ -273,7 +261,9 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       const bucketRankable = enriched
         .filter((e) => bucketOf(e.item) === bucket && e.score != null)
         .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
-      bucketRankable.forEach((e, i) => rankMap.set(e.item.slug, i + 1));
+      bucketRankable.forEach((e, i) => {
+        rankMap.set(e.item.slug, i + 1);
+      });
     }
     const ordered = [
       ...enriched
@@ -307,7 +297,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
       const growth30dInstalls = growthPctSafe(installs, installsMonthAgoEff, 1000);
 
       const flags: string[] = [];
-      if (errors.some((err) => err.startsWith(item.slug))) flags.push('partial_data');
+      if (errors.some((err) => err.startsWith(`${item.slug}:`))) flags.push('partial_data');
       if (level === 'L3') flags.push('no_data');
       if (dormant) flags.push('dormant');
       // 口径分离：商店累计安装不是周下载流，CI 噪声 flag 只适用于 npm/PyPI 周下载
@@ -336,8 +326,8 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
         growth_7d_installs_pct: growth7dInstalls,
         growth_30d_installs_pct: growth30dInstalls,
         delta_30d: stars != null && monthAgo != null ? stars - monthAgo : null,
-        growth_7d_pct: growthPctSafe(stars, weekAgo, 50),
-        growth_30d_pct: growthPctSafe(stars, monthAgo, 200),
+        growth_7d_pct: growthPctSafe(stars, weekAgo, FLOOR.week),
+        growth_30d_pct: growthPctSafe(stars, monthAgo, FLOOR.month),
         metrics: {
           stars,
           forks: typeof m.forks === 'number' ? m.forks : null,
@@ -346,6 +336,7 @@ export async function runDaily(opts: { token?: string; concurrency?: number } = 
           activity: activityScore(
             typeof m.last_commit === 'string' ? m.last_commit : null,
             typeof m.last_release === 'string' ? m.last_release : null,
+            now,
           ),
           last_release: typeof m.last_release === 'string' ? m.last_release : null,
           // 维护健康（详情页）：最近提交 / issue 积压 / 仓库创建时间 / 下载参考值
@@ -421,7 +412,7 @@ function isoWeek(d: Date): { year: number; week: number } {
 
 /** 周日/月末冻结归档；幂等（同一周期重复跑覆盖同文件） */
 async function archiveIfNeeded(today: string, rows: ScoreRow[]): Promise<string[]> {
-  const d = new Date(today + 'T00:00:00Z');
+  const d = new Date(`${today}T00:00:00Z`);
   const dow = d.getUTCDay(); // 0=周日
   const tomorrow = new Date(d);
   tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
@@ -452,15 +443,15 @@ async function archiveIfNeeded(today: string, rows: ScoreRow[]): Promise<string[
   return written;
 }
 
+/** 增速（小数）：复用 core 的 growthPct（小基数 FLOOR 抑制），仅额外保留 4 位小数 */
 function growthPctSafe(
   now: number | null,
   then: number | null | undefined,
   floor: number,
 ): number | null {
-  if (now == null || then == null || typeof then !== 'number') return null;
-  if (then < floor || then <= 0) return null;
+  const g = growthPct(now ?? null, then ?? null, floor);
   // 存储为小数（0.123 = +12.3%），前端 fmtPct 再乘 100 展示
-  return Math.round(((now - then) / then) * 10000) / 10000;
+  return g == null ? null : Math.round(g * 10000) / 10000;
 }
 
 // 直接运行时执行

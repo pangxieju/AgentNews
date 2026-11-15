@@ -104,44 +104,27 @@ async function collectContributors(repo: string, token?: string): Promise<number
   }
 }
 
-/** 最新 release 日期（1 次请求） */
-async function collectLatestRelease(repo: string, token?: string): Promise<string | null> {
-  const headers: Record<string, string> = {
-    Accept: 'application/vnd.github+json',
-    'User-Agent': 'agentnews-m0',
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-  try {
-    const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, { headers });
-    if (!res.ok) return null;
-    const d = (await res.json()) as { published_at?: string };
-    return d.published_at ?? null;
-  } catch {
-    return null;
-  }
-}
-
 /**
  * 探测 GitHub 剩余额度。
  * 无 token 时每小时只有 60 次，而每个 repo 需 3 次（repo+contributors+release），
  * 所以门槛必须按待采集 repo 数动态计算；额度不够就整轮走 ungh（只需 1 次/repo，且不占额度）。
  */
-async function githubQuota(token?: string): Promise<{ remaining: number; enough: boolean }> {
+async function githubRemaining(token?: string): Promise<number> {
   const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'User-Agent': 'agentnews-m0' };
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
     const res = await fetch('https://api.github.com/rate_limit', { headers });
-    if (!res.ok) return { remaining: 0, enough: false };
+    if (!res.ok) return 0;
     const data = (await res.json()) as { resources: { core: { remaining: number } } };
-    return { remaining: data.resources.core.remaining, enough: false };
+    return data.resources.core.remaining;
   } catch {
-    return { remaining: 0, enough: false };
+    return 0;
   }
 }
 
-/** 兼容旧签名：返回是否足够采完 needRepos 个 repo（每个 3 次请求） */
+/** 是否足够采完 needRepos 个 repo（每个 3 次请求：repo + contributors + releases/latest） */
 export async function githubHasQuota(token?: string, needRepos = 0): Promise<boolean> {
-  const { remaining } = await githubQuota(token);
+  const remaining = await githubRemaining(token);
   if (needRepos <= 0) return remaining >= 3;
   return remaining >= needRepos * 3;
 }
@@ -188,34 +171,15 @@ async function collectPypi(pkg: string, retries = 3): Promise<{ pypi_monthly_dl:
   throw new Error(lastErr || `pypi ${pkg}: failed`);
 }
 
-/** VS Code Marketplace：当前版本（extensions[0].versions[0].version）+ 更新日期 */
-async function collectVscodeVersion(extensionId: string): Promise<{
+/**
+ * VS Code Marketplace：安装量 + 当前版本（同一个 extensionquery 请求，非官方 API、低频）。
+ * installs 拿不到时抛错（不写 0：0 会被当成真实安装量参与分位与排名）。
+ */
+async function collectVscode(extensionId: string): Promise<{
+  vscode_installs: number;
   version: string | null;
   version_at: string | null;
 }> {
-  try {
-    const res = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json;api-version=3.0-preview.1' },
-      body: JSON.stringify({
-        filters: [{ criteria: [{ filterType: 7, value: extensionId }] }],
-        flags: 914,
-      }),
-    });
-    if (!res.ok) return { version: null, version_at: null };
-    const data = (await res.json()) as {
-      results?: { extensions?: { versions?: { version?: string; lastUpdated?: string }[] }[] }[];
-    };
-    const v = data.results?.[0]?.extensions?.[0]?.versions?.[0];
-    if (!v?.version) return { version: null, version_at: null };
-    return { version: v.version, version_at: v.lastUpdated ?? null };
-  } catch {
-    return { version: null, version_at: null };
-  }
-}
-
-/** VS Code Marketplace installs（非官方 API，低频） */
-async function collectVscode(extensionId: string): Promise<{ vscode_installs: number }> {
   const res = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json;api-version=3.0-preview.1' },
@@ -226,11 +190,22 @@ async function collectVscode(extensionId: string): Promise<{ vscode_installs: nu
   });
   if (!res.ok) throw new Error(`vscode ${extensionId}: ${res.status}`);
   const data = (await res.json()) as {
-    results: { extensions: { statistics?: { statisticName: string; value: number }[] }[] }[];
+    results?: {
+      extensions?: {
+        statistics?: { statisticName: string; value: number }[];
+        versions?: { version?: string; lastUpdated?: string }[];
+      }[];
+    }[];
   };
-  const stats = data.results?.[0]?.extensions?.[0]?.statistics ?? [];
-  const installs = stats.find((s) => s.statisticName === 'install')?.value ?? 0;
-  return { vscode_installs: installs };
+  const ext = data.results?.[0]?.extensions?.[0];
+  const installs = ext?.statistics?.find((s) => s.statisticName === 'install')?.value;
+  if (typeof installs !== 'number') throw new Error(`vscode ${extensionId}: install statistic missing`);
+  const v = ext?.versions?.[0];
+  return {
+    vscode_installs: installs,
+    version: v?.version ?? null,
+    version_at: v?.lastUpdated ?? null,
+  };
 }
 
 /**
@@ -292,10 +267,12 @@ async function collectPypiVersion(pkg: string): Promise<{
   }
 }
 
-/** GitHub release：tag_name + published_at（复用已有的 /releases/latest 请求思路，独立实现） */
+/** GitHub release：tag_name + published_at（release 时间与版本信息同一个请求） */
 async function collectGithubVersion(repo: string, token?: string): Promise<{
   version: string | null;
   version_at: string | null;
+  /** 真实 release 的发布时间；只有 tag 没有 release 时为 null（tag 不等于发版） */
+  release_at: string | null;
   name: string | null;
   notes: string | null;
   url: string | null;
@@ -310,10 +287,10 @@ async function collectGithubVersion(repo: string, token?: string): Promise<{
     if (res.status === 404) {
       // 没有 release 但可能有 tag（例如 Void / BabyAGI）：退回 tag + 该 tag 的提交时间
       const tagRes = await fetch(`https://api.github.com/repos/${repo}/tags?per_page=1`, { headers });
-      if (!tagRes.ok) return { version: null, version_at: null, name: null, notes: null, url: null };
+      if (!tagRes.ok) return { version: null, version_at: null, release_at: null, name: null, notes: null, url: null };
       const tags = (await tagRes.json()) as Array<{ name?: string; commit?: { sha?: string; url?: string } }>;
       const tag = tags[0];
-      if (!tag?.name) return { version: null, version_at: null, name: null, notes: null, url: null };
+      if (!tag?.name) return { version: null, version_at: null, release_at: null, name: null, notes: null, url: null };
       let at: string | null = null;
       if (tag.commit?.url) {
         const cRes = await fetch(tag.commit.url, { headers });
@@ -325,12 +302,13 @@ async function collectGithubVersion(repo: string, token?: string): Promise<{
       return {
         version: tag.name,
         version_at: at,
+        release_at: null,
         name: null,
         notes: null,
         url: `https://github.com/${repo}/releases/tag/${tag.name}`,
       };
     }
-    if (!res.ok) return { version: null, version_at: null, name: null, notes: null, url: null };
+    if (!res.ok) return { version: null, version_at: null, release_at: null, name: null, notes: null, url: null };
     const d = (await res.json()) as {
       tag_name?: string;
       published_at?: string;
@@ -341,13 +319,14 @@ async function collectGithubVersion(repo: string, token?: string): Promise<{
     return {
       version: d.tag_name ?? null,
       version_at: d.published_at ?? null,
+      release_at: d.published_at ?? null,
       name: d.name?.trim() || null,
       // 截断：只保留摘要，完整内容走 release 链接
       notes: d.body ? d.body.slice(0, 1600) : null,
       url: d.html_url ?? null,
     };
   } catch {
-    return { version: null, version_at: null, name: null, notes: null, url: null };
+    return { version: null, version_at: null, release_at: null, name: null, notes: null, url: null };
   }
 }
 
@@ -368,21 +347,22 @@ export async function collectAgent(
       const g = await collectGitHub(ghPrimary.identifier, token, ghMode);
       Object.assign(metrics, g);
 
-      // API 通道才补 contributors / latest release / version（各 1 次请求，不浪费额度）
+      // API 通道才补 contributors / release + version（repo 之外再 2 次请求，不浪费额度）
       if (ghMode === 'api') {
-        const [contrib, release, ver] = await Promise.all([
+        const [contrib, ver] = await Promise.all([
           collectContributors(ghPrimary.identifier, token),
-          collectLatestRelease(ghPrimary.identifier, token),
           collectGithubVersion(ghPrimary.identifier, token),
         ]);
         if (contrib != null) metrics.contributors = contrib;
-        if (release != null) metrics.last_release = release;
+        // last_release 只认真实 release 的发布时间（tag 的 commit 日期不是发版）
+        if (ver.release_at != null) metrics.last_release = ver.release_at;
         if (ver.version != null) {
           metrics.version = ver.version;
           metrics.version_at = ver.version_at;
           metrics.version_source = 'github';
         }
-        if (ver.notes != null) {
+        // 有 release 链接就带上 tag / 说明；不能靠 notes 是否存在（空 body 的 release 也是 release）
+        if (ver.url != null) {
           metrics.release_tag = ver.version;
           metrics.release_name = ver.name;
           metrics.release_notes = ver.notes;
@@ -435,15 +415,13 @@ export async function collectAgent(
     }
   }
   const vscodeSrc = vscodeSources.find((s) => s.is_primary) ?? vscodeSources[0];
-  if (vscodeSrc) {    try {
-      const [v, vv] = await Promise.all([
-        collectVscode(vscodeSrc.identifier),
-        collectVscodeVersion(vscodeSrc.identifier),
-      ]);
-      Object.assign(metrics, v);
-      if (vv.version != null) {
-        metrics.version = vv.version;
-        metrics.version_at = vv.version_at;
+  if (vscodeSrc) {
+    try {
+      const v = await collectVscode(vscodeSrc.identifier);
+      metrics.vscode_installs = v.vscode_installs;
+      if (v.version != null) {
+        metrics.version = v.version;
+        metrics.version_at = v.version_at;
         metrics.version_source = 'vscode';
       }
     } catch (e) {

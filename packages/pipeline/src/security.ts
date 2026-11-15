@@ -7,7 +7,7 @@
  * 输出：每个包的公告数与恶意包数，附 OSV 链接。
  * 不做的事：判断「是否已修复」（需要版本比对，误判成本高）。
  */
-import { writeFile, mkdir } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import type { Agent } from '@agentnews/core';
 
@@ -91,6 +91,6 @@ function osvPackageUrl(name: string, ecosystem: string): string {
 export async function writeSecurity(dataDir: string, date: string, info: Record<string, SecurityInfo>) {
   const path = join(dataDir, 'security', `${date}.json`);
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, JSON.stringify({ date, subjects: info }, null, 2) + '\n');
+  await writeFile(path, `${JSON.stringify({ date, subjects: info }, null, 2)}\n`);
   return path;
 }
