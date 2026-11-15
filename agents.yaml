@@ -1259,3 +1259,262 @@
   note: 扣子开源版；可视化 agent 开发平台
   sources:
     - { kind: github, identifier: coze-dev/coze-studio, is_primary: true }
+
+# =============================================================
+# 第八批扩充（M1 · 2026-11-15）：中国主流 agent 补齐
+# 开源项经 GitHub API 核过 star / pushed_at / license / 包归属；
+# 闭源项经 VS Code 市场或官方产品页核过（无公开指标的进收录区）
+# =============================================================
+
+# ---------- 开源：框架 ----------
+- slug: eino
+  name: Eino
+  vendor: ByteDance (CloudWeGo)
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://www.cloudwego.io/docs/eino/
+  note: Go 语言的 LLM / agent 编排框架
+  sources:
+    - { kind: github, identifier: cloudwego/eino, is_primary: true }
+
+- slug: spring-ai-alibaba
+  name: Spring AI Alibaba
+  vendor: Alibaba
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://java2ai.com
+  note: Java 生态的 agentic AI 框架
+  sources:
+    - { kind: github, identifier: alibaba/spring-ai-alibaba, is_primary: true }
+
+- slug: youtu-agent
+  name: Youtu-Agent
+  vendor: Tencent
+  form: framework
+  oss_bucket: semi
+  license_id: Other (Tencent)
+  homepage: https://tencentcloudadp.github.io/youtu-agent/
+  note: 源码可见但非 OSI 协议
+  sources:
+    - { kind: github, identifier: TencentCloudADP/youtu-agent, is_primary: true }
+    - { kind: pypi, identifier: youtu-agent }
+
+- slug: chatdev
+  name: ChatDev
+  vendor: OpenBMB
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://arxiv.org/abs/2307.07924
+  note: LLM 多智能体协作开发框架
+  sources:
+    - { kind: github, identifier: OpenBMB/ChatDev, is_primary: true }
+
+- slug: astrbot
+  name: AstrBot
+  vendor: AstrBot
+  form: framework
+  oss_bucket: open
+  license_id: AGPL-3.0
+  homepage: https://astrbot.app
+  note: 多 IM 平台的 agent 助手框架
+  sources:
+    - { kind: github, identifier: AstrBotDevs/AstrBot, is_primary: true }
+    - { kind: pypi, identifier: astrbot }
+
+- slug: ms-agent
+  name: MS-Agent
+  vendor: ModelScope (Alibaba)
+  form: framework
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://ms-agent-en.readthedocs.io
+  sources:
+    - { kind: github, identifier: modelscope/ms-agent, is_primary: true }
+    - { kind: pypi, identifier: ms-agent }
+
+# ---------- 开源：平台 ----------
+- slug: fastgpt
+  name: FastGPT
+  vendor: Labring (环界云)
+  form: platform
+  oss_bucket: semi
+  license_id: Other (FastGPT)
+  homepage: https://fastgpt.io
+  note: 知识库 + agent 编排平台，License 带商用限制
+  sources:
+    - { kind: github, identifier: labring/FastGPT, is_primary: true }
+
+- slug: maxkb
+  name: MaxKB
+  vendor: FIT2CLOUD (飞致云)
+  form: platform
+  oss_bucket: open
+  license_id: GPL-3.0
+  homepage: https://maxkb.cn
+  note: 企业知识库 / 智能体平台
+  sources:
+    - { kind: github, identifier: 1Panel-dev/MaxKB, is_primary: true }
+
+- slug: db-gpt
+  name: DB-GPT
+  vendor: Eosphoros AI
+  form: platform
+  oss_bucket: open
+  license_id: MIT
+  homepage: http://docs.dbgpt.cn
+  note: 数据智能体平台（Text2SQL / 数据分析）
+  sources:
+    - { kind: github, identifier: eosphoros-ai/DB-GPT, is_primary: true }
+    - { kind: pypi, identifier: dbgpt }
+
+- slug: yuxi
+  name: Yuxi
+  vendor: Yuxi
+  form: platform
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://github.com/xerrors/Yuxi
+  note: 可私有部署的多租户知识智能体平台
+  sources:
+    - { kind: github, identifier: xerrors/Yuxi, is_primary: true }
+
+- slug: langbot
+  name: LangBot
+  vendor: LangBot
+  form: platform
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://langbot.app
+  note: 面向 IM 的 agentic bot 平台
+  sources:
+    - { kind: github, identifier: langbot-app/LangBot, is_primary: true }
+    - { kind: pypi, identifier: langbot }
+
+# ---------- 开源：自主 / 桌面 ----------
+- slug: xagent
+  name: XAgent
+  vendor: OpenBMB
+  form: autonomous
+  oss_bucket: open
+  license_id: Apache-2.0
+  homepage: https://blog.x-agent.net/blog/xagent/
+  note: 复杂任务自主求解 agent
+  sources:
+    - { kind: github, identifier: OpenBMB/XAgent, is_primary: true }
+
+- slug: mobileagent
+  name: Mobile-Agent
+  vendor: X-PLUG (Alibaba)
+  form: desktop
+  oss_bucket: open
+  license_id: MIT
+  homepage: https://github.com/X-PLUG/MobileAgent
+  note: 跨手机 / PC 的 GUI agent
+  sources:
+    - { kind: github, identifier: X-PLUG/MobileAgent, is_primary: true }
+
+- slug: cherry-studio
+  name: Cherry Studio
+  vendor: Cherry Studio
+  form: desktop
+  oss_bucket: open
+  license_id: AGPL-3.0
+  homepage: https://cherryai.com
+  note: 桌面 AI 工作台，支持多模型与 agent
+  sources:
+    - { kind: github, identifier: CherryHQ/cherry-studio, is_primary: true }
+
+# ---------- 闭源：IDE 插件 ----------
+- slug: codearts-agent
+  name: CodeArts Agent
+  vendor: Huawei
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.huaweicloud.com/product/codearts.html
+  note: 华为云 CodeArts 智能编程助手（原 CodeArts Snap）
+  sources:
+    - { kind: manual, identifier: codearts-agent, is_primary: true }
+    - { kind: vscode, identifier: HuaweiCloud.vscode-codebot }
+
+- slug: raccoon
+  name: Raccoon (小浣熊)
+  vendor: SenseTime
+  form: ide-plugin
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://marketplace.visualstudio.com/items?itemName=SenseTime.raccoon
+  note: 商汤小浣熊代码助手；安装量来自 VS Code 市场
+  sources:
+    - { kind: manual, identifier: raccoon, is_primary: true }
+    - { kind: vscode, identifier: SenseTime.raccoon }
+
+# ---------- 闭源：自主 agent ----------
+- slug: minimax-agent
+  name: MiniMax Agent
+  vendor: MiniMax
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.minimax.io/agent
+  note: 无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: minimax-agent, is_primary: true }
+
+- slug: genspark
+  name: Genspark
+  vendor: Genspark
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.genspark.ai
+  note: Super Agent；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: genspark, is_primary: true }
+
+- slug: autoglm
+  name: AutoGLM
+  vendor: Zhipu AI (智谱)
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://autoglm.zhipuai.cn
+  note: 手机 / 电脑 GUI 操作 agent；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: autoglm, is_primary: true }
+
+- slug: kimi-researcher
+  name: Kimi Researcher
+  vendor: Moonshot AI (月之暗面)
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://www.kimi.com/researcher
+  note: 研究型自主 agent；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: kimi-researcher, is_primary: true }
+
+- slug: coze-space
+  name: Coze Space (扣子空间)
+  vendor: ByteDance
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://space.coze.cn
+  note: 通用任务托管 agent；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: coze-space, is_primary: true }
+
+- slug: skywork
+  name: Skywork (天工)
+  vendor: Kunlun Tech (昆仑万维)
+  form: autonomous
+  oss_bucket: closed
+  license_id: proprietary
+  homepage: https://skywork.ai
+  note: Super Agents；无公开安装数据（L3）
+  sources:
+    - { kind: manual, identifier: skywork, is_primary: true }

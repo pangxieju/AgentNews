@@ -55,6 +55,13 @@
     "h": 276,
     "url": "https://antigravity.google/assets/image/antigravity-logo.png"
   },
+  "astrbot": {
+    "file": "astrbot.f547bc7b.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://rainyun-apps.cn-nb1.rains3.com/materials/deploy-on-rainyun-en.svg"
+  },
   "atlas": {
     "file": "atlas.1d4021e9.png",
     "source": "html",
@@ -96,6 +103,13 @@
     "w": 0,
     "h": 0,
     "url": "https://microsoft.github.io/autogen/0.2/img/ag.svg"
+  },
+  "autoglm": {
+    "file": "autoglm.7247e384.png",
+    "source": "html",
+    "w": 180,
+    "h": 180,
+    "url": "https://autoglm.zhipuai.cn/apple-touch-icon.png?t=20250809"
   },
   "autogpt": {
     "file": "autogpt.4507a775.png",
@@ -139,6 +153,20 @@
     "h": 512,
     "url": "https://www.camel-ai.org/android-chrome-512x512.png"
   },
+  "chatdev": {
+    "file": "chatdev.ba775300.png",
+    "source": "html",
+    "w": 180,
+    "h": 180,
+    "url": "https://arxiv.org/static/browse/0.3.4/images/icons/apple-touch-icon.png"
+  },
+  "cherry-studio": {
+    "file": "cherry-studio.8e7ea914.png",
+    "source": "html",
+    "w": 167,
+    "h": 171,
+    "url": "https://cherryai.com/assets/favicon-BmbgeFTf.png"
+  },
   "claude-agent-sdk": {
     "file": "claude-agent-sdk.d1dd68bb.png",
     "source": "logo",
@@ -166,6 +194,13 @@
     "w": 96,
     "h": 96,
     "url": "https://developers.cloudflare.com/favicon.png"
+  },
+  "codearts-agent": {
+    "file": "codearts-agent.33d5a340.ico",
+    "source": "html",
+    "w": 96,
+    "h": 96,
+    "url": "https://www.huaweicloud.com/favicon.ico"
   },
   "codebuddy": {
     "file": "codebuddy.b4a24794.svg",
@@ -223,6 +258,13 @@
     "h": 0,
     "url": "https://github.githubassets.com/images/modules/site/copilot/copilot-logo.svg"
   },
+  "coze-space": {
+    "file": "coze-space.b9dd990e.png",
+    "source": "logo",
+    "w": 20,
+    "h": 20,
+    "url": "https://icon.horse/icon/space.coze.cn"
+  },
   "coze-studio": {
     "file": "coze-studio.e5f77817.jpg",
     "source": "github",
@@ -258,6 +300,13 @@
     "h": 512,
     "url": "https://cursor.com/marketing-static/icon-512x512.png"
   },
+  "db-gpt": {
+    "file": "db-gpt.be0626bf.jpg",
+    "source": "html",
+    "w": 200,
+    "h": 200,
+    "url": "http://docs.dbgpt.cn/img/eosphoros.jpeg"
+  },
   "deerflow": {
     "file": "deerflow.dd7971ec.ico",
     "source": "logo",
@@ -292,6 +341,20 @@
     "w": 0,
     "h": 0,
     "url": "https://factory.com/favicon.svg"
+  },
+  "eino": {
+    "file": "eino.16ac6e75.png",
+    "source": "html",
+    "w": 192,
+    "h": 192,
+    "url": "https://www.cloudwego.io/favicons/android-192x192.png"
+  },
+  "fastgpt": {
+    "file": "fastgpt.839cddd7.svg",
+    "source": "html",
+    "w": 0,
+    "h": 0,
+    "url": "https://fastgpt.io/logo.svg"
   },
   "feynman": {
     "file": "feynman.523cb9f8.svg",
@@ -334,6 +397,13 @@
     "w": 256,
     "h": 256,
     "url": "https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png"
+  },
+  "genspark": {
+    "file": "genspark.4bcf7e23.png",
+    "source": "logo",
+    "w": 256,
+    "h": 256,
+    "url": "https://icon.horse/icon/www.genspark.ai"
   },
   "github-copilot": {
     "file": "github-copilot.79fd9062.png",
@@ -419,12 +489,26 @@
     "h": 256,
     "url": "https://icon.horse/icon/kimi.com"
   },
+  "kimi-researcher": {
+    "file": "kimi-researcher.619bb248.png",
+    "source": "manifest",
+    "w": 512,
+    "h": 512,
+    "url": "https://www.kimi.com/pwa-512.png"
+  },
   "kiro": {
     "file": "kiro.fff9f20b.png",
     "source": "html",
     "w": 192,
     "h": 192,
     "url": "https://kiro.dev/apple-icon.png?4cefa8c54a20b098"
+  },
+  "langbot": {
+    "file": "langbot.574218a8.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://raw.githubusercontent.com/langbot-app/LangBot/HEAD/res/langbot-cloud.svg"
   },
   "langchain": {
     "file": "langchain.05da80e3.png",
@@ -481,6 +565,20 @@
     "w": 512,
     "h": 512,
     "url": "https://mastra.ai/favicon/new-brand/icon-512.png"
+  },
+  "maxkb": {
+    "file": "maxkb.01098c19.png",
+    "source": "html",
+    "w": 485,
+    "h": 485,
+    "url": "https://maxkb.cn/images/favicon.png"
+  },
+  "minimax-agent": {
+    "file": "minimax-agent.f951b028.png",
+    "source": "html",
+    "w": 300,
+    "h": 300,
+    "url": "https://filecdn.minimax.chat/public/58eca777-e31f-448a-9823-e2220e49b426.png"
   },
   "mistral-vibe": {
     "file": "mistral-vibe.820eb590.svg",
@@ -601,6 +699,13 @@
     "h": 0,
     "url": "https://qwenpaw.agentscope.io/qwenpaw-symbol.svg"
   },
+  "raccoon": {
+    "file": "raccoon.d7909d76.png",
+    "source": "html",
+    "w": 320,
+    "h": 320,
+    "url": "https://sensetime.gallerycdn.vsassets.io/extensions/sensetime/raccoon/1.0.15/1753944886238/Microsoft.VisualStudio.Services.Icons.Default"
+  },
   "ragflow": {
     "file": "ragflow.55be75bb.svg",
     "source": "html",
@@ -636,12 +741,26 @@
     "h": 256,
     "url": "https://icon.horse/icon/skyvern.com"
   },
+  "skywork": {
+    "file": "skywork.9f4b1718.png",
+    "source": "html",
+    "w": 29,
+    "h": 28,
+    "url": "https://static-s3.skyworkcdn.com/prod-skywork-web-homepage-bundle/favicon.ico"
+  },
   "smolagents": {
     "file": "smolagents.0b08e717.jpg",
     "source": "readme",
     "w": 1908,
     "h": 1848,
     "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/smolagents/benchmark_code_agents.jpeg"
+  },
+  "spring-ai-alibaba": {
+    "file": "spring-ai-alibaba.8db122d7.png",
+    "source": "html",
+    "w": 32,
+    "h": 32,
+    "url": "https://java2ai.com/img/favicon.png"
   },
   "stagehand": {
     "file": "stagehand.7a94d783.png",
@@ -719,6 +838,27 @@
     "w": 256,
     "h": 256,
     "url": "https://favicone.com/windsurf.com?s=256"
+  },
+  "xagent": {
+    "file": "xagent.4d2bb06a.png",
+    "source": "readme",
+    "w": 3066,
+    "h": 2555,
+    "url": "https://raw.githubusercontent.com/OpenBMB/XAgent/HEAD/assets/readme/xagent_logo.png"
+  },
+  "youtu-agent": {
+    "file": "youtu-agent.109c13bb.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://raw.githubusercontent.com/TencentCloudADP/youtu-agent/HEAD/docs/assets/logo.svg"
+  },
+  "yuxi": {
+    "file": "yuxi.16e8ff73.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://oss-img.xerrors.cn/github/yuxi-social-preview-a4f67514.svg"
   },
   "zed": {
     "file": "zed.f4202c3f.png",

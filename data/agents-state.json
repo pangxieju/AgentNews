@@ -33,6 +33,10 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "astrbot": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "atlas": {
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
@@ -55,6 +59,10 @@
     },
     "autogen": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "autoglm": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "autogpt": {
@@ -81,6 +89,14 @@
       "first_listed": "2026-11-14",
       "last_seen": "2026-11-15"
     },
+    "chatdev": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "cherry-studio": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "claude-agent-sdk": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
@@ -95,6 +111,10 @@
     },
     "cloudflare-agents": {
       "first_listed": "2026-11-14",
+      "last_seen": "2026-11-15"
+    },
+    "codearts-agent": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "codebuddy": {
@@ -129,6 +149,10 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "coze-space": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "coze-studio": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
@@ -149,6 +173,10 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "db-gpt": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "deerflow": {
       "first_listed": "2026-11-14",
       "last_seen": "2026-11-15"
@@ -167,6 +195,14 @@
     },
     "droid": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "eino": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "fastgpt": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "feynman": {
@@ -191,6 +227,10 @@
     },
     "gemini-code-assist": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "genspark": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "github-copilot": {
@@ -241,8 +281,16 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "kimi-researcher": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "kiro": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "langbot": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "langchain": {
@@ -277,8 +325,24 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "maxkb": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "minimax-agent": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "mistral-vibe": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "mobileagent": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "ms-agent": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "nanobrowser": {
@@ -345,6 +409,10 @@
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
+    "raccoon": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "ragflow": {
       "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
@@ -365,8 +433,16 @@
       "first_listed": "2026-11-09",
       "last_seen": "2026-11-15"
     },
+    "skywork": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
     "smolagents": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "spring-ai-alibaba": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "stagehand": {
@@ -411,6 +487,18 @@
     },
     "windsurf": {
       "first_listed": "2026-11-09",
+      "last_seen": "2026-11-15"
+    },
+    "xagent": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "youtu-agent": {
+      "first_listed": "2026-11-15",
+      "last_seen": "2026-11-15"
+    },
+    "yuxi": {
+      "first_listed": "2026-11-15",
       "last_seen": "2026-11-15"
     },
     "zed": {

@@ -300,6 +300,36 @@
       "installs_7d_ago": 8521,
       "installs_30d_ago": 9303,
       "channel": "pypi"
+    },
+    "youtu-agent": {
+      "installs_1d_ago": 180,
+      "installs_7d_ago": 107,
+      "installs_30d_ago": null,
+      "channel": "pypi"
+    },
+    "astrbot": {
+      "installs_1d_ago": 7974,
+      "installs_7d_ago": 12588,
+      "installs_30d_ago": 4764,
+      "channel": "pypi"
+    },
+    "ms-agent": {
+      "installs_1d_ago": 124,
+      "installs_7d_ago": 77,
+      "installs_30d_ago": 89,
+      "channel": "pypi"
+    },
+    "db-gpt": {
+      "installs_1d_ago": 307,
+      "installs_7d_ago": 632,
+      "installs_30d_ago": 368,
+      "channel": "pypi"
+    },
+    "langbot": {
+      "installs_1d_ago": 840,
+      "installs_7d_ago": 407,
+      "installs_30d_ago": 528,
+      "channel": "pypi"
     }
   }
 }
