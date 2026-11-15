@@ -140,11 +140,11 @@
     "url": "https://framework.beeai.dev/mintlify-assets/_mintlify/favicons/beeai-framework/PFK2IvHWMJJ_XaVU/_generated/favicon/android-chrome-192x192.png"
   },
   "blackbox": {
-    "file": "blackbox.ced0c231.png",
-    "source": "logo",
-    "w": 256,
-    "h": 256,
-    "url": "https://icon.horse/icon/www.blackbox.ai"
+    "file": "blackbox.bdf54ba5.png",
+    "source": "html",
+    "w": 512,
+    "h": 512,
+    "url": "https://www.blackbox.ai/icon.png?icon.1v940t4cxvy07.png"
   },
   "blueheart": {
     "file": "blueheart.b48855ec.png",
@@ -350,11 +350,11 @@
     "url": "https://devin.ai/icon.png"
   },
   "dia": {
-    "file": "dia.5e5777e4.png",
-    "source": "logo",
-    "w": 256,
-    "h": 256,
-    "url": "https://icon.horse/icon/www.diabrowser.com"
+    "file": "dia.b33dfde3.png",
+    "source": "manifest",
+    "w": 512,
+    "h": 512,
+    "url": "https://www.diabrowser.com/web-app-manifest-512x512.png"
   },
   "dify": {
     "file": "dify.e438ef12.svg",
@@ -406,11 +406,11 @@
     "url": "https://fastgpt.io/logo.svg"
   },
   "feishu-ai": {
-    "file": "feishu-ai.8b6aeffc.png",
+    "file": "feishu-ai.b019cc69.png",
     "source": "html",
-    "w": 100,
-    "h": 100,
-    "url": "https://p1-hera.feishucdn.com/tos-cn-i-jbbdkfciu3/84a9f036fe2b44f99b899fff4beeb963~tplv-jbbdkfciu3-image:100:100.image"
+    "w": 144,
+    "h": 145,
+    "url": "https://p1-hera.feishucdn.com/tos-cn-i-jbbdkfciu3/1ec7129d900e442d8501d810efdaa369~tplv-jbbdkfciu3-image:0:0.image"
   },
   "feynman": {
     "file": "feynman.523cb9f8.svg",
@@ -455,11 +455,11 @@
     "url": "https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png"
   },
   "genspark": {
-    "file": "genspark.4bcf7e23.png",
-    "source": "logo",
-    "w": 256,
-    "h": 256,
-    "url": "https://icon.horse/icon/www.genspark.ai"
+    "file": "genspark.7f2d0d60.png",
+    "source": "well-known",
+    "w": 180,
+    "h": 180,
+    "url": "https://www.genspark.ai/apple-touch-icon.png"
   },
   "github-copilot": {
     "file": "github-copilot.79fd9062.png",
@@ -490,11 +490,11 @@
     "url": "https://github.com/codespaces/badge.svg"
   },
   "grok-build": {
-    "file": "grok-build.7941fde9.png",
-    "source": "github",
-    "w": 192,
-    "h": 192,
-    "url": "https://github.com/xai-org.png?size=192"
+    "file": "grok-build.bcf29d7d.png",
+    "source": "readme",
+    "w": 600,
+    "h": 600,
+    "url": "https://media.x.ai/v1/website/spacexai-symbol-black-transparent-6435cf42.png"
   },
   "haystack": {
     "file": "haystack.7df54b8b.svg",
@@ -735,11 +735,11 @@
     "url": "https://cdn.autonomous.ai/assets/icons/icon-512x512.png"
   },
   "openmanus": {
-    "file": "openmanus.18ab5ebf.png",
-    "source": "github",
-    "w": 192,
-    "h": 192,
-    "url": "https://github.com/FoundationAgents.png?size=192"
+    "file": "openmanus.99223b6a.svg",
+    "source": "readme",
+    "w": 0,
+    "h": 0,
+    "url": "https://zenodo.org/badge/DOI/10.5281/zenodo.15186407.svg"
   },
   "orca": {
     "file": "orca.e38b8433.png",
