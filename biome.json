@@ -6,7 +6,8 @@
       "packages/**/src/**/*.tsx",
       "packages/**/scripts/**/*.mjs",
       "ops/**/*.mjs",
-      "ops/**/*.js"
+      "ops/**/*.js",
+      "packages/**/functions/**/*.ts"
     ]
   },
   "formatter": {
