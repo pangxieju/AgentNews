@@ -1,0 +1,329 @@
+{
+  "date": "2026-11-18",
+  "agents": {
+    "aider": {
+      "installs_1d_ago": 99271,
+      "installs_7d_ago": 98285,
+      "installs_30d_ago": 68221,
+      "channel": "pypi"
+    },
+    "opencode": {
+      "installs_1d_ago": 3407742,
+      "installs_7d_ago": 3417818,
+      "installs_30d_ago": 2178010,
+      "channel": "npm"
+    },
+    "pi": {
+      "installs_1d_ago": 5243882,
+      "installs_7d_ago": 6289766,
+      "installs_30d_ago": 2877413,
+      "channel": "npm"
+    },
+    "codex-cli": {
+      "installs_1d_ago": 22353510,
+      "installs_7d_ago": 26234083,
+      "installs_30d_ago": 13264559,
+      "channel": "npm"
+    },
+    "gemini-cli": {
+      "installs_1d_ago": 409123,
+      "installs_7d_ago": 435289,
+      "installs_30d_ago": 236888,
+      "channel": "npm"
+    },
+    "qwen-code": {
+      "installs_1d_ago": 128594,
+      "installs_7d_ago": 178000,
+      "installs_30d_ago": 47428,
+      "channel": "npm"
+    },
+    "claude-code": {
+      "installs_1d_ago": 14734147,
+      "installs_7d_ago": 16254401,
+      "installs_30d_ago": 7043047,
+      "channel": "npm"
+    },
+    "kimi-cli": {
+      "installs_1d_ago": 95769,
+      "installs_7d_ago": 85615,
+      "installs_30d_ago": 52655,
+      "channel": "npm"
+    },
+    "kilo-code": {
+      "installs_1d_ago": 51427,
+      "installs_7d_ago": 61876,
+      "installs_30d_ago": 16066,
+      "channel": "npm"
+    },
+    "browser-use": {
+      "installs_1d_ago": 1695866,
+      "installs_7d_ago": 1902064,
+      "installs_30d_ago": 1515390,
+      "channel": "pypi"
+    },
+    "open-interpreter": {
+      "installs_1d_ago": 6263,
+      "installs_7d_ago": 10417,
+      "installs_30d_ago": 6315,
+      "channel": "pypi"
+    },
+    "crewai": {
+      "installs_1d_ago": 504685,
+      "installs_7d_ago": 595558,
+      "installs_30d_ago": 668587,
+      "channel": "pypi"
+    },
+    "langgraph": {
+      "installs_1d_ago": 12102685,
+      "installs_7d_ago": 13933913,
+      "installs_30d_ago": 12518113,
+      "channel": "pypi"
+    },
+    "autogen": {
+      "installs_1d_ago": 85603,
+      "installs_7d_ago": 104389,
+      "installs_30d_ago": 86417,
+      "channel": "pypi"
+    },
+    "agno": {
+      "installs_1d_ago": 473650,
+      "installs_7d_ago": 531042,
+      "installs_30d_ago": 519150,
+      "channel": "pypi"
+    },
+    "pydantic-ai": {
+      "installs_1d_ago": 1259062,
+      "installs_7d_ago": 1511341,
+      "installs_30d_ago": 1530678,
+      "channel": "pypi"
+    },
+    "openai-agents": {
+      "installs_1d_ago": 3920094,
+      "installs_7d_ago": 4184061,
+      "installs_30d_ago": 3271693,
+      "channel": "pypi"
+    },
+    "crush": {
+      "installs_1d_ago": 9630,
+      "installs_7d_ago": 13521,
+      "installs_30d_ago": 3983,
+      "channel": "npm"
+    },
+    "iflow-cli": {
+      "installs_1d_ago": 423,
+      "installs_7d_ago": 370,
+      "installs_30d_ago": 311,
+      "channel": "npm"
+    },
+    "skyvern": {
+      "installs_1d_ago": 1711,
+      "installs_7d_ago": 2556,
+      "installs_30d_ago": 1383,
+      "channel": "pypi"
+    },
+    "mastra": {
+      "installs_1d_ago": 1066059,
+      "installs_7d_ago": 1238859,
+      "installs_30d_ago": 527119,
+      "channel": "npm"
+    },
+    "vercel-ai-sdk": {
+      "installs_1d_ago": 38578357,
+      "installs_7d_ago": 44800760,
+      "installs_30d_ago": 19627683,
+      "channel": "npm"
+    },
+    "semantic-kernel": {
+      "installs_1d_ago": 68286,
+      "installs_7d_ago": 79329,
+      "installs_30d_ago": 73141,
+      "channel": "pypi"
+    },
+    "llamaindex": {
+      "installs_1d_ago": 333889,
+      "installs_7d_ago": 400806,
+      "installs_30d_ago": 644289,
+      "channel": "pypi"
+    },
+    "haystack": {
+      "installs_1d_ago": 141426,
+      "installs_7d_ago": 143211,
+      "installs_30d_ago": 116053,
+      "channel": "pypi"
+    },
+    "smolagents": {
+      "installs_1d_ago": 160686,
+      "installs_7d_ago": 212596,
+      "installs_30d_ago": 112792,
+      "channel": "pypi"
+    },
+    "google-adk": {
+      "installs_1d_ago": 2239924,
+      "installs_7d_ago": 2554191,
+      "installs_30d_ago": 2316962,
+      "channel": "pypi"
+    },
+    "strands-agents": {
+      "installs_1d_ago": 7495001,
+      "installs_7d_ago": 8841519,
+      "installs_30d_ago": 8817200,
+      "channel": "pypi"
+    },
+    "agent-framework": {
+      "installs_1d_ago": 33105,
+      "installs_7d_ago": 44989,
+      "installs_30d_ago": 46068,
+      "channel": "pypi"
+    },
+    "atomic-agents": {
+      "installs_1d_ago": 3478,
+      "installs_7d_ago": 3655,
+      "installs_30d_ago": 4977,
+      "channel": "pypi"
+    },
+    "langchain": {
+      "installs_1d_ago": 31300973,
+      "installs_7d_ago": 34943355,
+      "installs_30d_ago": 37281283,
+      "channel": "pypi"
+    },
+    "gpt-engineer": {
+      "installs_1d_ago": 88,
+      "installs_7d_ago": 167,
+      "installs_30d_ago": 200,
+      "channel": "pypi"
+    },
+    "camel": {
+      "installs_1d_ago": 9527,
+      "installs_7d_ago": 11980,
+      "installs_30d_ago": 11600,
+      "channel": "pypi"
+    },
+    "agentscope": {
+      "installs_1d_ago": 139850,
+      "installs_7d_ago": 144417,
+      "installs_30d_ago": 44582,
+      "channel": "pypi"
+    },
+    "letta": {
+      "installs_1d_ago": 1330,
+      "installs_7d_ago": 1705,
+      "installs_30d_ago": 2727,
+      "channel": "pypi"
+    },
+    "beeai-framework": {
+      "installs_1d_ago": 2084,
+      "installs_7d_ago": 4020,
+      "installs_30d_ago": 2108,
+      "channel": "npm"
+    },
+    "voltagent": {
+      "installs_1d_ago": 42074,
+      "installs_7d_ago": 38945,
+      "installs_30d_ago": 22411,
+      "channel": "npm"
+    },
+    "cloudflare-agents": {
+      "installs_1d_ago": 2876095,
+      "installs_7d_ago": 3288080,
+      "installs_30d_ago": 1562787,
+      "channel": "npm"
+    },
+    "amp": {
+      "installs_1d_ago": 85214,
+      "installs_7d_ago": 80978,
+      "installs_30d_ago": 14778,
+      "channel": "npm"
+    },
+    "droid": {
+      "installs_1d_ago": 30734,
+      "installs_7d_ago": 33839,
+      "installs_30d_ago": 12140,
+      "channel": "npm"
+    },
+    "copilot-cli": {
+      "installs_1d_ago": 1445000,
+      "installs_7d_ago": 1810299,
+      "installs_30d_ago": 1252212,
+      "channel": "npm"
+    },
+    "auggie": {
+      "installs_1d_ago": 42226,
+      "installs_7d_ago": 42304,
+      "installs_30d_ago": 16734,
+      "channel": "npm"
+    },
+    "qoder": {
+      "installs_1d_ago": 17590,
+      "installs_7d_ago": 18324,
+      "installs_30d_ago": 4543,
+      "channel": "npm"
+    },
+    "openmanus": {
+      "installs_1d_ago": null,
+      "installs_7d_ago": 21,
+      "installs_30d_ago": null,
+      "channel": "pypi"
+    },
+    "swe-agent": {
+      "installs_1d_ago": 30,
+      "installs_7d_ago": 72,
+      "installs_30d_ago": 55,
+      "channel": "pypi"
+    },
+    "qwenpaw": {
+      "installs_1d_ago": 6384,
+      "installs_7d_ago": 8981,
+      "installs_30d_ago": 38681,
+      "channel": "pypi"
+    },
+    "omnigent": {
+      "installs_1d_ago": 10051,
+      "installs_7d_ago": 12349,
+      "installs_30d_ago": 9052,
+      "channel": "pypi"
+    },
+    "autocua": {
+      "installs_1d_ago": 294,
+      "installs_7d_ago": 295,
+      "installs_30d_ago": 266,
+      "channel": "pypi"
+    },
+    "langflow": {
+      "installs_1d_ago": 6396,
+      "installs_7d_ago": 8629,
+      "installs_30d_ago": 9395,
+      "channel": "pypi"
+    },
+    "youtu-agent": {
+      "installs_1d_ago": 48,
+      "installs_7d_ago": 245,
+      "installs_30d_ago": null,
+      "channel": "pypi"
+    },
+    "astrbot": {
+      "installs_1d_ago": 5626,
+      "installs_7d_ago": 10086,
+      "installs_30d_ago": 9343,
+      "channel": "pypi"
+    },
+    "ms-agent": {
+      "installs_1d_ago": 84,
+      "installs_7d_ago": 104,
+      "installs_30d_ago": 75,
+      "channel": "pypi"
+    },
+    "db-gpt": {
+      "installs_1d_ago": 180,
+      "installs_7d_ago": 661,
+      "installs_30d_ago": 328,
+      "channel": "pypi"
+    },
+    "langbot": {
+      "installs_1d_ago": 1362,
+      "installs_7d_ago": 719,
+      "installs_30d_ago": 519,
+      "channel": "pypi"
+    }
+  }
+}

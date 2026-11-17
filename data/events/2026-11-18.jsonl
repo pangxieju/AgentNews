@@ -1,0 +1,17 @@
+{"slug":"opencode","name":"OpenCode","kind":"version","date":"2026-11-18","title":"OpenCode 更新到 1.19.6","detail":"1.19.5 → 1.19.6"}
+{"slug":"claude-code","name":"Claude Code","kind":"version","date":"2026-11-18","title":"Claude Code 更新到 2.1.326","detail":"2.1.325 → 2.1.326"}
+{"slug":"openhands","name":"OpenHands","kind":"version","date":"2026-11-18","title":"OpenHands 更新到 v1.41.0","detail":"v1.40.0 → v1.41.0"}
+{"slug":"copilot-cli","name":"Copilot CLI","kind":"version","date":"2026-11-18","title":"Copilot CLI 更新到 1.0.113","detail":"1.0.112 → 1.0.113"}
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"version","date":"2026-11-18","title":"Kimi CLI 更新到 2.6.3","detail":"2.6.2 → 2.6.3"}
+{"slug":"qwen-code","name":"Qwen Code","kind":"version","date":"2026-11-18","title":"Qwen Code 更新到 0.28.0","detail":"0.27.4 → 0.28.0"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-18","title":"Amp 更新到 0.0.1794931244-ga961ae","detail":"0.0.1794844850-g57e01b → 0.0.1794931244-ga961ae"}
+{"slug":"auggie","name":"Auggie CLI","kind":"version","date":"2026-11-18","title":"Auggie CLI 更新到 1.2.1","detail":"0.37.1 → 1.2.1"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-18","title":"Factory Droid 更新到 1.13.0","detail":"1.12.1 → 1.13.0"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-18","title":"Qoder 更新到 1.1.91","detail":"1.1.89 → 1.1.91"}
+{"slug":"browser-use","name":"Browser-use","kind":"version","date":"2026-11-18","title":"Browser-use 更新到 1.0.6","detail":"1.0.5 → 1.0.6"}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"version","date":"2026-11-18","title":"Pydantic AI 更新到 2.69.0","detail":"2.68.0 → 2.69.0"}
+{"slug":"openharness","name":"OpenHarness","kind":"version","date":"2026-11-18","title":"OpenHarness 更新到 v0.6.61_cli","detail":"v1.4.50_desktop → v0.6.61_cli"}
+{"slug":"atomic-agents","name":"Atomic Agents","kind":"version","date":"2026-11-18","title":"Atomic Agents 更新到 2.16.2","detail":"2.16.0 → 2.16.2"}
+{"slug":"claude-agent-sdk","name":"Claude Agent SDK","kind":"version","date":"2026-11-18","title":"Claude Agent SDK 更新到 0.3.326","detail":"0.3.325 → 0.3.326"}
+{"slug":"db-gpt","name":"DB-GPT","kind":"release","date":"2026-11-18","title":"DB-GPT 发布新版本","detail":"2026-11-17"}
+{"slug":"hermes-agent","name":"Hermes Agent","kind":"version","date":"2026-11-18","title":"Hermes Agent 更新到 v0.23.2","detail":"v0.23.1 → v0.23.2"}
