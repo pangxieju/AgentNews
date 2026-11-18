@@ -81,6 +81,15 @@ jobs:
         continue-on-error: true
         run: pnpm icons:audit
 
+      # 收录申请：把 open 的 candidate issue 拉进候选清单（无新 issue 时不写盘）
+      # 失败不阻断：GitHub API 偶发限流时不能卡住每日采集
+      - name: Pull submissions
+        if: steps.pre.outputs.deployed != 'true'
+        continue-on-error: true
+        run: pnpm submissions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Commit snapshots
         if: steps.pre.outputs.deployed != 'true'
         run: |

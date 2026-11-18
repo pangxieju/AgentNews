@@ -4,7 +4,7 @@
  */
 import Base from '../layouts/Base.astro';
 import RankBoard, { type RankRow, type IconMeta } from './RankBoard';
-import { loadLatestScores, loadAgentsMeta } from '../lib/data';
+import { loadLatestScores, loadAgentsMeta, rankBaselines } from '../lib/data';
 import { isListed, rankUrl } from '../lib/shared';
 import { type Lang, bucketText, formLabel, granLabel, pathFor, t } from '../i18n/dict';
 
@@ -21,6 +21,9 @@ const H = (p: string) => pathFor(lang, p);
 const data = loadLatestScores();
 const date = data?.date ?? '—';
 const metaAll = loadAgentsMeta();
+/** 排名变动基线（周 / 月口径），供榜单箭头与排序用 */
+const bl7 = rankBaselines(7);
+const bl30 = rankBaselines(30);
 /** 只保留非误分类的条目（全部 9 种形态都进榜单） */
 const rows = (data?.rows ?? []).filter(isListed);
 
@@ -34,6 +37,8 @@ const slim: RankRow[] = rows.map((r) => ({
   rank_in_form: r.rank_in_form,
   delta_1d: r.delta_1d,
   delta_7d: r.delta_7d,
+  rank_prev_d7: bl7.ranks[r.slug] ?? null,
+  rank_prev_d30: bl30.ranks[r.slug] ?? null,
   installs_delta_7d: r.installs_delta_7d ?? null,
   installs_delta_30d: r.installs_delta_30d ?? null,
   growth_30d_pct: r.growth_30d_pct,
@@ -111,7 +116,7 @@ const jsonLd = [
   </p>
 </div>
 
-<RankBoard client:load rows={slim} meta={meta} bucket={bucket} form={form} g={g} lang={lang} />
+<RankBoard client:load rows={slim} meta={meta} bucket={bucket} form={form} g={g} lang={lang} baseline7={bl7.date} baseline30={bl30.date} />
 
 {rows.length === 0 && (
   <div class="warn" style="margin-top:16px">

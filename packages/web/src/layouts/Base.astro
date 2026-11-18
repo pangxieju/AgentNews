@@ -32,6 +32,8 @@ const props = Astro.props as {
 const lang: Lang = props.lang ?? langOf(path);
 const base = stripLang(path);
 const SITE = Astro.site ?? new URL('https://agentnews.example.com');
+/** 收录申请入口（GitHub issue 模板）；repo 迁移时只需改这一处 */
+const SUGGEST_URL = 'https://github.com/pangxieju/AgentNews/issues/new?template=add-agent.yml';
 
 const pageTitle = props.pageTitle ?? t(lang, 'app.name');
 const description =
@@ -555,6 +557,26 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
       .up { color: var(--ok); }
       .down { color: var(--bad); }
 
+      /* ── 排名变动徽标（▲ 升 / ▼ 降 / – 不变 / 新入榜） ── */
+      .mv {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+        margin-left: 4px;
+        border-radius: 4px;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 1.6;
+        white-space: nowrap;
+      }
+      .mv-up { color: var(--ok); background: color-mix(in srgb, var(--ok) 16%, transparent); }
+      .mv-down { color: var(--bad); background: color-mix(in srgb, var(--bad) 16%, transparent); }
+      .mv-same { color: var(--ink-3); }
+      .mv-new { color: var(--gh-attention); background: color-mix(in srgb, var(--gh-attention) 12%, transparent); }
+
       /* ── 徽标 ─────────────────────────────────────────────── */
       .badge {
         display: inline-flex;
@@ -889,6 +911,9 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
       .board-row:last-child { border-bottom: 0; }
       .board-row:hover { background: var(--paper-3); }
       .board-rank { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+      /* 排名变动必须带色（升绿 / 降红）：.board-rank 的灰字会盖掉 .up/.down，这里提高权重 */
+      .board-rank.up { color: var(--ok); font-weight: 600; }
+      .board-rank.down { color: var(--bad); font-weight: 600; }
       .board-name { display: flex; align-items: center; gap: 8px; min-width: 0; }
       .board-name a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .board-val { font-family: var(--mono); font-size: 13.5px; text-align: right; display: flex; align-items: center; gap: 8px; }
@@ -1566,6 +1591,7 @@ const openCount = rows.filter((r) => isListed(r) && r.oss_bucket !== 'closed').l
           <a href={pathFor(lang, '/about/')}>{t(lang, 'footer.method')}</a>
           <a href={pathFor(lang, '/data/')}>{t(lang, 'footer.data')}</a>
           <a href="/feed.xml">{t(lang, 'footer.rss')}</a>
+          <a href={SUGGEST_URL} rel="noreferrer" target="_blank">{t(lang, 'footer.suggest')}</a>
         </nav>
       </div>
     </footer>

@@ -13,6 +13,9 @@ export type RankRow = {
   rank_in_form: number | null;
   delta_1d: number | null;
   delta_7d: number | null;
+  /** 排名变动基线（构建期从历史快照算出）：窗口前（约 7/30 天）的组内排名，无基线为 null */
+  rank_prev_d7: number | null;
+  rank_prev_d30: number | null;
   /** 近 7 天安装量增量（快照不足时由 npm/PyPI 历史回填） */
   installs_delta_7d?: number | null;
   /** 近 30 天安装量增量（同样口径） */
@@ -42,6 +45,9 @@ interface Props {
   form: string;
   g: string;
   lang: Lang;
+  /** 周 / 月变动基线的实际快照日期（历史不足时为 null） */
+  baseline7: string | null;
+  baseline30: string | null;
 }
 
 type SortKey =
@@ -55,7 +61,8 @@ type SortKey =
   | 'delta_1d'
   | 'delta_7d'
   | 'installs_delta_7d'
-  | 'installs_delta_30d';
+  | 'installs_delta_30d'
+  | 'move';
 
 type Col = {
   key: SortKey;
@@ -69,11 +76,50 @@ type Col = {
   sortable?: boolean;
 };
 
+/** 带符号的增量文本 → 上/下色值（只给 +/− 开头的数字上色，「—」不受影响） */
+function signedTone(text: string): string | undefined {
+  if (text.startsWith('+')) return 'up';
+  if (text.startsWith('-')) return 'down';
+  return undefined;
+}
+
 /** 发版时间 → 可比较的时间戳（缺失或非法为 null，排序时排最后） */
 function releaseTs(v: string | null | undefined): number | null {
   if (!v) return null;
   const ts = Date.parse(v);
   return Number.isNaN(ts) ? null : ts;
+}
+
+/* ── 排名变动：跟随周/月粒度，基线来自构建期历史快照 ── */
+
+type MoveState = 'up' | 'down' | 'same' | 'new' | 'none';
+type Move = { state: MoveState; delta: number | null; prev: number | null };
+
+/** delta = 基线排名 − 当前排名，正数 = 上升。无基线或无当前排名 → 'none'。 */
+function moveOf(r: RankRow, gran: string, hasBase: boolean): Move {
+  if (!hasBase || r.rank_in_form == null) return { state: 'none', delta: null, prev: null };
+  const prev = gran === 'month' ? r.rank_prev_d30 : r.rank_prev_d7;
+  if (prev == null) return { state: 'new', delta: null, prev: null };
+  const delta = prev - r.rank_in_form;
+  if (delta === 0) return { state: 'same', delta: 0, prev };
+  return { state: delta > 0 ? 'up' : 'down', delta, prev };
+}
+
+function moveArrow(m: Move, lang: Lang): string {
+  if (m.state === 'none') return '—';
+  if (m.state === 'new') return t(lang, 'rank.moveNew');
+  if (m.state === 'same') return '–';
+  return `${m.state === 'up' ? '▲' : '▼'}${Math.abs(m.delta ?? 0)}`;
+}
+
+function moveTitle(m: Move, gran: string, base: string | null, lang: Lang): string {
+  if (m.state === 'none' || base == null) return '';
+  const days = gran === 'month' ? 30 : 7;
+  const vs = t(lang, 'rank.moveVs', { date: base, days });
+  if (m.state === 'new') return `${vs} · ${t(lang, 'rank.moveNewTitle', { date: base })}`;
+  if (m.state === 'same') return `${vs} · ${t(lang, 'rank.moveSameWord', { to: m.prev ?? '' })}`;
+  const n = Math.abs(m.delta ?? 0);
+  return `${vs} · ${t(lang, m.state === 'up' ? 'rank.moveUpWord' : 'rank.moveDownWord', { n, from: m.prev ?? '', to: m.state === 'up' ? (m.prev ?? 0) - n : (m.prev ?? 0) + n })}`;
 }
 
 function columns(lang: Lang, bucket: string): Col[] {
@@ -165,7 +211,21 @@ export default function RankBoard(props: Props) {
   const [pins, setPins] = useState<string[]>([]);
 
   // 列随 bucket 变化（开源/闭源指标不同）
-  const COLS = useMemo(() => columns(lang, bucket), [lang, bucket]);
+  const BASE_COLS = useMemo(() => columns(lang, bucket), [lang, bucket]);
+  // 排名变动列：跟随周/月口径，基线日期来自构建期快照（历史不足时不展示）
+  const hasMoveBase = (gran === 'month' ? props.baseline30 : props.baseline7) != null;
+  const moveCol: Col = useMemo(
+    () => ({
+      key: 'move' as SortKey,
+      label: t(lang, 'rank.move'),
+      get: (r: RankRow) => moveOf(r, gran, hasMoveBase).delta,
+      show: (rs: RankRow[]) =>
+        (gran === 'month' ? props.baseline30 : props.baseline7) != null && rs.some((r) => r.rank_in_form != null),
+      format: (r: RankRow) => moveArrow(moveOf(r, gran, hasMoveBase), lang),
+    }),
+    [lang, gran, props.baseline7, props.baseline30, hasMoveBase],
+  );
+  const COLS = useMemo(() => [...BASE_COLS, moveCol], [BASE_COLS, moveCol]);
 
   useEffect(() => {
     setPins(readPins());
@@ -241,6 +301,20 @@ export default function RankBoard(props: Props) {
       setSortKey(key);
       setSortDir('desc');
     }
+  };
+
+  /** 排名变动徽标（# 与「变动」列共用）；无基线或不参与排名时返回 null */
+  const baseDate = gran === 'month' ? props.baseline30 : props.baseline7;
+  const moveBadge = (r: RankRow) => {
+    const m = moveOf(r, gran, hasMoveBase);
+    if (m.state === 'none') return null;
+    const title = moveTitle(m, gran, baseDate, lang);
+    const cls = m.state === 'up' ? 'mv-up' : m.state === 'down' ? 'mv-down' : m.state === 'same' ? 'mv-same' : 'mv-new';
+    return (
+      <span class={`mv ${cls}`} title={title}>
+        {moveArrow(m, lang)}
+      </span>
+    );
   };
 
   const rankedCount = groups.reduce((n, g) => n + g.rows.filter((r) => r.rank_in_form != null).length, 0);
@@ -356,7 +430,7 @@ export default function RankBoard(props: Props) {
                 <tbody>
                   {grp.rows.map((r) => (
                     <tr key={r.slug} class="rank-row">
-                      <td class="pos">{r.rank_in_form ?? '—'}</td>
+                      <td class="pos">{r.rank_in_form ?? '—'}{moveBadge(r)}</td>
                       <td>
                         <div class="agent-cell">
                           <AgentIcon
@@ -380,19 +454,21 @@ export default function RankBoard(props: Props) {
                       {cols.map((c) => {
                         const v = c.get(r);
                         const max = maxOf[c.key] ?? 0;
-                        return (
-                          <td key={c.key} class="num">
-                            {c.bar && v != null && max > 0 ? (
-                              <span class="micro">
-                                <span class="micro-track">
-                                  <span class="micro-fill heat" style={`width:${Math.max(3, (Math.abs(v) / max) * 100).toFixed(1)}%`} />
-                                </span>
-                                <span>{c.format(r)}</span>
+                        return c.key === 'move' ? (
+                          <td key={c.key} class="num">{moveBadge(r) ?? c.format(r)}</td>
+                        ) : (
+                        <td key={c.key} class="num">
+                          {c.bar && v != null && max > 0 ? (
+                            <span class="micro">
+                              <span class="micro-track">
+                                <span class="micro-fill heat" style={`width:${Math.max(3, (Math.abs(v) / max) * 100).toFixed(1)}%`} />
                               </span>
-                            ) : (
-                              c.format(r)
-                            )}
-                          </td>
+                              <span>{c.format(r)}</span>
+                            </span>
+                          ) : (
+                            <span class={signedTone(c.format(r))}>{c.format(r)}</span>
+                          )}
+                        </td>
                         );
                       })}
                       <td>
@@ -424,7 +500,7 @@ export default function RankBoard(props: Props) {
               {grp.rows.map((r) => (
                 <li key={r.slug} class="rank-card">
                   <a class="rank-card-main" href={H(`/agent/${r.slug}/`)}>
-                    <span class="pos">{r.rank_in_form ?? '—'}</span>
+                    <span class="pos">{r.rank_in_form ?? '—'}{moveBadge(r)}</span>
                     <AgentIcon
                       slug={r.slug}
                       name={r.name}

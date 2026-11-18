@@ -101,6 +101,43 @@ export function loadHistory(slug: string): HistoryPoint[] {
     });
 }
 
+/* ───────────────── 排名变动基线 ───────────────── */
+
+function addDays(date: string, days: number): string {
+  const d = new Date(`${date}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+/**
+ * 排名变动基线：往前数 daysAgo 天，取「不晚于该日」的最新快照，
+ * 返回每个 slug 当时的组内排名（未上榜 / 无分为 null）与基线日期。
+ * 快照缺失（历史不足 / 采集断档）时 date 为 null，调用方据此降级为「无基线」。
+ */
+export function rankBaselines(daysAgo: 7 | 30): {
+  date: string | null;
+  ranks: Record<string, number>;
+} {
+  const all = loadAllScores(); // 倒序：最新在前
+  const latest = all[0];
+  if (!latest) return { date: null, ranks: {} };
+  const target = addDays(latest.date, -daysAgo);
+  let base: ScoreFile | null = null;
+  for (const f of all) {
+    if (f.date <= target) {
+      base = f;
+      break;
+    }
+  }
+  const ranks: Record<string, number> = {};
+  if (base) {
+    for (const r of base.rows) {
+      if (r.rank_in_form != null) ranks[r.slug] = r.rank_in_form;
+    }
+  }
+  return { date: base?.date ?? null, ranks };
+}
+
 /* ───────────────── 版本历史 ───────────────── */
 
 type VersionEntry = {

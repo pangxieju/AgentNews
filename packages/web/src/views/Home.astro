@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import AgentIcon from '../components/AgentIcon';
 import HomePicker, { type PickRow } from '../components/HomePicker';
-import { loadLatestScores, loadAgentsMeta, loadEvents, type AgentEvent, fmtPct } from '../lib/data';
+import { loadLatestScores, loadAgentsMeta, loadEvents, rankBaselines, type AgentEvent, fmtPct } from '../lib/data';
 import { FOCUS_FORMS, isListed } from '../lib/shared';
 import { FORM_GUIDES } from '../i18n/guides';
 import { type Lang, formLabel, pathFor, t } from '../i18n/dict';
@@ -40,6 +40,25 @@ const closedPending = closed.filter((r) => r.score == null).length;
 const hasGrowth = listedRows.some((r) => r.growth_30d_pct != null);
 
 const rankedCount = listedRows.filter((r) => r.rank_in_form != null).length;
+
+/* ── 本周排名变动（较 7 天前快照：可先计算再展示，无基线不显示） ── */
+const bl7 = rankBaselines(7);
+const base7 = bl7.date;
+const rankMove = (r: (typeof listedRows)[number]): { prev: number; cur: number; d: number } | null => {
+  const cur = r.rank_in_form;
+  const prev = bl7.ranks[r.slug] ?? null;
+  if (cur == null || prev == null) return null;
+  return { prev, cur, d: prev - cur }; // 正 = 上升
+};
+const moverRows = listedRows.map((r) => ({ r, m: rankMove(r) })).filter((x): x is { r: (typeof listedRows)[number]; m: { prev: number; cur: number; d: number } } => x.m != null);
+const moversUp = moverRows.filter((x) => x.m.d > 0).sort((a, b) => b.m.d - a.m.d).slice(0, 5);
+const moversDown = moverRows.filter((x) => x.m.d < 0).sort((a, b) => a.m.d - b.m.d).slice(0, 5);
+const hasMovers = base7 != null && (moversUp.length + moversDown.length) > 0;
+const moversCols = [
+  { title: t(lang, 'home.moversUp'), rows: moversUp },
+  { title: t(lang, 'home.moversDown'), rows: moversDown },
+];
+const SUGGEST_URL = 'https://github.com/pangxieju/AgentNews/issues/new?template=add-agent.yml';
 
 const guides = FORM_GUIDES[lang];
 const formCards = FOCUS_FORMS.map((f, i) => {
@@ -248,6 +267,57 @@ const jsonLd = [
       </div>
     </div>
   </section>
+
+  <div class="box" style="margin-top:24px">
+    <div class="box-body" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:240px">
+        <strong>{t(lang, 'home.suggestTitle')}</strong>
+        <p class="muted" style="font-size:12.5px;margin-top:3px">{t(lang, 'home.suggestBody')}</p>
+      </div>
+      <a class="btn btn-primary" href={SUGGEST_URL} rel="noreferrer" target="_blank">{t(lang, 'home.suggestCta')}</a>
+    </div>
+  </div>
+
+  {hasMovers && (
+    <section class="section">
+      <div class="section-title">
+        <h2>{t(lang, 'home.moversUp')} / {t(lang, 'home.moversDown')}</h2>
+        <span class="muted">{t(lang, 'home.moversHint', { date: base7 ?? '—' })}</span>
+      </div>
+      <div class="board-2">
+        {moversCols.map((col) => (
+          <div class="board-col">
+            <div class="board-head">
+              <span class="board-title">{col.title}</span>
+            </div>
+            {col.rows.length === 0 && (
+              <div class="board-foot">{t(lang, 'home.moversNone')}</div>
+            )}
+            {col.rows.map(({ r, m }) => (
+              <div class="board-row">
+                <span class={`board-rank ${m.d > 0 ? 'up' : 'down'}`} style="min-width:auto">
+                  {m.d > 0 ? '▲' : '▼'}{Math.abs(m.d)}
+                </span>
+                <span class="board-name">
+                  <AgentIcon
+                    slug={r.slug}
+                    name={r.name ?? r.slug}
+                    icon={meta[r.slug]?.icon}
+                    iconFallback={meta[r.slug]?.iconFallback}
+                    size={20}
+                  />
+                  <a href={H(`/agent/${r.slug}/`)}>{r.name ?? r.slug}</a>
+                </span>
+                <span class="board-val">
+                  <span class="muted" style="font-size:10.5px">{m.prev} → {m.cur}</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
 
   {recentEvents.length > 0 && (
     <section class="section">
