@@ -1,0 +1,70 @@
+name: deploy
+
+# 代码合并后自动发布（数据采集不在这个流程里，见 daily.yml）
+#
+# 为什么单独一个 workflow：daily 里"今天已发布过就整体跳过"（data/deploy/<date>.json）
+# 是给采集用的防盗刷逻辑；当天的数据发布完以后再合代码，daily 不会再部署，
+# 线上就会停在旧代码。这里只做「构建 + 发布」，不碰采集、不写部署标记。
+#
+# 触发：
+#   - push 到 main，且改动涉及站点/流水线/脚本（纯数据提交不触发）
+#   - 手动 workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/web/**'
+      - 'packages/core/**'
+      - 'packages/pipeline/**'
+      - 'ops/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/deploy.yml'
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # 数据契约 + 回归：宁可不发布，也不要把坏榜单放出去
+      - run: pnpm validate
+      - run: pnpm test
+
+      - run: pnpm build
+
+      # 手动发布必须有凭据：缺了直接失败，避免"绿着但没上线"
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error title=缺少 Cloudflare 凭据::仓库未配置 CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID，无法发布。"
+            exit 1
+          fi
+          pnpm --filter @agentnews/web exec wrangler pages deploy dist --project-name agentnews --force
+
+      - name: Summary
+        run: |
+          echo "### 已发布" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- commit: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 快照: $(ls data/scores | tail -1)" >> $GITHUB_STEP_SUMMARY
+          echo "- 站点: https://agentnews-c5h.pages.dev" >> $GITHUB_STEP_SUMMARY
