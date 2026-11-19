@@ -1,0 +1,19 @@
+{"slug":"claude-code","name":"Claude Code","kind":"version","date":"2026-11-20","title":"Claude Code 更新到 2.1.328","detail":"2.1.327 → 2.1.328"}
+{"slug":"gemini-cli","name":"Gemini CLI","kind":"version","date":"2026-11-20","title":"Gemini CLI 更新到 0.69.0","detail":"0.68.0 → 0.69.0"}
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"version","date":"2026-11-20","title":"Kimi CLI 更新到 2.7.0","detail":"2.6.3 → 2.7.0"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-20","title":"Amp 更新到 0.0.1795104033-gfa5ada","detail":"0.0.1795017641-g2e763e → 0.0.1795104033-gfa5ada"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-20","title":"Factory Droid 更新到 1.15.0","detail":"1.14.0 → 1.15.0"}
+{"slug":"zed","name":"Zed","kind":"version","date":"2026-11-20","title":"Zed 更新到 v1.29.2","detail":"v1.29.1 → v1.29.2"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-20","title":"Qoder 更新到 1.1.93","detail":"1.1.92 → 1.1.93"}
+{"slug":"orca","name":"Orca","kind":"version","date":"2026-11-20","title":"Orca 更新到 v1.4.264","detail":"v1.4.263 → v1.4.264"}
+{"slug":"cherry-studio","name":"Cherry Studio","kind":"version","date":"2026-11-20","title":"Cherry Studio 更新到 v2.2.3","detail":"v2.2.2 → v2.2.3"}
+{"slug":"stagehand","name":"Stagehand","kind":"version","date":"2026-11-20","title":"Stagehand 更新到 @browserbasehq/stagehand@3.7.4","detail":"stagehand-server-v3/v3.7.7 → @browserbasehq/stagehand@3.7.4"}
+{"slug":"langchain","name":"LangChain","kind":"version","date":"2026-11-20","title":"LangChain 更新到 1.5.2","detail":"1.5.1 → 1.5.2"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-20","title":"Vercel AI SDK 更新到 7.0.177","detail":"7.0.176 → 7.0.177"}
+{"slug":"crewai","name":"CrewAI","kind":"version","date":"2026-11-20","title":"CrewAI 更新到 1.15.43","detail":"1.15.42 → 1.15.43"}
+{"slug":"langgraph","name":"LangGraph","kind":"version","date":"2026-11-20","title":"LangGraph 更新到 1.2.23","detail":"1.2.22 → 1.2.23"}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"version","date":"2026-11-20","title":"Pydantic AI 更新到 2.71.0","detail":"2.70.0 → 2.71.0"}
+{"slug":"omnigent","name":"Omnigent","kind":"version","date":"2026-11-20","title":"Omnigent 更新到 0.23.0","detail":"0.22.0 → 0.23.0"}
+{"slug":"openharness","name":"OpenHarness","kind":"version","date":"2026-11-20","title":"OpenHarness 更新到 v0.6.73_cli","detail":"v0.6.69_cli → v0.6.73_cli"}
+{"slug":"claude-agent-sdk","name":"Claude Agent SDK","kind":"version","date":"2026-11-20","title":"Claude Agent SDK 更新到 0.3.328","detail":"0.3.327 → 0.3.328"}
+{"slug":"maxkb","name":"MaxKB","kind":"version","date":"2026-11-20","title":"MaxKB 更新到 v2.10.9-lts","detail":"v2.10.8-lts → v2.10.9-lts"}
