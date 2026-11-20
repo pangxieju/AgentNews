@@ -1,0 +1,26 @@
+{"slug":"codex-cli","name":"Codex CLI","kind":"version","date":"2026-11-21","title":"Codex CLI 更新到 0.171.0","detail":"0.170.0 → 0.171.0"}
+{"slug":"claude-code","name":"Claude Code","kind":"version","date":"2026-11-21","title":"Claude Code 更新到 2.1.329","detail":"2.1.328 → 2.1.329"}
+{"slug":"pi","name":"Pi","kind":"version","date":"2026-11-21","title":"Pi 更新到 1.6.0","detail":"1.5.2 → 1.6.0"}
+{"slug":"goose","name":"Goose","kind":"version","date":"2026-11-21","title":"Goose 更新到 v1.60.2","detail":"v1.60.1 → v1.60.2"}
+{"slug":"gemini-cli","name":"Gemini CLI","kind":"version","date":"2026-11-21","title":"Gemini CLI 更新到 0.70.0","detail":"0.69.0 → 0.70.0"}
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"version","date":"2026-11-21","title":"Kimi CLI 更新到 2.7.2","detail":"2.7.0 → 2.7.2"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-21","title":"Amp 更新到 0.0.1795190440-gf3619d","detail":"0.0.1795104033-gfa5ada → 0.0.1795190440-gf3619d"}
+{"slug":"crush","name":"Crush","kind":"version","date":"2026-11-21","title":"Crush 更新到 0.102.0","detail":"0.101.0 → 0.102.0"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-21","title":"Factory Droid 更新到 1.16.0","detail":"1.15.0 → 1.16.0"}
+{"slug":"mistral-vibe","name":"Mistral Vibe","kind":"version","date":"2026-11-21","title":"Mistral Vibe 更新到 v3.1.4","detail":"v3.1.3 → v3.1.4"}
+{"slug":"gemini-code-assist","name":"Gemini Code Assist","kind":"version","date":"2026-11-21","title":"Gemini Code Assist 更新到 2.110.0","detail":"2.107.0 → 2.110.0"}
+{"slug":"amazon-q","name":"Amazon Q Developer","kind":"version","date":"2026-11-21","title":"Amazon Q Developer 更新到 2.11.0","detail":"2.10.0 → 2.11.0"}
+{"slug":"kilo-code","name":"Kilo Code","kind":"version","date":"2026-11-21","title":"Kilo Code 更新到 7.8.32","detail":"7.8.27 → 7.8.32"}
+{"slug":"zed","name":"Zed","kind":"version","date":"2026-11-21","title":"Zed 更新到 v1.29.3","detail":"v1.29.2 → v1.29.3"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-21","title":"Qoder 更新到 1.1.94","detail":"1.1.93 → 1.1.94"}
+{"slug":"orca","name":"Orca","kind":"version","date":"2026-11-21","title":"Orca 更新到 v1.4.266","detail":"v1.4.264 → v1.4.266"}
+{"slug":"langchain","name":"LangChain","kind":"release","date":"2026-11-21","title":"LangChain 发布新版本","detail":"2026-11-19"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-21","title":"Vercel AI SDK 更新到 7.0.178","detail":"7.0.177 → 7.0.178"}
+{"slug":"crewai","name":"CrewAI","kind":"version","date":"2026-11-21","title":"CrewAI 更新到 1.15.44","detail":"1.15.43 → 1.15.44"}
+{"slug":"langgraph","name":"LangGraph","kind":"version","date":"2026-11-21","title":"LangGraph 更新到 1.2.24","detail":"1.2.23 → 1.2.24"}
+{"slug":"google-adk","name":"Google ADK","kind":"version","date":"2026-11-21","title":"Google ADK 更新到 2.15.0","detail":"2.14.1 → 2.15.0"}
+{"slug":"strands-agents","name":"Strands Agents","kind":"release","date":"2026-11-21","title":"Strands Agents 发布新版本","detail":"2026-11-19"}
+{"slug":"cloudflare-agents","name":"Cloudflare Agents","kind":"version","date":"2026-11-21","title":"Cloudflare Agents 更新到 0.34.0","detail":"0.33.0 → 0.34.0"}
+{"slug":"openharness","name":"OpenHarness","kind":"version","date":"2026-11-21","title":"OpenHarness 更新到 v1.4.54_desktop","detail":"v0.6.73_cli → v1.4.54_desktop"}
+{"slug":"claude-agent-sdk","name":"Claude Agent SDK","kind":"version","date":"2026-11-21","title":"Claude Agent SDK 更新到 0.3.329","detail":"0.3.328 → 0.3.329"}
+{"slug":"hermes-agent","name":"Hermes Agent","kind":"version","date":"2026-11-21","title":"Hermes Agent 更新到 v0.23.3","detail":"v0.23.2 → v0.23.3"}
