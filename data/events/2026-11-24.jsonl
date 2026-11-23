@@ -1,0 +1,13 @@
+{"slug":"openhands","name":"OpenHands","kind":"version","date":"2026-11-24","title":"OpenHands 更新到 v1.44.0","detail":"v1.43.0 → v1.44.0"}
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"version","date":"2026-11-24","title":"Kimi CLI 更新到 2.7.3","detail":"2.7.2 → 2.7.3"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-24","title":"Amp 更新到 0.0.1795449633-g4295dd","detail":"0.0.1795363233-gbb6f68 → 0.0.1795449633-g4295dd"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-24","title":"Qoder 更新到 1.1.96","detail":"1.1.95 → 1.1.96"}
+{"slug":"orca","name":"Orca","kind":"version","date":"2026-11-24","title":"Orca 更新到 v1.4.272","detail":"v1.4.269 → v1.4.272"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-24","title":"Vercel AI SDK 更新到 7.0.180","detail":"7.0.179 → 7.0.180"}
+{"slug":"agno","name":"Agno","kind":"version","date":"2026-11-24","title":"Agno 更新到 v3.2.1","detail":"3.2.1 → v3.2.1"}
+{"slug":"agno","name":"Agno","kind":"rank_jump","date":"2026-11-24","title":"Agno 排名 上升 5 位","from":8,"to":3}
+{"slug":"langgraph","name":"LangGraph","kind":"rank_jump","date":"2026-11-24","title":"LangGraph 排名 下降 6 位","from":3,"to":9}
+{"slug":"openharness","name":"OpenHarness","kind":"version","date":"2026-11-24","title":"OpenHarness 更新到 v0.6.85_cli","detail":"v0.6.81_cli → v0.6.85_cli"}
+{"slug":"fastgpt","name":"FastGPT","kind":"version","date":"2026-11-24","title":"FastGPT 更新到 v4.17.5","detail":"v4.17.4 → v4.17.5"}
+{"slug":"maxkb","name":"MaxKB","kind":"version","date":"2026-11-24","title":"MaxKB 更新到 v2.10.10-lts","detail":"v2.10.9-lts → v2.10.10-lts"}
+{"slug":"feynman","name":"Feynman","kind":"version","date":"2026-11-24","title":"Feynman 更新到 v0.5.73","detail":"v0.5.72 → v0.5.73"}
