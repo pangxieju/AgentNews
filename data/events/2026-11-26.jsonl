@@ -1,0 +1,23 @@
+{"slug":"claude-code","name":"Claude Code","kind":"version","date":"2026-11-26","title":"Claude Code 更新到 2.1.332","detail":"2.1.331 → 2.1.332"}
+{"slug":"pi","name":"Pi","kind":"version","date":"2026-11-26","title":"Pi 更新到 1.6.1","detail":"1.6.0 → 1.6.1"}
+{"slug":"copilot-cli","name":"Copilot CLI","kind":"version","date":"2026-11-26","title":"Copilot CLI 更新到 1.0.116","detail":"1.0.115 → 1.0.116"}
+{"slug":"openhands","name":"OpenHands","kind":"version","date":"2026-11-26","title":"OpenHands 更新到 v1.46.0","detail":"v1.45.0 → v1.46.0"}
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"version","date":"2026-11-26","title":"Kimi CLI 更新到 2.8.0","detail":"2.7.3 → 2.8.0"}
+{"slug":"goose","name":"Goose","kind":"version","date":"2026-11-26","title":"Goose 更新到 v1.61.0","detail":"v1.60.2 → v1.61.0"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-26","title":"Amp 更新到 0.0.1795622439-g2078b8","detail":"0.0.1795536036-g7f1841 → 0.0.1795622439-g2078b8"}
+{"slug":"auggie","name":"Auggie CLI","kind":"version","date":"2026-11-26","title":"Auggie CLI 更新到 1.2.3","detail":"1.2.2 → 1.2.3"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-26","title":"Factory Droid 更新到 1.20.0","detail":"1.19.0 → 1.20.0"}
+{"slug":"freebuff","name":"Freebuff","kind":"version","date":"2026-11-26","title":"Freebuff 更新到 0.2.38","detail":"0.2.36 → 0.2.38"}
+{"slug":"codearts-agent","name":"CodeArts Agent","kind":"version","date":"2026-11-26","title":"CodeArts Agent 更新到 26.11.300","detail":"26.10.300 → 26.11.300"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-26","title":"Qoder 更新到 1.1.98","detail":"1.1.97 → 1.1.98"}
+{"slug":"orca","name":"Orca","kind":"version","date":"2026-11-26","title":"Orca 更新到 v1.4.274","detail":"v1.4.273 → v1.4.274"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"release","date":"2026-11-26","title":"Vercel AI SDK 发布新版本","detail":"2026-11-24"}
+{"slug":"agno","name":"Agno","kind":"rank_jump","date":"2026-11-26","title":"Agno 排名 上升 5 位","from":9,"to":4}
+{"slug":"mastra","name":"Mastra","kind":"version","date":"2026-11-26","title":"Mastra 更新到 1.40.2","detail":"1.40.1 → 1.40.2"}
+{"slug":"google-adk","name":"Google ADK","kind":"version","date":"2026-11-26","title":"Google ADK 更新到 2.15.1","detail":"2.15.0 → 2.15.1"}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"version","date":"2026-11-26","title":"Pydantic AI 更新到 2.74.0","detail":"2.73.0 → 2.74.0"}
+{"slug":"strands-agents","name":"Strands Agents","kind":"version","date":"2026-11-26","title":"Strands Agents 更新到 1.67.0","detail":"1.66.0 → 1.67.0"}
+{"slug":"openharness","name":"OpenHarness","kind":"version","date":"2026-11-26","title":"OpenHarness 更新到 os-v0.1.18","detail":"v0.6.86_cli → os-v0.1.18"}
+{"slug":"claude-agent-sdk","name":"Claude Agent SDK","kind":"version","date":"2026-11-26","title":"Claude Agent SDK 更新到 0.3.332","detail":"0.3.331 → 0.3.332"}
+{"slug":"langflow","name":"Langflow","kind":"version","date":"2026-11-26","title":"Langflow 更新到 1.13.4","detail":"1.13.3 → 1.13.4"}
+{"slug":"feynman","name":"Feynman","kind":"version","date":"2026-11-26","title":"Feynman 更新到 v0.5.74","detail":"v0.5.73 → v0.5.74"}

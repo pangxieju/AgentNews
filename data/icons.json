@@ -861,11 +861,11 @@
     "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/smolagents/benchmark_code_agents.jpeg"
   },
   "spark": {
-    "file": "spark.3b38eb69.png",
+    "file": "spark.d5f4c14d.ico",
     "source": "logo",
-    "w": 32,
-    "h": 32,
-    "url": "https://icon.horse/icon/xinghuo.xfyun.cn"
+    "w": 256,
+    "h": 256,
+    "url": "https://favicone.com/xinghuo.xfyun.cn?s=256"
   },
   "spring-ai-alibaba": {
     "file": "spring-ai-alibaba.8db122d7.png",
