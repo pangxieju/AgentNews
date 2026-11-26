@@ -1,0 +1,24 @@
+{"slug":"kimi-cli","name":"Kimi CLI","kind":"version","date":"2026-11-27","title":"Kimi CLI 更新到 2.8.1","detail":"2.8.0 → 2.8.1"}
+{"slug":"goose","name":"Goose","kind":"version","date":"2026-11-27","title":"Goose 更新到 v1.61.1","detail":"v1.61.0 → v1.61.1"}
+{"slug":"qwen-code","name":"Qwen Code","kind":"version","date":"2026-11-27","title":"Qwen Code 更新到 0.28.6","detail":"0.28.4 → 0.28.6"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-27","title":"Amp 更新到 0.0.1795708844-gca33db","detail":"0.0.1795622439-g2078b8 → 0.0.1795708844-gca33db"}
+{"slug":"crush","name":"Crush","kind":"version","date":"2026-11-27","title":"Crush 更新到 0.103.0","detail":"0.102.0 → 0.103.0"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-27","title":"Factory Droid 更新到 1.21.1","detail":"1.20.0 → 1.21.1"}
+{"slug":"cline","name":"Cline","kind":"version","date":"2026-11-27","title":"Cline 更新到 4.1.28","detail":"4.1.27 → 4.1.28"}
+{"slug":"gemini-code-assist","name":"Gemini Code Assist","kind":"version","date":"2026-11-27","title":"Gemini Code Assist 更新到 2.111.0","detail":"2.110.0 → 2.111.0"}
+{"slug":"comate","name":"文心快码 Comate","kind":"version","date":"2026-11-27","title":"文心快码 Comate 更新到 4.16.0","detail":"4.14.1 → 4.16.0"}
+{"slug":"zed","name":"Zed","kind":"version","date":"2026-11-27","title":"Zed 更新到 v1.30.2","detail":"v1.29.3 → v1.30.2"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-27","title":"Qoder 更新到 1.1.99","detail":"1.1.98 → 1.1.99"}
+{"slug":"orca","name":"Orca","kind":"version","date":"2026-11-27","title":"Orca 更新到 v1.4.278","detail":"v1.4.274 → v1.4.278"}
+{"slug":"open-interpreter","name":"Open Interpreter","kind":"release","date":"2026-11-27","title":"Open Interpreter 发布新版本","detail":"2026-11-26"}
+{"slug":"langchain","name":"LangChain","kind":"release","date":"2026-11-27","title":"LangChain 发布新版本","detail":"2026-11-25"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-27","title":"Vercel AI SDK 更新到 7.0.183","detail":"7.0.181 → 7.0.183"}
+{"slug":"langgraph","name":"LangGraph","kind":"release","date":"2026-11-27","title":"LangGraph 发布新版本","detail":"2026-11-25"}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"version","date":"2026-11-27","title":"Pydantic AI 更新到 2.75.0","detail":"2.74.0 → 2.75.0"}
+{"slug":"astrbot","name":"AstrBot","kind":"release","date":"2026-11-27","title":"AstrBot 发布新版本","detail":"2026-11-26"}
+{"slug":"strands-agents","name":"Strands Agents","kind":"release","date":"2026-11-27","title":"Strands Agents 发布新版本","detail":"2026-11-25"}
+{"slug":"cloudflare-agents","name":"Cloudflare Agents","kind":"version","date":"2026-11-27","title":"Cloudflare Agents 更新到 0.34.1","detail":"0.34.0 → 0.34.1"}
+{"slug":"openharness","name":"OpenHarness","kind":"version","date":"2026-11-27","title":"OpenHarness 更新到 os-v0.1.19","detail":"os-v0.1.18 → os-v0.1.19"}
+{"slug":"ms-agent","name":"MS-Agent","kind":"version","date":"2026-11-27","title":"MS-Agent 更新到 1.7.0","detail":"1.6.0 → 1.7.0"}
+{"slug":"fastgpt","name":"FastGPT","kind":"version","date":"2026-11-27","title":"FastGPT 更新到 v4.17.6","detail":"v4.17.5 → v4.17.6"}
+{"slug":"autogpt","name":"AutoGPT","kind":"version","date":"2026-11-27","title":"AutoGPT 更新到 autogpt-platform-beta-v0.12.1","detail":"autogpt-platform-beta-v0.12.0 → autogpt-platform-beta-v0.12.1"}
