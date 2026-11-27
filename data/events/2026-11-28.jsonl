@@ -1,0 +1,23 @@
+{"slug":"pi","name":"Pi","kind":"version","date":"2026-11-28","title":"Pi 更新到 1.7.0","detail":"1.6.1 → 1.7.0"}
+{"slug":"copilot-cli","name":"Copilot CLI","kind":"version","date":"2026-11-28","title":"Copilot CLI 更新到 1.0.117","detail":"1.0.116 → 1.0.117"}
+{"slug":"qwen-code","name":"Qwen Code","kind":"version","date":"2026-11-28","title":"Qwen Code 更新到 0.28.7","detail":"0.28.6 → 0.28.7"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-28","title":"Amp 更新到 0.0.1795795229-g667b86","detail":"0.0.1795708844-gca33db → 0.0.1795795229-g667b86"}
+{"slug":"crush","name":"Crush","kind":"version","date":"2026-11-28","title":"Crush 更新到 0.104.0","detail":"0.103.0 → 0.104.0"}
+{"slug":"kilo-code","name":"Kilo Code","kind":"version","date":"2026-11-28","title":"Kilo Code 更新到 7.8.40","detail":"7.8.32 → 7.8.40"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-28","title":"Qoder 更新到 1.1.100","detail":"1.1.99 → 1.1.100"}
+{"slug":"orca","name":"Orca","kind":"version","date":"2026-11-28","title":"Orca 更新到 v1.4.280","detail":"v1.4.278 → v1.4.280"}
+{"slug":"browser-use","name":"Browser-use","kind":"version","date":"2026-11-28","title":"Browser-use 更新到 1.0.9","detail":"1.0.8 → 1.0.9"}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"version","date":"2026-11-28","title":"Pydantic AI 更新到 2.76.0","detail":"2.75.0 → 2.76.0"}
+{"slug":"agentscope","name":"AgentScope","kind":"version","date":"2026-11-28","title":"AgentScope 更新到 v2.0.12","detail":"2.0.12 → v2.0.12"}
+{"slug":"agentscope","name":"AgentScope","kind":"rank_jump","date":"2026-11-28","title":"AgentScope 排名 上升 5 位","from":15,"to":10}
+{"slug":"astrbot","name":"AstrBot","kind":"rank_jump","date":"2026-11-28","title":"AstrBot 排名 下降 5 位","from":11,"to":16}
+{"slug":"omnigent","name":"Omnigent","kind":"version","date":"2026-11-28","title":"Omnigent 更新到 v0.23.0","detail":"0.23.0 → v0.23.0"}
+{"slug":"spring-ai-alibaba","name":"Spring AI Alibaba","kind":"version","date":"2026-11-28","title":"Spring AI Alibaba 更新到 v2.1.0.0","detail":"v1.1.2.2 → v2.1.0.0"}
+{"slug":"spring-ai-alibaba","name":"Spring AI Alibaba","kind":"rank_jump","date":"2026-11-28","title":"Spring AI Alibaba 排名 上升 8 位","from":26,"to":18}
+{"slug":"camel","name":"CAMEL","kind":"version","date":"2026-11-28","title":"CAMEL 更新到 v0.2.90","detail":"0.2.90 → v0.2.90"}
+{"slug":"openharness","name":"OpenHarness","kind":"version","date":"2026-11-28","title":"OpenHarness 更新到 v0.7.2_cli","detail":"os-v0.1.19 → v0.7.2_cli"}
+{"slug":"beeai-framework","name":"BeeAI Framework","kind":"version","date":"2026-11-28","title":"BeeAI Framework 更新到 0.1.32","detail":"0.1.86 → 0.1.32"}
+{"slug":"db-gpt","name":"DB-GPT","kind":"version","date":"2026-11-28","title":"DB-GPT 更新到 v0.8.3","detail":"0.8.2 → v0.8.3"}
+{"slug":"langbot","name":"LangBot","kind":"version","date":"2026-11-28","title":"LangBot 更新到 v4.11.9","detail":"4.11.9 → v4.11.9"}
+{"slug":"qwenpaw","name":"QwenPaw","kind":"version","date":"2026-11-28","title":"QwenPaw 更新到 v2.3.0.post1","detail":"2.3.0.post1 → v2.3.0.post1"}
+{"slug":"gpt-engineer","name":"gpt-engineer","kind":"version","date":"2026-11-28","title":"gpt-engineer 更新到 v0.3.1","detail":"0.3.1 → v0.3.1"}
