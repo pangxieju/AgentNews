@@ -1,0 +1,24 @@
+{"slug":"qwen-code","name":"Qwen Code","kind":"version","date":"2026-11-29","title":"Qwen Code 更新到 0.29.0","detail":"0.28.7 → 0.29.0"}
+{"slug":"amp","name":"Amp","kind":"version","date":"2026-11-29","title":"Amp 更新到 0.0.1795881634-gdb9f00","detail":"0.0.1795795229-g667b86 → 0.0.1795881634-gdb9f00"}
+{"slug":"droid","name":"Factory Droid","kind":"version","date":"2026-11-29","title":"Factory Droid 更新到 1.23.0","detail":"1.21.1 → 1.23.0"}
+{"slug":"qoder","name":"Qoder","kind":"version","date":"2026-11-29","title":"Qoder 更新到 1.1.101","detail":"1.1.100 → 1.1.101"}
+{"slug":"orca","name":"Orca","kind":"version","date":"2026-11-29","title":"Orca 更新到 v1.4.281","detail":"v1.4.280 → v1.4.281"}
+{"slug":"cherry-studio","name":"Cherry Studio","kind":"version","date":"2026-11-29","title":"Cherry Studio 更新到 v2.2.5","detail":"v2.2.3 → v2.2.5"}
+{"slug":"autocua","name":"AutoCua","kind":"version","date":"2026-11-29","title":"AutoCua 更新到 3.1.0","detail":"3.0.0 → 3.1.0"}
+{"slug":"open-interpreter","name":"Open Interpreter","kind":"release","date":"2026-11-29","title":"Open Interpreter 发布新版本","detail":"2026-11-28"}
+{"slug":"vercel-ai-sdk","name":"Vercel AI SDK","kind":"version","date":"2026-11-29","title":"Vercel AI SDK 更新到 7.0.184","detail":"7.0.183 → 7.0.184"}
+{"slug":"crewai","name":"CrewAI","kind":"rank_jump","date":"2026-11-29","title":"CrewAI 排名 上升 5 位","from":8,"to":3}
+{"slug":"pydantic-ai","name":"Pydantic AI","kind":"version","date":"2026-11-29","title":"Pydantic AI 更新到 2.77.0","detail":"2.76.0 → 2.77.0"}
+{"slug":"astrbot","name":"AstrBot","kind":"rank_jump","date":"2026-11-29","title":"AstrBot 排名 上升 5 位","from":16,"to":11}
+{"slug":"strands-agents","name":"Strands Agents","kind":"version","date":"2026-11-29","title":"Strands Agents 更新到 1.68.0","detail":"1.67.0 → 1.68.0"}
+{"slug":"agentscope","name":"AgentScope","kind":"version","date":"2026-11-29","title":"AgentScope 更新到 2.0.12","detail":"v2.0.12 → 2.0.12"}
+{"slug":"agentscope","name":"AgentScope","kind":"rank_jump","date":"2026-11-29","title":"AgentScope 排名 下降 6 位","from":10,"to":16}
+{"slug":"omnigent","name":"Omnigent","kind":"version","date":"2026-11-29","title":"Omnigent 更新到 0.23.0","detail":"v0.23.0 → 0.23.0"}
+{"slug":"camel","name":"CAMEL","kind":"version","date":"2026-11-29","title":"CAMEL 更新到 0.2.90","detail":"v0.2.90 → 0.2.90"}
+{"slug":"beeai-framework","name":"BeeAI Framework","kind":"version","date":"2026-11-29","title":"BeeAI Framework 更新到 0.1.86","detail":"0.1.32 → 0.1.86"}
+{"slug":"langbot","name":"LangBot","kind":"version","date":"2026-11-29","title":"LangBot 更新到 4.11.9","detail":"v4.11.9 → 4.11.9"}
+{"slug":"db-gpt","name":"DB-GPT","kind":"version","date":"2026-11-29","title":"DB-GPT 更新到 0.8.2","detail":"v0.8.3 → 0.8.2"}
+{"slug":"hermes-agent","name":"Hermes Agent","kind":"version","date":"2026-11-29","title":"Hermes Agent 更新到 v0.23.5","detail":"v0.23.4 → v0.23.5"}
+{"slug":"qwenpaw","name":"QwenPaw","kind":"version","date":"2026-11-29","title":"QwenPaw 更新到 2.3.0.post1","detail":"v2.3.0.post1 → 2.3.0.post1"}
+{"slug":"feynman","name":"Feynman","kind":"version","date":"2026-11-29","title":"Feynman 更新到 v0.5.75","detail":"v0.5.74 → v0.5.75"}
+{"slug":"gpt-engineer","name":"gpt-engineer","kind":"version","date":"2026-11-29","title":"gpt-engineer 更新到 0.3.1","detail":"v0.3.1 → 0.3.1"}
